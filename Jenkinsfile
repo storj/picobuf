@@ -32,11 +32,9 @@ pipeline {
                 // make a backup of the mod file, because sometimes they get modified by tools
                 // this allows to lint the unmodified files
                 sh 'cp go.mod .build/go.mod.orig'
-                sh 'cp testsuite/go.mod .build/testsuite.go.mod.orig'
 
                 // download dependencies
                 sh 'go mod download'
-                sh 'cd testsuite && go mod download'
             }
         }
 
