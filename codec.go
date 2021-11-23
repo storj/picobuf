@@ -19,42 +19,12 @@ type FieldNumber protowire.Number
 // IsValid returns whether the field number is in correct range.
 func (field FieldNumber) IsValid() bool { return protowire.Number(field).IsValid() }
 
-// RequiredByte executes the appropriate method based on the mode.
+// Message codes an embedded message.
 //go:noinline
-func (codec *Codec) RequiredByte(field FieldNumber, v *byte) {
+func (codec *Codec) Message(field FieldNumber, fn func(*Codec)) {
 	if codec.encoding {
-		codec.encode.RequiredByte(field, v)
+		codec.encode.Message(field, fn)
 	} else {
-		codec.decode.RequiredByte(field, v)
-	}
-}
-
-// RequiredRawString executes the appropriate method based on the mode.
-//go:noinline
-func (codec *Codec) RequiredRawString(field FieldNumber, v *string) {
-	if codec.encoding {
-		codec.encode.RequiredRawString(field, v)
-	} else {
-		codec.decode.RequiredRawString(field, v)
-	}
-}
-
-// RequiredBytes executes the appropriate method based on the mode.
-//go:noinline
-func (codec *Codec) RequiredBytes(field FieldNumber, v *[]byte) {
-	if codec.encoding {
-		codec.encode.RequiredBytes(field, v)
-	} else {
-		codec.decode.RequiredBytes(field, v)
-	}
-}
-
-// RequiredMessage executes the appropriate method based on the mode.
-//go:noinline
-func (codec *Codec) RequiredMessage(field FieldNumber, fn func(*Codec)) {
-	if codec.encoding {
-		codec.encode.RequiredMessage(field, fn)
-	} else {
-		codec.decode.RequiredMessage(field, fn)
+		codec.decode.Message(field, fn)
 	}
 }

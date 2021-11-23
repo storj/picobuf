@@ -12,5 +12,5 @@ type Message interface {
 func Marshal(msg Message) ([]byte, error) {
 	enc := NewEncoder()
 	msg.Picobuf(enc.Codec())
-	return enc.Bytes(), nil
+	return enc.Buffer(), nil
 }
