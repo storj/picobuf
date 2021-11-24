@@ -20,8 +20,9 @@ type PrimitiveType struct {
 	Name      string
 	Zero      interface{}
 	Wire      protowire.Type
-	Append    string
+	Suffix    string // Suffix corresponds to `AppendSuffix` and `ConsumeSuffix`.
 	EncodeFmt string
+	DecodeFmt string // TODO: add bounds verification
 }
 
 // TypeName returns the corresponding Go type for the primitive.
@@ -31,6 +32,11 @@ func (t *PrimitiveType) TypeName() string {
 	}
 	v := reflect.ValueOf(t.Zero)
 	return v.Type().String()
+}
+
+// ZeroValue returns the zero value.
+func (t *PrimitiveType) ZeroValue() string {
+	return fmt.Sprintf("%#v", t.Zero)
 }
 
 // WireName returns the tag wire type for the type.
@@ -53,24 +59,44 @@ func (t *PrimitiveType) WireName() string {
 	}
 }
 
+// ShortWireName returns the wire type for the errors.
+func (t *PrimitiveType) ShortWireName() string {
+	switch t.Wire {
+	case protowire.VarintType:
+		return "Varint"
+	case protowire.Fixed32Type:
+		return "Fixed32"
+	case protowire.Fixed64Type:
+		return "Fixed64"
+	case protowire.BytesType:
+		return "Bytes"
+	case protowire.StartGroupType:
+		return "StartGroup"
+	case protowire.EndGroupType:
+		return "EndGroup"
+	default:
+		panic("unhandled wire type")
+	}
+}
+
 var types = []PrimitiveType{
-	{"Byte", byte(0), protowire.VarintType, "AppendVarint", "uint64(%s)"},
-	{"Bool", bool(false), protowire.VarintType, "AppendVarint", "uint64(1)"},
-	{"Int32", int32(0), protowire.VarintType, "AppendVarint", "uint64(%s)"},
-	{"Int64", int64(0), protowire.VarintType, "AppendVarint", "uint64(%s)"},
-	{"Uint32", uint32(0), protowire.VarintType, "AppendVarint", "uint64(%s)"},
-	{"Uint64", uint64(0), protowire.VarintType, "AppendVarint", "%s"},
-	{"Sint32", int32(0), protowire.VarintType, "AppendVarint", "uint64(encodeZigZag32(%s))"},
-	{"Sint64", int64(0), protowire.VarintType, "AppendVarint", "protowire.EncodeZigZag(%s)"},
-	{"Fixed32", uint32(0), protowire.Fixed32Type, "AppendFixed32", "%s"},
-	{"Fixed64", uint64(0), protowire.Fixed64Type, "AppendFixed64", "%s"},
-	{"Sfixed32", int32(0), protowire.Fixed32Type, "AppendFixed32", "encodeZigZag32(%s)"},
-	{"Sfixed64", int64(0), protowire.Fixed64Type, "AppendFixed64", "protowire.EncodeZigZag(%s)"},
-	{"Float", float32(0), protowire.Fixed32Type, "AppendFixed32", "math.Float32bits(%s)"},
-	{"Double", float64(0), protowire.Fixed64Type, "AppendFixed64", "math.Float64bits(%s)"},
-	{"String", string(""), protowire.BytesType, "AppendString", "%s"},
-	{"RawString", string(""), protowire.BytesType, "AppendString", "%s"},
-	{"Bytes", []byte{}, protowire.BytesType, "AppendBytes", "%s"},
+	{"Byte", byte(0), protowire.VarintType, "Varint", "uint64(%s)", "byte(%s)"},
+	{"Bool", bool(false), protowire.VarintType, "Varint", "uint64(1)", "%s == 1"},
+	{"Int32", int32(0), protowire.VarintType, "Varint", "uint64(%s)", "int32(%s)"},
+	{"Int64", int64(0), protowire.VarintType, "Varint", "uint64(%s)", "int64(%s)"},
+	{"Uint32", uint32(0), protowire.VarintType, "Varint", "uint64(%s)", "uint32(%s)"},
+	{"Uint64", uint64(0), protowire.VarintType, "Varint", "%s", "%s"},
+	{"Sint32", int32(0), protowire.VarintType, "Varint", "uint64(encodeZigZag32(%s))", "decodeZigZag32(uint32(%s))"},
+	{"Sint64", int64(0), protowire.VarintType, "Varint", "protowire.EncodeZigZag(%s)", "protowire.DecodeZigZag(%s)"},
+	{"Fixed32", uint32(0), protowire.Fixed32Type, "Fixed32", "%s", "%s"},
+	{"Fixed64", uint64(0), protowire.Fixed64Type, "Fixed64", "%s", "%s"},
+	{"Sfixed32", int32(0), protowire.Fixed32Type, "Fixed32", "encodeZigZag32(%s)", "decodeZigZag32(%s)"},
+	{"Sfixed64", int64(0), protowire.Fixed64Type, "Fixed64", "protowire.EncodeZigZag(%s)", "protowire.DecodeZigZag(%s)"},
+	{"Float", float32(0), protowire.Fixed32Type, "Fixed32", "math.Float32bits(%s)", "math.Float32frombits(%s)"},
+	{"Double", float64(0), protowire.Fixed64Type, "Fixed64", "math.Float64bits(%s)", "math.Float64frombits(%s)"},
+	{"String", string(""), protowire.BytesType, "String", "%s", "%s"},
+	{"RawString", string(""), protowire.BytesType, "String", "%s", "%s"},
+	{"Bytes", []byte{}, protowire.BytesType, "Bytes", "%s", "%s"}, //TODO: reuse the existing bytes buffer to reduce allocs.
 	// {"Message", Message, protowire.BytesType}, // custom implementation
 }
 
@@ -118,9 +144,9 @@ func generateEncoder() []byte {
 
 		pf("enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), %s)\n", t.WireName())
 		if strings.Contains(t.EncodeFmt, "%s") {
-			pf("enc.buffer = protowire.%s(enc.buffer, "+t.EncodeFmt+")\n", t.Append, "*v")
+			pf("enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "*v")
 		} else {
-			pf("enc.buffer = protowire.%s(enc.buffer, "+t.EncodeFmt+")\n", t.Append)
+			pf("enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix)
 		}
 
 		pf("}\n")
@@ -144,10 +170,34 @@ func generateDecoder() []byte {
 	pf("// See LICENSE for copying information.\n")
 	pf("\n")
 	pf("package picobuf\n\n")
+	pf(`import ("math";` + "\n\n" + ` "google.golang.org/protobuf/encoding/protowire")`)
+	pf("\n")
 
 	for _, t := range types {
 		pf("// %s decodes %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
-		pf("func (dec *Decoder) %s(field FieldNumber, v *%s) {}\n", t.Name, t.TypeName())
+		pf("func (dec *Decoder) %s(field FieldNumber, v *%s) {\n", t.Name, t.TypeName())
+
+		pf("if field != dec.pendingField {\n")
+		pf("    if !dec.filled.Set(int32(field)) { *v = %v }\n", t.ZeroValue())
+		pf("    return\n")
+		pf("}\n")
+
+		pf("if dec.pendingWire != %v {\n", t.WireName())
+		pf("    dec.fail(field, \"expected wire type %v\")\n", t.ShortWireName())
+		pf("    return\n")
+		pf("}\n")
+
+		pf("x, n := protowire.Consume%v(dec.buffer)\n", t.Suffix)
+		pf("if n < 0 { dec.fail(field, \"unable to parse %v\"); return }\n", t.Suffix)
+
+		if strings.Contains(t.DecodeFmt, "%s") {
+			pf("*v = "+t.DecodeFmt+"\n", "x")
+		} else {
+			pf("*v = " + t.DecodeFmt + "\n")
+		}
+		pf("dec.nextField(n)\n")
+		pf("dec.filled.Set(int32(field))\n")
+		pf("}\n")
 	}
 
 	formatted, err := format.Source(b.Bytes())

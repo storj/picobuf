@@ -60,5 +60,3 @@ func (enc *Encoder) Message(field FieldNumber, fn func(*Codec)) {
 	binary.PutUvarint(enc.buffer[lengthStart:lengthStart+bytesForSize], uint64(messageLength))
 	enc.buffer = enc.buffer[:lengthStart+bytesForSize+messageLength]
 }
-
-func encodeZigZag32(v int32) uint32 { return (uint32(v) << 1) ^ (uint32(v) >> 31) }

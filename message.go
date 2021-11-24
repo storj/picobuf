@@ -14,3 +14,10 @@ func Marshal(msg Message) ([]byte, error) {
 	msg.Picobuf(enc.Codec())
 	return enc.Buffer(), nil
 }
+
+// Unmarshal decodes msg as bytes.
+func Unmarshal(data []byte, msg Message) error {
+	dec := NewDecoder(data)
+	msg.Picobuf(dec.Codec())
+	return dec.Err()
+}
