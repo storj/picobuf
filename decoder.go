@@ -70,6 +70,33 @@ func (dec *Decoder) popState() {
 	dec.stack = dec.stack[:len(dec.stack)-1]
 }
 
+// MessageReferenceUpdate should set the message to nil
+// when allocate == false and allocate otherwise.
+type MessageReferenceUpdate func(allocate bool)
+
+// Message decodes a message.
+func (dec *Decoder) Message(field FieldNumber, isNil func() bool, update MessageReferenceUpdate, fn func(*Codec)) {
+	if field != dec.pendingField {
+		if !dec.filled.Set(int32(field)) {
+			update(false)
+		}
+		return
+	}
+	if dec.pendingWire != protowire.BytesType {
+		dec.fail(field, "expected wire type Bytes")
+		return
+	}
+
+	message, n := protowire.ConsumeBytes(dec.buffer)
+	dec.pushState(message)
+	update(true)
+	fn(dec.codec)
+	dec.popState()
+
+	dec.nextField(n)
+	dec.filled.Set(int32(field))
+}
+
 // PresentMessage decodes an always present message.
 func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Codec)) {
 	if field != dec.pendingField {

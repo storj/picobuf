@@ -49,7 +49,19 @@ func (m *TypesPico) Picobuf(c *picobuf.Codec) {
 	c.Bool(13, &m.Bool)
 	c.String(14, &m.String_)
 	c.Bytes(15, &m.Bytes)
-	c.PresentMessage(16, m.Message.Picobuf)
+	c.Message(16,
+		func() bool { return m.Message == nil },
+		func(alloc bool) {
+			if !alloc {
+				m.Message = nil
+			} else {
+				m.Message = new(MessagePico)
+			}
+		},
+		func(c *picobuf.Codec) {
+			m.Message.Picobuf(c)
+		},
+	)
 }
 
 type MessagePico struct {

@@ -365,7 +365,7 @@ func (dec *Decoder) RawString(field FieldNumber, v *string) {
 func (dec *Decoder) Bytes(field FieldNumber, v *[]byte) {
 	if field != dec.pendingField {
 		if !dec.filled.Set(int32(field)) {
-			*v = []byte{}
+			*v = nil
 		}
 		return
 	}

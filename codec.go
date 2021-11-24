@@ -21,7 +21,17 @@ type FieldNumber protowire.Number
 // IsValid returns whether the field number is in correct range.
 func (field FieldNumber) IsValid() bool { return protowire.Number(field).IsValid() }
 
-// PresentMessage codes a always present message.
+// Message codes a message.
+//go:noinline
+func (codec *Codec) Message(field FieldNumber, isNil func() bool, update MessageReferenceUpdate, fn func(*Codec)) {
+	if codec.encoding {
+		codec.encode.Message(field, isNil, update, fn)
+	} else {
+		codec.decode.Message(field, isNil, update, fn)
+	}
+}
+
+// PresentMessage codes an always present message.
 //go:noinline
 func (codec *Codec) PresentMessage(field FieldNumber, fn func(*Codec)) {
 	if codec.encoding {

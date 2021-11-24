@@ -36,6 +36,9 @@ func (t *PrimitiveType) TypeName() string {
 
 // ZeroValue returns the zero value.
 func (t *PrimitiveType) ZeroValue() string {
+	if _, isBytes := t.Zero.([]byte); isBytes {
+		return "nil"
+	}
 	return fmt.Sprintf("%#v", t.Zero)
 }
 

@@ -35,6 +35,9 @@ func TestEncoding(t *testing.T) {
 				Int32: 1,
 			},
 		},
+		{
+			Message: &MessagePico{},
+		},
 	}
 
 	for _, test := range tests {
@@ -48,5 +51,10 @@ func TestEncoding(t *testing.T) {
 		canonical, err := proto.Marshal(&p)
 		assert.NoError(t, err)
 		assert.Equal(t, canonical, data)
+
+		var got TypesPico
+		err = picobuf.Unmarshal(canonical, &got)
+		assert.NoError(t, err)
+		assert.DeepEqual(t, got, test)
 	}
 }

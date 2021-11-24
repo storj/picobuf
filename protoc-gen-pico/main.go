@@ -158,7 +158,19 @@ func genMessageMethods(gf *generator, m *protogen.Message) {
 	for _, field := range fields {
 		method := codecMethodName(gf, field)
 		if method == "Message" {
-			gf.P("c.PresentMessage(", field.Desc.Number(), ", m.", field.GoName, ".Picobuf)")
+			gf.P("c.Message(", field.Desc.Number(), ",")
+			gf.P("  func() bool { return m.", field.GoName, " == nil },")
+			gf.P("  func(alloc bool) {")
+			gf.P("    if !alloc {")
+			gf.P("      m.", field.GoName, " = nil")
+			gf.P("    } else {")
+			gf.P("      m.", field.GoName, " = new(", fieldGoType(gf, field)[1:], ")")
+			gf.P("    }")
+			gf.P("  },")
+			gf.P("  func(c *", picobufPackage.Ident("Codec"), ") {")
+			gf.P("    m.", field.GoName, ".Picobuf(c)")
+			gf.P("  },")
+			gf.P(")")
 		} else {
 			gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
 		}
