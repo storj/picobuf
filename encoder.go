@@ -34,19 +34,31 @@ func (enc *Encoder) Buffer() []byte { return enc.buffer }
 func (enc *Encoder) Message(field FieldNumber, fn func(*Codec)) {
 	tagStart := len(enc.buffer)
 	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.BytesType)
+	lengthStart := len(enc.buffer)
+	// We'll guess that we need 2 bytes for length.
+	// If we need less, then the copy is fast, and needing more is unlikely.
+	var lengthBufferPrediction [2]byte
+	enc.buffer = append(enc.buffer, lengthBufferPrediction[:]...)
 	messageStart := len(enc.buffer)
-	// add small buffer for encoding the length to avoid overlapping append
-	var lengthBuffer [binary.MaxVarintLen64]byte
-	enc.buffer = append(enc.buffer, lengthBuffer[:]...)
-	paddingStart := len(enc.buffer)
 	// encode the submessage
 	fn(enc.codec)
-	if paddingStart == len(enc.buffer) {
+	messageLength := len(enc.buffer) - messageStart
+	if messageLength == 0 {
+		// The message was empty, we can remove the tag.
 		enc.buffer = enc.buffer[:tagStart]
 		return
 	}
-	// add the message as bytes
-	enc.buffer = protowire.AppendBytes(enc.buffer[:messageStart], enc.buffer[paddingStart:])
+	bytesForSize := protowire.SizeVarint(uint64(messageLength))
+	if bytesForSize == len(lengthBufferPrediction) {
+		binary.PutUvarint(enc.buffer[lengthStart:messageStart], uint64(messageLength))
+		return
+	}
+	if bytesForSize > len(lengthBufferPrediction) {
+		enc.buffer = append(enc.buffer, make([]byte, bytesForSize-len(lengthBufferPrediction))...)
+	}
+	copy(enc.buffer[lengthStart+bytesForSize:], enc.buffer[messageStart:])
+	binary.PutUvarint(enc.buffer[lengthStart:lengthStart+bytesForSize], uint64(messageLength))
+	enc.buffer = enc.buffer[:lengthStart+bytesForSize+messageLength]
 }
 
 func encodeZigZag32(v int32) uint32 { return (uint32(v) << 1) ^ (uint32(v) >> 31) }
