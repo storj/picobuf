@@ -30,9 +30,9 @@ type TypesPico struct {
 	Message  *MessagePico
 }
 
-func (m *TypesPico) Picobuf(c *picobuf.Codec) {
+func (m *TypesPico) Picobuf(c *picobuf.Codec) bool {
 	if m == nil {
-		return
+		return false
 	}
 	c.Int32(1, &m.Int32)
 	c.Int64(2, &m.Int64)
@@ -50,21 +50,22 @@ func (m *TypesPico) Picobuf(c *picobuf.Codec) {
 	c.String(14, &m.String_)
 	c.Bytes(15, &m.Bytes)
 	c.Message(16,
-		func() bool { return m.Message == nil },
 		func() { m.Message = new(MessagePico) },
-		func(c *picobuf.Codec) {
-			m.Message.Picobuf(c)
+		func(c *picobuf.Codec) bool {
+			return m.Message.Picobuf(c)
 		},
 	)
+	return true
 }
 
 type MessagePico struct {
 	Int32 int32
 }
 
-func (m *MessagePico) Picobuf(c *picobuf.Codec) {
+func (m *MessagePico) Picobuf(c *picobuf.Codec) bool {
 	if m == nil {
-		return
+		return false
 	}
 	c.Int32(1, &m.Int32)
+	return true
 }

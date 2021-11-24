@@ -147,8 +147,8 @@ func oneofInterfaceName(gf *generator, oneof *protogen.Oneof) string {
 }
 
 func genMessageMethods(gf *generator, m *protogen.Message) {
-	gf.P("func (m *", m.GoIdent, gf.suffix, ") Picobuf(c *", picobufPackage.Ident("Codec"), ") {")
-	gf.P("if m == nil { return }")
+	gf.P("func (m *", m.GoIdent, gf.suffix, ") Picobuf(c *", picobufPackage.Ident("Codec"), ") bool {")
+	gf.P("if m == nil { return false }")
 
 	fields := append([]*protogen.Field(nil), m.Fields...)
 	sort.Slice(fields, func(i, j int) bool {
@@ -159,16 +159,16 @@ func genMessageMethods(gf *generator, m *protogen.Message) {
 		method := codecMethodName(gf, field)
 		if method == "Message" {
 			gf.P("c.Message(", field.Desc.Number(), ",")
-			gf.P("  func() bool { return m.", field.GoName, " == nil },")
 			gf.P("  func() { m.", field.GoName, " = new(", fieldGoType(gf, field)[1:], ") },")
-			gf.P("  func(c *", picobufPackage.Ident("Codec"), ") {")
-			gf.P("    m.", field.GoName, ".Picobuf(c)")
+			gf.P("  func(c *", picobufPackage.Ident("Codec"), ") bool {")
+			gf.P("    return m.", field.GoName, ".Picobuf(c)")
 			gf.P("  },")
 			gf.P(")")
 		} else {
 			gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
 		}
 	}
+	gf.P("return true")
 	gf.P("}")
 	gf.P()
 }

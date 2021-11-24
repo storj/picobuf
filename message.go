@@ -5,7 +5,8 @@ package picobuf
 
 // Message an interface for the generate protobuf message types.
 type Message interface {
-	Picobuf(*Codec)
+	// Picobuf returns true when the message is set.
+	Picobuf(*Codec) bool
 }
 
 // Marshal encodes msg as bytes.

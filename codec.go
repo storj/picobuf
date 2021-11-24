@@ -23,17 +23,17 @@ func (field FieldNumber) IsValid() bool { return protowire.Number(field).IsValid
 
 // Message codes a message.
 //go:noinline
-func (codec *Codec) Message(field FieldNumber, isNil func() bool, allocate func(), fn func(*Codec)) {
+func (codec *Codec) Message(field FieldNumber, allocate func(), fn func(*Codec) bool) {
 	if codec.encoding {
-		codec.encode.Message(field, isNil, allocate, fn)
+		codec.encode.Message(field, allocate, fn)
 	} else {
-		codec.decode.Message(field, isNil, allocate, fn)
+		codec.decode.Message(field, allocate, fn)
 	}
 }
 
 // PresentMessage codes an always present message.
 //go:noinline
-func (codec *Codec) PresentMessage(field FieldNumber, fn func(*Codec)) {
+func (codec *Codec) PresentMessage(field FieldNumber, fn func(*Codec) bool) {
 	if codec.encoding {
 		codec.encode.PresentMessage(field, fn)
 	} else {

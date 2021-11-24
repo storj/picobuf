@@ -42,13 +42,21 @@ type Address struct {
 	Street string
 }
 
-func (person *Person) Picobuf(codec *picobuf.Codec) {
+func (person *Person) Picobuf(codec *picobuf.Codec) bool {
+	if person == nil {
+		return false
+	}
 	codec.RawString(1, &person.Name)
 	codec.PresentMessage(2, person.Address.Picobuf)
+	return true
 }
 
-func (address *Address) Picobuf(codec *picobuf.Codec) {
+func (address *Address) Picobuf(codec *picobuf.Codec) bool {
+	if address == nil {
+		return false
+	}
 	codec.RawString(1, &address.Street)
+	return true
 }
 
 func TestEncoder_SubMessage(t *testing.T) {

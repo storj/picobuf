@@ -67,7 +67,7 @@ func (dec *Decoder) popState() {
 }
 
 // Message decodes a message.
-func (dec *Decoder) Message(field FieldNumber, isNil func() bool, allocate func(), fn func(*Codec)) {
+func (dec *Decoder) Message(field FieldNumber, allocate func(), fn func(*Codec) bool) {
 	if field != dec.pendingField {
 		return
 	}
@@ -86,7 +86,7 @@ func (dec *Decoder) Message(field FieldNumber, isNil func() bool, allocate func(
 }
 
 // PresentMessage decodes an always present message.
-func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Codec)) {
+func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Codec) bool) {
 	if field != dec.pendingField {
 		return
 	}

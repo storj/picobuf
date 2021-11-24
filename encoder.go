@@ -31,11 +31,8 @@ func (enc *Encoder) Codec() *Codec { return enc.codec }
 func (enc *Encoder) Buffer() []byte { return enc.buffer }
 
 // Message decodes a message.
-func (enc *Encoder) Message(field FieldNumber, isNil func() bool, allocate func(), fn func(*Codec)) {
-	if isNil() {
-		return
-	}
-
+func (enc *Encoder) Message(field FieldNumber, allocate func(), fn func(*Codec) bool) {
+	tagStart := len(enc.buffer)
 	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.BytesType)
 	lengthStart := len(enc.buffer)
 	// We'll guess that we need 2 bytes for length.
@@ -44,8 +41,13 @@ func (enc *Encoder) Message(field FieldNumber, isNil func() bool, allocate func(
 	enc.buffer = append(enc.buffer, lengthBufferPrediction[:]...)
 	messageStart := len(enc.buffer)
 	// encode the submessage
-	fn(enc.codec)
+	ok := fn(enc.codec)
 	messageLength := len(enc.buffer) - messageStart
+	if !ok {
+		// The message was nil, we can remove the tag.
+		enc.buffer = enc.buffer[:tagStart]
+		return
+	}
 	bytesForSize := protowire.SizeVarint(uint64(messageLength))
 	if bytesForSize == len(lengthBufferPrediction) {
 		binary.PutUvarint(enc.buffer[lengthStart:messageStart], uint64(messageLength))
@@ -60,7 +62,7 @@ func (enc *Encoder) Message(field FieldNumber, isNil func() bool, allocate func(
 }
 
 // PresentMessage encodes an always present message.
-func (enc *Encoder) PresentMessage(field FieldNumber, fn func(*Codec)) {
+func (enc *Encoder) PresentMessage(field FieldNumber, fn func(*Codec) bool) {
 	tagStart := len(enc.buffer)
 	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.BytesType)
 	lengthStart := len(enc.buffer)
