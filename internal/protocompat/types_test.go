@@ -39,14 +39,14 @@ func TestEncoding(t *testing.T) {
 
 	for _, test := range tests {
 		data, err := picobuf.Marshal(&test)
-		assert.Nil(t, err)
+		assert.NoError(t, err)
 
 		var p Types
 		err = proto.Unmarshal(data, &p)
-		assert.Nil(t, err)
+		assert.NoError(t, err)
 
 		canonical, err := proto.Marshal(&p)
-		assert.Nil(t, err)
+		assert.NoError(t, err)
 		assert.Equal(t, canonical, data)
 	}
 }

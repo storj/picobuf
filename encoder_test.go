@@ -60,7 +60,7 @@ func TestEncoder_SubMessage(t *testing.T) {
 	}
 
 	data, err := picobuf.Marshal(person)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, data, []byte{0xa, 0x5, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x12, 0x6, 0xa, 0x4, 0x48, 0x6f, 0x6d, 0x65})
 
 	person = &Person{
@@ -69,6 +69,6 @@ func TestEncoder_SubMessage(t *testing.T) {
 	}
 
 	data, err = picobuf.Marshal(person)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, data, []byte{0xa, 0x5, 0x48, 0x65, 0x6c, 0x6c, 0x6f})
 }

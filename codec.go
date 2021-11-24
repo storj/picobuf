@@ -3,7 +3,9 @@
 
 package picobuf
 
-import "google.golang.org/protobuf/encoding/protowire"
+import (
+	"google.golang.org/protobuf/encoding/protowire"
+)
 
 // Codec defines a unified implementation for encoder and decoder to
 // minimize generated code usage for messages.
