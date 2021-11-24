@@ -7,8 +7,6 @@ import (
 	"fmt"
 
 	"google.golang.org/protobuf/encoding/protowire"
-
-	"storj.io/picobuf/internal/bitset"
 )
 
 const (
@@ -30,8 +28,6 @@ type messageDecodeState struct {
 	pendingWire  protowire.Type
 
 	buffer []byte
-	filled bitset.Small
-	// TODO: we might need to differentiate between filled and zeroed fields.
 }
 
 // NewDecoder returns a new Decoder.
@@ -70,16 +66,9 @@ func (dec *Decoder) popState() {
 	dec.stack = dec.stack[:len(dec.stack)-1]
 }
 
-// MessageReferenceUpdate should set the message to nil
-// when allocate == false and allocate otherwise.
-type MessageReferenceUpdate func(allocate bool)
-
 // Message decodes a message.
-func (dec *Decoder) Message(field FieldNumber, isNil func() bool, update MessageReferenceUpdate, fn func(*Codec)) {
+func (dec *Decoder) Message(field FieldNumber, isNil func() bool, allocate func(), fn func(*Codec)) {
 	if field != dec.pendingField {
-		if !dec.filled.Set(int32(field)) {
-			update(false)
-		}
 		return
 	}
 	if dec.pendingWire != protowire.BytesType {
@@ -89,22 +78,16 @@ func (dec *Decoder) Message(field FieldNumber, isNil func() bool, update Message
 
 	message, n := protowire.ConsumeBytes(dec.buffer)
 	dec.pushState(message)
-	update(true)
+	allocate()
 	fn(dec.codec)
 	dec.popState()
 
 	dec.nextField(n)
-	dec.filled.Set(int32(field))
 }
 
 // PresentMessage decodes an always present message.
 func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Codec)) {
 	if field != dec.pendingField {
-		if !dec.filled.Set(int32(field)) {
-			dec.pushState(nil)
-			fn(dec.codec)
-			dec.popState()
-		}
 		return
 	}
 	if dec.pendingWire != protowire.BytesType {
@@ -118,7 +101,6 @@ func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Codec)) {
 	dec.popState()
 
 	dec.nextField(n)
-	dec.filled.Set(int32(field))
 }
 
 //go:noinline
@@ -149,5 +131,4 @@ func init() {
 	var z messageDecodeState
 	z.pendingField = 0
 	z.pendingWire = 0
-	z.filled.Set(0)
 }

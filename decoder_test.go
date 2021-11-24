@@ -61,9 +61,10 @@ func TestDecoder_SubMessage(t *testing.T) {
 		},
 	})
 
-	err = picobuf.Unmarshal([]byte{0xa, 0x5, 0x48, 0x65, 0x6c, 0x6c, 0x6f}, &got)
+	var got2 Person
+	err = picobuf.Unmarshal([]byte{0xa, 0x5, 0x48, 0x65, 0x6c, 0x6c, 0x6f}, &got2)
 	assert.NoError(t, err)
-	assert.Equal(t, got, Person{
+	assert.Equal(t, got2, Person{
 		Name:    "Hello",
 		Address: Address{},
 	})

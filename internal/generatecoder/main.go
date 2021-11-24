@@ -180,7 +180,6 @@ func generateDecoder() []byte {
 		pf("func (dec *Decoder) %s(field FieldNumber, v *%s) {\n", t.Name, t.TypeName())
 
 		pf("if field != dec.pendingField {\n")
-		pf("    if !dec.filled.Set(int32(field)) { *v = %v }\n", t.ZeroValue())
 		pf("    return\n")
 		pf("}\n")
 
@@ -198,7 +197,6 @@ func generateDecoder() []byte {
 			pf("*v = " + t.DecodeFmt + "\n")
 		}
 		pf("dec.nextField(n)\n")
-		pf("dec.filled.Set(int32(field))\n")
 		pf("}\n")
 	}
 
