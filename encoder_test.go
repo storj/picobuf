@@ -44,7 +44,7 @@ type Address struct {
 
 func (person *Person) Picobuf(codec *picobuf.Codec) {
 	codec.RawString(1, &person.Name)
-	codec.Message(2, person.Address.Picobuf)
+	codec.PresentMessage(2, person.Address.Picobuf)
 }
 
 func (address *Address) Picobuf(codec *picobuf.Codec) {

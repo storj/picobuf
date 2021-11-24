@@ -97,7 +97,6 @@ var types = []PrimitiveType{
 	{"String", string(""), protowire.BytesType, "String", "%s", "%s"},
 	{"RawString", string(""), protowire.BytesType, "String", "%s", "%s"},
 	{"Bytes", []byte{}, protowire.BytesType, "Bytes", "%s", "%s"}, //TODO: reuse the existing bytes buffer to reduce allocs.
-	// {"Message", Message, protowire.BytesType}, // custom implementation
 }
 
 func main() {

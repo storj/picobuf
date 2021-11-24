@@ -30,8 +30,8 @@ func (enc *Encoder) Codec() *Codec { return enc.codec }
 // Buffer returns the encoded internal buffer.
 func (enc *Encoder) Buffer() []byte { return enc.buffer }
 
-// Message encodes an embedded message.
-func (enc *Encoder) Message(field FieldNumber, fn func(*Codec)) {
+// PresentMessage encodes an always present message.
+func (enc *Encoder) PresentMessage(field FieldNumber, fn func(*Codec)) {
 	tagStart := len(enc.buffer)
 	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.BytesType)
 	lengthStart := len(enc.buffer)

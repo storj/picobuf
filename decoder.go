@@ -70,8 +70,8 @@ func (dec *Decoder) popState() {
 	dec.stack = dec.stack[:len(dec.stack)-1]
 }
 
-// Message decodes an embedded message.
-func (dec *Decoder) Message(field FieldNumber, fn func(*Codec)) {
+// PresentMessage decodes an always present message.
+func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Codec)) {
 	if field != dec.pendingField {
 		if !dec.filled.Set(int32(field)) {
 			dec.pushState(nil)

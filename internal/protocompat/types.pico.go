@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v3.16.0
+//     protoc:          v3.17.3
 
 package protocompat
 
@@ -49,7 +49,7 @@ func (m *TypesPico) Picobuf(c *picobuf.Codec) {
 	c.Bool(13, &m.Bool)
 	c.String(14, &m.String_)
 	c.Bytes(15, &m.Bytes)
-	c.Message(16, m.Message.Picobuf)
+	c.PresentMessage(16, m.Message.Picobuf)
 }
 
 type MessagePico struct {
