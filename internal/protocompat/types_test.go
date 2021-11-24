@@ -29,9 +29,9 @@ func TestEncoding(t *testing.T) {
 			Float:    1,
 			Double:   1,
 			Bool:     true,
-			String:   "1",
+			String_:  "1",
 			Bytes:    []byte{1},
-			Message: MessagePico{
+			Message: &MessagePico{
 				Int32: 1,
 			},
 		},
