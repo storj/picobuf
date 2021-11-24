@@ -43,12 +43,12 @@ func TestTypes(t *testing.T) {
 			Bool:     true,
 			String_:  "1",
 			Bytes:    []byte{1},
-			Message: &MessagePico{
+			Message: MessagePico{
 				Int32: 1,
 			},
 		},
 		{
-			Message: &MessagePico{},
+			OptionalMessage: &OptionalMessagePico{},
 		},
 	}
 

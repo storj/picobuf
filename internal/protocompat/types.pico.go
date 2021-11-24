@@ -12,22 +12,23 @@ import (
 )
 
 type TypesPico struct {
-	Int32    int32
-	Int64    int64
-	Uint32   uint32
-	Uint64   uint64
-	Sint32   int32
-	Sint64   int64
-	Fixed32  uint32
-	Fixed64  uint64
-	Sfixed32 int32
-	Sfixed64 int64
-	Float    float32
-	Double   float64
-	Bool     bool
-	String_  string
-	Bytes    []byte
-	Message  *MessagePico
+	Int32           int32
+	Int64           int64
+	Uint32          uint32
+	Uint64          uint64
+	Sint32          int32
+	Sint64          int64
+	Fixed32         uint32
+	Fixed64         uint64
+	Sfixed32        int32
+	Sfixed64        int64
+	Float           float32
+	Double          float64
+	Bool            bool
+	String_         string
+	Bytes           []byte
+	Message         MessagePico
+	OptionalMessage *OptionalMessagePico
 }
 
 func (m *TypesPico) Picobuf(c *picobuf.Codec) bool {
@@ -49,11 +50,12 @@ func (m *TypesPico) Picobuf(c *picobuf.Codec) bool {
 	c.Bool(13, &m.Bool)
 	c.String(14, &m.String_)
 	c.Bytes(15, &m.Bytes)
-	c.Message(16, func(c *picobuf.Codec) bool {
-		if c.IsDecoding() && m.Message == nil {
-			m.Message = new(MessagePico)
+	c.PresentMessage(16, m.Message.Picobuf)
+	c.Message(17, func(c *picobuf.Codec) bool {
+		if c.IsDecoding() && m.OptionalMessage == nil {
+			m.OptionalMessage = new(OptionalMessagePico)
 		}
-		return m.Message.Picobuf(c)
+		return m.OptionalMessage.Picobuf(c)
 	})
 	return true
 }
@@ -185,5 +187,17 @@ func (m *MapPico) Picobuf(c *picobuf.Codec) bool {
 		return false
 	}
 	c.MapStringString(1, &m.Values)
+	return true
+}
+
+type OptionalMessagePico struct {
+	Int32 int32
+}
+
+func (m *OptionalMessagePico) Picobuf(c *picobuf.Codec) bool {
+	if m == nil {
+		return false
+	}
+	c.Int32(1, &m.Int32)
 	return true
 }

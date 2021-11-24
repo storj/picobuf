@@ -10,9 +10,12 @@ import (
 	"sort"
 
 	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/pluginpb"
 )
+
+//go:generate protoc -I.. --go_out=paths=source_relative:. pico.proto
 
 const (
 	picobufPackage     = protogen.GoImportPath("storj.io/picobuf")
@@ -123,6 +126,14 @@ func genMessage(gf *generator, m *protogen.Message) {
 	genMessageOneofWrapperTypes(gf, m)
 }
 
+func getMessageOpts(m *protogen.Message) *MessageOptions {
+	opts, _ := proto.GetExtension(m.Desc.Options(), E_Message).(*MessageOptions)
+	if opts == nil {
+		return &MessageOptions{}
+	}
+	return opts
+}
+
 func genMessageField(gf *generator, m *protogen.Message, field *protogen.Field) {
 	if field.Desc.IsWeak() {
 		panic("unhandled: weak field")
@@ -157,14 +168,17 @@ func genMessageMethods(gf *generator, m *protogen.Message) {
 
 	for _, field := range fields {
 		method := codecMethodName(gf, field)
-		if method == "Message" {
+		switch method {
+		case "Message":
 			gf.P("c.Message(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Codec"), ") bool {")
 			gf.P("  if c.IsDecoding() && m.", field.GoName, " == nil {")
 			gf.P("    m.", field.GoName, " = new(", fieldGoType(gf, field)[1:], ")")
 			gf.P("  }")
 			gf.P("  return m.", field.GoName, ".Picobuf(c)")
 			gf.P("})")
-		} else if method == "RepeatedMessage" {
+		case "PresentMessage":
+			gf.P("c.PresentMessage(", field.Desc.Number(), ", m.", field.GoName, ".Picobuf)")
+		case "RepeatedMessage":
 			gf.P("c.RepeatedMessage(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Codec"), ", index int) bool {")
 			gf.P("  if c.IsDecoding() && index == -1 {")
 			gf.P("    m.", field.GoName, " = append(m.", field.GoName, ", new(", fieldGoType(gf, field)[3:], "))")
@@ -175,7 +189,7 @@ func genMessageMethods(gf *generator, m *protogen.Message) {
 			gf.P("  x.Picobuf(c)")
 			gf.P("  return true")
 			gf.P("})")
-		} else {
+		default:
 			gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
 		}
 	}
@@ -198,6 +212,9 @@ func codecMethodName(gf *generator, field *protogen.Field) string {
 	if method, ok := methodNames[field.Desc.Kind()]; ok {
 		if field.Desc.IsList() {
 			method = "Repeated" + method
+		}
+		if method == "Message" && !getFieldPresence(field) {
+			method = "PresentMessage"
 		}
 		return method
 	}
@@ -273,7 +290,7 @@ func fieldGoType(gf *generator, field *protogen.Field) (goType string) {
 		return "[]*" + goType
 	case field.Desc.IsList():
 		return "[]" + goType
-	case field.Desc.HasPresence():
+	case getFieldPresence(field):
 		return "*" + goType
 	case field.Desc.IsMap():
 		switch (kind2{field.Desc.MapKey().Kind(), field.Desc.MapValue().Kind()}) {
@@ -285,6 +302,21 @@ func fieldGoType(gf *generator, field *protogen.Field) (goType string) {
 	default:
 		return goType
 	}
+}
+
+func getFieldPresence(f *protogen.Field) bool {
+	if f.Desc.Kind() == protoreflect.MessageKind && getMessageOpts(f.Message).AlwaysPresent {
+		return false
+	}
+	return f.Desc.HasPresence() && !getFieldOpts(f).AlwaysPresent
+}
+
+func getFieldOpts(f *protogen.Field) *FieldOptions {
+	opts, _ := proto.GetExtension(f.Desc.Options(), E_Field).(*FieldOptions)
+	if opts == nil {
+		return &FieldOptions{}
+	}
+	return opts
 }
 
 func genMessageOneofWrapperTypes(gf *generator, m *protogen.Message) {

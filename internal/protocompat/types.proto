@@ -6,6 +6,8 @@ option go_package = "storj.io/picobuf/internal/protocompat";
 
 package types;
 
+import "pico.proto";
+
 message Types {
 	int32    int32    =  1;
 	int64    int64    =  2;
@@ -23,8 +25,8 @@ message Types {
 	string   string   = 14;
 	bytes    bytes    = 15;
 
-	Message message = 16;
-	/* OptionalMessage optional_message = 17; */
+	Message message = 16 [(pico.field).always_present = true];
+	OptionalMessage optional_message = 17;
 }
 
 message RepeatedTypes {
@@ -67,6 +69,10 @@ message Person {
 
 message Map {
 	map<string, string> values = 1;
+}
+
+message OptionalMessage {
+	int32 int32 = 1;
 }
 
 /*
