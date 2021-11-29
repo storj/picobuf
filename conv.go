@@ -22,3 +22,17 @@ func appendTag(buf []byte, num FieldNumber, typ protowire.Type) []byte {
 	buf = append(buf, byte(x))
 	return buf
 }
+
+func encodeBool64(v bool) uint64 {
+	if v {
+		return 1
+	}
+	return 0
+}
+
+func encodeBool8(v bool) byte {
+	if v {
+		return 1
+	}
+	return 0
+}

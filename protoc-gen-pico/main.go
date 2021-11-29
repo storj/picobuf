@@ -176,7 +176,7 @@ func genMessageMethods(gf *generator, m *protogen.Message) {
 func codecMethodName(gf *generator, field *protogen.Field) string {
 	if method, ok := methodNames[field.Desc.Kind()]; ok {
 		if field.Desc.IsList() {
-			method += "Repeated"
+			method = "Repeated" + method
 		}
 		return method
 	}

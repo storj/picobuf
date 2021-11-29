@@ -58,6 +58,46 @@ func (m *TypesPico) Picobuf(c *picobuf.Codec) bool {
 	return true
 }
 
+type RepeatedTypesPico struct {
+	Int32    []int32
+	Int64    []int64
+	Uint32   []uint32
+	Uint64   []uint64
+	Sint32   []int32
+	Sint64   []int64
+	Fixed32  []uint32
+	Fixed64  []uint64
+	Sfixed32 []int32
+	Sfixed64 []int64
+	Float    []float32
+	Double   []float64
+	Bool     []bool
+	String_  []string
+	Bytes    [][]byte
+}
+
+func (m *RepeatedTypesPico) Picobuf(c *picobuf.Codec) bool {
+	if m == nil {
+		return false
+	}
+	c.RepeatedInt32(1, &m.Int32)
+	c.RepeatedInt64(2, &m.Int64)
+	c.RepeatedUint32(3, &m.Uint32)
+	c.RepeatedUint64(4, &m.Uint64)
+	c.RepeatedSint32(5, &m.Sint32)
+	c.RepeatedSint64(6, &m.Sint64)
+	c.RepeatedFixed32(7, &m.Fixed32)
+	c.RepeatedFixed64(8, &m.Fixed64)
+	c.RepeatedSfixed32(9, &m.Sfixed32)
+	c.RepeatedSfixed64(10, &m.Sfixed64)
+	c.RepeatedFloat(11, &m.Float)
+	c.RepeatedDouble(12, &m.Double)
+	c.RepeatedBool(13, &m.Bool)
+	c.RepeatedString(14, &m.String_)
+	c.RepeatedBytes(15, &m.Bytes)
+	return true
+}
+
 type MessagePico struct {
 	Int32 int32
 }
