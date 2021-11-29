@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v3.17.3
+//     protoc:          v3.19.1
 
 package protocompat
 
@@ -67,5 +67,27 @@ func (m *MessagePico) Picobuf(c *picobuf.Codec) bool {
 		return false
 	}
 	c.Int32(1, &m.Int32)
+	return true
+}
+
+type PersonPico struct {
+	Name     string
+	Birthday int64
+	Phone    string
+	Siblings int32
+	Spouse   bool
+	Money    float64
+}
+
+func (m *PersonPico) Picobuf(c *picobuf.Codec) bool {
+	if m == nil {
+		return false
+	}
+	c.String(1, &m.Name)
+	c.Int64(2, &m.Birthday)
+	c.String(3, &m.Phone)
+	c.Int32(4, &m.Siblings)
+	c.Bool(5, &m.Spouse)
+	c.Double(6, &m.Money)
 	return true
 }
