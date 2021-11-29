@@ -9,6 +9,7 @@ import (
 	"github.com/zeebo/assert"
 
 	"storj.io/picobuf"
+	"storj.io/picobuf/internal/picotest"
 )
 
 func pbyte(v byte) *byte       { return &v }
@@ -33,36 +34,10 @@ func TestEncoder_Types(t *testing.T) {
 	assert.Equal(t, result, []byte{0x10, 0x1, 0x18, 0x64, 0x20, 0xff, 0x1, 0x32, 0x5, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x3a, 0x1, 0x0, 0x42, 0x4, 0x1, 0x2, 0x3, 0x4})
 }
 
-type Person struct {
-	Name    string
-	Address Address
-}
-
-type Address struct {
-	Street string
-}
-
-func (person *Person) Picobuf(codec *picobuf.Codec) bool {
-	if person == nil {
-		return false
-	}
-	codec.RawString(1, &person.Name)
-	codec.PresentMessage(2, person.Address.Picobuf)
-	return true
-}
-
-func (address *Address) Picobuf(codec *picobuf.Codec) bool {
-	if address == nil {
-		return false
-	}
-	codec.RawString(1, &address.Street)
-	return true
-}
-
 func TestEncoder_SubMessage(t *testing.T) {
-	person := &Person{
+	person := &picotest.Person{
 		Name: "Hello",
-		Address: Address{
+		Address: &picotest.Address{
 			Street: "Home",
 		},
 	}
@@ -71,12 +46,19 @@ func TestEncoder_SubMessage(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, data, []byte{0xa, 0x5, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x12, 0x6, 0xa, 0x4, 0x48, 0x6f, 0x6d, 0x65})
 
-	person = &Person{
+	person = &picotest.Person{
 		Name:    "Hello",
-		Address: Address{},
+		Address: nil,
 	}
-
 	data, err = picobuf.Marshal(person)
 	assert.NoError(t, err)
 	assert.Equal(t, data, []byte{0xa, 0x5, 0x48, 0x65, 0x6c, 0x6c, 0x6f})
+
+	person = &picotest.Person{
+		Name:    "Hello",
+		Address: &picotest.Address{},
+	}
+	data, err = picobuf.Marshal(person)
+	assert.NoError(t, err)
+	assert.Equal(t, data, []byte{0xa, 0x5, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x12, 0x0})
 }

@@ -79,10 +79,23 @@ func (dec *Decoder) Message(field FieldNumber, allocate func(), fn func(*Codec) 
 	message, n := protowire.ConsumeBytes(dec.buffer)
 	dec.pushState(message)
 	allocate()
-	fn(dec.codec)
+	dec.Loop(fn)
 	dec.popState()
 
 	dec.nextField(n)
+}
+
+// Loop loops fields until all messages have been processed.
+func (dec *Decoder) Loop(fn func(*Codec) bool) {
+	for dec.pendingField > 0 {
+		startingLength := len(dec.buffer)
+		fn(dec.codec)
+		if len(dec.buffer) == startingLength {
+			// we didn't process any of the fields
+			n := protowire.ConsumeFieldValue(protowire.Number(dec.pendingField), dec.pendingWire, dec.buffer)
+			dec.nextField(n)
+		}
+	}
 }
 
 // PresentMessage decodes an always present message.
@@ -97,7 +110,7 @@ func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Codec) bool) {
 
 	message, n := protowire.ConsumeBytes(dec.buffer)
 	dec.pushState(message)
-	fn(dec.codec)
+	dec.Loop(fn)
 	dec.popState()
 
 	dec.nextField(n)
