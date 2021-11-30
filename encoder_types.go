@@ -14,7 +14,7 @@ func (enc *Encoder) Byte(field FieldNumber, v *uint8) {
 	if *v == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.VarintType)
+	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
 	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(*v))
 }
 
@@ -23,7 +23,7 @@ func (enc *Encoder) Bool(field FieldNumber, v *bool) {
 	if !*v {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.VarintType)
+	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
 	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(1))
 }
 
@@ -32,7 +32,7 @@ func (enc *Encoder) Int32(field FieldNumber, v *int32) {
 	if *v == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.VarintType)
+	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
 	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(*v))
 }
 
@@ -41,7 +41,7 @@ func (enc *Encoder) Int64(field FieldNumber, v *int64) {
 	if *v == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.VarintType)
+	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
 	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(*v))
 }
 
@@ -50,7 +50,7 @@ func (enc *Encoder) Uint32(field FieldNumber, v *uint32) {
 	if *v == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.VarintType)
+	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
 	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(*v))
 }
 
@@ -59,7 +59,7 @@ func (enc *Encoder) Uint64(field FieldNumber, v *uint64) {
 	if *v == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.VarintType)
+	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
 	enc.buffer = protowire.AppendVarint(enc.buffer, *v)
 }
 
@@ -68,7 +68,7 @@ func (enc *Encoder) Sint32(field FieldNumber, v *int32) {
 	if *v == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.VarintType)
+	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
 	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(encodeZigZag32(*v)))
 }
 
@@ -77,7 +77,7 @@ func (enc *Encoder) Sint64(field FieldNumber, v *int64) {
 	if *v == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.VarintType)
+	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
 	enc.buffer = protowire.AppendVarint(enc.buffer, protowire.EncodeZigZag(*v))
 }
 
@@ -86,7 +86,7 @@ func (enc *Encoder) Fixed32(field FieldNumber, v *uint32) {
 	if *v == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.Fixed32Type)
+	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed32Type)
 	enc.buffer = protowire.AppendFixed32(enc.buffer, *v)
 }
 
@@ -95,7 +95,7 @@ func (enc *Encoder) Fixed64(field FieldNumber, v *uint64) {
 	if *v == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.Fixed64Type)
+	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed64Type)
 	enc.buffer = protowire.AppendFixed64(enc.buffer, *v)
 }
 
@@ -104,7 +104,7 @@ func (enc *Encoder) Sfixed32(field FieldNumber, v *int32) {
 	if *v == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.Fixed32Type)
+	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed32Type)
 	enc.buffer = protowire.AppendFixed32(enc.buffer, encodeZigZag32(*v))
 }
 
@@ -113,7 +113,7 @@ func (enc *Encoder) Sfixed64(field FieldNumber, v *int64) {
 	if *v == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.Fixed64Type)
+	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed64Type)
 	enc.buffer = protowire.AppendFixed64(enc.buffer, protowire.EncodeZigZag(*v))
 }
 
@@ -122,7 +122,7 @@ func (enc *Encoder) Float(field FieldNumber, v *float32) {
 	if *v == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.Fixed32Type)
+	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed32Type)
 	enc.buffer = protowire.AppendFixed32(enc.buffer, math.Float32bits(*v))
 }
 
@@ -131,7 +131,7 @@ func (enc *Encoder) Double(field FieldNumber, v *float64) {
 	if *v == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.Fixed64Type)
+	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed64Type)
 	enc.buffer = protowire.AppendFixed64(enc.buffer, math.Float64bits(*v))
 }
 
@@ -140,7 +140,7 @@ func (enc *Encoder) String(field FieldNumber, v *string) {
 	if len(*v) == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.BytesType)
+	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 	enc.buffer = protowire.AppendString(enc.buffer, *v)
 }
 
@@ -149,7 +149,7 @@ func (enc *Encoder) RawString(field FieldNumber, v *string) {
 	if len(*v) == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.BytesType)
+	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 	enc.buffer = protowire.AppendString(enc.buffer, *v)
 }
 
@@ -158,6 +158,6 @@ func (enc *Encoder) Bytes(field FieldNumber, v *[]byte) {
 	if len(*v) == 0 {
 		return
 	}
-	enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), protowire.BytesType)
+	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 	enc.buffer = protowire.AppendBytes(enc.buffer, *v)
 }

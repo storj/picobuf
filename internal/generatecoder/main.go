@@ -144,7 +144,7 @@ func generateEncoder() []byte {
 			pf("if *v == %v { return }\n", t.Zero)
 		}
 
-		pf("enc.buffer = protowire.AppendTag(enc.buffer, protowire.Number(field), %s)\n", t.WireName())
+		pf("enc.buffer = appendTag(enc.buffer, field, %s)\n", t.WireName())
 		if strings.Contains(t.EncodeFmt, "%s") {
 			pf("enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "*v")
 		} else {
