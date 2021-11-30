@@ -112,3 +112,21 @@ func TestDecoder_SubMessage(t *testing.T) {
 		Address: nil,
 	})
 }
+
+func TestDecoder_Repeated(t *testing.T) {
+	dec := picobuf.NewDecoder([]byte{0x22, 0x06, 0x03, 0x8E, 0x02, 0x9E, 0xA7, 0x05})
+	xs := []int32{}
+	dec.Loop(func(c *picobuf.Codec) bool {
+		c.RepeatedInt32(4, &xs)
+		return true
+	})
+	assert.Equal(t, xs, []int32{3, 270, 86942})
+
+	dec = picobuf.NewDecoder([]byte{0x22, 0x06, 0x03, 0x8E, 0x02, 0x9E, 0xA7, 0x05, 0x22, 0x06, 0x03, 0x8E, 0x02, 0x9E, 0xA7, 0x05})
+	xs = []int32{}
+	dec.Loop(func(c *picobuf.Codec) bool {
+		c.RepeatedInt32(4, &xs)
+		return true
+	})
+	assert.Equal(t, xs, []int32{3, 270, 86942, 3, 270, 86942})
+}

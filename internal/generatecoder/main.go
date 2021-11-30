@@ -241,12 +241,7 @@ func generateDecoder() []byte {
 
 			pf("x, n := protowire.Consume%v(dec.buffer)\n", t.Suffix)
 			pf("if n < 0 { dec.fail(field, \"unable to parse %v\"); return }\n", t.Suffix)
-
-			if strings.Contains(t.DecodeFmt, "%s") {
-				pf("*v = "+t.DecodeFmt+"\n", "x")
-			} else {
-				pf("*v = " + t.DecodeFmt + "\n")
-			}
+			pf("*v = "+t.DecodeFmt+"\n", "x")
 			pf("dec.nextField(n)\n")
 			pf("}\n")
 		}
@@ -254,11 +249,32 @@ func generateDecoder() []byte {
 		{ // decoding repeated values
 			pf("// Repeated%s decodes repeated %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
 			pf("func (dec *Decoder) Repeated%s(field FieldNumber, v *[]%s) {\n", t.Name, t.TypeName())
+			pf("for field == dec.pendingField {\n")
 
-			pf("if field != dec.pendingField {\n")
+			pf("switch dec.pendingWire {")
+			if t.IsScalar() {
+				pf("case protowire.BytesType:\n")
+				pf("    packed, n := protowire.ConsumeBytes(dec.buffer)\n")
+				pf("    for len(packed) > 0 {\n")
+				pf("         x, xn := protowire.Consume%v(packed)\n", t.Suffix)
+				pf("         if xn < 0 { dec.fail(field, \"unable to parse %v\"); return }\n", t.Suffix)
+				pf("         *v = append(*v, "+t.DecodeFmt+")\n", "x")
+				pf("         packed = packed[xn:]\n")
+				pf("    }\n")
+				pf("    dec.nextField(n)\n")
+			}
+			pf("case %v:\n", t.WireName())
+			pf("    x, n := protowire.Consume%v(dec.buffer)\n", t.Suffix)
+			pf("    if n < 0 { dec.fail(field, \"unable to parse %v\"); return }\n", t.Suffix)
+			pf("    *v = append(*v, "+t.DecodeFmt+")\n", "x")
+			pf("    dec.nextField(n)\n")
+
+			pf("default:\n")
+			pf("    dec.fail(field, \"expected wire type %v\")\n", t.ShortWireName())
 			pf("    return\n")
 			pf("}\n")
-			pf("panic(\"not implemented\")\n")
+
+			pf("}\n")
 			pf("}\n")
 		}
 	}

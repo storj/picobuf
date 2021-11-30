@@ -96,13 +96,9 @@ func TestEncoding_Repeated(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, canonical, data)
 
-		/*
-			decoding not yet implemented
-
-			var got TypesPico
-			err = picobuf.Unmarshal(canonical, &got)
-			assert.NoError(t, err)
-			assert.DeepEqual(t, got, test)
-		*/
+		var got RepeatedTypesPico
+		err = picobuf.Unmarshal(canonical, &got)
+		assert.NoError(t, err)
+		assert.DeepEqual(t, got, test)
 	}
 }
