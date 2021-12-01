@@ -65,6 +65,10 @@ message Person {
 	double money    = 6;
 }
 
+message Map {
+	map<string, string> values = 1;
+}
+
 /*
 Go generator currently does not support explicit optional types.
 

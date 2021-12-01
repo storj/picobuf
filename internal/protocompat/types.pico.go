@@ -175,3 +175,15 @@ func (m *PersonPico) Picobuf(c *picobuf.Codec) bool {
 	c.Double(6, &m.Money)
 	return true
 }
+
+type MapPico struct {
+	Values map[string]string
+}
+
+func (m *MapPico) Picobuf(c *picobuf.Codec) bool {
+	if m == nil {
+		return false
+	}
+	c.MapStringString(1, &m.Values)
+	return true
+}

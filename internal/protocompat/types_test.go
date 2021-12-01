@@ -118,3 +118,55 @@ func TestRepeated(t *testing.T) {
 		assert.DeepEqual(t, got, test)
 	}
 }
+
+func TestMaps(t *testing.T) {
+	tests := []MapPico{
+		{},
+		{
+			Values: map[string]string{"a": "b"},
+		},
+		{
+			Values: map[string]string{"": ""},
+		},
+		{
+			Values: map[string]string{"empty": ""},
+		},
+		{
+			Values: map[string]string{"": "v"},
+		},
+		{
+			Values: map[string]string{
+				"a": "b",
+				"b": "c",
+				"c": "d",
+			},
+		},
+	}
+
+	for _, test := range tests {
+		data, err := picobuf.Marshal(&test)
+		assert.NoError(t, err)
+
+		var p Map
+		err = proto.Unmarshal(data, &p)
+		assert.NoError(t, err)
+
+		opts := proto.MarshalOptions{Deterministic: true}
+		canonical, err := opts.Marshal(&p)
+		assert.NoError(t, err)
+
+		// encoding of maps is not deterministic
+		if len(test.Values) <= 1 {
+			_, hasEmptyKey := test.Values[""]
+			_, hasEmptyVal := test.Values["empty"]
+			if !hasEmptyKey && !hasEmptyVal {
+				assert.Equal(t, canonical, data)
+			}
+		}
+
+		var got MapPico
+		err = picobuf.Unmarshal(canonical, &got)
+		assert.NoError(t, err)
+		assert.DeepEqual(t, got, test)
+	}
+}

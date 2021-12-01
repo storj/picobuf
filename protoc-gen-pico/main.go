@@ -184,7 +184,17 @@ func genMessageMethods(gf *generator, m *protogen.Message) {
 	gf.P()
 }
 
+type kind2 [2]protoreflect.Kind
+
 func codecMethodName(gf *generator, field *protogen.Field) string {
+	if field.Desc.IsMap() {
+		switch (kind2{field.Desc.MapKey().Kind(), field.Desc.MapValue().Kind()}) {
+		case kind2{protoreflect.StringKind, protoreflect.StringKind}:
+			return "MapStringString"
+		default:
+			panic(fmt.Sprintf("unhandled: invalid map field kind: <%v,%v>", field.Desc.MapKey().Kind(), field.Desc.MapValue().Kind()))
+		}
+	}
 	if method, ok := methodNames[field.Desc.Kind()]; ok {
 		if field.Desc.IsList() {
 			method = "Repeated" + method
@@ -266,7 +276,12 @@ func fieldGoType(gf *generator, field *protogen.Field) (goType string) {
 	case field.Desc.HasPresence():
 		return "*" + goType
 	case field.Desc.IsMap():
-		panic("unhandled: map field types")
+		switch (kind2{field.Desc.MapKey().Kind(), field.Desc.MapValue().Kind()}) {
+		case kind2{protoreflect.StringKind, protoreflect.StringKind}:
+			return "map[string]string"
+		default:
+			panic(fmt.Sprintf("unhandled: invalid map field kind: <%v,%v>", field.Desc.MapKey().Kind(), field.Desc.MapValue().Kind()))
+		}
 	default:
 		return goType
 	}
