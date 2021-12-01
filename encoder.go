@@ -31,7 +31,7 @@ func (enc *Encoder) Codec() *Codec { return enc.codec }
 func (enc *Encoder) Buffer() []byte { return enc.buffer }
 
 // Message decodes a message.
-func (enc *Encoder) Message(field FieldNumber, allocate func(), fn func(*Codec) bool) {
+func (enc *Encoder) Message(field FieldNumber, fn func(*Codec) bool) {
 	enc.encodeAnyBytes(field, func() bool {
 		return fn(enc.codec)
 	})

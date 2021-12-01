@@ -12,7 +12,7 @@ import (
 	"storj.io/picobuf"
 )
 
-func TestEncoding_Types(t *testing.T) {
+func TestTypes(t *testing.T) {
 	tests := []TypesPico{
 		{},
 		{
@@ -61,7 +61,7 @@ func TestEncoding_Types(t *testing.T) {
 	}
 }
 
-func TestEncoding_Repeated(t *testing.T) {
+func TestRepeated(t *testing.T) {
 	tests := []RepeatedTypesPico{
 		{},
 		{

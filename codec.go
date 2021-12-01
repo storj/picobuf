@@ -21,13 +21,16 @@ type FieldNumber protowire.Number
 // IsValid returns whether the field number is in correct range.
 func (field FieldNumber) IsValid() bool { return protowire.Number(field).IsValid() }
 
+// IsDecoding returns whether codec is in decoding mode.
+func (codec *Codec) IsDecoding() bool { return !codec.encoding }
+
 // Message codes a message.
 //go:noinline
-func (codec *Codec) Message(field FieldNumber, allocate func(), fn func(*Codec) bool) {
+func (codec *Codec) Message(field FieldNumber, fn func(*Codec) bool) {
 	if codec.encoding {
-		codec.encode.Message(field, allocate, fn)
+		codec.encode.Message(field, fn)
 	} else {
-		codec.decode.Message(field, allocate, fn)
+		codec.decode.Message(field, fn)
 	}
 }
 

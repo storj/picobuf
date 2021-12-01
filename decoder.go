@@ -67,7 +67,7 @@ func (dec *Decoder) popState() {
 }
 
 // Message decodes a message.
-func (dec *Decoder) Message(field FieldNumber, allocate func(), fn func(*Codec) bool) {
+func (dec *Decoder) Message(field FieldNumber, fn func(*Codec) bool) {
 	if field != dec.pendingField {
 		return
 	}
@@ -78,7 +78,6 @@ func (dec *Decoder) Message(field FieldNumber, allocate func(), fn func(*Codec) 
 
 	message, n := protowire.ConsumeBytes(dec.buffer)
 	dec.pushState(message)
-	allocate()
 	dec.Loop(fn)
 	dec.popState()
 
@@ -87,9 +86,12 @@ func (dec *Decoder) Message(field FieldNumber, allocate func(), fn func(*Codec) 
 
 // Loop loops fields until all messages have been processed.
 func (dec *Decoder) Loop(fn func(*Codec) bool) {
-	for dec.pendingField > 0 {
+	for {
 		startingLength := len(dec.buffer)
 		fn(dec.codec)
+		if !dec.pendingField.IsValid() {
+			break
+		}
 		if len(dec.buffer) == startingLength {
 			// we didn't process any of the fields
 			n := protowire.ConsumeFieldValue(protowire.Number(dec.pendingField), dec.pendingWire, dec.buffer)

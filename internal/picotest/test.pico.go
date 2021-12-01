@@ -47,12 +47,12 @@ func (m *Person) Picobuf(c *picobuf.Codec) bool {
 		return false
 	}
 	c.String(1, &m.Name)
-	c.Message(2,
-		func() { m.Address = new(Address) },
-		func(c *picobuf.Codec) bool {
-			return m.Address.Picobuf(c)
-		},
-	)
+	c.Message(2, func(c *picobuf.Codec) bool {
+		if c.IsDecoding() && m.Address == nil {
+			m.Address = new(Address)
+		}
+		return m.Address.Picobuf(c)
+	})
 	return true
 }
 
@@ -106,12 +106,12 @@ func (m *AllTypes) Picobuf(c *picobuf.Codec) bool {
 	c.Bool(13, &m.Bool)
 	c.String(14, &m.String_)
 	c.Bytes(15, &m.Bytes)
-	c.Message(16,
-		func() { m.Message = new(Message) },
-		func(c *picobuf.Codec) bool {
-			return m.Message.Picobuf(c)
-		},
-	)
+	c.Message(16, func(c *picobuf.Codec) bool {
+		if c.IsDecoding() && m.Message == nil {
+			m.Message = new(Message)
+		}
+		return m.Message.Picobuf(c)
+	})
 	return true
 }
 

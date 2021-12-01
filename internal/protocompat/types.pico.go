@@ -49,12 +49,12 @@ func (m *TypesPico) Picobuf(c *picobuf.Codec) bool {
 	c.Bool(13, &m.Bool)
 	c.String(14, &m.String_)
 	c.Bytes(15, &m.Bytes)
-	c.Message(16,
-		func() { m.Message = new(MessagePico) },
-		func(c *picobuf.Codec) bool {
-			return m.Message.Picobuf(c)
-		},
-	)
+	c.Message(16, func(c *picobuf.Codec) bool {
+		if c.IsDecoding() && m.Message == nil {
+			m.Message = new(MessagePico)
+		}
+		return m.Message.Picobuf(c)
+	})
 	return true
 }
 
