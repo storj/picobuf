@@ -34,6 +34,16 @@ func (codec *Codec) Message(field FieldNumber, fn func(*Codec) bool) {
 	}
 }
 
+// RepeatedMessage codes a repeated message.
+//go:noinline
+func (codec *Codec) RepeatedMessage(field FieldNumber, fn func(c *Codec, index int) bool) {
+	if codec.encoding {
+		codec.encode.RepeatedMessage(field, fn)
+	} else {
+		codec.decode.RepeatedMessage(field, fn)
+	}
+}
+
 // PresentMessage codes an always present message.
 //go:noinline
 func (codec *Codec) PresentMessage(field FieldNumber, fn func(*Codec) bool) {

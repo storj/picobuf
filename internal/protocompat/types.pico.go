@@ -74,6 +74,7 @@ type RepeatedTypesPico struct {
 	Bool     []bool
 	String_  []string
 	Bytes    [][]byte
+	Message  []*MessagePico
 }
 
 func (m *RepeatedTypesPico) Picobuf(c *picobuf.Codec) bool {
@@ -95,11 +96,53 @@ func (m *RepeatedTypesPico) Picobuf(c *picobuf.Codec) bool {
 	c.RepeatedBool(13, &m.Bool)
 	c.RepeatedString(14, &m.String_)
 	c.RepeatedBytes(15, &m.Bytes)
+	c.RepeatedMessage(16, func(c *picobuf.Codec, index int) bool {
+		if c.IsDecoding() && index == -1 {
+			m.Message = append(m.Message, new(MessagePico))
+		}
+		if index >= len(m.Message) {
+			return false
+		}
+		if index < 0 {
+			index = len(m.Message) - 1
+		}
+		x := m.Message[index]
+		x.Picobuf(c)
+		return true
+	})
+	return true
+}
+
+type RepeatedMixedPico struct {
+	Int32   int32
+	Message []*MessagePico
+}
+
+func (m *RepeatedMixedPico) Picobuf(c *picobuf.Codec) bool {
+	if m == nil {
+		return false
+	}
+	c.Int32(1, &m.Int32)
+	c.RepeatedMessage(16, func(c *picobuf.Codec, index int) bool {
+		if c.IsDecoding() && index == -1 {
+			m.Message = append(m.Message, new(MessagePico))
+		}
+		if index >= len(m.Message) {
+			return false
+		}
+		if index < 0 {
+			index = len(m.Message) - 1
+		}
+		x := m.Message[index]
+		x.Picobuf(c)
+		return true
+	})
 	return true
 }
 
 type MessagePico struct {
 	Int32 int32
+	Int64 int64
 }
 
 func (m *MessagePico) Picobuf(c *picobuf.Codec) bool {
@@ -107,6 +150,7 @@ func (m *MessagePico) Picobuf(c *picobuf.Codec) bool {
 		return false
 	}
 	c.Int32(1, &m.Int32)
+	c.Int64(2, &m.Int64)
 	return true
 }
 

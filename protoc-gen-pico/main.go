@@ -164,6 +164,17 @@ func genMessageMethods(gf *generator, m *protogen.Message) {
 			gf.P("  }")
 			gf.P("  return m.", field.GoName, ".Picobuf(c)")
 			gf.P("})")
+		} else if method == "RepeatedMessage" {
+			gf.P("c.RepeatedMessage(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Codec"), ", index int) bool {")
+			gf.P("  if c.IsDecoding() && index == -1 {")
+			gf.P("    m.", field.GoName, " = append(m.", field.GoName, ", new(", fieldGoType(gf, field)[3:], "))")
+			gf.P("  }")
+			gf.P("  if index >= len(m.", field.GoName, ") { return false }")
+			gf.P("  if index < 0 { index = len(m.", field.GoName, ") - 1 }")
+			gf.P("  x := m.", field.GoName, "[index]")
+			gf.P("  x.Picobuf(c)")
+			gf.P("  return true")
+			gf.P("})")
 		} else {
 			gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
 		}
@@ -248,16 +259,17 @@ func fieldGoType(gf *generator, field *protogen.Field) (goType string) {
 	}
 
 	switch {
+	case field.Desc.IsList() && field.Desc.Kind() == protoreflect.MessageKind:
+		return "[]*" + goType
 	case field.Desc.IsList():
 		return "[]" + goType
+	case field.Desc.HasPresence():
+		return "*" + goType
 	case field.Desc.IsMap():
 		panic("unhandled: map field types")
+	default:
+		return goType
 	}
-
-	if field.Desc.HasPresence() {
-		return "*" + goType
-	}
-	return goType
 }
 
 func genMessageOneofWrapperTypes(gf *generator, m *protogen.Message) {

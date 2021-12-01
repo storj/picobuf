@@ -66,8 +66,48 @@ func (dec *Decoder) popState() {
 	dec.stack = dec.stack[:len(dec.stack)-1]
 }
 
+// RepeatedMessage decodes a message.
+func (dec *Decoder) RepeatedMessage(field FieldNumber, fn func(c *Codec, index int) bool) {
+	for field == dec.pendingField {
+		if dec.pendingWire != protowire.BytesType {
+			dec.fail(field, "expected wire type Bytes")
+			return
+		}
+
+		message, n := protowire.ConsumeBytes(dec.buffer)
+		dec.pushState(message)
+		mode := -1
+		dec.Loop(func(c *Codec) bool {
+			fn(dec.codec, mode)
+			mode = -2
+			return true
+		})
+		dec.popState()
+
+		dec.nextField(n)
+	}
+}
+
 // Message decodes a message.
 func (dec *Decoder) Message(field FieldNumber, fn func(*Codec) bool) {
+	if field != dec.pendingField {
+		return
+	}
+	if dec.pendingWire != protowire.BytesType {
+		dec.fail(field, "expected wire type Bytes")
+		return
+	}
+
+	message, n := protowire.ConsumeBytes(dec.buffer)
+	dec.pushState(message)
+	dec.Loop(fn)
+	dec.popState()
+
+	dec.nextField(n)
+}
+
+// PresentMessage decodes an always present message.
+func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Codec) bool) {
 	if field != dec.pendingField {
 		return
 	}
@@ -98,24 +138,6 @@ func (dec *Decoder) Loop(fn func(*Codec) bool) {
 			dec.nextField(n)
 		}
 	}
-}
-
-// PresentMessage decodes an always present message.
-func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Codec) bool) {
-	if field != dec.pendingField {
-		return
-	}
-	if dec.pendingWire != protowire.BytesType {
-		dec.fail(field, "expected wire type Bytes")
-		return
-	}
-
-	message, n := protowire.ConsumeBytes(dec.buffer)
-	dec.pushState(message)
-	dec.Loop(fn)
-	dec.popState()
-
-	dec.nextField(n)
 }
 
 //go:noinline

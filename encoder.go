@@ -46,8 +46,20 @@ func (enc *Encoder) PresentMessage(field FieldNumber, fn func(*Codec) bool) {
 	})
 }
 
+// RepeatedMessage encodes a repeated message.
+func (enc *Encoder) RepeatedMessage(field FieldNumber, fn func(c *Codec, index int) bool) {
+	for index := 0; ; index++ {
+		ok := enc.encodeAnyBytes(field, func() bool {
+			return fn(enc.codec, index)
+		})
+		if !ok {
+			return
+		}
+	}
+}
+
 // encodeAnyBytes encodes field as Bytes and handles encoding the length.
-func (enc *Encoder) encodeAnyBytes(field FieldNumber, fn func() bool) {
+func (enc *Encoder) encodeAnyBytes(field FieldNumber, fn func() bool) bool {
 	tagStart := len(enc.buffer)
 	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 	lengthStart := len(enc.buffer)
@@ -61,13 +73,13 @@ func (enc *Encoder) encodeAnyBytes(field FieldNumber, fn func() bool) {
 	if !ok {
 		// The message was nil, we can remove the tag.
 		enc.buffer = enc.buffer[:tagStart]
-		return
+		return false
 	}
 	messageLength := len(enc.buffer) - messageStart
 	bytesForSize := protowire.SizeVarint(uint64(messageLength))
 	if bytesForSize == len(lengthBufferPrediction) {
 		binary.PutUvarint(enc.buffer[lengthStart:messageStart], uint64(messageLength))
-		return
+		return true
 	}
 	if bytesForSize > len(lengthBufferPrediction) {
 		enc.buffer = append(enc.buffer, make([]byte, bytesForSize-len(lengthBufferPrediction))...)
@@ -76,4 +88,5 @@ func (enc *Encoder) encodeAnyBytes(field FieldNumber, fn func() bool) {
 	copy(enc.buffer[lengthStart+bytesForSize:], enc.buffer[messageStart:])
 	binary.PutUvarint(enc.buffer[lengthStart:lengthStart+bytesForSize], uint64(messageLength))
 	enc.buffer = enc.buffer[:lengthStart+bytesForSize+messageLength]
+	return true
 }

@@ -12,6 +12,18 @@ import (
 	"storj.io/picobuf"
 )
 
+func TestDecodingMixed(t *testing.T) {
+	var x1 RepeatedMixedPico
+	err := picobuf.Unmarshal([]byte{130, 1, 0, 8, 123, 130, 1, 0}, &x1)
+	assert.NoError(t, err)
+	assert.DeepEqual(t, x1, RepeatedMixedPico{Int32: 123, Message: []*MessagePico{{}, {}}})
+
+	var x2 RepeatedMixedPico
+	err = picobuf.Unmarshal([]byte{130, 1, 4, 16, 56, 8, 109, 8, 123, 130, 1, 4, 16, 56, 8, 109}, &x2)
+	assert.NoError(t, err)
+	assert.DeepEqual(t, x2, RepeatedMixedPico{Int32: 123, Message: []*MessagePico{{Int32: 109, Int64: 56}, {Int32: 109, Int64: 56}}})
+}
+
 func TestTypes(t *testing.T) {
 	tests := []TypesPico{
 		{},
@@ -80,6 +92,10 @@ func TestRepeated(t *testing.T) {
 			Bool:     []bool{true, false, true},
 			String_:  []string{"hello", "world"},
 			Bytes:    [][]byte{{}, {0, 1}, {0xff}},
+			Message: []*MessagePico{
+				{Int32: 1},
+				{Int32: 2},
+			},
 		},
 	}
 
