@@ -69,22 +69,38 @@ func (m *Address) Picobuf(c *picobuf.Codec) bool {
 }
 
 type AllTypes struct {
-	Int32    int32
-	Int64    int64
-	Uint32   uint32
-	Uint64   uint64
-	Sint32   int32
-	Sint64   int64
-	Fixed32  uint32
-	Fixed64  uint64
-	Sfixed32 int32
-	Sfixed64 int64
-	Float    float32
-	Double   float64
-	Bool     bool
-	String_  string
-	Bytes    []byte
-	Message  *Message
+	Int32     int32
+	Int64     int64
+	Uint32    uint32
+	Uint64    uint64
+	Sint32    int32
+	Sint64    int64
+	Fixed32   uint32
+	Fixed64   uint64
+	Sfixed32  int32
+	Sfixed64  int64
+	Float     float32
+	Double    float64
+	Bool      bool
+	String_   string
+	Bytes     []byte
+	Message   *Message
+	Int32S    []int32
+	Int64S    []int64
+	Uint32S   []uint32
+	Uint64S   []uint64
+	Sint32S   []int32
+	Sint64S   []int64
+	Fixed32S  []uint32
+	Fixed64S  []uint64
+	Sfixed32S []int32
+	Sfixed64S []int64
+	Floats    []float32
+	Doubles   []float64
+	Bools     []bool
+	Strings   []string
+	Bytess    [][]byte
+	Messages  []*Message
 }
 
 func (m *AllTypes) Picobuf(c *picobuf.Codec) bool {
@@ -111,6 +127,35 @@ func (m *AllTypes) Picobuf(c *picobuf.Codec) bool {
 			m.Message = new(Message)
 		}
 		return m.Message.Picobuf(c)
+	})
+	c.RepeatedInt32(17, &m.Int32S)
+	c.RepeatedInt64(18, &m.Int64S)
+	c.RepeatedUint32(19, &m.Uint32S)
+	c.RepeatedUint64(20, &m.Uint64S)
+	c.RepeatedSint32(21, &m.Sint32S)
+	c.RepeatedSint64(22, &m.Sint64S)
+	c.RepeatedFixed32(23, &m.Fixed32S)
+	c.RepeatedFixed64(24, &m.Fixed64S)
+	c.RepeatedSfixed32(25, &m.Sfixed32S)
+	c.RepeatedSfixed64(26, &m.Sfixed64S)
+	c.RepeatedFloat(27, &m.Floats)
+	c.RepeatedDouble(28, &m.Doubles)
+	c.RepeatedBool(29, &m.Bools)
+	c.RepeatedString(30, &m.Strings)
+	c.RepeatedBytes(31, &m.Bytess)
+	c.RepeatedMessage(32, func(c *picobuf.Codec, index int) bool {
+		if c.IsDecoding() && index == -1 {
+			m.Messages = append(m.Messages, new(Message))
+		}
+		if index >= len(m.Messages) {
+			return false
+		}
+		if index < 0 {
+			index = len(m.Messages) - 1
+		}
+		x := m.Messages[index]
+		x.Picobuf(c)
+		return true
 	})
 	return true
 }

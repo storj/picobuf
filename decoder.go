@@ -148,6 +148,10 @@ func (dec *Decoder) fail(field FieldNumber, msg string) {
 }
 
 func (dec *Decoder) nextField(advance int) {
+	if advance < 0 || advance > len(dec.buffer) {
+		dec.fail(0, "advance outside buffer")
+		return
+	}
 	dec.buffer = dec.buffer[advance:]
 	if len(dec.buffer) == 0 {
 		dec.pendingField = fieldDecodingDone
