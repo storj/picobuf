@@ -11,8 +11,9 @@ import (
 
 // Encoder implements encoding of protobuf format.
 type Encoder struct {
-	buffer []byte
-	codec  *Codec
+	buffer  []byte
+	codec   *Codec
+	backing [64]byte
 }
 
 // NewEncoder creates a new Encoder.
@@ -21,6 +22,7 @@ func NewEncoder() *Encoder {
 		encoding: true,
 	}
 	codec.encode.codec = codec
+	codec.encode.buffer = codec.encode.backing[:0]
 	return &codec.encode
 }
 
