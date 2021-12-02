@@ -5,7 +5,7 @@ package picobuf
 
 // MapStringString codes a map<string, string>.
 func (codec *Codec) MapStringString(field FieldNumber, m *map[string]string) {
-	if codec.encoding {
+	if codec.decode.codec == nil {
 		codec.encode.MapStringString(field, m)
 	} else {
 		codec.decode.MapStringString(field, m)

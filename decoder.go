@@ -32,9 +32,7 @@ type messageDecodeState struct {
 
 // NewDecoder returns a new Decoder.
 func NewDecoder(data []byte) *Decoder {
-	codec := &Codec{
-		encoding: false,
-	}
+	codec := &Codec{}
 	codec.decode.codec = codec
 	codec.decode.buffer = data
 	codec.decode.nextField(0)

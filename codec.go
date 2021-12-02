@@ -10,9 +10,8 @@ import (
 // Codec defines a unified implementation for encoder and decoder to
 // minimize generated code usage for messages.
 type Codec struct {
-	encoding bool
-	encode   Encoder
-	decode   Decoder
+	decode Decoder
+	encode Encoder
 }
 
 // FieldNumber corresponds to a protobuf field number.
@@ -22,12 +21,12 @@ type FieldNumber protowire.Number
 func (field FieldNumber) IsValid() bool { return protowire.Number(field).IsValid() }
 
 // IsDecoding returns whether codec is in decoding mode.
-func (codec *Codec) IsDecoding() bool { return !codec.encoding }
+func (codec *Codec) IsDecoding() bool { return codec.decode.codec != nil }
 
 // Message codes a message.
 //go:noinline
 func (codec *Codec) Message(field FieldNumber, fn func(*Codec) bool) {
-	if codec.encoding {
+	if codec.decode.codec == nil {
 		codec.encode.Message(field, fn)
 	} else {
 		codec.decode.Message(field, fn)
@@ -37,7 +36,7 @@ func (codec *Codec) Message(field FieldNumber, fn func(*Codec) bool) {
 // RepeatedMessage codes a repeated message.
 //go:noinline
 func (codec *Codec) RepeatedMessage(field FieldNumber, fn func(c *Codec, index int) bool) {
-	if codec.encoding {
+	if codec.decode.codec == nil {
 		codec.encode.RepeatedMessage(field, fn)
 	} else {
 		codec.decode.RepeatedMessage(field, fn)
@@ -47,7 +46,7 @@ func (codec *Codec) RepeatedMessage(field FieldNumber, fn func(c *Codec, index i
 // PresentMessage codes an always present message.
 //go:noinline
 func (codec *Codec) PresentMessage(field FieldNumber, fn func(*Codec) bool) {
-	if codec.encoding {
+	if codec.decode.codec == nil {
 		codec.encode.PresentMessage(field, fn)
 	} else {
 		codec.decode.PresentMessage(field, fn)
