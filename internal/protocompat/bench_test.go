@@ -20,6 +20,7 @@ func BenchmarkProtobuf(b *testing.B) {
 		encoded = append(encoded, bytes)
 	}
 	b.Run("Encode", func(b *testing.B) {
+		b.ReportAllocs()
 		for k := 0; k < b.N; k++ {
 			for i := range data {
 				_, _ = proto.Marshal(&data[i])
@@ -27,6 +28,7 @@ func BenchmarkProtobuf(b *testing.B) {
 		}
 	})
 	b.Run("Decode", func(b *testing.B) {
+		b.ReportAllocs()
 		for k := 0; k < b.N; k++ {
 			for _, bytes := range encoded {
 				var x Person
@@ -44,6 +46,7 @@ func BenchmarkPicobuf(b *testing.B) {
 		encoded = append(encoded, bytes)
 	}
 	b.Run("Encode", func(b *testing.B) {
+		b.ReportAllocs()
 		for k := 0; k < b.N; k++ {
 			for i := range data {
 				_, _ = picobuf.Marshal(&data[i])
@@ -52,6 +55,7 @@ func BenchmarkPicobuf(b *testing.B) {
 
 	})
 	b.Run("Decode", func(b *testing.B) {
+		b.ReportAllocs()
 		for k := 0; k < b.N; k++ {
 			for _, bytes := range encoded {
 				var x PersonPico
