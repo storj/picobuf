@@ -1,0 +1,10 @@
+// Copyright (C) 2021 Storj Labs, Inc.
+// See LICENSE for copying information.
+
+syntax = "proto3";
+
+package picotest;
+
+message Types {
+	int32    int32    =  1;
+}
