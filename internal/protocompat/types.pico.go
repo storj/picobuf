@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v3.17.3
+//     protoc:          v3.19.1
 
 package protocompat
 
@@ -41,7 +41,7 @@ type TypesPico struct {
 	OptionalMessage *OptionalMessagePico
 }
 
-func (m *TypesPico) Picobuf(c *picobuf.Codec) bool {
+func (m *TypesPico) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
@@ -60,14 +60,37 @@ func (m *TypesPico) Picobuf(c *picobuf.Codec) bool {
 	c.Bool(13, &m.Bool)
 	c.String(14, &m.String_)
 	c.Bytes(15, &m.Bytes)
-	c.PresentMessage(16, m.Message.Picobuf)
-	c.Message(17, func(c *picobuf.Codec) bool {
-		if c.IsDecoding() && m.OptionalMessage == nil {
+	c.PresentMessage(16, m.Message.Encode)
+	c.Message(17, m.OptionalMessage.Encode)
+	return true
+}
+
+func (m *TypesPico) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Int32(1, &m.Int32)
+	c.Int64(2, &m.Int64)
+	c.Uint32(3, &m.Uint32)
+	c.Uint64(4, &m.Uint64)
+	c.Sint32(5, &m.Sint32)
+	c.Sint64(6, &m.Sint64)
+	c.Fixed32(7, &m.Fixed32)
+	c.Fixed64(8, &m.Fixed64)
+	c.Sfixed32(9, &m.Sfixed32)
+	c.Sfixed64(10, &m.Sfixed64)
+	c.Float(11, &m.Float)
+	c.Double(12, &m.Double)
+	c.Bool(13, &m.Bool)
+	c.String(14, &m.String_)
+	c.Bytes(15, &m.Bytes)
+	c.PresentMessage(16, m.Message.Decode)
+	c.Message(17, func(c *picobuf.Decoder) {
+		if m.OptionalMessage == nil {
 			m.OptionalMessage = new(OptionalMessagePico)
 		}
-		return m.OptionalMessage.Picobuf(c)
+		m.OptionalMessage.Decode(c)
 	})
-	return true
 }
 
 type RepeatedTypesPico struct {
@@ -89,7 +112,7 @@ type RepeatedTypesPico struct {
 	Message  []*MessagePico
 }
 
-func (m *RepeatedTypesPico) Picobuf(c *picobuf.Codec) bool {
+func (m *RepeatedTypesPico) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
@@ -108,21 +131,40 @@ func (m *RepeatedTypesPico) Picobuf(c *picobuf.Codec) bool {
 	c.RepeatedBool(13, &m.Bool)
 	c.RepeatedString(14, &m.String_)
 	c.RepeatedBytes(15, &m.Bytes)
-	c.RepeatedMessage(16, func(c *picobuf.Codec, index int) bool {
-		if c.IsDecoding() && index == -1 {
-			m.Message = append(m.Message, new(MessagePico))
-		}
+	c.RepeatedMessage(16, func(c *picobuf.Encoder, index int) bool {
 		if index >= len(m.Message) {
 			return false
 		}
-		if index < 0 {
-			index = len(m.Message) - 1
-		}
-		x := m.Message[index]
-		x.Picobuf(c)
+		m.Message[index].Encode(c)
 		return true
 	})
 	return true
+}
+
+func (m *RepeatedTypesPico) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.RepeatedInt32(1, &m.Int32)
+	c.RepeatedInt64(2, &m.Int64)
+	c.RepeatedUint32(3, &m.Uint32)
+	c.RepeatedUint64(4, &m.Uint64)
+	c.RepeatedSint32(5, &m.Sint32)
+	c.RepeatedSint64(6, &m.Sint64)
+	c.RepeatedFixed32(7, &m.Fixed32)
+	c.RepeatedFixed64(8, &m.Fixed64)
+	c.RepeatedSfixed32(9, &m.Sfixed32)
+	c.RepeatedSfixed64(10, &m.Sfixed64)
+	c.RepeatedFloat(11, &m.Float)
+	c.RepeatedDouble(12, &m.Double)
+	c.RepeatedBool(13, &m.Bool)
+	c.RepeatedString(14, &m.String_)
+	c.RepeatedBytes(15, &m.Bytes)
+	c.RepeatedMessage(16, func(c *picobuf.Decoder) {
+		mm := new(MessagePico)
+		c.Loop(mm.Decode)
+		m.Message = append(m.Message, mm)
+	})
 }
 
 type RepeatedMixedPico struct {
@@ -130,26 +172,31 @@ type RepeatedMixedPico struct {
 	Message []*MessagePico
 }
 
-func (m *RepeatedMixedPico) Picobuf(c *picobuf.Codec) bool {
+func (m *RepeatedMixedPico) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
 	c.Int32(1, &m.Int32)
-	c.RepeatedMessage(16, func(c *picobuf.Codec, index int) bool {
-		if c.IsDecoding() && index == -1 {
-			m.Message = append(m.Message, new(MessagePico))
-		}
+	c.RepeatedMessage(16, func(c *picobuf.Encoder, index int) bool {
 		if index >= len(m.Message) {
 			return false
 		}
-		if index < 0 {
-			index = len(m.Message) - 1
-		}
-		x := m.Message[index]
-		x.Picobuf(c)
+		m.Message[index].Encode(c)
 		return true
 	})
 	return true
+}
+
+func (m *RepeatedMixedPico) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Int32(1, &m.Int32)
+	c.RepeatedMessage(16, func(c *picobuf.Decoder) {
+		mm := new(MessagePico)
+		c.Loop(mm.Decode)
+		m.Message = append(m.Message, mm)
+	})
 }
 
 type MessagePico struct {
@@ -157,13 +204,21 @@ type MessagePico struct {
 	Int64 int64
 }
 
-func (m *MessagePico) Picobuf(c *picobuf.Codec) bool {
+func (m *MessagePico) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
 	c.Int32(1, &m.Int32)
 	c.Int64(2, &m.Int64)
 	return true
+}
+
+func (m *MessagePico) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Int32(1, &m.Int32)
+	c.Int64(2, &m.Int64)
 }
 
 type PersonPico struct {
@@ -177,7 +232,7 @@ type PersonPico struct {
 	Spoken   []LanguagePico
 }
 
-func (m *PersonPico) Picobuf(c *picobuf.Codec) bool {
+func (m *PersonPico) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
@@ -188,26 +243,36 @@ func (m *PersonPico) Picobuf(c *picobuf.Codec) bool {
 	c.Bool(5, &m.Spouse)
 	c.Double(6, &m.Money)
 	c.Int32(7, (*int32)(&m.Primary))
-	c.RepeatedEnum(8, func(index int) (*int32, bool) {
-		if c.IsDecoding() && index == -1 {
-			m.Spoken = append(m.Spoken, 0)
-		}
+	c.RepeatedEnum(8, func(index int) *int32 {
 		if index >= len(m.Spoken) {
-			return nil, false
+			return nil
 		}
-		if index < 0 {
-			index = len(m.Spoken) - 1
-		}
-		return (*int32)(&m.Spoken[index]), true
+		return (*int32)(&m.Spoken[index])
 	})
 	return true
+}
+
+func (m *PersonPico) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.String(1, &m.Name)
+	c.Int64(2, &m.Birthday)
+	c.String(3, &m.Phone)
+	c.Int32(4, &m.Siblings)
+	c.Bool(5, &m.Spouse)
+	c.Double(6, &m.Money)
+	c.Int32(7, (*int32)(&m.Primary))
+	c.RepeatedEnum(8, func(x int32) {
+		m.Spoken = append(m.Spoken, (LanguagePico)(x))
+	})
 }
 
 type MapPico struct {
 	Values map[string]string
 }
 
-func (m *MapPico) Picobuf(c *picobuf.Codec) bool {
+func (m *MapPico) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
@@ -215,14 +280,28 @@ func (m *MapPico) Picobuf(c *picobuf.Codec) bool {
 	return true
 }
 
+func (m *MapPico) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.MapStringString(1, &m.Values)
+}
+
 type OptionalMessagePico struct {
 	Int32 int32
 }
 
-func (m *OptionalMessagePico) Picobuf(c *picobuf.Codec) bool {
+func (m *OptionalMessagePico) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
 	c.Int32(1, &m.Int32)
 	return true
+}
+
+func (m *OptionalMessagePico) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Int32(1, &m.Int32)
 }

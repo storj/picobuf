@@ -158,7 +158,12 @@ func oneofInterfaceName(gf *generator, oneof *protogen.Oneof) string {
 }
 
 func genMessageMethods(gf *generator, m *protogen.Message) {
-	gf.P("func (m *", m.GoIdent, gf.suffix, ") Picobuf(c *", picobufPackage.Ident("Codec"), ") bool {")
+	genMessageEncode(gf, m)
+	genMessageDecode(gf, m)
+}
+
+func genMessageEncode(gf *generator, m *protogen.Message) {
+	gf.P("func (m *", m.GoIdent, gf.suffix, ") Encode(c *", picobufPackage.Ident("Encoder"), ") bool {")
 	gf.P("if m == nil { return false }")
 
 	fields := append([]*protogen.Field(nil), m.Fields...)
@@ -173,33 +178,19 @@ func genMessageMethods(gf *generator, m *protogen.Message) {
 
 		switch {
 		case method == "Message":
-			gf.P("c.Message(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Codec"), ") bool {")
-			gf.P("  if c.IsDecoding() && m.", field.GoName, " == nil {")
-			gf.P("    m.", field.GoName, " = new(", fieldGoType(gf, field)[1:], ")")
-			gf.P("  }")
-			gf.P("  return m.", field.GoName, ".Picobuf(c)")
-			gf.P("})")
+			gf.P("c.Message(", field.Desc.Number(), ", m.", field.GoName, ".Encode)")
 		case method == "PresentMessage":
-			gf.P("c.PresentMessage(", field.Desc.Number(), ", m.", field.GoName, ".Picobuf)")
+			gf.P("c.PresentMessage(", field.Desc.Number(), ", m.", field.GoName, ".Encode)")
 		case method == "RepeatedMessage":
-			gf.P("c.RepeatedMessage(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Codec"), ", index int) bool {")
-			gf.P("  if c.IsDecoding() && index == -1 {")
-			gf.P("    m.", field.GoName, " = append(m.", field.GoName, ", new(", fieldGoType(gf, field)[3:], "))")
-			gf.P("  }")
+			gf.P("c.RepeatedMessage(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Encoder"), ", index int) bool {")
 			gf.P("  if index >= len(m.", field.GoName, ") { return false }")
-			gf.P("  if index < 0 { index = len(m.", field.GoName, ") - 1 }")
-			gf.P("  x := m.", field.GoName, "[index]")
-			gf.P("  x.Picobuf(c)")
+			gf.P("  m.", field.GoName, "[index].Encode(c)")
 			gf.P("  return true")
 			gf.P("})")
 		case kind == protoreflect.EnumKind && cardinality == protoreflect.Repeated:
-			gf.P("c.RepeatedEnum(", field.Desc.Number(), ", func(index int) (*int32, bool) {")
-			gf.P("  if c.IsDecoding() && index == -1 {")
-			gf.P("    m.", field.GoName, " = append(m.", field.GoName, ", 0)")
-			gf.P("  }")
-			gf.P("  if index >= len(m.", field.GoName, ") { return nil, false }")
-			gf.P("  if index < 0 { index = len(m.", field.GoName, ") - 1 }")
-			gf.P("  return (*int32)(&m.", field.GoName, "[index]), true")
+			gf.P("c.RepeatedEnum(", field.Desc.Number(), ", func(index int) *int32 {")
+			gf.P("  if index >= len(m.", field.GoName, ") { return nil }")
+			gf.P("  return (*int32)(&m.", field.GoName, "[index])")
 			gf.P("})")
 		case kind == protoreflect.EnumKind:
 			gf.P("c.", method, "(", field.Desc.Number(), ", (*int32)(&m.", field.GoName, "))")
@@ -208,6 +199,50 @@ func genMessageMethods(gf *generator, m *protogen.Message) {
 		}
 	}
 	gf.P("return true")
+	gf.P("}")
+	gf.P()
+}
+
+func genMessageDecode(gf *generator, m *protogen.Message) {
+	gf.P("func (m *", m.GoIdent, gf.suffix, ") Decode(c *", picobufPackage.Ident("Decoder"), ") {")
+	gf.P("if m == nil { return }")
+
+	fields := append([]*protogen.Field(nil), m.Fields...)
+	sort.Slice(fields, func(i, j int) bool {
+		return fields[i].Desc.Number() < fields[j].Desc.Number()
+	})
+
+	for _, field := range fields {
+		method := codecMethodName(gf, field)
+		kind := field.Desc.Kind()
+		cardinality := field.Desc.Cardinality()
+
+		switch {
+		case method == "Message":
+			gf.P("c.Message(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Decoder"), ") {")
+			gf.P("  if m.", field.GoName, " == nil {")
+			gf.P("    m.", field.GoName, " = new(", fieldGoType(gf, field)[1:], ")")
+			gf.P("  }")
+			gf.P("  m.", field.GoName, ".Decode(c)")
+			gf.P("})")
+		case method == "PresentMessage":
+			gf.P("c.PresentMessage(", field.Desc.Number(), ", m.", field.GoName, ".Decode)")
+		case method == "RepeatedMessage":
+			gf.P("c.RepeatedMessage(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Decoder"), ") {")
+			gf.P("  mm := new(", fieldGoType(gf, field)[3:], ")")
+			gf.P("  c.Loop(mm.Decode)")
+			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", mm)")
+			gf.P("})")
+		case kind == protoreflect.EnumKind && cardinality == protoreflect.Repeated:
+			gf.P("c.RepeatedEnum(", field.Desc.Number(), ", func(x int32) {")
+			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", (", fieldGoType(gf, field)[2:], ")(x))")
+			gf.P("})")
+		case kind == protoreflect.EnumKind:
+			gf.P("c.", method, "(", field.Desc.Number(), ", (*int32)(&m.", field.GoName, "))")
+		default:
+			gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
+		}
+	}
 	gf.P("}")
 	gf.P()
 }

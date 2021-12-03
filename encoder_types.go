@@ -10,6 +10,7 @@ import (
 )
 
 // Byte encodes non-default byte protobuf type.
+//go:noinline
 func (enc *Encoder) Byte(field FieldNumber, v *uint8) {
 	if *v == 0 {
 		return
@@ -19,6 +20,7 @@ func (enc *Encoder) Byte(field FieldNumber, v *uint8) {
 }
 
 // RepeatedByte encodes non-empty repeated byte protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedByte(field FieldNumber, v *[]uint8) {
 	if len(*v) == 0 {
 		return
@@ -32,6 +34,7 @@ func (enc *Encoder) RepeatedByte(field FieldNumber, v *[]uint8) {
 }
 
 // Bool encodes non-default bool protobuf type.
+//go:noinline
 func (enc *Encoder) Bool(field FieldNumber, v *bool) {
 	if !*v {
 		return
@@ -41,6 +44,7 @@ func (enc *Encoder) Bool(field FieldNumber, v *bool) {
 }
 
 // RepeatedBool encodes non-empty repeated bool protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedBool(field FieldNumber, v *[]bool) {
 	if len(*v) == 0 {
 		return
@@ -53,6 +57,7 @@ func (enc *Encoder) RepeatedBool(field FieldNumber, v *[]bool) {
 }
 
 // Int32 encodes non-default int32 protobuf type.
+//go:noinline
 func (enc *Encoder) Int32(field FieldNumber, v *int32) {
 	if *v == 0 {
 		return
@@ -62,6 +67,7 @@ func (enc *Encoder) Int32(field FieldNumber, v *int32) {
 }
 
 // RepeatedInt32 encodes non-empty repeated int32 protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedInt32(field FieldNumber, v *[]int32) {
 	if len(*v) == 0 {
 		return
@@ -75,6 +81,7 @@ func (enc *Encoder) RepeatedInt32(field FieldNumber, v *[]int32) {
 }
 
 // Int64 encodes non-default int64 protobuf type.
+//go:noinline
 func (enc *Encoder) Int64(field FieldNumber, v *int64) {
 	if *v == 0 {
 		return
@@ -84,6 +91,7 @@ func (enc *Encoder) Int64(field FieldNumber, v *int64) {
 }
 
 // RepeatedInt64 encodes non-empty repeated int64 protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedInt64(field FieldNumber, v *[]int64) {
 	if len(*v) == 0 {
 		return
@@ -97,6 +105,7 @@ func (enc *Encoder) RepeatedInt64(field FieldNumber, v *[]int64) {
 }
 
 // Uint32 encodes non-default uint32 protobuf type.
+//go:noinline
 func (enc *Encoder) Uint32(field FieldNumber, v *uint32) {
 	if *v == 0 {
 		return
@@ -106,6 +115,7 @@ func (enc *Encoder) Uint32(field FieldNumber, v *uint32) {
 }
 
 // RepeatedUint32 encodes non-empty repeated uint32 protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedUint32(field FieldNumber, v *[]uint32) {
 	if len(*v) == 0 {
 		return
@@ -119,6 +129,7 @@ func (enc *Encoder) RepeatedUint32(field FieldNumber, v *[]uint32) {
 }
 
 // Uint64 encodes non-default uint64 protobuf type.
+//go:noinline
 func (enc *Encoder) Uint64(field FieldNumber, v *uint64) {
 	if *v == 0 {
 		return
@@ -128,6 +139,7 @@ func (enc *Encoder) Uint64(field FieldNumber, v *uint64) {
 }
 
 // RepeatedUint64 encodes non-empty repeated uint64 protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedUint64(field FieldNumber, v *[]uint64) {
 	if len(*v) == 0 {
 		return
@@ -141,6 +153,7 @@ func (enc *Encoder) RepeatedUint64(field FieldNumber, v *[]uint64) {
 }
 
 // Sint32 encodes non-default sint32 protobuf type.
+//go:noinline
 func (enc *Encoder) Sint32(field FieldNumber, v *int32) {
 	if *v == 0 {
 		return
@@ -150,6 +163,7 @@ func (enc *Encoder) Sint32(field FieldNumber, v *int32) {
 }
 
 // RepeatedSint32 encodes non-empty repeated sint32 protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedSint32(field FieldNumber, v *[]int32) {
 	if len(*v) == 0 {
 		return
@@ -163,6 +177,7 @@ func (enc *Encoder) RepeatedSint32(field FieldNumber, v *[]int32) {
 }
 
 // Sint64 encodes non-default sint64 protobuf type.
+//go:noinline
 func (enc *Encoder) Sint64(field FieldNumber, v *int64) {
 	if *v == 0 {
 		return
@@ -172,6 +187,7 @@ func (enc *Encoder) Sint64(field FieldNumber, v *int64) {
 }
 
 // RepeatedSint64 encodes non-empty repeated sint64 protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedSint64(field FieldNumber, v *[]int64) {
 	if len(*v) == 0 {
 		return
@@ -185,6 +201,7 @@ func (enc *Encoder) RepeatedSint64(field FieldNumber, v *[]int64) {
 }
 
 // Fixed32 encodes non-default fixed32 protobuf type.
+//go:noinline
 func (enc *Encoder) Fixed32(field FieldNumber, v *uint32) {
 	if *v == 0 {
 		return
@@ -194,6 +211,7 @@ func (enc *Encoder) Fixed32(field FieldNumber, v *uint32) {
 }
 
 // RepeatedFixed32 encodes non-empty repeated fixed32 protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedFixed32(field FieldNumber, v *[]uint32) {
 	if len(*v) == 0 {
 		return
@@ -206,6 +224,7 @@ func (enc *Encoder) RepeatedFixed32(field FieldNumber, v *[]uint32) {
 }
 
 // Fixed64 encodes non-default fixed64 protobuf type.
+//go:noinline
 func (enc *Encoder) Fixed64(field FieldNumber, v *uint64) {
 	if *v == 0 {
 		return
@@ -215,6 +234,7 @@ func (enc *Encoder) Fixed64(field FieldNumber, v *uint64) {
 }
 
 // RepeatedFixed64 encodes non-empty repeated fixed64 protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedFixed64(field FieldNumber, v *[]uint64) {
 	if len(*v) == 0 {
 		return
@@ -227,6 +247,7 @@ func (enc *Encoder) RepeatedFixed64(field FieldNumber, v *[]uint64) {
 }
 
 // Sfixed32 encodes non-default sfixed32 protobuf type.
+//go:noinline
 func (enc *Encoder) Sfixed32(field FieldNumber, v *int32) {
 	if *v == 0 {
 		return
@@ -236,6 +257,7 @@ func (enc *Encoder) Sfixed32(field FieldNumber, v *int32) {
 }
 
 // RepeatedSfixed32 encodes non-empty repeated sfixed32 protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedSfixed32(field FieldNumber, v *[]int32) {
 	if len(*v) == 0 {
 		return
@@ -248,6 +270,7 @@ func (enc *Encoder) RepeatedSfixed32(field FieldNumber, v *[]int32) {
 }
 
 // Sfixed64 encodes non-default sfixed64 protobuf type.
+//go:noinline
 func (enc *Encoder) Sfixed64(field FieldNumber, v *int64) {
 	if *v == 0 {
 		return
@@ -257,6 +280,7 @@ func (enc *Encoder) Sfixed64(field FieldNumber, v *int64) {
 }
 
 // RepeatedSfixed64 encodes non-empty repeated sfixed64 protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedSfixed64(field FieldNumber, v *[]int64) {
 	if len(*v) == 0 {
 		return
@@ -269,6 +293,7 @@ func (enc *Encoder) RepeatedSfixed64(field FieldNumber, v *[]int64) {
 }
 
 // Float encodes non-default float protobuf type.
+//go:noinline
 func (enc *Encoder) Float(field FieldNumber, v *float32) {
 	if *v == 0 {
 		return
@@ -278,6 +303,7 @@ func (enc *Encoder) Float(field FieldNumber, v *float32) {
 }
 
 // RepeatedFloat encodes non-empty repeated float protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedFloat(field FieldNumber, v *[]float32) {
 	if len(*v) == 0 {
 		return
@@ -290,6 +316,7 @@ func (enc *Encoder) RepeatedFloat(field FieldNumber, v *[]float32) {
 }
 
 // Double encodes non-default double protobuf type.
+//go:noinline
 func (enc *Encoder) Double(field FieldNumber, v *float64) {
 	if *v == 0 {
 		return
@@ -299,6 +326,7 @@ func (enc *Encoder) Double(field FieldNumber, v *float64) {
 }
 
 // RepeatedDouble encodes non-empty repeated double protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedDouble(field FieldNumber, v *[]float64) {
 	if len(*v) == 0 {
 		return
@@ -311,6 +339,7 @@ func (enc *Encoder) RepeatedDouble(field FieldNumber, v *[]float64) {
 }
 
 // String encodes non-default string protobuf type.
+//go:noinline
 func (enc *Encoder) String(field FieldNumber, v *string) {
 	if len(*v) == 0 {
 		return
@@ -320,6 +349,7 @@ func (enc *Encoder) String(field FieldNumber, v *string) {
 }
 
 // RepeatedString encodes non-empty repeated string protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedString(field FieldNumber, v *[]string) {
 	if len(*v) == 0 {
 		return
@@ -331,6 +361,7 @@ func (enc *Encoder) RepeatedString(field FieldNumber, v *[]string) {
 }
 
 // RawString encodes non-default rawstring protobuf type.
+//go:noinline
 func (enc *Encoder) RawString(field FieldNumber, v *string) {
 	if len(*v) == 0 {
 		return
@@ -340,6 +371,7 @@ func (enc *Encoder) RawString(field FieldNumber, v *string) {
 }
 
 // RepeatedRawString encodes non-empty repeated rawstring protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedRawString(field FieldNumber, v *[]string) {
 	if len(*v) == 0 {
 		return
@@ -351,6 +383,7 @@ func (enc *Encoder) RepeatedRawString(field FieldNumber, v *[]string) {
 }
 
 // Bytes encodes non-default bytes protobuf type.
+//go:noinline
 func (enc *Encoder) Bytes(field FieldNumber, v *[]byte) {
 	if len(*v) == 0 {
 		return
@@ -360,6 +393,7 @@ func (enc *Encoder) Bytes(field FieldNumber, v *[]byte) {
 }
 
 // RepeatedBytes encodes non-empty repeated bytes protobuf type.
+//go:noinline
 func (enc *Encoder) RepeatedBytes(field FieldNumber, v *[][]byte) {
 	if len(*v) == 0 {
 		return

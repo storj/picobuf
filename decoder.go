@@ -18,8 +18,7 @@ const (
 type Decoder struct {
 	messageDecodeState
 	stack []messageDecodeState
-
-	codec *Codec
+	init  bool
 	err   error
 }
 
@@ -32,15 +31,10 @@ type messageDecodeState struct {
 
 // NewDecoder returns a new Decoder.
 func NewDecoder(data []byte) *Decoder {
-	codec := &Codec{}
-	codec.decode.codec = codec
-	codec.decode.buffer = data
-	codec.decode.nextField(0)
-	return &codec.decode
+	dec := new(Decoder)
+	dec.buffer = data
+	return dec
 }
-
-// Codec returns the associated codec.
-func (dec *Decoder) Codec() *Codec { return dec.codec }
 
 // Err returns error that occurred during decoding.
 func (dec *Decoder) Err() error {
@@ -65,7 +59,7 @@ func (dec *Decoder) popState() {
 }
 
 // RepeatedMessage decodes a message.
-func (dec *Decoder) RepeatedMessage(field FieldNumber, fn func(c *Codec, index int) bool) {
+func (dec *Decoder) RepeatedMessage(field FieldNumber, fn func(c *Decoder)) {
 	for field == dec.pendingField {
 		if dec.pendingWire != protowire.BytesType {
 			dec.fail(field, "expected wire type Bytes")
@@ -74,12 +68,7 @@ func (dec *Decoder) RepeatedMessage(field FieldNumber, fn func(c *Codec, index i
 
 		message, n := protowire.ConsumeBytes(dec.buffer)
 		dec.pushState(message)
-		mode := -1
-		dec.Loop(func(c *Codec) bool {
-			fn(dec.codec, mode)
-			mode = -2
-			return true
-		})
+		fn(dec)
 		dec.popState()
 
 		dec.nextField(n)
@@ -87,7 +76,7 @@ func (dec *Decoder) RepeatedMessage(field FieldNumber, fn func(c *Codec, index i
 }
 
 // RepeatedEnum decodes a repeated enumeration.
-func (dec *Decoder) RepeatedEnum(field FieldNumber, fn func(index int) (*int32, bool)) {
+func (dec *Decoder) RepeatedEnum(field FieldNumber, add func(x int32)) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
 		case protowire.BytesType:
@@ -98,8 +87,7 @@ func (dec *Decoder) RepeatedEnum(field FieldNumber, fn func(index int) (*int32, 
 					dec.fail(field, "unable to parse Varint")
 					return
 				}
-				v, _ := fn(-1)
-				*v = int32(x)
+				add(int32(x))
 				packed = packed[xn:]
 			}
 			dec.nextField(n)
@@ -109,8 +97,7 @@ func (dec *Decoder) RepeatedEnum(field FieldNumber, fn func(index int) (*int32, 
 				dec.fail(field, "unable to parse Varint")
 				return
 			}
-			v, _ := fn(-1)
-			*v = int32(x)
+			add(int32(x))
 			dec.nextField(n)
 		default:
 			dec.fail(field, "expected wire type Varint")
@@ -120,7 +107,7 @@ func (dec *Decoder) RepeatedEnum(field FieldNumber, fn func(index int) (*int32, 
 }
 
 // Message decodes a message.
-func (dec *Decoder) Message(field FieldNumber, fn func(*Codec) bool) {
+func (dec *Decoder) Message(field FieldNumber, fn func(*Decoder)) {
 	if field != dec.pendingField {
 		return
 	}
@@ -138,7 +125,7 @@ func (dec *Decoder) Message(field FieldNumber, fn func(*Codec) bool) {
 }
 
 // PresentMessage decodes an always present message.
-func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Codec) bool) {
+func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Decoder)) {
 	if field != dec.pendingField {
 		return
 	}
@@ -156,10 +143,15 @@ func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Codec) bool) {
 }
 
 // Loop loops fields until all messages have been processed.
-func (dec *Decoder) Loop(fn func(*Codec) bool) {
+func (dec *Decoder) Loop(fn func(*Decoder)) {
+	if !dec.init {
+		dec.nextField(0)
+		dec.init = true
+	}
+
 	for {
 		startingLength := len(dec.buffer)
-		fn(dec.codec)
+		fn(dec)
 		if !dec.pendingField.IsValid() {
 			break
 		}

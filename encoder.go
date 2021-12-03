@@ -11,46 +11,43 @@ import (
 
 // Encoder implements encoding of protobuf format.
 type Encoder struct {
-	codec   *Codec
-	buffer  []byte
-	backing [64]byte
+	buffer []byte
 }
 
 // NewEncoder creates a new Encoder.
 func NewEncoder() *Encoder {
-	codec := &Codec{}
-	codec.encode.codec = codec
-	codec.encode.buffer = codec.encode.backing[:0]
-	return &codec.encode
+	return NewEncoderBuffer(make([]byte, 0, 64))
 }
 
-// Codec returns the associated codec.
-func (enc *Encoder) Codec() *Codec { return enc.codec }
+// NewEncoderBuffer creates a new encoder using a preallocated buffer.
+func NewEncoderBuffer(buffer []byte) *Encoder {
+	return &Encoder{buffer: buffer[:0]}
+}
 
 // Buffer returns the encoded internal buffer.
 func (enc *Encoder) Buffer() []byte { return enc.buffer }
 
 // Message decodes a message.
-func (enc *Encoder) Message(field FieldNumber, fn func(*Codec) bool) {
+func (enc *Encoder) Message(field FieldNumber, fn func(*Encoder) bool) {
 	enc.encodeAnyBytes(field, func() bool {
-		return fn(enc.codec)
+		return fn(enc)
 	})
 }
 
 // PresentMessage encodes an always present message.
-func (enc *Encoder) PresentMessage(field FieldNumber, fn func(*Codec) bool) {
+func (enc *Encoder) PresentMessage(field FieldNumber, fn func(*Encoder) bool) {
 	enc.encodeAnyBytes(field, func() bool {
 		lengthStart := len(enc.buffer)
-		fn(enc.codec)
+		fn(enc)
 		return len(enc.buffer) > lengthStart
 	})
 }
 
 // RepeatedMessage encodes a repeated message.
-func (enc *Encoder) RepeatedMessage(field FieldNumber, fn func(c *Codec, index int) bool) {
+func (enc *Encoder) RepeatedMessage(field FieldNumber, fn func(c *Encoder, index int) bool) {
 	for index := 0; ; index++ {
 		ok := enc.encodeAnyBytes(field, func() bool {
-			return fn(enc.codec, index)
+			return fn(enc, index)
 		})
 		if !ok {
 			return
@@ -59,12 +56,12 @@ func (enc *Encoder) RepeatedMessage(field FieldNumber, fn func(c *Codec, index i
 }
 
 // RepeatedEnum encodes a repeated enumeration.
-func (enc *Encoder) RepeatedEnum(field FieldNumber, fn func(index int) (*int32, bool)) {
+func (enc *Encoder) RepeatedEnum(field FieldNumber, fn func(index int) *int32) {
 	enc.encodeAnyBytes(field, func() bool {
 		count := 0
 		for i := 0; ; i++ {
-			v, ok := fn(i)
-			if !ok {
+			v := fn(i)
+			if v == nil {
 				break
 			}
 			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(*v))

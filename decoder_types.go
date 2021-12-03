@@ -10,6 +10,7 @@ import (
 )
 
 // Byte decodes byte protobuf type.
+//go:noinline
 func (dec *Decoder) Byte(field FieldNumber, v *uint8) {
 	if field != dec.pendingField {
 		return
@@ -28,6 +29,7 @@ func (dec *Decoder) Byte(field FieldNumber, v *uint8) {
 }
 
 // RepeatedByte decodes repeated byte protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedByte(field FieldNumber, v *[]uint8) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -59,6 +61,7 @@ func (dec *Decoder) RepeatedByte(field FieldNumber, v *[]uint8) {
 }
 
 // Bool decodes bool protobuf type.
+//go:noinline
 func (dec *Decoder) Bool(field FieldNumber, v *bool) {
 	if field != dec.pendingField {
 		return
@@ -77,6 +80,7 @@ func (dec *Decoder) Bool(field FieldNumber, v *bool) {
 }
 
 // RepeatedBool decodes repeated bool protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedBool(field FieldNumber, v *[]bool) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -108,6 +112,7 @@ func (dec *Decoder) RepeatedBool(field FieldNumber, v *[]bool) {
 }
 
 // Int32 decodes int32 protobuf type.
+//go:noinline
 func (dec *Decoder) Int32(field FieldNumber, v *int32) {
 	if field != dec.pendingField {
 		return
@@ -126,6 +131,7 @@ func (dec *Decoder) Int32(field FieldNumber, v *int32) {
 }
 
 // RepeatedInt32 decodes repeated int32 protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedInt32(field FieldNumber, v *[]int32) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -157,6 +163,7 @@ func (dec *Decoder) RepeatedInt32(field FieldNumber, v *[]int32) {
 }
 
 // Int64 decodes int64 protobuf type.
+//go:noinline
 func (dec *Decoder) Int64(field FieldNumber, v *int64) {
 	if field != dec.pendingField {
 		return
@@ -175,6 +182,7 @@ func (dec *Decoder) Int64(field FieldNumber, v *int64) {
 }
 
 // RepeatedInt64 decodes repeated int64 protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedInt64(field FieldNumber, v *[]int64) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -206,6 +214,7 @@ func (dec *Decoder) RepeatedInt64(field FieldNumber, v *[]int64) {
 }
 
 // Uint32 decodes uint32 protobuf type.
+//go:noinline
 func (dec *Decoder) Uint32(field FieldNumber, v *uint32) {
 	if field != dec.pendingField {
 		return
@@ -224,6 +233,7 @@ func (dec *Decoder) Uint32(field FieldNumber, v *uint32) {
 }
 
 // RepeatedUint32 decodes repeated uint32 protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedUint32(field FieldNumber, v *[]uint32) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -255,6 +265,7 @@ func (dec *Decoder) RepeatedUint32(field FieldNumber, v *[]uint32) {
 }
 
 // Uint64 decodes uint64 protobuf type.
+//go:noinline
 func (dec *Decoder) Uint64(field FieldNumber, v *uint64) {
 	if field != dec.pendingField {
 		return
@@ -273,6 +284,7 @@ func (dec *Decoder) Uint64(field FieldNumber, v *uint64) {
 }
 
 // RepeatedUint64 decodes repeated uint64 protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedUint64(field FieldNumber, v *[]uint64) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -304,6 +316,7 @@ func (dec *Decoder) RepeatedUint64(field FieldNumber, v *[]uint64) {
 }
 
 // Sint32 decodes sint32 protobuf type.
+//go:noinline
 func (dec *Decoder) Sint32(field FieldNumber, v *int32) {
 	if field != dec.pendingField {
 		return
@@ -322,6 +335,7 @@ func (dec *Decoder) Sint32(field FieldNumber, v *int32) {
 }
 
 // RepeatedSint32 decodes repeated sint32 protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedSint32(field FieldNumber, v *[]int32) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -353,6 +367,7 @@ func (dec *Decoder) RepeatedSint32(field FieldNumber, v *[]int32) {
 }
 
 // Sint64 decodes sint64 protobuf type.
+//go:noinline
 func (dec *Decoder) Sint64(field FieldNumber, v *int64) {
 	if field != dec.pendingField {
 		return
@@ -371,6 +386,7 @@ func (dec *Decoder) Sint64(field FieldNumber, v *int64) {
 }
 
 // RepeatedSint64 decodes repeated sint64 protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedSint64(field FieldNumber, v *[]int64) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -402,6 +418,7 @@ func (dec *Decoder) RepeatedSint64(field FieldNumber, v *[]int64) {
 }
 
 // Fixed32 decodes fixed32 protobuf type.
+//go:noinline
 func (dec *Decoder) Fixed32(field FieldNumber, v *uint32) {
 	if field != dec.pendingField {
 		return
@@ -420,6 +437,7 @@ func (dec *Decoder) Fixed32(field FieldNumber, v *uint32) {
 }
 
 // RepeatedFixed32 decodes repeated fixed32 protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedFixed32(field FieldNumber, v *[]uint32) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -451,6 +469,7 @@ func (dec *Decoder) RepeatedFixed32(field FieldNumber, v *[]uint32) {
 }
 
 // Fixed64 decodes fixed64 protobuf type.
+//go:noinline
 func (dec *Decoder) Fixed64(field FieldNumber, v *uint64) {
 	if field != dec.pendingField {
 		return
@@ -469,6 +488,7 @@ func (dec *Decoder) Fixed64(field FieldNumber, v *uint64) {
 }
 
 // RepeatedFixed64 decodes repeated fixed64 protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedFixed64(field FieldNumber, v *[]uint64) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -500,6 +520,7 @@ func (dec *Decoder) RepeatedFixed64(field FieldNumber, v *[]uint64) {
 }
 
 // Sfixed32 decodes sfixed32 protobuf type.
+//go:noinline
 func (dec *Decoder) Sfixed32(field FieldNumber, v *int32) {
 	if field != dec.pendingField {
 		return
@@ -518,6 +539,7 @@ func (dec *Decoder) Sfixed32(field FieldNumber, v *int32) {
 }
 
 // RepeatedSfixed32 decodes repeated sfixed32 protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedSfixed32(field FieldNumber, v *[]int32) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -549,6 +571,7 @@ func (dec *Decoder) RepeatedSfixed32(field FieldNumber, v *[]int32) {
 }
 
 // Sfixed64 decodes sfixed64 protobuf type.
+//go:noinline
 func (dec *Decoder) Sfixed64(field FieldNumber, v *int64) {
 	if field != dec.pendingField {
 		return
@@ -567,6 +590,7 @@ func (dec *Decoder) Sfixed64(field FieldNumber, v *int64) {
 }
 
 // RepeatedSfixed64 decodes repeated sfixed64 protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedSfixed64(field FieldNumber, v *[]int64) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -598,6 +622,7 @@ func (dec *Decoder) RepeatedSfixed64(field FieldNumber, v *[]int64) {
 }
 
 // Float decodes float protobuf type.
+//go:noinline
 func (dec *Decoder) Float(field FieldNumber, v *float32) {
 	if field != dec.pendingField {
 		return
@@ -616,6 +641,7 @@ func (dec *Decoder) Float(field FieldNumber, v *float32) {
 }
 
 // RepeatedFloat decodes repeated float protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedFloat(field FieldNumber, v *[]float32) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -647,6 +673,7 @@ func (dec *Decoder) RepeatedFloat(field FieldNumber, v *[]float32) {
 }
 
 // Double decodes double protobuf type.
+//go:noinline
 func (dec *Decoder) Double(field FieldNumber, v *float64) {
 	if field != dec.pendingField {
 		return
@@ -665,6 +692,7 @@ func (dec *Decoder) Double(field FieldNumber, v *float64) {
 }
 
 // RepeatedDouble decodes repeated double protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedDouble(field FieldNumber, v *[]float64) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -696,6 +724,7 @@ func (dec *Decoder) RepeatedDouble(field FieldNumber, v *[]float64) {
 }
 
 // String decodes string protobuf type.
+//go:noinline
 func (dec *Decoder) String(field FieldNumber, v *string) {
 	if field != dec.pendingField {
 		return
@@ -714,6 +743,7 @@ func (dec *Decoder) String(field FieldNumber, v *string) {
 }
 
 // RepeatedString decodes repeated string protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedString(field FieldNumber, v *[]string) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -733,6 +763,7 @@ func (dec *Decoder) RepeatedString(field FieldNumber, v *[]string) {
 }
 
 // RawString decodes rawstring protobuf type.
+//go:noinline
 func (dec *Decoder) RawString(field FieldNumber, v *string) {
 	if field != dec.pendingField {
 		return
@@ -751,6 +782,7 @@ func (dec *Decoder) RawString(field FieldNumber, v *string) {
 }
 
 // RepeatedRawString decodes repeated rawstring protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedRawString(field FieldNumber, v *[]string) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
@@ -770,6 +802,7 @@ func (dec *Decoder) RepeatedRawString(field FieldNumber, v *[]string) {
 }
 
 // Bytes decodes bytes protobuf type.
+//go:noinline
 func (dec *Decoder) Bytes(field FieldNumber, v *[]byte) {
 	if field != dec.pendingField {
 		return
@@ -788,6 +821,7 @@ func (dec *Decoder) Bytes(field FieldNumber, v *[]byte) {
 }
 
 // RepeatedBytes decodes repeated bytes protobuf type.
+//go:noinline
 func (dec *Decoder) RepeatedBytes(field FieldNumber, v *[][]byte) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {

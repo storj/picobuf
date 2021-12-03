@@ -15,10 +15,17 @@ type Types struct {
 	Int32 int32
 }
 
-func (m *Types) Picobuf(c *picobuf.Codec) bool {
+func (m *Types) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
 	c.Int32(1, &m.Int32)
 	return true
+}
+
+func (m *Types) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Int32(1, &m.Int32)
 }

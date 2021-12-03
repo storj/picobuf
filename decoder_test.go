@@ -27,7 +27,7 @@ func TestDecoder_Types(t *testing.T) {
 	}
 
 	var fields example
-	dec.Loop(func(c *picobuf.Codec) bool {
+	dec.Loop(func(c *picobuf.Decoder) {
 		c.Byte(1, &fields.byte0)
 		c.Byte(2, &fields.byte1)
 		c.Byte(3, &fields.byte100)
@@ -36,7 +36,6 @@ func TestDecoder_Types(t *testing.T) {
 		c.RawString(6, &fields.stringHello)
 		c.Bytes(7, &fields.bytesZero)
 		c.Bytes(8, &fields.bytesNumbers)
-		return true
 	})
 
 	assert.NoError(t, dec.Err())
@@ -67,7 +66,7 @@ func TestDecoder_OutOfOrder(t *testing.T) {
 	}
 
 	var fields example
-	dec.Loop(func(c *picobuf.Codec) bool {
+	dec.Loop(func(c *picobuf.Decoder) {
 		c.Bytes(8, &fields.bytesNumbers)
 		c.Byte(1, &fields.byte0)
 		c.RawString(5, &fields.stringEmpty)
@@ -76,7 +75,6 @@ func TestDecoder_OutOfOrder(t *testing.T) {
 		c.Byte(2, &fields.byte1)
 		c.Byte(3, &fields.byte100)
 		c.RawString(6, &fields.stringHello)
-		return true
 	})
 
 	assert.NoError(t, dec.Err())
@@ -116,17 +114,11 @@ func TestDecoder_SubMessage(t *testing.T) {
 func TestDecoder_Repeated(t *testing.T) {
 	dec := picobuf.NewDecoder([]byte{0x22, 0x06, 0x03, 0x8E, 0x02, 0x9E, 0xA7, 0x05})
 	xs := []int32{}
-	dec.Loop(func(c *picobuf.Codec) bool {
-		c.RepeatedInt32(4, &xs)
-		return true
-	})
+	dec.Loop(func(c *picobuf.Decoder) { c.RepeatedInt32(4, &xs) })
 	assert.Equal(t, xs, []int32{3, 270, 86942})
 
 	dec = picobuf.NewDecoder([]byte{0x22, 0x06, 0x03, 0x8E, 0x02, 0x9E, 0xA7, 0x05, 0x22, 0x06, 0x03, 0x8E, 0x02, 0x9E, 0xA7, 0x05})
 	xs = []int32{}
-	dec.Loop(func(c *picobuf.Codec) bool {
-		c.RepeatedInt32(4, &xs)
-		return true
-	})
+	dec.Loop(func(c *picobuf.Decoder) { c.RepeatedInt32(4, &xs) })
 	assert.Equal(t, xs, []int32{3, 270, 86942, 3, 270, 86942})
 }

@@ -119,11 +119,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	err = ioutil.WriteFile("codec_types.go", generateCodec(), 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func generateEncoder() []byte {
@@ -141,6 +136,7 @@ func generateEncoder() []byte {
 	for _, t := range types {
 		{ // encoding a single value
 			pf("// %s encodes non-default %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
+			pf("//go:noinline\n")
 			pf("func (enc *Encoder) %s(field FieldNumber, v *%s) {\n", t.Name, t.TypeName())
 			if t.Wire == protowire.BytesType {
 				pf("if len(*v) == 0 { return }\n")
@@ -157,6 +153,7 @@ func generateEncoder() []byte {
 
 		{ // encoding repeated values
 			pf("// Repeated%s encodes non-empty repeated %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
+			pf("//go:noinline\n")
 			pf("func (enc *Encoder) Repeated%s(field FieldNumber, v *[]%s) {\n", t.Name, t.TypeName())
 			pf("if len(*v) == 0 { return }\n")
 
@@ -228,6 +225,7 @@ func generateDecoder() []byte {
 	for _, t := range types {
 		{ // decoding single value
 			pf("// %s decodes %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
+			pf("//go:noinline\n")
 			pf("func (dec *Decoder) %s(field FieldNumber, v *%s) {\n", t.Name, t.TypeName())
 
 			pf("if field != dec.pendingField {\n")
@@ -248,6 +246,7 @@ func generateDecoder() []byte {
 
 		{ // decoding repeated values
 			pf("// Repeated%s decodes repeated %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
+			pf("//go:noinline\n")
 			pf("func (dec *Decoder) Repeated%s(field FieldNumber, v *[]%s) {\n", t.Name, t.TypeName())
 			pf("for field == dec.pendingField {\n")
 
@@ -277,47 +276,6 @@ func generateDecoder() []byte {
 			pf("}\n")
 			pf("}\n")
 		}
-	}
-
-	formatted, err := format.Source(b.Bytes())
-	if err != nil {
-		fmt.Println(b.String())
-		log.Fatal(err)
-	}
-
-	return formatted
-}
-
-func generateCodec() []byte {
-	var b bytes.Buffer
-	pf := func(format string, args ...interface{}) {
-		fmt.Fprintf(&b, format, args...)
-	}
-	pf("// Copyright (C) 2021 Storj Labs, Inc.\n")
-	pf("// See LICENSE for copying information.\n")
-	pf("\n")
-	pf("package picobuf\n\n")
-
-	for _, t := range types {
-		pf("// %s codes %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
-		pf("//go:noinline\n")
-		pf("func (codec *Codec) %s(field FieldNumber, v *%s) {\n", t.Name, t.TypeName())
-		pf("if codec.decode.codec == nil {\n")
-		pf("  codec.encode.%s(field, v)\n", t.Name)
-		pf("} else {\n")
-		pf("  codec.decode.%s(field, v)\n", t.Name)
-		pf("}\n")
-		pf("}\n")
-
-		pf("// Repeated%s codes repeated %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
-		pf("//go:noinline\n")
-		pf("func (codec *Codec) Repeated%s(field FieldNumber, v *[]%s) {\n", t.Name, t.TypeName())
-		pf("if codec.decode.codec == nil {\n")
-		pf("  codec.encode.Repeated%s(field, v)\n", t.Name)
-		pf("} else {\n")
-		pf("  codec.decode.Repeated%s(field, v)\n", t.Name)
-		pf("}\n")
-		pf("}\n")
 	}
 
 	formatted, err := format.Source(b.Bytes())

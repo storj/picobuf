@@ -47,9 +47,10 @@ func BenchmarkPicobuf(b *testing.B) {
 	}
 	b.Run("Encode", func(b *testing.B) {
 		b.ReportAllocs()
+		var buf [64]byte
 		for k := 0; k < b.N; k++ {
 			for i := range data {
-				_, _ = picobuf.Marshal(&data[i])
+				_, _ = picobuf.MarshalBuffer(&data[i], buf[:])
 			}
 		}
 
