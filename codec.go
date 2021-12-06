@@ -52,3 +52,13 @@ func (codec *Codec) PresentMessage(field FieldNumber, fn func(*Codec) bool) {
 		codec.decode.PresentMessage(field, fn)
 	}
 }
+
+// RepeatedEnum codes a repeated enumeration.
+//go:noinline
+func (codec *Codec) RepeatedEnum(field FieldNumber, fn func(index int) (*int32, bool)) {
+	if codec.decode.codec == nil {
+		codec.encode.RepeatedEnum(field, fn)
+	} else {
+		codec.decode.RepeatedEnum(field, fn)
+	}
+}

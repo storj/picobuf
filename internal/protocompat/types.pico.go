@@ -3,12 +3,22 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v3.19.1
+//     protoc:          v3.17.3
 
 package protocompat
 
 import (
 	picobuf "storj.io/picobuf"
+)
+
+type LanguagePico int32
+
+const (
+	Language_UNKNOWNPico LanguagePico = 0
+	Language_ENGLISHPico LanguagePico = 1
+	Language_SPANISHPico LanguagePico = 3
+	Language_FRENCHPico  LanguagePico = 4
+	Language_GERMANPico  LanguagePico = 5
 )
 
 type TypesPico struct {
@@ -163,6 +173,8 @@ type PersonPico struct {
 	Siblings int32
 	Spouse   bool
 	Money    float64
+	Primary  LanguagePico
+	Spoken   []LanguagePico
 }
 
 func (m *PersonPico) Picobuf(c *picobuf.Codec) bool {
@@ -175,6 +187,19 @@ func (m *PersonPico) Picobuf(c *picobuf.Codec) bool {
 	c.Int32(4, &m.Siblings)
 	c.Bool(5, &m.Spouse)
 	c.Double(6, &m.Money)
+	c.Int32(7, (*int32)(&m.Primary))
+	c.RepeatedEnum(8, func(index int) (*int32, bool) {
+		if c.IsDecoding() && index == -1 {
+			m.Spoken = append(m.Spoken, 0)
+		}
+		if index >= len(m.Spoken) {
+			return nil, false
+		}
+		if index < 0 {
+			index = len(m.Spoken) - 1
+		}
+		return (*int32)(&m.Spoken[index]), true
+	})
 	return true
 }
 

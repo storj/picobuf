@@ -86,6 +86,39 @@ func (dec *Decoder) RepeatedMessage(field FieldNumber, fn func(c *Codec, index i
 	}
 }
 
+// RepeatedEnum decodes a repeated enumeration.
+func (dec *Decoder) RepeatedEnum(field FieldNumber, fn func(index int) (*int32, bool)) {
+	for field == dec.pendingField {
+		switch dec.pendingWire {
+		case protowire.BytesType:
+			packed, n := protowire.ConsumeBytes(dec.buffer)
+			for len(packed) > 0 {
+				x, xn := protowire.ConsumeVarint(packed)
+				if xn < 0 {
+					dec.fail(field, "unable to parse Varint")
+					return
+				}
+				v, _ := fn(-1)
+				*v = int32(x)
+				packed = packed[xn:]
+			}
+			dec.nextField(n)
+		case protowire.VarintType:
+			x, n := protowire.ConsumeVarint(dec.buffer)
+			if n < 0 {
+				dec.fail(field, "unable to parse Varint")
+				return
+			}
+			v, _ := fn(-1)
+			*v = int32(x)
+			dec.nextField(n)
+		default:
+			dec.fail(field, "expected wire type Varint")
+			return
+		}
+	}
+}
+
 // Message decodes a message.
 func (dec *Decoder) Message(field FieldNumber, fn func(*Codec) bool) {
 	if field != dec.pendingField {

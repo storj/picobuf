@@ -168,17 +168,20 @@ func genMessageMethods(gf *generator, m *protogen.Message) {
 
 	for _, field := range fields {
 		method := codecMethodName(gf, field)
-		switch method {
-		case "Message":
+		kind := field.Desc.Kind()
+		cardinality := field.Desc.Cardinality()
+
+		switch {
+		case method == "Message":
 			gf.P("c.Message(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Codec"), ") bool {")
 			gf.P("  if c.IsDecoding() && m.", field.GoName, " == nil {")
 			gf.P("    m.", field.GoName, " = new(", fieldGoType(gf, field)[1:], ")")
 			gf.P("  }")
 			gf.P("  return m.", field.GoName, ".Picobuf(c)")
 			gf.P("})")
-		case "PresentMessage":
+		case method == "PresentMessage":
 			gf.P("c.PresentMessage(", field.Desc.Number(), ", m.", field.GoName, ".Picobuf)")
-		case "RepeatedMessage":
+		case method == "RepeatedMessage":
 			gf.P("c.RepeatedMessage(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Codec"), ", index int) bool {")
 			gf.P("  if c.IsDecoding() && index == -1 {")
 			gf.P("    m.", field.GoName, " = append(m.", field.GoName, ", new(", fieldGoType(gf, field)[3:], "))")
@@ -189,6 +192,17 @@ func genMessageMethods(gf *generator, m *protogen.Message) {
 			gf.P("  x.Picobuf(c)")
 			gf.P("  return true")
 			gf.P("})")
+		case kind == protoreflect.EnumKind && cardinality == protoreflect.Repeated:
+			gf.P("c.RepeatedEnum(", field.Desc.Number(), ", func(index int) (*int32, bool) {")
+			gf.P("  if c.IsDecoding() && index == -1 {")
+			gf.P("    m.", field.GoName, " = append(m.", field.GoName, ", 0)")
+			gf.P("  }")
+			gf.P("  if index >= len(m.", field.GoName, ") { return nil, false }")
+			gf.P("  if index < 0 { index = len(m.", field.GoName, ") - 1 }")
+			gf.P("  return (*int32)(&m.", field.GoName, "[index]), true")
+			gf.P("})")
+		case kind == protoreflect.EnumKind:
+			gf.P("c.", method, "(", field.Desc.Number(), ", (*int32)(&m.", field.GoName, "))")
 		default:
 			gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
 		}

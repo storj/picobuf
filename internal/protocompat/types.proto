@@ -8,6 +8,14 @@ package types;
 
 import "pico.proto";
 
+enum Language {
+	UNKNOWN = 0;
+	ENGLISH = 1;
+	SPANISH = 3;
+	FRENCH = 4;
+	GERMAN = 5;
+}
+
 message Types {
 	int32    int32    =  1;
 	int64    int64    =  2;
@@ -59,12 +67,14 @@ message Message {
 }
 
 message Person {
-	string name     = 1;
-	int64  birthday = 2;
-	string phone    = 3;
-	int32  siblings = 4;
-	bool   spouse   = 5;
-	double money    = 6;
+	string name              = 1;
+	int64  birthday          = 2;
+	string phone             = 3;
+	int32  siblings          = 4;
+	bool   spouse            = 5;
+	double money             = 6;
+	Language primary         = 7;
+	repeated Language spoken = 8;
 }
 
 message Map {

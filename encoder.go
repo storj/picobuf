@@ -58,6 +58,22 @@ func (enc *Encoder) RepeatedMessage(field FieldNumber, fn func(c *Codec, index i
 	}
 }
 
+// RepeatedEnum encodes a repeated enumeration.
+func (enc *Encoder) RepeatedEnum(field FieldNumber, fn func(index int) (*int32, bool)) {
+	enc.encodeAnyBytes(field, func() bool {
+		count := 0
+		for i := 0; ; i++ {
+			v, ok := fn(i)
+			if !ok {
+				break
+			}
+			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(*v))
+			count++
+		}
+		return count > 0
+	})
+}
+
 // encodeAnyBytes encodes field as Bytes and handles encoding the length.
 func (enc *Encoder) encodeAnyBytes(field FieldNumber, fn func() bool) bool {
 	tagStart := len(enc.buffer)

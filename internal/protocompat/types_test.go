@@ -170,3 +170,37 @@ func TestMaps(t *testing.T) {
 		assert.DeepEqual(t, got, test)
 	}
 }
+
+func TestEnum(t *testing.T) {
+	test := PersonPico{
+		Primary: Language_ENGLISHPico,
+		Spoken: []LanguagePico{
+			Language_ENGLISHPico,
+			Language_SPANISHPico,
+			Language_FRENCHPico,
+		},
+	}
+
+	data, err := picobuf.Marshal(&test)
+	assert.NoError(t, err)
+
+	{
+		var got Person
+		err = proto.Unmarshal(data, &got)
+		assert.NoError(t, err)
+
+		assert.Equal(t, int32(got.Primary), int32(test.Primary))
+		assert.Equal(t, len(got.Spoken), len(test.Spoken))
+
+		for i := 0; i < len(got.Spoken); i++ {
+			assert.Equal(t, int32(got.Spoken[i]), int32(test.Spoken[i]))
+		}
+	}
+
+	{
+		var got PersonPico
+		err = picobuf.Unmarshal(data, &got)
+		assert.NoError(t, err)
+		assert.DeepEqual(t, got, test)
+	}
+}
