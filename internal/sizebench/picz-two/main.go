@@ -8,13 +8,13 @@ import (
 
 	"storj.io/picobuf/internal/sizebench/basz"
 	"storj.io/picobuf/internal/sizebench/pico"
-	"storj.io/picobuf/internal/sizebench/pico/sml"
+	"storj.io/picobuf/internal/sizebench/pico/two"
 )
 
 func main() {
 	fmt.Println([]byte{})
 	basz.CallDynamicMethod(fmt.Println)
-	pico.Test(&sml.Nop{})
-	pico.Test(&sml.Types{})
-	basz.CallDynamicMethod(&sml.Types{})
+	pico.Test(&two.Nop{})
+	pico.Test(&two.Types{})
+	basz.CallDynamicMethod(&two.Types{})
 }

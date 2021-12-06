@@ -5,12 +5,11 @@ package main
 
 import (
 	"fmt"
-	"reflect"
+
+	"storj.io/picobuf/internal/sizebench/basz"
 )
 
 func main() {
 	fmt.Println([]byte{})
-
-	v := reflect.ValueOf(fmt.Println)
-	_ = v.MethodByName("Parsed").Call(nil)
+	basz.CallDynamicMethod(fmt.Println)
 }

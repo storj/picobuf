@@ -7,11 +7,12 @@ import (
 	"fmt"
 
 	"storj.io/picobuf/internal/sizebench/prot"
-	"storj.io/picobuf/internal/sizebench/prot/sml"
+	"storj.io/picobuf/internal/sizebench/prot/two"
 )
 
 func main() {
 	fmt.Println([]byte{})
-	prot.Test(&sml.Nop{})
-	prot.Test(&sml.Types{})
+	prot.Test(&two.Nop{})
+	prot.Test(&two.Types{})
+	prot.Test(&two.Types2{})
 }

@@ -10,6 +10,8 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
+	"strings"
 	"sync"
 	"text/tabwriter"
 
@@ -19,13 +21,11 @@ import (
 // Note, the names of packages has been chosen to be exactly the same to reduce the difference
 // in package names that end up in the binary.
 
-//go:generate protoc --pico_out=paths=source_relative:./pico/bas --pico_opt=Mmsg-bas.proto=storj.io/picobuf/internal/sizebench/pico/bas msg-bas.proto
-//go:generate protoc --pico_out=paths=source_relative:./pico/snd --pico_opt=Mmsg-bas.proto=storj.io/picobuf/internal/sizebench/pico/snd msg-bas.proto
-//go:generate protoc --pico_out=paths=source_relative:./pico/par --pico_opt=Mmsg-par.proto=storj.io/picobuf/internal/sizebench/pico/par msg-par.proto
+//go:generate protoc --pico_out=paths=source_relative:./pico/one --pico_opt=Mmsg-one.proto=storj.io/picobuf/internal/sizebench/pico/one msg-one.proto
+//go:generate protoc --pico_out=paths=source_relative:./pico/two --pico_opt=Mmsg-two.proto=storj.io/picobuf/internal/sizebench/pico/two msg-two.proto
 //go:generate protoc --pico_out=paths=source_relative:./pico/sml --pico_opt=Mmsg-sml.proto=storj.io/picobuf/internal/sizebench/pico/sml msg-sml.proto
-//go:generate protoc --go_out=paths=source_relative:./prot/bas --go_opt=Mmsg-bas.proto=storj.io/picobuf/internal/sizebench/prot/bas msg-bas.proto
-//go:generate protoc --go_out=paths=source_relative:./prot/snd --go_opt=Mmsg-bas.proto=storj.io/picobuf/internal/sizebench/prot/snd msg-bas.proto
-//go:generate protoc --go_out=paths=source_relative:./prot/par --go_opt=Mmsg-par.proto=storj.io/picobuf/internal/sizebench/prot/par msg-par.proto
+//go:generate protoc --go_out=paths=source_relative:./prot/one --go_opt=Mmsg-one.proto=storj.io/picobuf/internal/sizebench/prot/one msg-one.proto
+//go:generate protoc --go_out=paths=source_relative:./prot/two --go_opt=Mmsg-two.proto=storj.io/picobuf/internal/sizebench/prot/two msg-two.proto
 //go:generate protoc --go_out=paths=source_relative:./prot/sml --go_opt=Mmsg-sml.proto=storj.io/picobuf/internal/sizebench/prot/sml msg-sml.proto
 
 // OsArch creates a easy map of OS and Arch combinations.
@@ -38,7 +38,7 @@ var osarches = []OsArch{
 	{"linux", "amd64"},
 	// {"darwin", "amd64"},
 	// {"windows", "amd64"},
-	{"js", "wasm"},
+	// {"js", "wasm"},
 }
 
 func main() {
@@ -55,21 +55,23 @@ func run() error {
 	}
 	defer func() { _ = os.RemoveAll(tempdir) }()
 
-	targets := [][2]string{
-		{"base-fmt", "base"},
-		{"basz-fmt", "base-conserv"},
-		{"pico-lib", "pico-lib"},
-		{"pico-msg", "pico-msg"},
-		{"pico-par", "pico-partial"},
-		{"pico-sml", "pico-small"},
-		{"picz-lib", "pico-conserv-lib"},
-		{"picz-msg", "pico-conserv-msg"},
-		{"picz-par", "pico-conserv-partial"},
-		{"picz-sml", "pico-conserv-small"},
-		{"prot-lib", "proto-lib"},
-		{"prot-msg", "proto-msg"},
-		{"prot-par", "proto-partial"},
-		{"prot-sml", "proto-small"},
+	exeTargets := []string{
+		"base-fmt",
+		"basz-fmt",
+		"pico-one",
+		"pico-two",
+		"pico-sml",
+		"picz-one",
+		"picz-two",
+		"picz-sml",
+		"prot-one",
+		"prot-two",
+		"prot-sml",
+	}
+
+	pkgTargets := []string{
+		"pico/one",
+		"pico/two",
 	}
 
 	limiter := make(chan struct{}, 4)
@@ -80,19 +82,42 @@ func run() error {
 	}
 
 	var mu sync.Mutex
-	results := map[idx]result{}
+	exeResults := map[idx]exeResult{}
+	pkgResults := map[idx]pkgResult{}
+	failures := []error{}
 
 	var g errgroup.Group
 	for _, osarch := range osarches {
-		for _, target := range targets {
-			osarch, target := osarch, target
+		osarch := osarch
+		for _, target := range exeTargets {
+			target := target
 			g.Go(func() error {
 				limiter <- struct{}{}
 				defer func() { <-limiter }()
 
-				result := analyze(tempdir, osarch, target[0])
+				result, err := analyzeExe(tempdir, osarch, target)
 				mu.Lock()
-				results[idx{osarch, target[1]}] = result
+				exeResults[idx{osarch, target}] = result
+				if err != nil {
+					failures = append(failures, fmt.Errorf("%s %s: %w", osarch, target, err))
+				}
+				mu.Unlock()
+				return nil
+			})
+		}
+
+		for _, target := range pkgTargets {
+			target := target
+			g.Go(func() error {
+				limiter <- struct{}{}
+				defer func() { <-limiter }()
+
+				result, err := analyzePkg(tempdir, osarch, target)
+				mu.Lock()
+				pkgResults[idx{osarch, target}] = result
+				if err != nil {
+					failures = append(failures, fmt.Errorf("%s %s: %w", osarch, target, err))
+				}
 				mu.Unlock()
 				return nil
 			})
@@ -100,18 +125,11 @@ func run() error {
 	}
 	_ = g.Wait()
 
-	failed := false
-	for _, osarch := range osarches {
-		for _, target := range targets {
-			r := results[idx{osarch, target[1]}]
-			if r.fail != nil {
-				fmt.Fprintln(os.Stderr, r.arch, target[0], r.fail, string(r.out))
-				failed = true
-			}
+	if len(failures) > 0 {
+		for _, failure := range failures {
+			fmt.Fprintln(os.Stderr, failure)
 		}
-	}
-	if failed {
-		return fmt.Errorf("failed to compile")
+		return fmt.Errorf("compilation failed")
 	}
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 4, 4, ' ', 0)
@@ -121,39 +139,49 @@ func run() error {
 		fmt.Fprintf(w, "goos: %v\n", osarch.Os)
 		fmt.Fprintf(w, "goarch: %v\n", osarch.Arch)
 
-		size := func(target string) int64 { return results[idx{osarch, target}].size }
+		exeSize := func(target string) string {
+			size := exeResults[idx{osarch, target}].size
+			return fmt.Sprintf("%12v", memorySize(size))
+		}
+		exeDelta := func(target, base string) string {
+			asize := exeResults[idx{osarch, target}].size
+			bsize := exeResults[idx{osarch, base}].size
+			return fmt.Sprintf("%12v\t%12v-Δ", memorySize(asize), memorySize(asize-bsize))
+		}
 
-		baseSize := size("base")
-		picoMsgSize := size("pico-msg") - size("pico-lib")
-		picoLibSize := size("pico-lib") - picoMsgSize - baseSize
-		picoUnused := size("pico-partial") - picoMsgSize - picoLibSize - baseSize
-		picoSmall := size("pico-small") - baseSize
+		pkgSize := func(target string) string {
+			size := pkgResults[idx{osarch, target}].size
+			return fmt.Sprintf("%12v", memorySize(size))
+		}
+		pkgSizeMatch := func(target, match string) string {
+			r := pkgResults[idx{osarch, target}]
+			return fmt.Sprintf("%12v", memorySize(r.symbols.sum(match)))
+		}
+		pkgDelta := func(target, base string) string {
+			asize := pkgResults[idx{osarch, target}].size
+			bsize := pkgResults[idx{osarch, base}].size
+			return fmt.Sprintf("%12v\t%12v-Δ", memorySize(asize), memorySize(asize-bsize))
+		}
 
-		fmt.Fprintf(w, "BenchmarkPico/Library\t1\t%12v\n", memorySize(picoLibSize))
-		fmt.Fprintf(w, "BenchmarkPico/Message\t1\t%12v\n", memorySize(picoMsgSize))
-		fmt.Fprintf(w, "BenchmarkPico/Unused\t1\t%12v\n", memorySize(picoUnused))
-		fmt.Fprintf(w, "BenchmarkPico/LibrarySmall\t1\t%12v\n", memorySize(picoSmall))
+		fmt.Fprintf(w, "BenchmarkExeBase\t1\t%v\n", exeSize("base-fmt"))
+		fmt.Fprintf(w, "BenchmarkExeBaseConserv\t1\t%v\n", exeSize("basz-fmt"))
 
-		baseConservSize := size("base-conserv")
-		picoConservMsgSize := size("pico-conserv-msg") - size("pico-conserv-lib")
-		picoConservLibSize := size("pico-conserv-lib") - picoConservMsgSize - baseConservSize
-		picoConservUnused := size("pico-conserv-partial") - picoConservMsgSize - picoConservLibSize - baseConservSize
-		picoConservSmall := size("pico-conserv-small") - baseConservSize
+		fmt.Fprintf(w, "BenchmarkExePico/One\t1\t%v\n", exeDelta("pico-one", "base-fmt"))
+		fmt.Fprintf(w, "BenchmarkExePico/Two\t1\t%v\n", exeDelta("pico-two", "base-fmt"))
+		fmt.Fprintf(w, "BenchmarkExePico/Sml\t1\t%v\n", exeDelta("pico-sml", "base-fmt"))
 
-		fmt.Fprintf(w, "BenchmarkPicoConserv/Library\t1\t%12v\n", memorySize(picoConservLibSize))
-		fmt.Fprintf(w, "BenchmarkPicoConserv/Message\t1\t%12v\n", memorySize(picoConservMsgSize))
-		fmt.Fprintf(w, "BenchmarkPicoConserv/Unused\t1\t%12v\n", memorySize(picoConservUnused))
-		fmt.Fprintf(w, "BenchmarkPicoConserv/LibrarySmall\t1\t%12v\n", memorySize(picoConservSmall))
+		fmt.Fprintf(w, "BenchmarkPkgPico/One\t1\t%v\n", pkgSize("pico/one"))
+		fmt.Fprintf(w, "BenchmarkPkgPico/One/Encode\t1\t%v\t%v-f\n", pkgSizeMatch("pico/one", "one.(*Types).Encode"), pkgSizeMatch("pico/one", "one.(*Types).Encode.func"))
+		fmt.Fprintf(w, "BenchmarkPkgPico/One/Decode\t1\t%v\t%v-f\n", pkgSizeMatch("pico/one", "one.(*Types).Decode"), pkgSizeMatch("pico/one", "one.(*Types).Decode.func"))
+		fmt.Fprintf(w, "BenchmarkPkgPico/Two\t1\t%v\n", pkgDelta("pico/two", "pico/one"))
 
-		protoMsgSize := size("proto-msg") - size("proto-lib")
-		protoLibSize := size("proto-lib") - protoMsgSize - baseConservSize
-		protoUnused := size("proto-partial") - protoMsgSize - protoLibSize - baseConservSize
-		protoSmall := size("proto-small") - baseConservSize
+		fmt.Fprintf(w, "BenchmarkExePicoConserv/One\t1\t%v\n", exeDelta("picz-one", "basz-fmt"))
+		fmt.Fprintf(w, "BenchmarkExePicoConserv/Two\t1\t%v\n", exeDelta("picz-two", "basz-fmt"))
+		fmt.Fprintf(w, "BenchmarkExePicoConserv/Sml\t1\t%v\n", exeDelta("picz-sml", "basz-fmt"))
 
-		fmt.Fprintf(w, "BenchmarkProto/Library\t1\t%12v\n", memorySize(protoLibSize))
-		fmt.Fprintf(w, "BenchmarkProto/Message\t1\t%12v\n", memorySize(protoMsgSize))
-		fmt.Fprintf(w, "BenchmarkProto/Unused\t1\t%12v\n", memorySize(protoUnused))
-		fmt.Fprintf(w, "BenchmarkProto/LibrarySmall\t1\t%12v\n", memorySize(protoSmall))
+		fmt.Fprintf(w, "BenchmarkExeProto/One\t1\t%v\n", exeDelta("prot-one", "basz-fmt"))
+		fmt.Fprintf(w, "BenchmarkExeProto/Two\t1\t%v\n", exeDelta("prot-two", "basz-fmt"))
+		fmt.Fprintf(w, "BenchmarkExeProto/Sml\t1\t%v\n", exeDelta("prot-sml", "basz-fmt"))
 
 		fmt.Fprintf(w, "\n")
 	}
@@ -161,39 +189,128 @@ func run() error {
 	return nil
 }
 
-type result struct {
+type exeResult struct {
 	arch OsArch
 	size int64
-
-	out  []byte
-	fail error
 }
 
-func analyze(tempdir string, osarch OsArch, target string) (r result) {
+func analyzeExe(tempdir string, osarch OsArch, target string) (r exeResult, err error) {
 	r.arch = osarch
 
-	exe := filepath.Join(tempdir, osarch.Os+"_"+osarch.Arch+"_"+target+".exe")
+	exe := filepath.Join(tempdir, osarch.Os+"_"+osarch.Arch+"_"+filepath.Base(target)+".exe")
 	cmd := exec.Command("go", "build", "-o", exe, "-trimpath", "./"+target)
 	cmd.Env = append(os.Environ(),
 		"GOOS="+osarch.Os,
 		"GOARCH="+osarch.Arch,
+		"CGO_ENABLED=0",
 	)
 
-	r.out, r.fail = cmd.CombinedOutput()
-	if r.fail != nil {
-		return
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return r, fmt.Errorf("compile failed: %w (%s)", err, string(out))
 	}
 
 	info, err := os.Stat(exe)
 	if err != nil {
-		r.fail = err
-		return
+		return r, err
 	}
 
 	r.size = info.Size()
-	return
+	return r, nil
+}
+
+type pkgResult struct {
+	arch    OsArch
+	size    int64
+	symbols symbols
+}
+
+func analyzePkg(tempdir string, osarch OsArch, target string) (r pkgResult, err error) {
+	r.arch = osarch
+
+	exe := filepath.Join(tempdir, osarch.Os+"_"+osarch.Arch+"_"+filepath.Base(target)+".o")
+	cmd := exec.Command("go", "build", "-o", exe, "-trimpath", "./"+target)
+	cmd.Env = append(os.Environ(),
+		"GOOS="+osarch.Os,
+		"GOARCH="+osarch.Arch,
+		"CGO_ENABLED=0",
+	)
+
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return r, fmt.Errorf("compile failed: %w (%s)", err, string(out))
+	}
+
+	info, err := os.Stat(exe)
+	if err != nil {
+		return r, err
+	}
+
+	r.size = info.Size()
+
+	r.symbols, err = analyzeSymbols(exe)
+	if err != nil {
+		return r, err
+	}
+
+	return r, nil
 }
 
 func memorySize(size int64) string {
 	return fmt.Sprintf("%.3f KB", float64(size)/(1e3))
+}
+
+type symbols []symbol
+
+func (syms symbols) sum(match string) int64 {
+	size := int64(0)
+	for _, sym := range syms {
+		if strings.Contains(sym.name, match) {
+			size += sym.size
+		}
+	}
+	return size
+}
+
+type symbol struct {
+	name string
+	size int64
+}
+
+func analyzeSymbols(bin string) (symbols, error) {
+	cmd := exec.Command("go", "tool", "nm", "-size", bin)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return nil, err
+	}
+
+	var syms symbols
+	for _, line := range strings.Split(string(out), "\n") {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+		sym, err := parseSymbol(line)
+		if err != nil {
+			return syms, err
+		}
+		syms = append(syms, sym)
+	}
+	return syms, nil
+}
+
+func parseSymbol(line string) (sym symbol, err error) {
+	tokens := strings.Fields(line[8:])
+	if len(tokens) < 2 {
+		return sym, fmt.Errorf("invalid sym text: %q", line)
+	}
+
+	if size := strings.TrimSpace(tokens[0]); size != "" {
+		sym.size, err = strconv.ParseInt(size, 10, 64)
+		if err != nil {
+			return sym, fmt.Errorf("invalid size: %q", size)
+		}
+	}
+
+	sym.name = strings.Join(tokens[2:], " ")
+	return sym, nil
 }

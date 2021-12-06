@@ -6,14 +6,12 @@ package main
 import (
 	"fmt"
 
-	"storj.io/picobuf"
-	"storj.io/picobuf/internal/sizebench/pico/par"
+	"storj.io/picobuf/internal/sizebench/prot"
+	"storj.io/picobuf/internal/sizebench/prot/one"
 )
 
 func main() {
 	fmt.Println([]byte{})
-
-	var y par.Types
-	_, _ = picobuf.Marshal(&y)
-	_ = picobuf.Unmarshal([]byte{}, &y)
+	prot.Test(&one.Nop{})
+	prot.Test(&one.Types{})
 }
