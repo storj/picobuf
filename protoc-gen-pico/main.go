@@ -182,15 +182,12 @@ func genMessageEncode(gf *generator, m *protogen.Message) {
 		case method == "PresentMessage":
 			gf.P("c.PresentMessage(", field.Desc.Number(), ", m.", field.GoName, ".Encode)")
 		case method == "RepeatedMessage":
-			gf.P("c.RepeatedMessage(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Encoder"), ", index int) bool {")
-			gf.P("  if index >= len(m.", field.GoName, ") { return false }")
-			gf.P("  m.", field.GoName, "[index].Encode(c)")
-			gf.P("  return true")
-			gf.P("})")
+			gf.P("for _, x := range m.", field.GoName, " {")
+			gf.P("  c.AlwaysMessage(", field.Desc.Number(), ", x.Encode)")
+			gf.P("}")
 		case kind == protoreflect.EnumKind && cardinality == protoreflect.Repeated:
-			gf.P("c.RepeatedEnum(", field.Desc.Number(), ", func(index int) *int32 {")
-			gf.P("  if index >= len(m.", field.GoName, ") { return nil }")
-			gf.P("  return (*int32)(&m.", field.GoName, "[index])")
+			gf.P("c.RepeatedEnum(", field.Desc.Number(), ", len(m.", field.GoName, ")", ", func(index int) int32 {")
+			gf.P("  return (int32)(m.", field.GoName, "[index])")
 			gf.P("})")
 		case kind == protoreflect.EnumKind:
 			gf.P("c.", method, "(", field.Desc.Number(), ", (*int32)(&m.", field.GoName, "))")

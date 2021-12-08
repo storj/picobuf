@@ -25,11 +25,10 @@ func (enc *Encoder) RepeatedByte(field FieldNumber, v *[]uint8) {
 	if len(*v) == 0 {
 		return
 	}
-	enc.encodeAnyBytes(field, func() bool {
+	enc.alwaysAnyBytes(field, func() {
 		for _, x := range *v {
 			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(x))
 		}
-		return true
 	})
 }
 
@@ -72,11 +71,10 @@ func (enc *Encoder) RepeatedInt32(field FieldNumber, v *[]int32) {
 	if len(*v) == 0 {
 		return
 	}
-	enc.encodeAnyBytes(field, func() bool {
+	enc.alwaysAnyBytes(field, func() {
 		for _, x := range *v {
 			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(x))
 		}
-		return true
 	})
 }
 
@@ -96,11 +94,10 @@ func (enc *Encoder) RepeatedInt64(field FieldNumber, v *[]int64) {
 	if len(*v) == 0 {
 		return
 	}
-	enc.encodeAnyBytes(field, func() bool {
+	enc.alwaysAnyBytes(field, func() {
 		for _, x := range *v {
 			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(x))
 		}
-		return true
 	})
 }
 
@@ -120,11 +117,10 @@ func (enc *Encoder) RepeatedUint32(field FieldNumber, v *[]uint32) {
 	if len(*v) == 0 {
 		return
 	}
-	enc.encodeAnyBytes(field, func() bool {
+	enc.alwaysAnyBytes(field, func() {
 		for _, x := range *v {
 			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(x))
 		}
-		return true
 	})
 }
 
@@ -144,11 +140,10 @@ func (enc *Encoder) RepeatedUint64(field FieldNumber, v *[]uint64) {
 	if len(*v) == 0 {
 		return
 	}
-	enc.encodeAnyBytes(field, func() bool {
+	enc.alwaysAnyBytes(field, func() {
 		for _, x := range *v {
 			enc.buffer = protowire.AppendVarint(enc.buffer, x)
 		}
-		return true
 	})
 }
 
@@ -168,11 +163,10 @@ func (enc *Encoder) RepeatedSint32(field FieldNumber, v *[]int32) {
 	if len(*v) == 0 {
 		return
 	}
-	enc.encodeAnyBytes(field, func() bool {
+	enc.alwaysAnyBytes(field, func() {
 		for _, x := range *v {
 			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(encodeZigZag32(x)))
 		}
-		return true
 	})
 }
 
@@ -192,11 +186,10 @@ func (enc *Encoder) RepeatedSint64(field FieldNumber, v *[]int64) {
 	if len(*v) == 0 {
 		return
 	}
-	enc.encodeAnyBytes(field, func() bool {
+	enc.alwaysAnyBytes(field, func() {
 		for _, x := range *v {
 			enc.buffer = protowire.AppendVarint(enc.buffer, protowire.EncodeZigZag(x))
 		}
-		return true
 	})
 }
 

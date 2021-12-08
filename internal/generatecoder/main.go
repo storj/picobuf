@@ -168,11 +168,10 @@ func generateEncoder() []byte {
 						pf("    enc.buffer = append(enc.buffer, encodeBool8(x))\n")
 						pf("}\n")
 					} else {
-						pf("enc.encodeAnyBytes(field, func() bool {\n")
+						pf("enc.alwaysAnyBytes(field, func() {\n")
 						pf("    for _, x := range *v {\n")
 						pf("         enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "x")
 						pf("    }\n")
-						pf("    return true\n")
 						pf("})\n")
 					}
 				case protowire.Fixed32Type:

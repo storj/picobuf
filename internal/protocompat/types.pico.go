@@ -135,18 +135,11 @@ func (m *RepeatedTypesPico) Encode(c *picobuf.Encoder) bool {
 	c.RepeatedBool(13, &m.Bool)
 	c.RepeatedString(14, &m.String_)
 	c.RepeatedBytes(15, &m.Bytes)
-	c.RepeatedMessage(16, func(c *picobuf.Encoder, index int) bool {
-		if index >= len(m.Message) {
-			return false
-		}
-		m.Message[index].Encode(c)
-		return true
-	})
-	c.RepeatedEnum(17, func(index int) *int32 {
-		if index >= len(m.Language) {
-			return nil
-		}
-		return (*int32)(&m.Language[index])
+	for _, x := range m.Message {
+		c.AlwaysMessage(16, x.Encode)
+	}
+	c.RepeatedEnum(17, len(m.Language), func(index int) int32 {
+		return (int32)(m.Language[index])
 	})
 	return true
 }
@@ -190,13 +183,9 @@ func (m *RepeatedMixedPico) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.Int32(1, &m.Int32)
-	c.RepeatedMessage(16, func(c *picobuf.Encoder, index int) bool {
-		if index >= len(m.Message) {
-			return false
-		}
-		m.Message[index].Encode(c)
-		return true
-	})
+	for _, x := range m.Message {
+		c.AlwaysMessage(16, x.Encode)
+	}
 	return true
 }
 
@@ -256,11 +245,8 @@ func (m *PersonPico) Encode(c *picobuf.Encoder) bool {
 	c.Bool(5, &m.Spouse)
 	c.Double(6, &m.Money)
 	c.Int32(7, (*int32)(&m.Primary))
-	c.RepeatedEnum(8, func(index int) *int32 {
-		if index >= len(m.Spoken) {
-			return nil
-		}
-		return (*int32)(&m.Spoken[index])
+	c.RepeatedEnum(8, len(m.Spoken), func(index int) int32 {
+		return (int32)(m.Spoken[index])
 	})
 	return true
 }

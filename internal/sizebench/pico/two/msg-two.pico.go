@@ -121,18 +121,11 @@ func (m *Types) Encode(c *picobuf.Encoder) bool {
 	c.RepeatedBool(30, &m.Bools)
 	c.RepeatedString(31, &m.Strings)
 	c.RepeatedBytes(32, &m.Bytess)
-	c.RepeatedMessage(33, func(c *picobuf.Encoder, index int) bool {
-		if index >= len(m.Messages) {
-			return false
-		}
-		m.Messages[index].Encode(c)
-		return true
-	})
-	c.RepeatedEnum(34, func(index int) *int32 {
-		if index >= len(m.Languages) {
-			return nil
-		}
-		return (*int32)(&m.Languages[index])
+	for _, x := range m.Messages {
+		c.AlwaysMessage(33, x.Encode)
+	}
+	c.RepeatedEnum(34, len(m.Languages), func(index int) int32 {
+		return (int32)(m.Languages[index])
 	})
 	c.MapStringString(35, &m.Values)
 	return true
@@ -283,18 +276,11 @@ func (m *Types2) Encode(c *picobuf.Encoder) bool {
 	c.RepeatedBool(30, &m.Bools)
 	c.RepeatedString(31, &m.Strings)
 	c.RepeatedBytes(32, &m.Bytess)
-	c.RepeatedMessage(33, func(c *picobuf.Encoder, index int) bool {
-		if index >= len(m.Messages) {
-			return false
-		}
-		m.Messages[index].Encode(c)
-		return true
-	})
-	c.RepeatedEnum(34, func(index int) *int32 {
-		if index >= len(m.Languages) {
-			return nil
-		}
-		return (*int32)(&m.Languages[index])
+	for _, x := range m.Messages {
+		c.AlwaysMessage(33, x.Encode)
+	}
+	c.RepeatedEnum(34, len(m.Languages), func(index int) int32 {
+		return (int32)(m.Languages[index])
 	})
 	c.MapStringString(35, &m.Values)
 	return true

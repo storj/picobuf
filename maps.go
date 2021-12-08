@@ -6,7 +6,7 @@ package picobuf
 // MapStringString encodes a map<string, string>.
 func (enc *Encoder) MapStringString(field FieldNumber, m *map[string]string) {
 	for key, val := range *m {
-		enc.encodeAnyBytes(field, func() bool {
+		enc.anyBytes(field, func() bool {
 			enc.String(1, &key)
 			enc.String(2, &val)
 			return true

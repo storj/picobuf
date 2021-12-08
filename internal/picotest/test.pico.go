@@ -167,13 +167,9 @@ func (m *AllTypes) Encode(c *picobuf.Encoder) bool {
 	c.RepeatedBool(29, &m.Bools)
 	c.RepeatedString(30, &m.Strings)
 	c.RepeatedBytes(31, &m.Bytess)
-	c.RepeatedMessage(32, func(c *picobuf.Encoder, index int) bool {
-		if index >= len(m.Messages) {
-			return false
-		}
-		m.Messages[index].Encode(c)
-		return true
-	})
+	for _, x := range m.Messages {
+		c.AlwaysMessage(32, x.Encode)
+	}
 	return true
 }
 
