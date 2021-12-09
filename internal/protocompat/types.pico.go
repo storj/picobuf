@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v3.19.1
+//     protoc:          v3.17.3
 
 package protocompat
 
@@ -39,6 +39,7 @@ type TypesPico struct {
 	Bytes           []byte
 	Message         MessagePico
 	OptionalMessage *OptionalMessagePico
+	Language        LanguagePico
 }
 
 func (m *TypesPico) Encode(c *picobuf.Encoder) bool {
@@ -62,6 +63,7 @@ func (m *TypesPico) Encode(c *picobuf.Encoder) bool {
 	c.Bytes(15, &m.Bytes)
 	c.PresentMessage(16, m.Message.Encode)
 	c.Message(17, m.OptionalMessage.Encode)
+	c.Int32(18, (*int32)(&m.Language))
 	return true
 }
 
@@ -91,6 +93,7 @@ func (m *TypesPico) Decode(c *picobuf.Decoder) {
 		}
 		m.OptionalMessage.Decode(c)
 	})
+	c.Int32(18, (*int32)(&m.Language))
 }
 
 type RepeatedTypesPico struct {
@@ -110,6 +113,7 @@ type RepeatedTypesPico struct {
 	String_  []string
 	Bytes    [][]byte
 	Message  []*MessagePico
+	Language []LanguagePico
 }
 
 func (m *RepeatedTypesPico) Encode(c *picobuf.Encoder) bool {
@@ -138,6 +142,12 @@ func (m *RepeatedTypesPico) Encode(c *picobuf.Encoder) bool {
 		m.Message[index].Encode(c)
 		return true
 	})
+	c.RepeatedEnum(17, func(index int) *int32 {
+		if index >= len(m.Language) {
+			return nil
+		}
+		return (*int32)(&m.Language[index])
+	})
 	return true
 }
 
@@ -164,6 +174,9 @@ func (m *RepeatedTypesPico) Decode(c *picobuf.Decoder) {
 		mm := new(MessagePico)
 		c.Loop(mm.Decode)
 		m.Message = append(m.Message, mm)
+	})
+	c.RepeatedEnum(17, func(x int32) {
+		m.Language = append(m.Language, (LanguagePico)(x))
 	})
 }
 

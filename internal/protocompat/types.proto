@@ -35,6 +35,8 @@ message Types {
 
 	Message message = 16 [(pico.field).always_present = true];
 	OptionalMessage optional_message = 17;
+
+	Language language = 18;
 }
 
 message RepeatedTypes {
@@ -54,6 +56,7 @@ message RepeatedTypes {
 	repeated string   string   = 14;
 	repeated bytes    bytes    = 15;
 	repeated Message  message  = 16;
+	repeated Language language = 17;
 }
 
 message RepeatedMixed {

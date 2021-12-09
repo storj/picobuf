@@ -25,26 +25,36 @@ message Types {
   bytes    bytes = 15;
 
   Message message = 16;
+  Language language = 17;
 
-  repeated int32    int32s = 17;
-  repeated int64    int64s = 18;
-  repeated uint32   uint32s = 19;
-  repeated uint64   uint64s = 20;
-  repeated sint32   sint32s = 21;
-  repeated sint64   sint64s = 22;
-  repeated fixed32  fixed32s = 23;
-  repeated fixed64  fixed64s = 24;
-  repeated sfixed32 sfixed32s = 25;
-  repeated sfixed64 sfixed64s = 26;
-  repeated float    floats = 27;
-  repeated double   doubles = 28;
-  repeated bool     bools = 29;
-  repeated string   strings = 30;
-  repeated bytes    bytess = 31;
+  repeated int32    int32s = 18;
+  repeated int64    int64s = 19;
+  repeated uint32   uint32s = 20;
+  repeated uint64   uint64s = 21;
+  repeated sint32   sint32s = 22;
+  repeated sint64   sint64s = 23;
+  repeated fixed32  fixed32s = 24;
+  repeated fixed64  fixed64s = 25;
+  repeated sfixed32 sfixed32s = 26;
+  repeated sfixed64 sfixed64s = 27;
+  repeated float    floats = 28;
+  repeated double   doubles = 29;
+  repeated bool     bools = 30;
+  repeated string   strings = 31;
+  repeated bytes    bytess = 32;
 
-  repeated Message messages = 32;
+  repeated Message messages = 33;
+  repeated Language languages = 34;
 
-  map<string, string> values = 33;
+  map<string, string> values = 35;
+}
+
+enum Language {
+  UNKNOWN = 0;
+  ENGLISH = 1;
+  SPANISH = 3;
+  FRENCH = 4;
+  GERMAN = 5;
 }
 
 message Message {

@@ -77,6 +77,8 @@ func generateProtobuf(n int) []Person {
 			Siblings: r.Int31n(5),
 			Spouse:   r.Intn(2) == 1,
 			Money:    r.Float64(),
+			Primary:  Language(r.Intn(5)),
+			Spoken:   []Language{Language(r.Intn(5))},
 		}
 	}
 	return xs
@@ -93,6 +95,8 @@ func generatePicobuf(n int) []PersonPico {
 			Siblings: r.Int31n(5),
 			Spouse:   r.Intn(2) == 1,
 			Money:    r.Float64() * 1000,
+			Primary:  LanguagePico(r.Intn(5)),
+			Spoken:   []LanguagePico{LanguagePico(r.Intn(5))},
 		}
 	}
 	return xs

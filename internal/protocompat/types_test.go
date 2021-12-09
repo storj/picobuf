@@ -46,6 +46,7 @@ func TestTypes(t *testing.T) {
 			Message: MessagePico{
 				Int32: 1,
 			},
+			Language: Language_ENGLISHPico,
 		},
 		{
 			OptionalMessage: &OptionalMessagePico{},
@@ -96,6 +97,7 @@ func TestRepeated(t *testing.T) {
 				{Int32: 1},
 				{Int32: 2},
 			},
+			Language: []LanguagePico{Language_ENGLISHPico},
 		},
 	}
 

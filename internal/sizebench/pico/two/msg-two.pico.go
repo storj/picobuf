@@ -3,12 +3,32 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v3.19.1
+//     protoc:          v3.17.3
 
 package two
 
 import (
 	picobuf "storj.io/picobuf"
+)
+
+type Language int32
+
+const (
+	Language_UNKNOWN Language = 0
+	Language_ENGLISH Language = 1
+	Language_SPANISH Language = 3
+	Language_FRENCH  Language = 4
+	Language_GERMAN  Language = 5
+)
+
+type Language2 int32
+
+const (
+	Language2_UNKNOWN2 Language2 = 0
+	Language2_ENGLISH2 Language2 = 1
+	Language2_SPANISH2 Language2 = 3
+	Language2_FRENCH2  Language2 = 4
+	Language2_GERMAN2  Language2 = 5
 )
 
 type Nop struct {
@@ -44,6 +64,7 @@ type Types struct {
 	String_   string
 	Bytes     []byte
 	Message   *Message
+	Language  Language
 	Int32S    []int32
 	Int64S    []int64
 	Uint32S   []uint32
@@ -60,6 +81,7 @@ type Types struct {
 	Strings   []string
 	Bytess    [][]byte
 	Messages  []*Message
+	Languages []Language
 	Values    map[string]string
 }
 
@@ -83,29 +105,36 @@ func (m *Types) Encode(c *picobuf.Encoder) bool {
 	c.String(14, &m.String_)
 	c.Bytes(15, &m.Bytes)
 	c.Message(16, m.Message.Encode)
-	c.RepeatedInt32(17, &m.Int32S)
-	c.RepeatedInt64(18, &m.Int64S)
-	c.RepeatedUint32(19, &m.Uint32S)
-	c.RepeatedUint64(20, &m.Uint64S)
-	c.RepeatedSint32(21, &m.Sint32S)
-	c.RepeatedSint64(22, &m.Sint64S)
-	c.RepeatedFixed32(23, &m.Fixed32S)
-	c.RepeatedFixed64(24, &m.Fixed64S)
-	c.RepeatedSfixed32(25, &m.Sfixed32S)
-	c.RepeatedSfixed64(26, &m.Sfixed64S)
-	c.RepeatedFloat(27, &m.Floats)
-	c.RepeatedDouble(28, &m.Doubles)
-	c.RepeatedBool(29, &m.Bools)
-	c.RepeatedString(30, &m.Strings)
-	c.RepeatedBytes(31, &m.Bytess)
-	c.RepeatedMessage(32, func(c *picobuf.Encoder, index int) bool {
+	c.Int32(17, (*int32)(&m.Language))
+	c.RepeatedInt32(18, &m.Int32S)
+	c.RepeatedInt64(19, &m.Int64S)
+	c.RepeatedUint32(20, &m.Uint32S)
+	c.RepeatedUint64(21, &m.Uint64S)
+	c.RepeatedSint32(22, &m.Sint32S)
+	c.RepeatedSint64(23, &m.Sint64S)
+	c.RepeatedFixed32(24, &m.Fixed32S)
+	c.RepeatedFixed64(25, &m.Fixed64S)
+	c.RepeatedSfixed32(26, &m.Sfixed32S)
+	c.RepeatedSfixed64(27, &m.Sfixed64S)
+	c.RepeatedFloat(28, &m.Floats)
+	c.RepeatedDouble(29, &m.Doubles)
+	c.RepeatedBool(30, &m.Bools)
+	c.RepeatedString(31, &m.Strings)
+	c.RepeatedBytes(32, &m.Bytess)
+	c.RepeatedMessage(33, func(c *picobuf.Encoder, index int) bool {
 		if index >= len(m.Messages) {
 			return false
 		}
 		m.Messages[index].Encode(c)
 		return true
 	})
-	c.MapStringString(33, &m.Values)
+	c.RepeatedEnum(34, func(index int) *int32 {
+		if index >= len(m.Languages) {
+			return nil
+		}
+		return (*int32)(&m.Languages[index])
+	})
+	c.MapStringString(35, &m.Values)
 	return true
 }
 
@@ -134,27 +163,31 @@ func (m *Types) Decode(c *picobuf.Decoder) {
 		}
 		m.Message.Decode(c)
 	})
-	c.RepeatedInt32(17, &m.Int32S)
-	c.RepeatedInt64(18, &m.Int64S)
-	c.RepeatedUint32(19, &m.Uint32S)
-	c.RepeatedUint64(20, &m.Uint64S)
-	c.RepeatedSint32(21, &m.Sint32S)
-	c.RepeatedSint64(22, &m.Sint64S)
-	c.RepeatedFixed32(23, &m.Fixed32S)
-	c.RepeatedFixed64(24, &m.Fixed64S)
-	c.RepeatedSfixed32(25, &m.Sfixed32S)
-	c.RepeatedSfixed64(26, &m.Sfixed64S)
-	c.RepeatedFloat(27, &m.Floats)
-	c.RepeatedDouble(28, &m.Doubles)
-	c.RepeatedBool(29, &m.Bools)
-	c.RepeatedString(30, &m.Strings)
-	c.RepeatedBytes(31, &m.Bytess)
-	c.RepeatedMessage(32, func(c *picobuf.Decoder) {
+	c.Int32(17, (*int32)(&m.Language))
+	c.RepeatedInt32(18, &m.Int32S)
+	c.RepeatedInt64(19, &m.Int64S)
+	c.RepeatedUint32(20, &m.Uint32S)
+	c.RepeatedUint64(21, &m.Uint64S)
+	c.RepeatedSint32(22, &m.Sint32S)
+	c.RepeatedSint64(23, &m.Sint64S)
+	c.RepeatedFixed32(24, &m.Fixed32S)
+	c.RepeatedFixed64(25, &m.Fixed64S)
+	c.RepeatedSfixed32(26, &m.Sfixed32S)
+	c.RepeatedSfixed64(27, &m.Sfixed64S)
+	c.RepeatedFloat(28, &m.Floats)
+	c.RepeatedDouble(29, &m.Doubles)
+	c.RepeatedBool(30, &m.Bools)
+	c.RepeatedString(31, &m.Strings)
+	c.RepeatedBytes(32, &m.Bytess)
+	c.RepeatedMessage(33, func(c *picobuf.Decoder) {
 		mm := new(Message)
 		c.Loop(mm.Decode)
 		m.Messages = append(m.Messages, mm)
 	})
-	c.MapStringString(33, &m.Values)
+	c.RepeatedEnum(34, func(x int32) {
+		m.Languages = append(m.Languages, (Language)(x))
+	})
+	c.MapStringString(35, &m.Values)
 }
 
 type Message struct {
@@ -193,6 +226,7 @@ type Types2 struct {
 	String_   string
 	Bytes     []byte
 	Message   *Message2
+	Language  Language2
 	Int32S    []int32
 	Int64S    []int64
 	Uint32S   []uint32
@@ -209,6 +243,7 @@ type Types2 struct {
 	Strings   []string
 	Bytess    [][]byte
 	Messages  []*Message2
+	Languages []Language2
 	Values    map[string]string
 }
 
@@ -232,29 +267,36 @@ func (m *Types2) Encode(c *picobuf.Encoder) bool {
 	c.String(14, &m.String_)
 	c.Bytes(15, &m.Bytes)
 	c.Message(16, m.Message.Encode)
-	c.RepeatedInt32(17, &m.Int32S)
-	c.RepeatedInt64(18, &m.Int64S)
-	c.RepeatedUint32(19, &m.Uint32S)
-	c.RepeatedUint64(20, &m.Uint64S)
-	c.RepeatedSint32(21, &m.Sint32S)
-	c.RepeatedSint64(22, &m.Sint64S)
-	c.RepeatedFixed32(23, &m.Fixed32S)
-	c.RepeatedFixed64(24, &m.Fixed64S)
-	c.RepeatedSfixed32(25, &m.Sfixed32S)
-	c.RepeatedSfixed64(26, &m.Sfixed64S)
-	c.RepeatedFloat(27, &m.Floats)
-	c.RepeatedDouble(28, &m.Doubles)
-	c.RepeatedBool(29, &m.Bools)
-	c.RepeatedString(30, &m.Strings)
-	c.RepeatedBytes(31, &m.Bytess)
-	c.RepeatedMessage(32, func(c *picobuf.Encoder, index int) bool {
+	c.Int32(17, (*int32)(&m.Language))
+	c.RepeatedInt32(18, &m.Int32S)
+	c.RepeatedInt64(19, &m.Int64S)
+	c.RepeatedUint32(20, &m.Uint32S)
+	c.RepeatedUint64(21, &m.Uint64S)
+	c.RepeatedSint32(22, &m.Sint32S)
+	c.RepeatedSint64(23, &m.Sint64S)
+	c.RepeatedFixed32(24, &m.Fixed32S)
+	c.RepeatedFixed64(25, &m.Fixed64S)
+	c.RepeatedSfixed32(26, &m.Sfixed32S)
+	c.RepeatedSfixed64(27, &m.Sfixed64S)
+	c.RepeatedFloat(28, &m.Floats)
+	c.RepeatedDouble(29, &m.Doubles)
+	c.RepeatedBool(30, &m.Bools)
+	c.RepeatedString(31, &m.Strings)
+	c.RepeatedBytes(32, &m.Bytess)
+	c.RepeatedMessage(33, func(c *picobuf.Encoder, index int) bool {
 		if index >= len(m.Messages) {
 			return false
 		}
 		m.Messages[index].Encode(c)
 		return true
 	})
-	c.MapStringString(33, &m.Values)
+	c.RepeatedEnum(34, func(index int) *int32 {
+		if index >= len(m.Languages) {
+			return nil
+		}
+		return (*int32)(&m.Languages[index])
+	})
+	c.MapStringString(35, &m.Values)
 	return true
 }
 
@@ -283,27 +325,31 @@ func (m *Types2) Decode(c *picobuf.Decoder) {
 		}
 		m.Message.Decode(c)
 	})
-	c.RepeatedInt32(17, &m.Int32S)
-	c.RepeatedInt64(18, &m.Int64S)
-	c.RepeatedUint32(19, &m.Uint32S)
-	c.RepeatedUint64(20, &m.Uint64S)
-	c.RepeatedSint32(21, &m.Sint32S)
-	c.RepeatedSint64(22, &m.Sint64S)
-	c.RepeatedFixed32(23, &m.Fixed32S)
-	c.RepeatedFixed64(24, &m.Fixed64S)
-	c.RepeatedSfixed32(25, &m.Sfixed32S)
-	c.RepeatedSfixed64(26, &m.Sfixed64S)
-	c.RepeatedFloat(27, &m.Floats)
-	c.RepeatedDouble(28, &m.Doubles)
-	c.RepeatedBool(29, &m.Bools)
-	c.RepeatedString(30, &m.Strings)
-	c.RepeatedBytes(31, &m.Bytess)
-	c.RepeatedMessage(32, func(c *picobuf.Decoder) {
+	c.Int32(17, (*int32)(&m.Language))
+	c.RepeatedInt32(18, &m.Int32S)
+	c.RepeatedInt64(19, &m.Int64S)
+	c.RepeatedUint32(20, &m.Uint32S)
+	c.RepeatedUint64(21, &m.Uint64S)
+	c.RepeatedSint32(22, &m.Sint32S)
+	c.RepeatedSint64(23, &m.Sint64S)
+	c.RepeatedFixed32(24, &m.Fixed32S)
+	c.RepeatedFixed64(25, &m.Fixed64S)
+	c.RepeatedSfixed32(26, &m.Sfixed32S)
+	c.RepeatedSfixed64(27, &m.Sfixed64S)
+	c.RepeatedFloat(28, &m.Floats)
+	c.RepeatedDouble(29, &m.Doubles)
+	c.RepeatedBool(30, &m.Bools)
+	c.RepeatedString(31, &m.Strings)
+	c.RepeatedBytes(32, &m.Bytess)
+	c.RepeatedMessage(33, func(c *picobuf.Decoder) {
 		mm := new(Message2)
 		c.Loop(mm.Decode)
 		m.Messages = append(m.Messages, mm)
 	})
-	c.MapStringString(33, &m.Values)
+	c.RepeatedEnum(34, func(x int32) {
+		m.Languages = append(m.Languages, (Language2)(x))
+	})
+	c.MapStringString(35, &m.Values)
 }
 
 type Message2 struct {
