@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v3.17.3
+//     protoc:          v3.19.1
 
 package protocompat
 
@@ -138,8 +138,11 @@ func (m *RepeatedTypesPico) Encode(c *picobuf.Encoder) bool {
 	for _, x := range m.Message {
 		c.AlwaysMessage(16, x.Encode)
 	}
-	c.RepeatedEnum(17, len(m.Language), func(index int) int32 {
-		return (int32)(m.Language[index])
+	c.RepeatedEnum(17, len(m.Language), func(index uint) int32 {
+		if index < uint(len(m.Language)) {
+			return (int32)(m.Language[index])
+		}
+		return 0
 	})
 	return true
 }
@@ -245,8 +248,11 @@ func (m *PersonPico) Encode(c *picobuf.Encoder) bool {
 	c.Bool(5, &m.Spouse)
 	c.Double(6, &m.Money)
 	c.Int32(7, (*int32)(&m.Primary))
-	c.RepeatedEnum(8, len(m.Spoken), func(index int) int32 {
-		return (int32)(m.Spoken[index])
+	c.RepeatedEnum(8, len(m.Spoken), func(index uint) int32 {
+		if index < uint(len(m.Spoken)) {
+			return (int32)(m.Spoken[index])
+		}
+		return 0
 	})
 	return true
 }

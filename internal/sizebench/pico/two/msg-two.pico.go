@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v3.17.3
+//     protoc:          v3.19.1
 
 package two
 
@@ -124,8 +124,11 @@ func (m *Types) Encode(c *picobuf.Encoder) bool {
 	for _, x := range m.Messages {
 		c.AlwaysMessage(33, x.Encode)
 	}
-	c.RepeatedEnum(34, len(m.Languages), func(index int) int32 {
-		return (int32)(m.Languages[index])
+	c.RepeatedEnum(34, len(m.Languages), func(index uint) int32 {
+		if index < uint(len(m.Languages)) {
+			return (int32)(m.Languages[index])
+		}
+		return 0
 	})
 	c.MapStringString(35, &m.Values)
 	return true
@@ -279,8 +282,11 @@ func (m *Types2) Encode(c *picobuf.Encoder) bool {
 	for _, x := range m.Messages {
 		c.AlwaysMessage(33, x.Encode)
 	}
-	c.RepeatedEnum(34, len(m.Languages), func(index int) int32 {
-		return (int32)(m.Languages[index])
+	c.RepeatedEnum(34, len(m.Languages), func(index uint) int32 {
+		if index < uint(len(m.Languages)) {
+			return (int32)(m.Languages[index])
+		}
+		return 0
 	})
 	c.MapStringString(35, &m.Values)
 	return true

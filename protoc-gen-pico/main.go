@@ -186,8 +186,8 @@ func genMessageEncode(gf *generator, m *protogen.Message) {
 			gf.P("  c.AlwaysMessage(", field.Desc.Number(), ", x.Encode)")
 			gf.P("}")
 		case kind == protoreflect.EnumKind && cardinality == protoreflect.Repeated:
-			gf.P("c.RepeatedEnum(", field.Desc.Number(), ", len(m.", field.GoName, ")", ", func(index int) int32 {")
-			gf.P("  return (int32)(m.", field.GoName, "[index])")
+			gf.P("c.RepeatedEnum(", field.Desc.Number(), ", len(m.", field.GoName, ")", ", func(index uint) int32 {")
+			gf.P("  if index < uint(len(m.", field.GoName, ")) { return (int32)(m.", field.GoName, "[index]) }; return 0")
 			gf.P("})")
 		case kind == protoreflect.EnumKind:
 			gf.P("c.", method, "(", field.Desc.Number(), ", (*int32)(&m.", field.GoName, "))")

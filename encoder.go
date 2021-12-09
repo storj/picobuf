@@ -51,13 +51,13 @@ func (enc *Encoder) PresentMessage(field FieldNumber, fn func(enc *Encoder) bool
 
 // RepeatedEnum encodes a repeated enumeration.
 //go:noinline
-func (enc *Encoder) RepeatedEnum(field FieldNumber, n int, fn func(index int) int32) {
+func (enc *Encoder) RepeatedEnum(field FieldNumber, n int, fn func(index uint) int32) {
 	if n == 0 {
 		return
 	}
 	enc.alwaysAnyBytes(field, func() {
 		for i := 0; i < n; i++ {
-			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(fn(i)))
+			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(fn(uint(i))))
 		}
 	})
 }
