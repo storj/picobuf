@@ -9,83 +9,83 @@ package types;
 import "pico.proto";
 
 enum Language {
-	UNKNOWN = 0;
-	ENGLISH = 1;
-	SPANISH = 3;
-	FRENCH = 4;
-	GERMAN = 5;
+  UNKNOWN = 0;
+  ENGLISH = 1;
+  SPANISH = 3;
+  FRENCH = 4;
+  GERMAN = 5;
 }
 
 message Types {
-	int32    int32    =  1;
-	int64    int64    =  2;
-	uint32   uint32   =  3;
-	uint64   uint64   =  4;
-	sint32   sint32   =  5;
-	sint64   sint64   =  6;
-	fixed32  fixed32  =  7;
-	fixed64  fixed64  =  8;
-	sfixed32 sfixed32 =  9;
-	sfixed64 sfixed64 = 10;
-	float    float    = 11;
-	double   double   = 12;
-	bool     bool     = 13;
-	string   string   = 14;
-	bytes    bytes    = 15;
+  int32    int32 = 1;
+  int64    int64 = 2;
+  uint32   uint32 = 3;
+  uint64   uint64 = 4;
+  sint32   sint32 = 5;
+  sint64   sint64 = 6;
+  fixed32  fixed32 = 7;
+  fixed64  fixed64 = 8;
+  sfixed32 sfixed32 = 9;
+  sfixed64 sfixed64 = 10;
+  float    float = 11;
+  double   double = 12;
+  bool     bool = 13;
+  string   string = 14;
+  bytes    bytes = 15;
 
-	Message message = 16 [(pico.field).always_present = true];
-	OptionalMessage optional_message = 17;
+  Message message = 16 [(pico.field).always_present = true];
+  OptionalMessage optional_message = 17;
 
-	Language language = 18;
+  Language language = 18;
 }
 
 message RepeatedTypes {
-	repeated int32    int32    =  1;
-	repeated int64    int64    =  2;
-	repeated uint32   uint32   =  3;
-	repeated uint64   uint64   =  4;
-	repeated sint32   sint32   =  5;
-	repeated sint64   sint64   =  6;
-	repeated fixed32  fixed32  =  7;
-	repeated fixed64  fixed64  =  8;
-	repeated sfixed32 sfixed32 =  9;
-	repeated sfixed64 sfixed64 = 10;
-	repeated float    float    = 11;
-	repeated double   double   = 12;
-	repeated bool     bool     = 13;
-	repeated string   string   = 14;
-	repeated bytes    bytes    = 15;
-	repeated Message  message  = 16;
-	repeated Language language = 17;
+  repeated int32    int32 = 1;
+  repeated int64    int64 = 2;
+  repeated uint32   uint32 = 3;
+  repeated uint64   uint64 = 4;
+  repeated sint32   sint32 = 5;
+  repeated sint64   sint64 = 6;
+  repeated fixed32  fixed32 = 7;
+  repeated fixed64  fixed64 = 8;
+  repeated sfixed32 sfixed32 = 9;
+  repeated sfixed64 sfixed64 = 10;
+  repeated float    float = 11;
+  repeated double   double = 12;
+  repeated bool     bool = 13;
+  repeated string   string = 14;
+  repeated bytes    bytes = 15;
+  repeated Message  message = 16;
+  repeated Language language = 17;
 }
 
 message RepeatedMixed {
-	int32    int32    =  1;
-	repeated Message  message  = 16;
+  int32    int32 = 1;
+  repeated Message  message = 16;
 }
 
 message Message {
-	int32 int32 = 1;
-	int64 int64 = 2;
+  int32 int32 = 1;
+  int64 int64 = 2;
 }
 
 message Person {
-	string name              = 1;
-	int64  birthday          = 2;
-	string phone             = 3;
-	int32  siblings          = 4;
-	bool   spouse            = 5;
-	double money             = 6;
-	Language primary         = 7;
-	repeated Language spoken = 8;
+  string   name = 1;
+  int64    birthday = 2;
+  string   phone = 3;
+  int32    siblings = 4;
+  bool     spouse = 5;
+  double   money = 6;
+  Language primary = 7;
+  repeated Language spoken = 8;
 }
 
 message Map {
-	map<string, string> values = 1;
+  map<string, string> values = 1;
 }
 
 message OptionalMessage {
-	int32 int32 = 1;
+  int32 int32 = 1;
 }
 
 /*
