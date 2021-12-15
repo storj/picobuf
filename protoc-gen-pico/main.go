@@ -176,6 +176,10 @@ func genMessageEncode(gf *generator, m *protogen.Message) {
 		kind := field.Desc.Kind()
 		cardinality := field.Desc.Cardinality()
 
+		if field.Oneof != nil {
+			gf.P("if m, ok := m.", field.Oneof.GoName, ".(*", oneofWrapperTypeName(gf, field), "); ok {")
+		}
+
 		switch {
 		case method == "Message":
 			gf.P("c.Message(", field.Desc.Number(), ", m.", field.GoName, ".Encode)")
@@ -193,6 +197,10 @@ func genMessageEncode(gf *generator, m *protogen.Message) {
 			gf.P("c.", method, "(", field.Desc.Number(), ", (*int32)(&m.", field.GoName, "))")
 		default:
 			gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
+		}
+
+		if field.Oneof != nil {
+			gf.P("}")
 		}
 	}
 	gf.P("return true")
@@ -213,6 +221,17 @@ func genMessageDecode(gf *generator, m *protogen.Message) {
 		method := codecMethodName(gf, field)
 		kind := field.Desc.Kind()
 		cardinality := field.Desc.Cardinality()
+		if field.Oneof != nil {
+			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("var x *", oneofWrapperTypeName(gf, field))
+			gf.P("if z, ok := m.", field.Oneof.GoName, ".(*", oneofWrapperTypeName(gf, field), "); ok {")
+			gf.P("   x = z")
+			gf.P("} else {")
+			gf.P("   x = new(", oneofWrapperTypeName(gf, field), ")")
+			gf.P("   m.", field.Oneof.GoName, " = x")
+			gf.P("}")
+			gf.P("m := x")
+		}
 
 		switch {
 		case method == "Message":
@@ -238,6 +257,10 @@ func genMessageDecode(gf *generator, m *protogen.Message) {
 			gf.P("c.", method, "(", field.Desc.Number(), ", (*int32)(&m.", field.GoName, "))")
 		default:
 			gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
+		}
+
+		if field.Oneof != nil {
+			gf.P("}")
 		}
 	}
 	gf.P("}")
@@ -351,10 +374,17 @@ func fieldGoType(gf *generator, field *protogen.Field) (goType string) {
 }
 
 func getFieldPresence(f *protogen.Field) bool {
+	if f.Oneof == nil {
+		if f.Desc.Kind() == protoreflect.MessageKind && getMessageOpts(f.Message).AlwaysPresent {
+			return false
+		}
+		return f.Desc.HasPresence() && !getFieldOpts(f).AlwaysPresent
+	}
+
 	if f.Desc.Kind() == protoreflect.MessageKind && getMessageOpts(f.Message).AlwaysPresent {
 		return false
 	}
-	return f.Desc.HasPresence() && !getFieldOpts(f).AlwaysPresent
+	return f.Desc.Kind() == protoreflect.MessageKind
 }
 
 func getFieldOpts(f *protogen.Field) *FieldOptions {
@@ -376,7 +406,7 @@ func genMessageOneofWrapperTypes(gf *generator, m *protogen.Message) {
 		gf.P()
 
 		for _, field := range oneof.Fields {
-			gf.P("type ", field.GoIdent, gf.suffix, " struct {")
+			gf.P("type ", oneofWrapperTypeName(gf, field), " struct {")
 			gf.P(field.GoName, " ", fieldGoType(gf, field))
 			gf.P("}")
 			gf.P()
@@ -384,8 +414,12 @@ func genMessageOneofWrapperTypes(gf *generator, m *protogen.Message) {
 		gf.P()
 
 		for _, field := range oneof.Fields {
-			gf.P("func (*", field.GoIdent, gf.suffix, ") ", ifName, "() {}")
+			gf.P("func (*", oneofWrapperTypeName(gf, field), ") ", ifName, "() {}")
 		}
 		gf.P()
 	}
+}
+
+func oneofWrapperTypeName(gf *generator, field *protogen.Field) string {
+	return field.GoIdent.GoName + gf.suffix
 }

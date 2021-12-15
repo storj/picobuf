@@ -88,6 +88,14 @@ message OptionalMessage {
   int32 int32 = 1;
 }
 
+message CommandMessage {
+  string class = 1;
+  oneof command {
+    string name = 2;
+    Message message = 3;
+  }
+}
+
 /*
 Go generator currently does not support explicit optional types.
 

@@ -206,3 +206,33 @@ func TestEnum(t *testing.T) {
 		assert.DeepEqual(t, got, test)
 	}
 }
+
+func TestOneOf(t *testing.T) {
+	test := CommandMessagePico{
+		Class: "Hello",
+		Command: &CommandMessage_NamePico{
+			Name: "Hello",
+		},
+	}
+
+	data, err := picobuf.Marshal(&test)
+	assert.NoError(t, err)
+
+	{
+		var got CommandMessage
+		err = proto.Unmarshal(data, &got)
+		assert.NoError(t, err)
+
+		assert.Equal(t, got.Class, test.Class)
+		name, isName := got.Command.(*CommandMessage_Name)
+		assert.True(t, isName)
+		assert.Equal(t, name.Name, "Hello")
+	}
+
+	{
+		var got CommandMessagePico
+		err = picobuf.Unmarshal(data, &got)
+		assert.NoError(t, err)
+		assert.DeepEqual(t, got, test)
+	}
+}

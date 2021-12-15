@@ -36,6 +36,9 @@ func NewDecoder(data []byte) *Decoder {
 	return dec
 }
 
+// PendingField returns the next field number in the stream.
+func (dec *Decoder) PendingField() FieldNumber { return dec.pendingField }
+
 // Err returns error that occurred during decoding.
 func (dec *Decoder) Err() error {
 	return dec.err

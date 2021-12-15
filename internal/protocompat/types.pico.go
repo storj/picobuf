@@ -310,3 +310,69 @@ func (m *OptionalMessagePico) Decode(c *picobuf.Decoder) {
 	}
 	c.Int32(1, &m.Int32)
 }
+
+type CommandMessagePico struct {
+	Class   string
+	Command isCommandMessage_CommandPico
+}
+
+func (m *CommandMessagePico) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.String(1, &m.Class)
+	if m, ok := m.Command.(*CommandMessage_NamePico); ok {
+		c.String(2, &m.Name)
+	}
+	if m, ok := m.Command.(*CommandMessage_MessagePico); ok {
+		c.Message(3, m.Message.Encode)
+	}
+	return true
+}
+
+func (m *CommandMessagePico) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.String(1, &m.Class)
+	if c.PendingField() == 2 {
+		var x *CommandMessage_NamePico
+		if z, ok := m.Command.(*CommandMessage_NamePico); ok {
+			x = z
+		} else {
+			x = new(CommandMessage_NamePico)
+			m.Command = x
+		}
+		m := x
+		c.String(2, &m.Name)
+	}
+	if c.PendingField() == 3 {
+		var x *CommandMessage_MessagePico
+		if z, ok := m.Command.(*CommandMessage_MessagePico); ok {
+			x = z
+		} else {
+			x = new(CommandMessage_MessagePico)
+			m.Command = x
+		}
+		m := x
+		c.Message(3, func(c *picobuf.Decoder) {
+			if m.Message == nil {
+				m.Message = new(MessagePico)
+			}
+			m.Message.Decode(c)
+		})
+	}
+}
+
+type isCommandMessage_CommandPico interface{ isCommandMessage_CommandPico() }
+
+type CommandMessage_NamePico struct {
+	Name string
+}
+
+type CommandMessage_MessagePico struct {
+	Message *MessagePico
+}
+
+func (*CommandMessage_NamePico) isCommandMessage_CommandPico()    {}
+func (*CommandMessage_MessagePico) isCommandMessage_CommandPico() {}
