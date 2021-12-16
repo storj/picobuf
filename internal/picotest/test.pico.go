@@ -9,6 +9,7 @@ package picotest
 
 import (
 	picobuf "storj.io/picobuf"
+	pic "storj.io/picobuf/internal/picotest/pic"
 )
 
 type Basic struct {
@@ -237,4 +238,26 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.Int32(1, &m.Int32)
+}
+
+type Piece struct {
+	Id  pic.ID
+	Alt string
+}
+
+func (m *Piece) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	m.Id.PicoEncode(c, 1)
+	(*pic.RawString)(&m.Alt).PicoEncode(c, 2)
+	return true
+}
+
+func (m *Piece) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	m.Id.PicoDecode(c, 1)
+	(*pic.RawString)(&m.Alt).PicoDecode(c, 2)
 }

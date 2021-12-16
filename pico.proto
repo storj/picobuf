@@ -17,7 +17,9 @@ extend google.protobuf.MessageOptions {
 }
 
 message FieldOptions {
-  bool always_present = 1;
+  bool   always_present = 1;
+  string custom_type = 2;
+  string custom_cast = 3;
 }
 
 extend google.protobuf.FieldOptions {

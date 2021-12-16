@@ -6,6 +6,8 @@ option go_package = "storj.io/picobuf/internal/picotest";
 
 package picotest;
 
+import "pico.proto";
+
 message Basic {
   int32  byte0 = 1;
   int32  byte1 = 2;
@@ -66,4 +68,12 @@ message AllTypes {
 
 message Message {
   int32 int32 = 1;
+}
+
+message Piece {
+  bytes id  = 1 [(pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"];
+  bytes alt = 2 [
+    (pico.field).custom_type = "string",
+    (pico.field).custom_cast = "storj.io/picobuf/internal/picotest/pic.RawString"
+  ];
 }

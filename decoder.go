@@ -23,8 +23,8 @@ type Decoder struct {
 }
 
 type messageDecodeState struct {
-	pendingField FieldNumber
-	pendingWire  protowire.Type
+	pendingField FieldNumber    //nolint: structcheck
+	pendingWire  protowire.Type //nolint: structcheck
 
 	buffer []byte
 }
@@ -166,6 +166,11 @@ func (dec *Decoder) Loop(fn func(*Decoder)) {
 	}
 }
 
+// Fail fails the decoding process.
+func (dec *Decoder) Fail(field FieldNumber, msg string) {
+	dec.fail(field, msg)
+}
+
 //go:noinline
 func (dec *Decoder) fail(field FieldNumber, msg string) {
 	// TODO: use static error types
@@ -191,11 +196,4 @@ func (dec *Decoder) nextField(advance int) {
 	}
 	dec.buffer = dec.buffer[n:]
 	dec.pendingField, dec.pendingWire = FieldNumber(field), wire
-}
-
-func init() {
-	// silence structcheck linting bug about unused field
-	var z messageDecodeState
-	z.pendingField = 0
-	z.pendingWire = 0
 }

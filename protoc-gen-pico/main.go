@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"runtime/debug"
 	"sort"
+	"strings"
 
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
@@ -19,6 +20,7 @@ import (
 
 const (
 	picobufPackage     = protogen.GoImportPath("storj.io/picobuf")
+	picowirePackage    = protogen.GoImportPath("storj.io/picobuf/picowire")
 	timestamppbPackage = protogen.GoImportPath("google.golang.org/protobuf/types/known/timestamppb")
 )
 
@@ -121,14 +123,6 @@ func genMessage(gf *generator, m *protogen.Message) {
 	genMessageOneofWrapperTypes(gf, m)
 }
 
-func getMessageOpts(m *protogen.Message) *MessageOptions {
-	opts, _ := proto.GetExtension(m.Desc.Options(), E_Message).(*MessageOptions)
-	if opts == nil {
-		return &MessageOptions{}
-	}
-	return opts
-}
-
 func genMessageField(gf *generator, m *protogen.Message, field *protogen.Field) {
 	if field.Desc.IsWeak() {
 		panic("unhandled: weak field")
@@ -160,6 +154,11 @@ func genMessageMethods(gf *generator, m *protogen.Message) {
 func genMessageEncode(gf *generator, m *protogen.Message) {
 	gf.P("func (m *", m.GoIdent, ") Encode(c *", picobufPackage.Ident("Encoder"), ") bool {")
 	gf.P("if m == nil { return false }")
+	defer func() {
+		gf.P("return true")
+		gf.P("}")
+		gf.P()
+	}()
 
 	fields := append([]*protogen.Field(nil), m.Fields...)
 	sort.Slice(fields, func(i, j int) bool {
@@ -167,45 +166,96 @@ func genMessageEncode(gf *generator, m *protogen.Message) {
 	})
 
 	for _, field := range fields {
-		method := codecMethodName(gf, field)
-		kind := field.Desc.Kind()
-		cardinality := field.Desc.Cardinality()
+		genFieldEncode(gf, field)
+	}
+}
 
-		if field.Oneof != nil {
-			gf.P("if m, ok := m.", field.Oneof.GoName, ".(*", oneofWrapperTypeName(gf, field), "); ok {")
+func genFieldEncode(gf *generator, field *protogen.Field) {
+	info := fieldInfo(gf, field, field.Desc)
+
+	if info.oneof {
+		gf.P("if m, ok := m.", field.Oneof.GoName, ".(*", oneofWrapperTypeName(gf, field), "); ok {")
+		defer gf.P("}")
+	}
+
+	switch {
+	case info.kind == kindCast:
+		if info.repeated {
+			panic("custom decode with repeated not handled")
 		}
+		gf.P("(*", info.castType, ")(&m.", field.GoName, ").PicoEncode(c, ", field.Desc.Number(), ")")
 
+	case info.kind == kindCustom:
+		if info.repeated {
+			panic("custom type with repeated not handled")
+		}
+		gf.P("m.", field.GoName, ".PicoEncode(c, ", field.Desc.Number(), ")")
+
+	case info.kind == kindInternal:
+		method, ok := codecMethodName[field.Desc.Kind()]
+		if !ok {
+			panic("unsupported type " + field.Desc.Kind().GoString())
+		}
+		if info.repeated {
+			method = "Repeated" + method
+		}
+		if info.pointer {
+			panic("pointer not supported for internal type " + info.goType)
+		}
+		gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
+
+	case info.kind == kindMessage:
 		switch {
-		case method == "Message":
+		case info.pointer && !info.repeated:
 			gf.P("c.Message(", field.Desc.Number(), ", m.", field.GoName, ".Encode)")
-		case method == "PresentMessage":
-			gf.P("c.PresentMessage(", field.Desc.Number(), ", m.", field.GoName, ".Encode)")
-		case method == "RepeatedMessage":
+		case info.pointer && info.repeated:
 			gf.P("for _, x := range m.", field.GoName, " {")
 			gf.P("  c.AlwaysMessage(", field.Desc.Number(), ", x.Encode)")
 			gf.P("}")
-		case kind == protoreflect.EnumKind && cardinality == protoreflect.Repeated:
-			gf.P("c.RepeatedEnum(", field.Desc.Number(), ", len(m.", field.GoName, ")", ", func(index uint) int32 {")
-			gf.P("  if index < uint(len(m.", field.GoName, ")) { return (int32)(m.", field.GoName, "[index]) }; return 0")
-			gf.P("})")
-		case kind == protoreflect.EnumKind:
-			gf.P("c.", method, "(", field.Desc.Number(), ", (*int32)(&m.", field.GoName, "))")
-		default:
-			gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
-		}
-
-		if field.Oneof != nil {
+		case !info.pointer && !info.repeated:
+			gf.P("c.PresentMessage(", field.Desc.Number(), ", m.", field.GoName, ".Encode)")
+		case !info.pointer && info.repeated:
+			gf.P("for i := range m.", field.GoName, " {")
+			gf.P("  x := &m.", field.GoName, "[i]")
+			gf.P("  c.AlwaysMessage(", field.Desc.Number(), ", x.Encode)")
 			gf.P("}")
 		}
+
+	case info.kind == kindEnum:
+		switch {
+		case info.pointer && !info.repeated:
+			panic("enum with pointer not supported")
+		case info.pointer && info.repeated:
+			panic("enum with pointer and repeated not supported")
+		case !info.pointer && !info.repeated:
+			gf.P("c.Int32(", field.Desc.Number(), ", (*int32)(&m.", field.GoName, "))")
+		case !info.pointer && info.repeated:
+			gf.P("c.RepeatedEnum(", field.Desc.Number(), ", len(m.", field.GoName, ")", ", func(index uint) int32 {")
+			gf.P("  if index < uint(len(m.", field.GoName, ")) {")
+			gf.P("     return (int32)(m.", field.GoName, "[index])")
+			gf.P("  }")
+			gf.P("  return 0")
+			gf.P("})")
+		}
+
+	case info.kind == kindMap:
+		if info.repeated {
+			panic("map cannot be repeated")
+		}
+
+		panic("unsupported map")
+	default:
+		panic("unhandled kind")
 	}
-	gf.P("return true")
-	gf.P("}")
-	gf.P()
 }
 
 func genMessageDecode(gf *generator, m *protogen.Message) {
 	gf.P("func (m *", m.GoIdent, ") Decode(c *", picobufPackage.Ident("Decoder"), ") {")
 	gf.P("if m == nil { return }")
+	defer func() {
+		gf.P("}")
+		gf.P()
+	}()
 
 	fields := append([]*protogen.Field(nil), m.Fields...)
 	sort.Slice(fields, func(i, j int) bool {
@@ -213,79 +263,102 @@ func genMessageDecode(gf *generator, m *protogen.Message) {
 	})
 
 	for _, field := range fields {
-		method := codecMethodName(gf, field)
-		kind := field.Desc.Kind()
-		cardinality := field.Desc.Cardinality()
-		if field.Oneof != nil {
-			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
-			gf.P("var x *", oneofWrapperTypeName(gf, field))
-			gf.P("if z, ok := m.", field.Oneof.GoName, ".(*", oneofWrapperTypeName(gf, field), "); ok {")
-			gf.P("   x = z")
-			gf.P("} else {")
-			gf.P("   x = new(", oneofWrapperTypeName(gf, field), ")")
-			gf.P("   m.", field.Oneof.GoName, " = x")
-			gf.P("}")
-			gf.P("m := x")
-		}
+		genFieldDecode(gf, field)
+	}
+}
 
+func genFieldDecode(gf *generator, field *protogen.Field) {
+	info := fieldInfo(gf, field, field.Desc)
+
+	if info.oneof {
+		gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+		gf.P("var x *", oneofWrapperTypeName(gf, field))
+		gf.P("if z, ok := m.", field.Oneof.GoName, ".(*", oneofWrapperTypeName(gf, field), "); ok {")
+		gf.P("   x = z")
+		gf.P("} else {")
+		gf.P("   x = new(", oneofWrapperTypeName(gf, field), ")")
+		gf.P("   m.", field.Oneof.GoName, " = x")
+		gf.P("}")
+		gf.P("m := x")
+		defer gf.P("}")
+	}
+
+	switch {
+	case info.kind == kindCast:
+		if info.repeated {
+			panic("custom decode with repeated not handled")
+		}
+		gf.P("(*", info.castType, ")(&m.", field.GoName, ").PicoDecode(c, ", field.Desc.Number(), ")")
+
+	case info.kind == kindCustom:
+		if info.repeated {
+			panic("custom type with repeated not handled")
+		}
+		gf.P("m.", field.GoName, ".PicoDecode(c, ", field.Desc.Number(), ")")
+
+	case info.kind == kindInternal:
+		method, ok := codecMethodName[field.Desc.Kind()]
+		if !ok {
+			panic("unsupported type " + field.Desc.Kind().GoString())
+		}
+		if info.repeated {
+			method = "Repeated" + method
+		}
+		if info.pointer {
+			panic("pointer not supported for internal type " + info.goType)
+		}
+		gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
+
+	case info.kind == kindMessage:
 		switch {
-		case method == "Message":
+		case info.pointer && !info.repeated:
 			gf.P("c.Message(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Decoder"), ") {")
 			gf.P("  if m.", field.GoName, " == nil {")
-			gf.P("    m.", field.GoName, " = new(", fieldGoType(gf, field)[1:], ")")
+			gf.P("    m.", field.GoName, " = new(", info.baseType, ")")
 			gf.P("  }")
 			gf.P("  m.", field.GoName, ".Decode(c)")
 			gf.P("})")
-		case method == "PresentMessage":
-			gf.P("c.PresentMessage(", field.Desc.Number(), ", m.", field.GoName, ".Decode)")
-		case method == "RepeatedMessage":
+		case info.pointer && info.repeated:
 			gf.P("c.RepeatedMessage(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Decoder"), ") {")
-			gf.P("  mm := new(", fieldGoType(gf, field)[3:], ")")
+			gf.P("  mm := new(", info.baseType, ")")
 			gf.P("  c.Loop(mm.Decode)")
 			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", mm)")
 			gf.P("})")
-		case kind == protoreflect.EnumKind && cardinality == protoreflect.Repeated:
-			gf.P("c.RepeatedEnum(", field.Desc.Number(), ", func(x int32) {")
-			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", (", fieldGoType(gf, field)[2:], ")(x))")
+		case !info.pointer && !info.repeated:
+			gf.P("c.PresentMessage(", field.Desc.Number(), ", m.", field.GoName, ".Decode)")
+		case !info.pointer && info.repeated:
+			gf.P("c.RepeatedMessage(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Decoder"), ") {")
+			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", ", info.baseType, ")")
+			gf.P("  c.Loop(", field.GoName, "[len(", field.GoName, ")-1].Decode)")
 			gf.P("})")
-		case kind == protoreflect.EnumKind:
-			gf.P("c.", method, "(", field.Desc.Number(), ", (*int32)(&m.", field.GoName, "))")
-		default:
-			gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
 		}
 
-		if field.Oneof != nil {
-			gf.P("}")
+	case info.kind == kindEnum:
+		switch {
+		case info.pointer && !info.repeated:
+			panic("enum with pointer not supported")
+		case info.pointer && info.repeated:
+			panic("enum with pointer and repeated not supported")
+		case !info.pointer && !info.repeated:
+			gf.P("c.Int32(", field.Desc.Number(), ", (*int32)(&m.", field.GoName, "))")
+		case !info.pointer && info.repeated:
+			gf.P("c.RepeatedEnum(", field.Desc.Number(), ", func(x int32) {")
+			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", (", info.baseType, ")(x))")
+			gf.P("})")
 		}
+
+	case info.kind == kindMap:
+		if info.repeated {
+			panic("map cannot be repeated")
+		}
+
+		panic("unsupported map")
+	default:
+		panic("unhandled kind")
 	}
-	gf.P("}")
-	gf.P()
 }
 
-type kind2 [2]protoreflect.Kind
-
-func codecMethodName(gf *generator, field *protogen.Field) string {
-	if field.Desc.IsMap() {
-		switch (kind2{field.Desc.MapKey().Kind(), field.Desc.MapValue().Kind()}) {
-		case kind2{protoreflect.StringKind, protoreflect.StringKind}:
-			return "MapStringString"
-		default:
-			panic(fmt.Sprintf("unhandled: invalid map field kind: <%v,%v>", field.Desc.MapKey().Kind(), field.Desc.MapValue().Kind()))
-		}
-	}
-	if method, ok := methodNames[field.Desc.Kind()]; ok {
-		if field.Desc.IsList() {
-			method = "Repeated" + method
-		}
-		if method == "Message" && !getFieldPresence(field) {
-			method = "PresentMessage"
-		}
-		return method
-	}
-	panic(fmt.Sprintf("unhandled: invalid field kind: %v", field.Desc.Kind()))
-}
-
-var methodNames = map[protoreflect.Kind]string{
+var codecMethodName = map[protoreflect.Kind]string{
 	protoreflect.BoolKind:     "Bool",
 	protoreflect.Int32Kind:    "Int32",
 	protoreflect.Int64Kind:    "Int64",
@@ -301,79 +374,164 @@ var methodNames = map[protoreflect.Kind]string{
 	protoreflect.DoubleKind:   "Double",
 	protoreflect.StringKind:   "String",
 	protoreflect.BytesKind:    "Bytes",
-	protoreflect.EnumKind:     "Int32",
-	protoreflect.MessageKind:  "Message",
 }
 
-func fieldGoType(gf *generator, field *protogen.Field) (goType string) {
-	if field.Desc.IsWeak() {
+type fieldKind byte
+
+const (
+	kindInternal = fieldKind(iota)
+	kindMessage
+	kindEnum
+	kindMap
+	kindCustom
+	kindCast
+)
+
+type fieldInformation struct {
+	baseType string
+	goType   string
+	castType string
+	kind     fieldKind
+	pointer  bool
+	repeated bool
+	oneof    bool
+
+	key   *fieldInformation
+	value *fieldInformation
+}
+
+func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDescriptor) (info fieldInformation) {
+	if desc.IsWeak() {
 		panic("unhandled: weak field")
 	}
 
-	switch field.Desc.Kind() {
+	info.kind = kindInternal
+	info.pointer = desc.HasPresence()
+	info.repeated = desc.IsList()
+	info.oneof = desc.ContainingOneof() != nil
+
+	switch desc.Kind() {
 	case protoreflect.BoolKind:
-		goType = "bool"
+		info.baseType = "bool"
 	case protoreflect.EnumKind:
-		goType = gf.QualifiedGoIdent(field.Enum.GoIdent)
+		if field == nil {
+			panic("unsupported enum")
+		}
+		info.baseType = gf.QualifiedGoIdent(field.Enum.GoIdent)
+		info.kind = kindEnum
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
-		goType = "int32"
+		info.baseType = "int32"
 	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
-		goType = "uint32"
+		info.baseType = "uint32"
 	case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
-		goType = "int64"
+		info.baseType = "int64"
 	case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
-		goType = "uint64"
+		info.baseType = "uint64"
 	case protoreflect.FloatKind:
-		goType = "float32"
+		info.baseType = "float32"
 	case protoreflect.DoubleKind:
-		goType = "float64"
+		info.baseType = "float64"
 	case protoreflect.StringKind:
-		goType = "string"
+		info.baseType = "string"
+		info.pointer = false
 	case protoreflect.BytesKind:
-		goType = "[]byte"
+		info.baseType = "[]byte"
+		info.pointer = false
 	case protoreflect.MessageKind:
-		// intercept the well-known timestamp type to be our own type
-		switch field.Message.GoIdent {
-		case timestamppbPackage.Ident("Timestamp"):
-			goType = "picobuf.Timestamp"
-		default:
-			goType = gf.QualifiedGoIdent(field.Message.GoIdent)
+		if field.Desc.IsMap() {
+			info.kind = kindMap
+
+			keyInfo := fieldInfo(gf, nil, desc.MapKey())
+			if keyInfo.repeated {
+				panic("map key with repeated not supported")
+			}
+			if info.pointer {
+				panic("map key with pointer not supported")
+			}
+			info.key = &keyInfo
+
+			valueInfo := fieldInfo(gf, nil, desc.MapValue())
+			info.value = &valueInfo
+
+			info.baseType = "map[" + info.key.goType + "]" + info.value.goType
+
+			keyMethod, keyOk := codecMethodName[field.Desc.MapKey().Kind()]
+			valueMethod, valueOk := codecMethodName[field.Desc.MapValue().Kind()]
+			if keyOk && valueOk {
+				info.castType = gf.QualifiedGoIdent(picowirePackage.Ident("Map" + keyMethod + valueMethod))
+				info.kind = kindCast
+			}
+			info.pointer = false
+		} else {
+			info.kind = kindMessage
+			info.pointer = true
+
+			// intercept the well-known timestamp type to be our own type
+			switch field.Message.GoIdent {
+			case timestamppbPackage.Ident("Timestamp"):
+				info.baseType = "picobuf.Timestamp"
+			default:
+				info.baseType = gf.QualifiedGoIdent(field.Message.GoIdent)
+			}
 		}
 	default:
 		panic(fmt.Sprintf("unhandled: invalid field kind: %v", field.Desc.Kind()))
 	}
 
-	switch {
-	case field.Desc.IsList() && field.Desc.Kind() == protoreflect.MessageKind:
-		return "[]*" + goType
-	case field.Desc.IsList():
-		return "[]" + goType
-	case getFieldPresence(field):
-		return "*" + goType
-	case field.Desc.IsMap():
-		switch (kind2{field.Desc.MapKey().Kind(), field.Desc.MapValue().Kind()}) {
-		case kind2{protoreflect.StringKind, protoreflect.StringKind}:
-			return "map[string]string"
-		default:
-			panic(fmt.Sprintf("unhandled: invalid map field kind: <%v,%v>", field.Desc.MapKey().Kind(), field.Desc.MapValue().Kind()))
+	if field != nil {
+		if opts := getFieldOpts(field); opts.AlwaysPresent {
+			info.pointer = false
 		}
-	default:
-		return goType
+		if getMessageOpts(field.Message).AlwaysPresent {
+			info.pointer = false
+		}
+		opts := getFieldOpts(field)
+		if opts.CustomType != "" {
+			info.baseType = qualifiedIdent(gf, opts.CustomType)
+			info.kind = kindCustom
+		}
+		if opts.CustomCast != "" {
+			info.castType = qualifiedIdent(gf, opts.CustomCast)
+			info.kind = kindCast
+		}
 	}
+
+	info.goType = info.baseType
+	if info.pointer {
+		info.goType = "*" + info.goType
+	}
+	if info.repeated {
+		info.goType = "[]" + info.goType
+	}
+
+	return info
 }
 
-func getFieldPresence(f *protogen.Field) bool {
-	if f.Oneof == nil {
-		if f.Desc.Kind() == protoreflect.MessageKind && getMessageOpts(f.Message).AlwaysPresent {
-			return false
-		}
-		return f.Desc.HasPresence() && !getFieldOpts(f).AlwaysPresent
-	}
+func fieldGoType(gf *generator, field *protogen.Field) string {
+	info := fieldInfo(gf, field, field.Desc)
+	return info.goType
+}
 
-	if f.Desc.Kind() == protoreflect.MessageKind && getMessageOpts(f.Message).AlwaysPresent {
-		return false
+func qualifiedIdent(gf *generator, fullyQualifiedIdent string) string {
+	p := strings.LastIndexByte(fullyQualifiedIdent, '.')
+	if p >= 0 {
+		return gf.QualifiedGoIdent(protogen.GoIdent{
+			GoName:       fullyQualifiedIdent[p+1:],
+			GoImportPath: protogen.GoImportPath(fullyQualifiedIdent[:p]),
+		})
 	}
-	return f.Desc.Kind() == protoreflect.MessageKind
+	return fullyQualifiedIdent
+}
+
+func getMessageOpts(m *protogen.Message) *MessageOptions {
+	if m == nil {
+		return &MessageOptions{}
+	}
+	opts, _ := proto.GetExtension(m.Desc.Options(), E_Message).(*MessageOptions)
+	if opts == nil {
+		return &MessageOptions{}
+	}
+	return opts
 }
 
 func getFieldOpts(f *protogen.Field) *FieldOptions {

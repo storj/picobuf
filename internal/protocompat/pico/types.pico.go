@@ -9,6 +9,7 @@ package pico
 
 import (
 	picobuf "storj.io/picobuf"
+	picowire "storj.io/picobuf/picowire"
 )
 
 type Language int32
@@ -281,7 +282,7 @@ func (m *Map) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
-	c.MapStringString(1, &m.Values)
+	(*picowire.MapStringString)(&m.Values).PicoEncode(c, 1)
 	return true
 }
 
@@ -289,7 +290,7 @@ func (m *Map) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	c.MapStringString(1, &m.Values)
+	(*picowire.MapStringString)(&m.Values).PicoDecode(c, 1)
 }
 
 type OptionalMessage struct {

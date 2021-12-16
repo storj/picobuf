@@ -9,6 +9,7 @@ package two
 
 import (
 	picobuf "storj.io/picobuf"
+	picowire "storj.io/picobuf/picowire"
 )
 
 type Language int32
@@ -130,7 +131,7 @@ func (m *Types) Encode(c *picobuf.Encoder) bool {
 		}
 		return 0
 	})
-	c.MapStringString(35, &m.Values)
+	(*picowire.MapStringString)(&m.Values).PicoEncode(c, 35)
 	return true
 }
 
@@ -183,7 +184,7 @@ func (m *Types) Decode(c *picobuf.Decoder) {
 	c.RepeatedEnum(34, func(x int32) {
 		m.Languages = append(m.Languages, (Language)(x))
 	})
-	c.MapStringString(35, &m.Values)
+	(*picowire.MapStringString)(&m.Values).PicoDecode(c, 35)
 }
 
 type Message struct {
@@ -288,7 +289,7 @@ func (m *Types2) Encode(c *picobuf.Encoder) bool {
 		}
 		return 0
 	})
-	c.MapStringString(35, &m.Values)
+	(*picowire.MapStringString)(&m.Values).PicoEncode(c, 35)
 	return true
 }
 
@@ -341,7 +342,7 @@ func (m *Types2) Decode(c *picobuf.Decoder) {
 	c.RepeatedEnum(34, func(x int32) {
 		m.Languages = append(m.Languages, (Language2)(x))
 	})
-	c.MapStringString(35, &m.Values)
+	(*picowire.MapStringString)(&m.Values).PicoDecode(c, 35)
 }
 
 type Message2 struct {

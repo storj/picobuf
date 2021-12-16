@@ -95,6 +95,11 @@ func (enc *Encoder) anyBytes(field FieldNumber, fn func() bool) bool {
 	return true
 }
 
+// AlwaysAnyBytes encodes field as Bytes and handles encoding the length.
+func (enc *Encoder) AlwaysAnyBytes(field FieldNumber, fn func()) bool {
+	return enc.alwaysAnyBytes(field, fn)
+}
+
 // alwaysAnyBytes encodes field as Bytes and handles encoding the length.
 func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
 	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)

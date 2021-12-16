@@ -11,6 +11,12 @@ type Message interface {
 	Decode(*Decoder)
 }
 
+// CustomType defines methods that are used for custom encode or decode behaviors.
+type CustomType interface {
+	PicoEncode(*Encoder, FieldNumber)
+	PicoDecode(*Decoder, FieldNumber)
+}
+
 // FieldNumber corresponds to a protobuf field number.
 type FieldNumber protowire.Number
 

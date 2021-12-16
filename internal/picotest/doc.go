@@ -4,4 +4,4 @@
 // Package picotest holds generated types for testing.
 package picotest
 
-//go:generate protoc --pico_out=paths=source_relative:. test.proto
+//go:generate protoc  -I../.. -I. --pico_out=paths=source_relative:. test.proto
