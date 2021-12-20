@@ -10,22 +10,24 @@ import (
 	"google.golang.org/protobuf/proto"
 
 	"storj.io/picobuf"
+	"storj.io/picobuf/internal/protocompat/pico"
+	"storj.io/picobuf/internal/protocompat/prot"
 )
 
 func TestDecodingMixed(t *testing.T) {
-	var x1 RepeatedMixedPico
+	var x1 pico.RepeatedMixed
 	err := picobuf.Unmarshal([]byte{130, 1, 0, 8, 123, 130, 1, 0}, &x1)
 	assert.NoError(t, err)
-	assert.DeepEqual(t, x1, RepeatedMixedPico{Int32: 123, Message: []*MessagePico{{}, {}}})
+	assert.DeepEqual(t, x1, pico.RepeatedMixed{Int32: 123, Message: []*pico.Message{{}, {}}})
 
-	var x2 RepeatedMixedPico
+	var x2 pico.RepeatedMixed
 	err = picobuf.Unmarshal([]byte{130, 1, 4, 16, 56, 8, 109, 8, 123, 130, 1, 4, 16, 56, 8, 109}, &x2)
 	assert.NoError(t, err)
-	assert.DeepEqual(t, x2, RepeatedMixedPico{Int32: 123, Message: []*MessagePico{{Int32: 109, Int64: 56}, {Int32: 109, Int64: 56}}})
+	assert.DeepEqual(t, x2, pico.RepeatedMixed{Int32: 123, Message: []*pico.Message{{Int32: 109, Int64: 56}, {Int32: 109, Int64: 56}}})
 }
 
 func TestTypes(t *testing.T) {
-	tests := []TypesPico{
+	tests := []pico.Types{
 		{},
 		{
 			Int32:    1,
@@ -43,13 +45,13 @@ func TestTypes(t *testing.T) {
 			Bool:     true,
 			String_:  "1",
 			Bytes:    []byte{1},
-			Message: MessagePico{
+			Message: pico.Message{
 				Int32: 1,
 			},
-			Language: Language_ENGLISHPico,
+			Language: pico.Language_ENGLISH,
 		},
 		{
-			OptionalMessage: &OptionalMessagePico{},
+			OptionalMessage: &pico.OptionalMessage{},
 		},
 	}
 
@@ -57,7 +59,7 @@ func TestTypes(t *testing.T) {
 		data, err := picobuf.Marshal(&test)
 		assert.NoError(t, err)
 
-		var p Types
+		var p prot.Types
 		err = proto.Unmarshal(data, &p)
 		assert.NoError(t, err)
 
@@ -67,7 +69,7 @@ func TestTypes(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, canonical, data)
 
-		var got TypesPico
+		var got pico.Types
 		err = picobuf.Unmarshal(canonical, &got)
 		assert.NoError(t, err)
 		assert.DeepEqual(t, got, test)
@@ -75,7 +77,7 @@ func TestTypes(t *testing.T) {
 }
 
 func TestRepeated(t *testing.T) {
-	tests := []RepeatedTypesPico{
+	tests := []pico.RepeatedTypes{
 		{},
 		{
 			Int32:    []int32{1, 0xFFFF, -1},
@@ -93,11 +95,11 @@ func TestRepeated(t *testing.T) {
 			Bool:     []bool{true, false, true},
 			String_:  []string{"hello", "world"},
 			Bytes:    [][]byte{{}, {0, 1}, {0xff}},
-			Message: []*MessagePico{
+			Message: []*pico.Message{
 				{Int32: 1},
 				{Int32: 2},
 			},
-			Language: []LanguagePico{Language_ENGLISHPico},
+			Language: []pico.Language{pico.Language_ENGLISH},
 		},
 	}
 
@@ -105,7 +107,7 @@ func TestRepeated(t *testing.T) {
 		data, err := picobuf.Marshal(&test)
 		assert.NoError(t, err)
 
-		var p RepeatedTypes
+		var p prot.RepeatedTypes
 		err = proto.Unmarshal(data, &p)
 		assert.NoError(t, err)
 
@@ -114,7 +116,7 @@ func TestRepeated(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, canonical, data)
 
-		var got RepeatedTypesPico
+		var got pico.RepeatedTypes
 		err = picobuf.Unmarshal(canonical, &got)
 		assert.NoError(t, err)
 		assert.DeepEqual(t, got, test)
@@ -122,7 +124,7 @@ func TestRepeated(t *testing.T) {
 }
 
 func TestMaps(t *testing.T) {
-	tests := []MapPico{
+	tests := []pico.Map{
 		{},
 		{
 			Values: map[string]string{"a": "b"},
@@ -149,7 +151,7 @@ func TestMaps(t *testing.T) {
 		data, err := picobuf.Marshal(&test)
 		assert.NoError(t, err)
 
-		var p Map
+		var p prot.Map
 		err = proto.Unmarshal(data, &p)
 		assert.NoError(t, err)
 
@@ -166,7 +168,7 @@ func TestMaps(t *testing.T) {
 			}
 		}
 
-		var got MapPico
+		var got pico.Map
 		err = picobuf.Unmarshal(canonical, &got)
 		assert.NoError(t, err)
 		assert.DeepEqual(t, got, test)
@@ -174,12 +176,12 @@ func TestMaps(t *testing.T) {
 }
 
 func TestEnum(t *testing.T) {
-	test := PersonPico{
-		Primary: Language_ENGLISHPico,
-		Spoken: []LanguagePico{
-			Language_ENGLISHPico,
-			Language_SPANISHPico,
-			Language_FRENCHPico,
+	test := pico.Person{
+		Primary: pico.Language_ENGLISH,
+		Spoken: []pico.Language{
+			pico.Language_ENGLISH,
+			pico.Language_SPANISH,
+			pico.Language_FRENCH,
 		},
 	}
 
@@ -187,7 +189,7 @@ func TestEnum(t *testing.T) {
 	assert.NoError(t, err)
 
 	{
-		var got Person
+		var got prot.Person
 		err = proto.Unmarshal(data, &got)
 		assert.NoError(t, err)
 
@@ -200,7 +202,7 @@ func TestEnum(t *testing.T) {
 	}
 
 	{
-		var got PersonPico
+		var got pico.Person
 		err = picobuf.Unmarshal(data, &got)
 		assert.NoError(t, err)
 		assert.DeepEqual(t, got, test)
@@ -208,9 +210,9 @@ func TestEnum(t *testing.T) {
 }
 
 func TestOneOf(t *testing.T) {
-	test := CommandMessagePico{
+	test := pico.CommandMessage{
 		Class: "Hello",
-		Command: &CommandMessage_NamePico{
+		Command: &pico.CommandMessage_Name{
 			Name: "Hello",
 		},
 	}
@@ -219,18 +221,18 @@ func TestOneOf(t *testing.T) {
 	assert.NoError(t, err)
 
 	{
-		var got CommandMessage
+		var got prot.CommandMessage
 		err = proto.Unmarshal(data, &got)
 		assert.NoError(t, err)
 
 		assert.Equal(t, got.Class, test.Class)
-		name, isName := got.Command.(*CommandMessage_Name)
+		name, isName := got.Command.(*prot.CommandMessage_Name)
 		assert.True(t, isName)
 		assert.Equal(t, name.Name, "Hello")
 	}
 
 	{
-		var got CommandMessagePico
+		var got pico.CommandMessage
 		err = picobuf.Unmarshal(data, &got)
 		assert.NoError(t, err)
 		assert.DeepEqual(t, got, test)

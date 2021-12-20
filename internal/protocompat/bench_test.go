@@ -10,6 +10,8 @@ import (
 	"google.golang.org/protobuf/proto"
 
 	"storj.io/picobuf"
+	"storj.io/picobuf/internal/protocompat/pico"
+	"storj.io/picobuf/internal/protocompat/prot"
 )
 
 func BenchmarkProtobuf(b *testing.B) {
@@ -31,7 +33,7 @@ func BenchmarkProtobuf(b *testing.B) {
 		b.ReportAllocs()
 		for k := 0; k < b.N; k++ {
 			for _, bytes := range encoded {
-				var x Person
+				var x prot.Person
 				_ = proto.Unmarshal(bytes, &x)
 			}
 		}
@@ -59,44 +61,44 @@ func BenchmarkPicobuf(b *testing.B) {
 		b.ReportAllocs()
 		for k := 0; k < b.N; k++ {
 			for _, bytes := range encoded {
-				var x PersonPico
+				var x pico.Person
 				_ = picobuf.Unmarshal(bytes, &x)
 			}
 		}
 	})
 }
 
-func generateProtobuf(n int) []Person {
+func generateProtobuf(n int) []prot.Person {
 	r := rand.New(rand.NewSource(int64(n)))
-	xs := make([]Person, n)
+	xs := make([]prot.Person, n)
 	for i := range xs {
-		xs[i] = Person{
+		xs[i] = prot.Person{
 			Name:     randString(r, 16),
 			Birthday: r.Int63(),
 			Phone:    randString(r, 10),
 			Siblings: r.Int31n(5),
 			Spouse:   r.Intn(2) == 1,
 			Money:    r.Float64(),
-			Primary:  Language(r.Intn(5)),
-			Spoken:   []Language{Language(r.Intn(5))},
+			Primary:  prot.Language(r.Intn(5)),
+			Spoken:   []prot.Language{prot.Language(r.Intn(5))},
 		}
 	}
 	return xs
 }
 
-func generatePicobuf(n int) []PersonPico {
+func generatePicobuf(n int) []pico.Person {
 	r := rand.New(rand.NewSource(int64(n)))
-	xs := make([]PersonPico, n)
+	xs := make([]pico.Person, n)
 	for i := range xs {
-		xs[i] = PersonPico{
+		xs[i] = pico.Person{
 			Name:     randString(r, 16),
 			Birthday: r.Int63(),
 			Phone:    randString(r, 10),
 			Siblings: r.Int31n(5),
 			Spouse:   r.Intn(2) == 1,
 			Money:    r.Float64() * 1000,
-			Primary:  LanguagePico(r.Intn(5)),
-			Spoken:   []LanguagePico{LanguagePico(r.Intn(5))},
+			Primary:  pico.Language(r.Intn(5)),
+			Spoken:   []pico.Language{pico.Language(r.Intn(5))},
 		}
 	}
 	return xs

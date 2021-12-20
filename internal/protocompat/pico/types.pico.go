@@ -5,23 +5,23 @@
 //     protoc-gen-pico: (devel)
 //     protoc:          v3.19.1
 
-package protocompat
+package pico
 
 import (
 	picobuf "storj.io/picobuf"
 )
 
-type LanguagePico int32
+type Language int32
 
 const (
-	Language_UNKNOWNPico LanguagePico = 0
-	Language_ENGLISHPico LanguagePico = 1
-	Language_SPANISHPico LanguagePico = 3
-	Language_FRENCHPico  LanguagePico = 4
-	Language_GERMANPico  LanguagePico = 5
+	Language_UNKNOWN Language = 0
+	Language_ENGLISH Language = 1
+	Language_SPANISH Language = 3
+	Language_FRENCH  Language = 4
+	Language_GERMAN  Language = 5
 )
 
-type TypesPico struct {
+type Types struct {
 	Int32           int32
 	Int64           int64
 	Uint32          uint32
@@ -37,12 +37,12 @@ type TypesPico struct {
 	Bool            bool
 	String_         string
 	Bytes           []byte
-	Message         MessagePico
-	OptionalMessage *OptionalMessagePico
-	Language        LanguagePico
+	Message         Message
+	OptionalMessage *OptionalMessage
+	Language        Language
 }
 
-func (m *TypesPico) Encode(c *picobuf.Encoder) bool {
+func (m *Types) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
@@ -67,7 +67,7 @@ func (m *TypesPico) Encode(c *picobuf.Encoder) bool {
 	return true
 }
 
-func (m *TypesPico) Decode(c *picobuf.Decoder) {
+func (m *Types) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
@@ -89,14 +89,14 @@ func (m *TypesPico) Decode(c *picobuf.Decoder) {
 	c.PresentMessage(16, m.Message.Decode)
 	c.Message(17, func(c *picobuf.Decoder) {
 		if m.OptionalMessage == nil {
-			m.OptionalMessage = new(OptionalMessagePico)
+			m.OptionalMessage = new(OptionalMessage)
 		}
 		m.OptionalMessage.Decode(c)
 	})
 	c.Int32(18, (*int32)(&m.Language))
 }
 
-type RepeatedTypesPico struct {
+type RepeatedTypes struct {
 	Int32    []int32
 	Int64    []int64
 	Uint32   []uint32
@@ -112,11 +112,11 @@ type RepeatedTypesPico struct {
 	Bool     []bool
 	String_  []string
 	Bytes    [][]byte
-	Message  []*MessagePico
-	Language []LanguagePico
+	Message  []*Message
+	Language []Language
 }
 
-func (m *RepeatedTypesPico) Encode(c *picobuf.Encoder) bool {
+func (m *RepeatedTypes) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
@@ -147,7 +147,7 @@ func (m *RepeatedTypesPico) Encode(c *picobuf.Encoder) bool {
 	return true
 }
 
-func (m *RepeatedTypesPico) Decode(c *picobuf.Decoder) {
+func (m *RepeatedTypes) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
@@ -167,21 +167,21 @@ func (m *RepeatedTypesPico) Decode(c *picobuf.Decoder) {
 	c.RepeatedString(14, &m.String_)
 	c.RepeatedBytes(15, &m.Bytes)
 	c.RepeatedMessage(16, func(c *picobuf.Decoder) {
-		mm := new(MessagePico)
+		mm := new(Message)
 		c.Loop(mm.Decode)
 		m.Message = append(m.Message, mm)
 	})
 	c.RepeatedEnum(17, func(x int32) {
-		m.Language = append(m.Language, (LanguagePico)(x))
+		m.Language = append(m.Language, (Language)(x))
 	})
 }
 
-type RepeatedMixedPico struct {
+type RepeatedMixed struct {
 	Int32   int32
-	Message []*MessagePico
+	Message []*Message
 }
 
-func (m *RepeatedMixedPico) Encode(c *picobuf.Encoder) bool {
+func (m *RepeatedMixed) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
@@ -192,24 +192,24 @@ func (m *RepeatedMixedPico) Encode(c *picobuf.Encoder) bool {
 	return true
 }
 
-func (m *RepeatedMixedPico) Decode(c *picobuf.Decoder) {
+func (m *RepeatedMixed) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
 	c.Int32(1, &m.Int32)
 	c.RepeatedMessage(16, func(c *picobuf.Decoder) {
-		mm := new(MessagePico)
+		mm := new(Message)
 		c.Loop(mm.Decode)
 		m.Message = append(m.Message, mm)
 	})
 }
 
-type MessagePico struct {
+type Message struct {
 	Int32 int32
 	Int64 int64
 }
 
-func (m *MessagePico) Encode(c *picobuf.Encoder) bool {
+func (m *Message) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
@@ -218,7 +218,7 @@ func (m *MessagePico) Encode(c *picobuf.Encoder) bool {
 	return true
 }
 
-func (m *MessagePico) Decode(c *picobuf.Decoder) {
+func (m *Message) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
@@ -226,18 +226,18 @@ func (m *MessagePico) Decode(c *picobuf.Decoder) {
 	c.Int64(2, &m.Int64)
 }
 
-type PersonPico struct {
+type Person struct {
 	Name     string
 	Birthday int64
 	Phone    string
 	Siblings int32
 	Spouse   bool
 	Money    float64
-	Primary  LanguagePico
-	Spoken   []LanguagePico
+	Primary  Language
+	Spoken   []Language
 }
 
-func (m *PersonPico) Encode(c *picobuf.Encoder) bool {
+func (m *Person) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
@@ -257,7 +257,7 @@ func (m *PersonPico) Encode(c *picobuf.Encoder) bool {
 	return true
 }
 
-func (m *PersonPico) Decode(c *picobuf.Decoder) {
+func (m *Person) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
@@ -269,15 +269,15 @@ func (m *PersonPico) Decode(c *picobuf.Decoder) {
 	c.Double(6, &m.Money)
 	c.Int32(7, (*int32)(&m.Primary))
 	c.RepeatedEnum(8, func(x int32) {
-		m.Spoken = append(m.Spoken, (LanguagePico)(x))
+		m.Spoken = append(m.Spoken, (Language)(x))
 	})
 }
 
-type MapPico struct {
+type Map struct {
 	Values map[string]string
 }
 
-func (m *MapPico) Encode(c *picobuf.Encoder) bool {
+func (m *Map) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
@@ -285,18 +285,18 @@ func (m *MapPico) Encode(c *picobuf.Encoder) bool {
 	return true
 }
 
-func (m *MapPico) Decode(c *picobuf.Decoder) {
+func (m *Map) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
 	c.MapStringString(1, &m.Values)
 }
 
-type OptionalMessagePico struct {
+type OptionalMessage struct {
 	Int32 int32
 }
 
-func (m *OptionalMessagePico) Encode(c *picobuf.Encoder) bool {
+func (m *OptionalMessage) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
@@ -304,75 +304,75 @@ func (m *OptionalMessagePico) Encode(c *picobuf.Encoder) bool {
 	return true
 }
 
-func (m *OptionalMessagePico) Decode(c *picobuf.Decoder) {
+func (m *OptionalMessage) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
 	c.Int32(1, &m.Int32)
 }
 
-type CommandMessagePico struct {
+type CommandMessage struct {
 	Class   string
-	Command isCommandMessage_CommandPico
+	Command isCommandMessage_Command
 }
 
-func (m *CommandMessagePico) Encode(c *picobuf.Encoder) bool {
+func (m *CommandMessage) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
 	c.String(1, &m.Class)
-	if m, ok := m.Command.(*CommandMessage_NamePico); ok {
+	if m, ok := m.Command.(*CommandMessage_Name); ok {
 		c.String(2, &m.Name)
 	}
-	if m, ok := m.Command.(*CommandMessage_MessagePico); ok {
+	if m, ok := m.Command.(*CommandMessage_Message); ok {
 		c.Message(3, m.Message.Encode)
 	}
 	return true
 }
 
-func (m *CommandMessagePico) Decode(c *picobuf.Decoder) {
+func (m *CommandMessage) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
 	c.String(1, &m.Class)
 	if c.PendingField() == 2 {
-		var x *CommandMessage_NamePico
-		if z, ok := m.Command.(*CommandMessage_NamePico); ok {
+		var x *CommandMessage_Name
+		if z, ok := m.Command.(*CommandMessage_Name); ok {
 			x = z
 		} else {
-			x = new(CommandMessage_NamePico)
+			x = new(CommandMessage_Name)
 			m.Command = x
 		}
 		m := x
 		c.String(2, &m.Name)
 	}
 	if c.PendingField() == 3 {
-		var x *CommandMessage_MessagePico
-		if z, ok := m.Command.(*CommandMessage_MessagePico); ok {
+		var x *CommandMessage_Message
+		if z, ok := m.Command.(*CommandMessage_Message); ok {
 			x = z
 		} else {
-			x = new(CommandMessage_MessagePico)
+			x = new(CommandMessage_Message)
 			m.Command = x
 		}
 		m := x
 		c.Message(3, func(c *picobuf.Decoder) {
 			if m.Message == nil {
-				m.Message = new(MessagePico)
+				m.Message = new(Message)
 			}
 			m.Message.Decode(c)
 		})
 	}
 }
 
-type isCommandMessage_CommandPico interface{ isCommandMessage_CommandPico() }
+type isCommandMessage_Command interface{ isCommandMessage_Command() }
 
-type CommandMessage_NamePico struct {
+type CommandMessage_Name struct {
 	Name string
 }
 
-type CommandMessage_MessagePico struct {
-	Message *MessagePico
+type CommandMessage_Message struct {
+	Message *Message
 }
 
-func (*CommandMessage_NamePico) isCommandMessage_CommandPico()    {}
-func (*CommandMessage_MessagePico) isCommandMessage_CommandPico() {}
+func (*CommandMessage_Name) isCommandMessage_Command()    {}
+func (*CommandMessage_Message) isCommandMessage_Command() {}
