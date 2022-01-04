@@ -10,8 +10,8 @@ import (
 )
 
 func main() {
-	var z byte
+	var z uint32
 	enc := picobuf.NewEncoder()
-	enc.Byte(1, &z)
+	enc.Uint32(1, &z)
 	fmt.Println(enc.Buffer())
 }

@@ -88,7 +88,6 @@ func (t *PrimitiveType) ShortWireName() string {
 }
 
 var types = []PrimitiveType{
-	{"Byte", byte(0), protowire.VarintType, "Varint", "uint64(%s)", "byte(%s)"},
 	{"Bool", bool(false), protowire.VarintType, "Varint", "encodeBool64(%s)", "%s == 1"},
 	{"Int32", int32(0), protowire.VarintType, "Varint", "uint64(%s)", "int32(%s)"},
 	{"Int64", int64(0), protowire.VarintType, "Varint", "uint64(%s)", "int64(%s)"},
@@ -103,7 +102,6 @@ var types = []PrimitiveType{
 	{"Float", float32(0), protowire.Fixed32Type, "Fixed32", "math.Float32bits(%s)", "math.Float32frombits(%s)"},
 	{"Double", float64(0), protowire.Fixed64Type, "Fixed64", "math.Float64bits(%s)", "math.Float64frombits(%s)"},
 	{"String", string(""), protowire.BytesType, "String", "%s", "%s"},
-	{"RawString", string(""), protowire.BytesType, "String", "%s", "%s"},
 	{"Bytes", []byte{}, protowire.BytesType, "Bytes", "%s", "%s"}, //TODO: reuse the existing bytes buffer to reduce allocs.
 }
 

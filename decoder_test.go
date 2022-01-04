@@ -16,10 +16,10 @@ func TestDecoder_Types(t *testing.T) {
 	dec := picobuf.NewDecoder([]byte{0x10, 0x1, 0x18, 0x64, 0x20, 0xff, 0x1, 0x32, 0x5, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x3a, 0x1, 0x0, 0x42, 0x4, 0x1, 0x2, 0x3, 0x4})
 
 	type example struct {
-		byte0        byte
-		byte1        byte
-		byte100      byte
-		byte255      byte
+		varint0      uint32
+		varint1      uint32
+		varint100    uint32
+		varint255    uint32
 		stringEmpty  string
 		stringHello  string
 		bytesZero    []byte
@@ -28,22 +28,22 @@ func TestDecoder_Types(t *testing.T) {
 
 	var fields example
 	dec.Loop(func(c *picobuf.Decoder) {
-		c.Byte(1, &fields.byte0)
-		c.Byte(2, &fields.byte1)
-		c.Byte(3, &fields.byte100)
-		c.Byte(4, &fields.byte255)
-		c.RawString(5, &fields.stringEmpty)
-		c.RawString(6, &fields.stringHello)
+		c.Uint32(1, &fields.varint0)
+		c.Uint32(2, &fields.varint1)
+		c.Uint32(3, &fields.varint100)
+		c.Uint32(4, &fields.varint255)
+		c.String(5, &fields.stringEmpty)
+		c.String(6, &fields.stringHello)
 		c.Bytes(7, &fields.bytesZero)
 		c.Bytes(8, &fields.bytesNumbers)
 	})
 
 	assert.NoError(t, dec.Err())
 	assert.Equal(t, fields, example{
-		byte0:        0,
-		byte1:        1,
-		byte100:      100,
-		byte255:      255,
+		varint0:      0,
+		varint1:      1,
+		varint100:    100,
+		varint255:    255,
 		stringEmpty:  "",
 		stringHello:  "hello",
 		bytesZero:    []byte{0},
@@ -55,10 +55,10 @@ func TestDecoder_OutOfOrder(t *testing.T) {
 	dec := picobuf.NewDecoder([]byte{0x10, 0x1, 0x18, 0x64, 0x20, 0xff, 0x1, 0x32, 0x5, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x3a, 0x1, 0x0, 0x42, 0x4, 0x1, 0x2, 0x3, 0x4})
 
 	type example struct {
-		byte0        byte
-		byte1        byte
-		byte100      byte
-		byte255      byte
+		varint0      uint32
+		varint1      uint32
+		varint100    uint32
+		varint255    uint32
 		stringEmpty  string
 		stringHello  string
 		bytesZero    []byte
@@ -68,21 +68,21 @@ func TestDecoder_OutOfOrder(t *testing.T) {
 	var fields example
 	dec.Loop(func(c *picobuf.Decoder) {
 		c.Bytes(8, &fields.bytesNumbers)
-		c.Byte(1, &fields.byte0)
-		c.RawString(5, &fields.stringEmpty)
+		c.Uint32(1, &fields.varint0)
+		c.String(5, &fields.stringEmpty)
 		c.Bytes(7, &fields.bytesZero)
-		c.Byte(4, &fields.byte255)
-		c.Byte(2, &fields.byte1)
-		c.Byte(3, &fields.byte100)
-		c.RawString(6, &fields.stringHello)
+		c.Uint32(4, &fields.varint255)
+		c.Uint32(2, &fields.varint1)
+		c.Uint32(3, &fields.varint100)
+		c.String(6, &fields.stringHello)
 	})
 
 	assert.NoError(t, dec.Err())
 	assert.Equal(t, fields, example{
-		byte0:        0,
-		byte1:        1,
-		byte100:      100,
-		byte255:      255,
+		varint0:      0,
+		varint1:      1,
+		varint100:    100,
+		varint255:    255,
 		stringEmpty:  "",
 		stringHello:  "hello",
 		bytesZero:    []byte{0},

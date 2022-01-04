@@ -9,57 +9,6 @@ import (
 	"google.golang.org/protobuf/encoding/protowire"
 )
 
-// Byte decodes byte protobuf type.
-//go:noinline
-func (dec *Decoder) Byte(field FieldNumber, v *uint8) {
-	if field != dec.pendingField {
-		return
-	}
-	if dec.pendingWire != protowire.VarintType {
-		dec.fail(field, "expected wire type Varint")
-		return
-	}
-	x, n := protowire.ConsumeVarint(dec.buffer)
-	if n < 0 {
-		dec.fail(field, "unable to parse Varint")
-		return
-	}
-	*v = byte(x)
-	dec.nextField(n)
-}
-
-// RepeatedByte decodes repeated byte protobuf type.
-//go:noinline
-func (dec *Decoder) RepeatedByte(field FieldNumber, v *[]uint8) {
-	for field == dec.pendingField {
-		switch dec.pendingWire {
-		case protowire.BytesType:
-			packed, n := protowire.ConsumeBytes(dec.buffer)
-			for len(packed) > 0 {
-				x, xn := protowire.ConsumeVarint(packed)
-				if xn < 0 {
-					dec.fail(field, "unable to parse Varint")
-					return
-				}
-				*v = append(*v, byte(x))
-				packed = packed[xn:]
-			}
-			dec.nextField(n)
-		case protowire.VarintType:
-			x, n := protowire.ConsumeVarint(dec.buffer)
-			if n < 0 {
-				dec.fail(field, "unable to parse Varint")
-				return
-			}
-			*v = append(*v, byte(x))
-			dec.nextField(n)
-		default:
-			dec.fail(field, "expected wire type Varint")
-			return
-		}
-	}
-}
-
 // Bool decodes bool protobuf type.
 //go:noinline
 func (dec *Decoder) Bool(field FieldNumber, v *bool) {
@@ -745,45 +694,6 @@ func (dec *Decoder) String(field FieldNumber, v *string) {
 // RepeatedString decodes repeated string protobuf type.
 //go:noinline
 func (dec *Decoder) RepeatedString(field FieldNumber, v *[]string) {
-	for field == dec.pendingField {
-		switch dec.pendingWire {
-		case protowire.BytesType:
-			x, n := protowire.ConsumeString(dec.buffer)
-			if n < 0 {
-				dec.fail(field, "unable to parse String")
-				return
-			}
-			*v = append(*v, x)
-			dec.nextField(n)
-		default:
-			dec.fail(field, "expected wire type Bytes")
-			return
-		}
-	}
-}
-
-// RawString decodes rawstring protobuf type.
-//go:noinline
-func (dec *Decoder) RawString(field FieldNumber, v *string) {
-	if field != dec.pendingField {
-		return
-	}
-	if dec.pendingWire != protowire.BytesType {
-		dec.fail(field, "expected wire type Bytes")
-		return
-	}
-	x, n := protowire.ConsumeString(dec.buffer)
-	if n < 0 {
-		dec.fail(field, "unable to parse String")
-		return
-	}
-	*v = x
-	dec.nextField(n)
-}
-
-// RepeatedRawString decodes repeated rawstring protobuf type.
-//go:noinline
-func (dec *Decoder) RepeatedRawString(field FieldNumber, v *[]string) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
 		case protowire.BytesType:

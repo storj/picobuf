@@ -12,20 +12,20 @@ import (
 	"storj.io/picobuf/internal/picotest"
 )
 
-func pbyte(v byte) *byte       { return &v }
+func puint32(v uint32) *uint32 { return &v }
 func pstring(v string) *string { return &v }
 func pbytes(v []byte) *[]byte  { return &v }
 
 func TestEncoder_Types(t *testing.T) {
 	enc := picobuf.NewEncoder()
 
-	enc.Byte(1, pbyte(0))
-	enc.Byte(2, pbyte(1))
-	enc.Byte(3, pbyte(100))
-	enc.Byte(4, pbyte(255))
+	enc.Uint32(1, puint32(0))
+	enc.Uint32(2, puint32(1))
+	enc.Uint32(3, puint32(100))
+	enc.Uint32(4, puint32(255))
 
-	enc.RawString(5, pstring(""))
-	enc.RawString(6, pstring("hello"))
+	enc.String(5, pstring(""))
+	enc.String(6, pstring("hello"))
 
 	enc.Bytes(7, pbytes([]byte{0}))
 	enc.Bytes(8, pbytes([]byte{1, 2, 3, 4}))

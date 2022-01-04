@@ -9,29 +9,6 @@ import (
 	"google.golang.org/protobuf/encoding/protowire"
 )
 
-// Byte encodes non-default byte protobuf type.
-//go:noinline
-func (enc *Encoder) Byte(field FieldNumber, v *uint8) {
-	if *v == 0 {
-		return
-	}
-	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
-	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(*v))
-}
-
-// RepeatedByte encodes non-empty repeated byte protobuf type.
-//go:noinline
-func (enc *Encoder) RepeatedByte(field FieldNumber, v *[]uint8) {
-	if len(*v) == 0 {
-		return
-	}
-	enc.alwaysAnyBytes(field, func() {
-		for _, x := range *v {
-			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(x))
-		}
-	})
-}
-
 // Bool encodes non-default bool protobuf type.
 //go:noinline
 func (enc *Encoder) Bool(field FieldNumber, v *bool) {
@@ -344,28 +321,6 @@ func (enc *Encoder) String(field FieldNumber, v *string) {
 // RepeatedString encodes non-empty repeated string protobuf type.
 //go:noinline
 func (enc *Encoder) RepeatedString(field FieldNumber, v *[]string) {
-	if len(*v) == 0 {
-		return
-	}
-	for _, x := range *v {
-		enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
-		enc.buffer = protowire.AppendString(enc.buffer, x)
-	}
-}
-
-// RawString encodes non-default rawstring protobuf type.
-//go:noinline
-func (enc *Encoder) RawString(field FieldNumber, v *string) {
-	if len(*v) == 0 {
-		return
-	}
-	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
-	enc.buffer = protowire.AppendString(enc.buffer, *v)
-}
-
-// RepeatedRawString encodes non-empty repeated rawstring protobuf type.
-//go:noinline
-func (enc *Encoder) RepeatedRawString(field FieldNumber, v *[]string) {
 	if len(*v) == 0 {
 		return
 	}
