@@ -275,14 +275,64 @@ func (m *Person) Decode(c *picobuf.Decoder) {
 }
 
 type Map struct {
-	Values map[string]string
+	StringString   map[string]string
+	StringInt32    map[string]int32
+	StringInt64    map[string]int64
+	StringUint32   map[string]uint32
+	StringUint64   map[string]uint64
+	StringSint32   map[string]int32
+	StringSint64   map[string]int64
+	StringFixed32  map[string]uint32
+	StringFixed64  map[string]uint64
+	StringSfixed32 map[string]int32
+	StringSfixed64 map[string]int64
+	StringFloat    map[string]float32
+	StringDouble   map[string]float64
+	StringBool     map[string]bool
+	StringBytes    map[string][]byte
+	Int32String    map[int32]string
+	Int64String    map[int64]string
+	Uint32String   map[uint32]string
+	Uint64String   map[uint64]string
+	Sint32String   map[int32]string
+	Sint64String   map[int64]string
+	Fixed32String  map[uint32]string
+	Fixed64String  map[uint64]string
+	Sfixed32String map[int32]string
+	Sfixed64String map[int64]string
+	BoolString     map[bool]string
 }
 
 func (m *Map) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
-	(*picowire.MapStringString)(&m.Values).PicoEncode(c, 1)
+	(*picowire.MapStringString)(&m.StringString).PicoEncode(c, 1)
+	(*picowire.MapStringInt32)(&m.StringInt32).PicoEncode(c, 2)
+	(*picowire.MapStringInt64)(&m.StringInt64).PicoEncode(c, 3)
+	(*picowire.MapStringUint32)(&m.StringUint32).PicoEncode(c, 4)
+	(*picowire.MapStringUint64)(&m.StringUint64).PicoEncode(c, 5)
+	(*picowire.MapStringSint32)(&m.StringSint32).PicoEncode(c, 6)
+	(*picowire.MapStringSint64)(&m.StringSint64).PicoEncode(c, 7)
+	(*picowire.MapStringFixed32)(&m.StringFixed32).PicoEncode(c, 8)
+	(*picowire.MapStringFixed64)(&m.StringFixed64).PicoEncode(c, 9)
+	(*picowire.MapStringSfixed32)(&m.StringSfixed32).PicoEncode(c, 10)
+	(*picowire.MapStringSfixed64)(&m.StringSfixed64).PicoEncode(c, 11)
+	(*picowire.MapStringFloat)(&m.StringFloat).PicoEncode(c, 12)
+	(*picowire.MapStringDouble)(&m.StringDouble).PicoEncode(c, 13)
+	(*picowire.MapStringBool)(&m.StringBool).PicoEncode(c, 14)
+	(*picowire.MapStringBytes)(&m.StringBytes).PicoEncode(c, 16)
+	(*picowire.MapInt32String)(&m.Int32String).PicoEncode(c, 17)
+	(*picowire.MapInt64String)(&m.Int64String).PicoEncode(c, 18)
+	(*picowire.MapUint32String)(&m.Uint32String).PicoEncode(c, 19)
+	(*picowire.MapUint64String)(&m.Uint64String).PicoEncode(c, 20)
+	(*picowire.MapSint32String)(&m.Sint32String).PicoEncode(c, 21)
+	(*picowire.MapSint64String)(&m.Sint64String).PicoEncode(c, 22)
+	(*picowire.MapFixed32String)(&m.Fixed32String).PicoEncode(c, 23)
+	(*picowire.MapFixed64String)(&m.Fixed64String).PicoEncode(c, 24)
+	(*picowire.MapSfixed32String)(&m.Sfixed32String).PicoEncode(c, 25)
+	(*picowire.MapSfixed64String)(&m.Sfixed64String).PicoEncode(c, 26)
+	(*picowire.MapBoolString)(&m.BoolString).PicoEncode(c, 27)
 	return true
 }
 
@@ -290,7 +340,32 @@ func (m *Map) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	(*picowire.MapStringString)(&m.Values).PicoDecode(c, 1)
+	(*picowire.MapStringString)(&m.StringString).PicoDecode(c, 1)
+	(*picowire.MapStringInt32)(&m.StringInt32).PicoDecode(c, 2)
+	(*picowire.MapStringInt64)(&m.StringInt64).PicoDecode(c, 3)
+	(*picowire.MapStringUint32)(&m.StringUint32).PicoDecode(c, 4)
+	(*picowire.MapStringUint64)(&m.StringUint64).PicoDecode(c, 5)
+	(*picowire.MapStringSint32)(&m.StringSint32).PicoDecode(c, 6)
+	(*picowire.MapStringSint64)(&m.StringSint64).PicoDecode(c, 7)
+	(*picowire.MapStringFixed32)(&m.StringFixed32).PicoDecode(c, 8)
+	(*picowire.MapStringFixed64)(&m.StringFixed64).PicoDecode(c, 9)
+	(*picowire.MapStringSfixed32)(&m.StringSfixed32).PicoDecode(c, 10)
+	(*picowire.MapStringSfixed64)(&m.StringSfixed64).PicoDecode(c, 11)
+	(*picowire.MapStringFloat)(&m.StringFloat).PicoDecode(c, 12)
+	(*picowire.MapStringDouble)(&m.StringDouble).PicoDecode(c, 13)
+	(*picowire.MapStringBool)(&m.StringBool).PicoDecode(c, 14)
+	(*picowire.MapStringBytes)(&m.StringBytes).PicoDecode(c, 16)
+	(*picowire.MapInt32String)(&m.Int32String).PicoDecode(c, 17)
+	(*picowire.MapInt64String)(&m.Int64String).PicoDecode(c, 18)
+	(*picowire.MapUint32String)(&m.Uint32String).PicoDecode(c, 19)
+	(*picowire.MapUint64String)(&m.Uint64String).PicoDecode(c, 20)
+	(*picowire.MapSint32String)(&m.Sint32String).PicoDecode(c, 21)
+	(*picowire.MapSint64String)(&m.Sint64String).PicoDecode(c, 22)
+	(*picowire.MapFixed32String)(&m.Fixed32String).PicoDecode(c, 23)
+	(*picowire.MapFixed64String)(&m.Fixed64String).PicoDecode(c, 24)
+	(*picowire.MapSfixed32String)(&m.Sfixed32String).PicoDecode(c, 25)
+	(*picowire.MapSfixed64String)(&m.Sfixed64String).PicoDecode(c, 26)
+	(*picowire.MapBoolString)(&m.BoolString).PicoDecode(c, 27)
 }
 
 type OptionalMessage struct {

@@ -441,13 +441,11 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 		if field.Desc.IsMap() {
 			info.kind = kindMap
 
+			if keyKind := desc.MapKey().Kind(); !validMapKey[keyKind] {
+				panic("invalid map key " + keyKind.String())
+			}
+
 			keyInfo := fieldInfo(gf, nil, desc.MapKey())
-			if keyInfo.repeated {
-				panic("map key with repeated not supported")
-			}
-			if info.pointer {
-				panic("map key with pointer not supported")
-			}
 			info.key = &keyInfo
 
 			valueInfo := fieldInfo(gf, nil, desc.MapValue())
@@ -505,6 +503,27 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 	}
 
 	return info
+}
+
+var validMapKey = map[protoreflect.Kind]bool{
+	protoreflect.BoolKind:     true,
+	protoreflect.EnumKind:     false,
+	protoreflect.Int32Kind:    true,
+	protoreflect.Sint32Kind:   true,
+	protoreflect.Uint32Kind:   true,
+	protoreflect.Int64Kind:    true,
+	protoreflect.Sint64Kind:   true,
+	protoreflect.Uint64Kind:   true,
+	protoreflect.Sfixed32Kind: true,
+	protoreflect.Fixed32Kind:  true,
+	protoreflect.FloatKind:    false,
+	protoreflect.Sfixed64Kind: true,
+	protoreflect.Fixed64Kind:  true,
+	protoreflect.DoubleKind:   false,
+	protoreflect.StringKind:   true,
+	protoreflect.BytesKind:    false,
+	protoreflect.MessageKind:  false,
+	protoreflect.GroupKind:    false,
 }
 
 func fieldGoType(gf *generator, field *protogen.Field) string {

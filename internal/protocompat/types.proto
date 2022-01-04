@@ -80,7 +80,34 @@ message Person {
 }
 
 message Map {
-  map<string, string> values = 1;
+  map<string, string>   string_string = 1;
+
+  map<string, int32>    string_int32 = 2;
+  map<string, int64>    string_int64 = 3;
+  map<string, uint32>   string_uint32 = 4;
+  map<string, uint64>   string_uint64 = 5;
+  map<string, sint32>   string_sint32 = 6;
+  map<string, sint64>   string_sint64 = 7;
+  map<string, fixed32>  string_fixed32 = 8;
+  map<string, fixed64>  string_fixed64 = 9;
+  map<string, sfixed32> string_sfixed32 = 10;
+  map<string, sfixed64> string_sfixed64 = 11;
+  map<string, float>    string_float = 12;
+  map<string, double>   string_double = 13;
+  map<string, bool>     string_bool = 14;
+  map<string, bytes>    string_bytes = 16;
+
+  map<int32, string>    int32_string = 17;
+  map<int64, string>    int64_string = 18;
+  map<uint32, string>   uint32_string = 19;
+  map<uint64, string>   uint64_string = 20;
+  map<sint32, string>   sint32_string = 21;
+  map<sint64, string>   sint64_string = 22;
+  map<fixed32, string>  fixed32_string = 23;
+  map<fixed64, string>  fixed64_string = 24;
+  map<sfixed32, string> sfixed32_string = 25;
+  map<sfixed64, string> sfixed64_string = 26;
+  map<bool, string>     bool_string = 27;
 }
 
 message OptionalMessage {

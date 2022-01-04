@@ -127,23 +127,51 @@ func TestMaps(t *testing.T) {
 	tests := []pico.Map{
 		{},
 		{
-			Values: map[string]string{"a": "b"},
+			StringString: map[string]string{"a": "b"},
 		},
 		{
-			Values: map[string]string{"": ""},
+			StringString: map[string]string{"": ""},
 		},
 		{
-			Values: map[string]string{"empty": ""},
+			StringString: map[string]string{"empty": ""},
 		},
 		{
-			Values: map[string]string{"": "v"},
+			StringString: map[string]string{"": "v"},
 		},
 		{
-			Values: map[string]string{
+			StringString: map[string]string{
 				"a": "b",
 				"b": "c",
 				"c": "d",
 			},
+		},
+		{
+			StringString:   map[string]string{"a": "b"},
+			StringInt32:    map[string]int32{"a": 1},
+			StringInt64:    map[string]int64{"a": 1},
+			StringUint32:   map[string]uint32{"a": 1},
+			StringUint64:   map[string]uint64{"a": 1},
+			StringSint32:   map[string]int32{"a": 1},
+			StringSint64:   map[string]int64{"a": 1},
+			StringFixed32:  map[string]uint32{"a": 1},
+			StringFixed64:  map[string]uint64{"a": 1},
+			StringSfixed32: map[string]int32{"a": 1},
+			StringSfixed64: map[string]int64{"a": 1},
+			StringFloat:    map[string]float32{"a": 1},
+			StringDouble:   map[string]float64{"a": 1},
+			StringBool:     map[string]bool{"a": true},
+			StringBytes:    map[string][]byte{"a": []byte("a")},
+			Int32String:    map[int32]string{1: "a"},
+			Int64String:    map[int64]string{1: "a"},
+			Uint32String:   map[uint32]string{1: "a"},
+			Uint64String:   map[uint64]string{1: "a"},
+			Sint32String:   map[int32]string{1: "a"},
+			Sint64String:   map[int64]string{1: "a"},
+			Fixed32String:  map[uint32]string{1: "a"},
+			Fixed64String:  map[uint64]string{1: "a"},
+			Sfixed32String: map[int32]string{1: "a"},
+			Sfixed64String: map[int64]string{1: "a"},
+			BoolString:     map[bool]string{true: "a"},
 		},
 	}
 
@@ -160,9 +188,9 @@ func TestMaps(t *testing.T) {
 		assert.NoError(t, err)
 
 		// encoding of maps is not deterministic
-		if len(test.Values) <= 1 {
-			_, hasEmptyKey := test.Values[""]
-			_, hasEmptyVal := test.Values["empty"]
+		if len(test.StringString) <= 1 {
+			_, hasEmptyKey := test.StringString[""]
+			_, hasEmptyVal := test.StringString["empty"]
 			if !hasEmptyKey && !hasEmptyVal {
 				assert.Equal(t, canonical, data)
 			}

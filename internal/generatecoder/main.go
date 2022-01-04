@@ -9,6 +9,7 @@ import (
 	"go/format"
 	"io/ioutil"
 	"log"
+	"path/filepath"
 	"reflect"
 	"strings"
 
@@ -87,6 +88,11 @@ func (t *PrimitiveType) ShortWireName() string {
 	}
 }
 
+// IsValidMapKey returns whether primitive can be used as a map key.
+func (t *PrimitiveType) IsValidMapKey() bool {
+	return t.Name != "Float" && t.Name != "Double" && t.Name != "Bytes"
+}
+
 var types = []PrimitiveType{
 	{"Bool", bool(false), protowire.VarintType, "Varint", "encodeBool64(%s)", "%s == 1"},
 	{"Int32", int32(0), protowire.VarintType, "Varint", "uint64(%s)", "int32(%s)"},
@@ -114,6 +120,11 @@ func main() {
 	}
 
 	err = ioutil.WriteFile("decoder_types.go", generateDecoder(), 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = ioutil.WriteFile(filepath.Join("picowire", "map.go"), generateMaps(), 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -272,6 +283,75 @@ func generateDecoder() []byte {
 
 			pf("}\n")
 			pf("}\n")
+		}
+	}
+
+	formatted, err := format.Source(b.Bytes())
+	if err != nil {
+		fmt.Println(b.String())
+		log.Fatal(err)
+	}
+
+	return formatted
+}
+
+func generateMaps() []byte {
+	var b bytes.Buffer
+	pf := func(format string, args ...interface{}) {
+		fmt.Fprintf(&b, format, args...)
+	}
+	pf("// Copyright (C) 2021 Storj Labs, Inc.\n")
+	pf("// See LICENSE for copying information.\n")
+	pf("\n")
+	pf("package picowire\n\n")
+	pf(`import "storj.io/picobuf"`)
+	pf("\n")
+
+	for _, key := range types {
+		if !key.IsValidMapKey() {
+			continue
+		}
+
+		for _, val := range types {
+			mapType := "Map" + key.Name + val.Name
+			pf("// %s implements map<%s,%s>.\n", mapType, strings.ToLower(key.Name), strings.ToLower(val.Name))
+			pf("type %s map[%s]%s\n\n", mapType, key.TypeName(), val.TypeName())
+
+			pf("// PicoEncode encodes as protobuf.\n")
+			pf("//go:noinline\n")
+			pf("func(m *%s) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {\n", mapType)
+			pf("   for key, val := range *m {\n")
+			pf("       enc.AlwaysAnyBytes(field, func() {\n")
+			pf("           enc.%s(1, &key)\n", key.Name)
+			pf("           enc.%s(2, &val)\n", val.Name)
+			pf("       })\n")
+			pf("   }\n")
+			pf("}\n\n")
+
+			pf("// PicoDecode decodes as protobuf.\n")
+			pf("//go:noinline\n")
+			pf("func(m *%s) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {\n", mapType)
+			pf("   var key %s\n", key.TypeName())
+			pf("   var val %s\n", val.TypeName())
+			pf("   var filled bool\n")
+			pf("   dec.RepeatedMessage(field, func(c *picobuf.Decoder) {\n")
+			pf("       if *m == nil {\n")
+			pf("           *m = map[%s]%s{}\n", key.TypeName(), val.TypeName())
+			pf("       }\n")
+			pf("       c.Loop(func(c *picobuf.Decoder) {\n")
+			pf("           if filled {\n")
+			pf("               (*m)[key] = val\n")
+			pf("               filled = false\n")
+			pf("           }\n")
+			pf("           c.%s(1, &key)\n", key.Name)
+			pf("           c.%s(2, &val)\n", val.Name)
+			pf("           filled = true\n")
+			pf("       })\n")
+			pf("   })\n")
+			pf("   if filled {\n")
+			pf("       (*m)[key] = val\n")
+			pf("   }\n")
+			pf("}\n\n")
 		}
 	}
 
