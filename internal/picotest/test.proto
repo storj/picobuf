@@ -81,3 +81,52 @@ message Piece {
 message Map {
   map<int32, int32> values = 1;
 }
+
+message VariationsScalar {
+  string value = 1;
+  optional string opt = 2;
+  repeated string rep = 3;
+
+  string present_basic = 4        [(pico.field).always_present = true];
+  optional string present_opt = 5 [(pico.field).always_present = true];
+  repeated string present_rep = 6 [(pico.field).always_present = true];
+
+  optional bytes  opt_bytes = 7;
+}
+
+message VariationsMessage {
+  Message value = 1;
+  optional Message opt = 2;
+  repeated Message rep = 3;
+
+  Message present_basic = 4        [(pico.field).always_present = true];
+  optional Message present_opt = 5 [(pico.field).always_present = true];
+  repeated Message present_rep = 6 [(pico.field).always_present = true];
+}
+
+message VariationsCustom {
+  bytes value = 1 [
+    (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"
+  ];
+  optional bytes opt = 2 [
+    (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"
+  ];
+  // not supported:
+  // repeated bytes rep = 3 [
+  //   (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"
+  // ];
+
+  bytes present_basic = 4 [
+    (pico.field).always_present = true,
+    (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"
+  ];
+  optional bytes present_opt = 5 [
+    (pico.field).always_present = true,
+    (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"
+  ];
+  // not supported:
+  // repeated bytes present_rep = 6 [
+  //   (pico.field).always_present = true,
+  //   (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"
+  // ];
+}

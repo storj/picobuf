@@ -199,10 +199,16 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 		if info.repeated {
 			method = "Repeated" + method
 		}
-		if info.pointer {
-			panic("pointer not supported for internal type " + info.goType)
+		if info.repeated && info.pointer {
+			panic("pointer not supported for repeated internal type " + info.goType)
 		}
-		gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
+		if !info.pointer {
+			gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
+		} else {
+			gf.P("if m.", field.GoName, " != nil {")
+			gf.P("  c.", method, "(", field.Desc.Number(), ", m.", field.GoName, ")")
+			gf.P("}")
+		}
 
 	case info.kind == kindMessage:
 		switch {
@@ -304,10 +310,17 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 		if info.repeated {
 			method = "Repeated" + method
 		}
-		if info.pointer {
-			panic("pointer not supported for internal type " + info.goType)
+		if info.repeated && info.pointer {
+			panic("pointer not supported for repeated internal type " + info.goType)
 		}
-		gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
+		if !info.pointer {
+			gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
+		} else {
+			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("  m.", field.GoName, " = new(", info.baseType, ")")
+			gf.P("  c.", method, "(", field.Desc.Number(), ", m.", field.GoName, ")")
+			gf.P("}")
+		}
 
 	case info.kind == kindMessage:
 		switch {
@@ -328,8 +341,8 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 			gf.P("c.PresentMessage(", field.Desc.Number(), ", m.", field.GoName, ".Decode)")
 		case !info.pointer && info.repeated:
 			gf.P("c.RepeatedMessage(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Decoder"), ") {")
-			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", ", info.baseType, ")")
-			gf.P("  c.Loop(", field.GoName, "[len(", field.GoName, ")-1].Decode)")
+			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", ", info.baseType, "{})")
+			gf.P("  c.Loop(m.", field.GoName, "[len(m.", field.GoName, ")-1].Decode)")
 			gf.P("})")
 		}
 
@@ -406,9 +419,9 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 	}
 
 	info.kind = kindInternal
-	info.pointer = desc.HasPresence()
+	info.pointer = desc.HasPresence() || desc.HasOptionalKeyword()
 	info.repeated = desc.IsList()
-	info.oneof = desc.ContainingOneof() != nil
+	info.oneof = desc.ContainingOneof() != nil && !desc.ContainingOneof().IsSynthetic()
 
 	switch desc.Kind() {
 	case protoreflect.BoolKind:
@@ -433,10 +446,10 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 		info.baseType = "float64"
 	case protoreflect.StringKind:
 		info.baseType = "string"
-		info.pointer = false
+		info.pointer = desc.HasOptionalKeyword()
 	case protoreflect.BytesKind:
 		info.baseType = "[]byte"
-		info.pointer = false
+		info.pointer = desc.HasOptionalKeyword()
 	case protoreflect.MessageKind:
 		if field.Desc.IsMap() {
 			info.kind = kindMap
@@ -477,13 +490,14 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 	}
 
 	if field != nil {
-		if opts := getFieldOpts(field); opts.AlwaysPresent {
-			info.pointer = false
-		}
 		if getMessageOpts(field.Message).AlwaysPresent {
 			info.pointer = false
 		}
+
 		opts := getFieldOpts(field)
+		if opts.AlwaysPresent {
+			info.pointer = false
+		}
 		if opts.CustomType != "" {
 			info.baseType = qualifiedIdent(gf, opts.CustomType)
 			info.kind = kindCustom
