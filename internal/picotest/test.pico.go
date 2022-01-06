@@ -10,6 +10,7 @@ package picotest
 import (
 	picobuf "storj.io/picobuf"
 	pic "storj.io/picobuf/internal/picotest/pic"
+	picowire "storj.io/picobuf/picowire"
 )
 
 type Basic struct {
@@ -260,4 +261,23 @@ func (m *Piece) Decode(c *picobuf.Decoder) {
 	}
 	m.Id.PicoDecode(c, 1)
 	(*pic.RawString)(&m.Alt).PicoDecode(c, 2)
+}
+
+type Map struct {
+	Values map[int32]int32
+}
+
+func (m *Map) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	(*picowire.MapInt32Int32)(&m.Values).PicoEncode(c, 1)
+	return true
+}
+
+func (m *Map) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	(*picowire.MapInt32Int32)(&m.Values).PicoDecode(c, 1)
 }

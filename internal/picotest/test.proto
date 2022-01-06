@@ -77,3 +77,7 @@ message Piece {
     (pico.field).custom_cast = "storj.io/picobuf/internal/picotest/pic.RawString"
   ];
 }
+
+message Map {
+  map<int32, int32> values = 1;
+}

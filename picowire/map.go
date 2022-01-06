@@ -24,24 +24,16 @@ func (m *MapBoolBool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber
 func (m *MapBoolBool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
 	var val bool
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]bool{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Bool(1, &key)
 			c.Bool(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapBoolInt32 implements map<bool,int32>.
@@ -63,24 +55,16 @@ func (m *MapBoolInt32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 func (m *MapBoolInt32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Bool(1, &key)
 			c.Int32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapBoolInt64 implements map<bool,int64>.
@@ -102,24 +86,16 @@ func (m *MapBoolInt64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 func (m *MapBoolInt64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Bool(1, &key)
 			c.Int64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapBoolUint32 implements map<bool,uint32>.
@@ -141,24 +117,16 @@ func (m *MapBoolUint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapBoolUint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Bool(1, &key)
 			c.Uint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapBoolUint64 implements map<bool,uint64>.
@@ -180,24 +148,16 @@ func (m *MapBoolUint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapBoolUint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Bool(1, &key)
 			c.Uint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapBoolSint32 implements map<bool,sint32>.
@@ -219,24 +179,16 @@ func (m *MapBoolSint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapBoolSint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Bool(1, &key)
 			c.Sint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapBoolSint64 implements map<bool,sint64>.
@@ -258,24 +210,16 @@ func (m *MapBoolSint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapBoolSint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Bool(1, &key)
 			c.Sint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapBoolFixed32 implements map<bool,fixed32>.
@@ -297,24 +241,16 @@ func (m *MapBoolFixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapBoolFixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Bool(1, &key)
 			c.Fixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapBoolFixed64 implements map<bool,fixed64>.
@@ -336,24 +272,16 @@ func (m *MapBoolFixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapBoolFixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Bool(1, &key)
 			c.Fixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapBoolSfixed32 implements map<bool,sfixed32>.
@@ -375,24 +303,16 @@ func (m *MapBoolSfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapBoolSfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Bool(1, &key)
 			c.Sfixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapBoolSfixed64 implements map<bool,sfixed64>.
@@ -414,24 +334,16 @@ func (m *MapBoolSfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapBoolSfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Bool(1, &key)
 			c.Sfixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapBoolFloat implements map<bool,float>.
@@ -453,24 +365,16 @@ func (m *MapBoolFloat) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 func (m *MapBoolFloat) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
 	var val float32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]float32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Bool(1, &key)
 			c.Float(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapBoolDouble implements map<bool,double>.
@@ -492,24 +396,16 @@ func (m *MapBoolDouble) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapBoolDouble) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
 	var val float64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]float64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Bool(1, &key)
 			c.Double(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapBoolString implements map<bool,string>.
@@ -531,24 +427,16 @@ func (m *MapBoolString) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapBoolString) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
 	var val string
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]string{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Bool(1, &key)
 			c.String(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapBoolBytes implements map<bool,bytes>.
@@ -570,24 +458,16 @@ func (m *MapBoolBytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 func (m *MapBoolBytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
 	var val []byte
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool][]byte{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Bool(1, &key)
 			c.Bytes(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt32Bool implements map<int32,bool>.
@@ -609,24 +489,16 @@ func (m *MapInt32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 func (m *MapInt32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val bool
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]bool{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int32(1, &key)
 			c.Bool(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt32Int32 implements map<int32,int32>.
@@ -648,24 +520,16 @@ func (m *MapInt32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapInt32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int32(1, &key)
 			c.Int32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt32Int64 implements map<int32,int64>.
@@ -687,24 +551,16 @@ func (m *MapInt32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapInt32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int32(1, &key)
 			c.Int64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt32Uint32 implements map<int32,uint32>.
@@ -726,24 +582,16 @@ func (m *MapInt32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapInt32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int32(1, &key)
 			c.Uint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt32Uint64 implements map<int32,uint64>.
@@ -765,24 +613,16 @@ func (m *MapInt32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapInt32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int32(1, &key)
 			c.Uint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt32Sint32 implements map<int32,sint32>.
@@ -804,24 +644,16 @@ func (m *MapInt32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapInt32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int32(1, &key)
 			c.Sint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt32Sint64 implements map<int32,sint64>.
@@ -843,24 +675,16 @@ func (m *MapInt32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapInt32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int32(1, &key)
 			c.Sint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt32Fixed32 implements map<int32,fixed32>.
@@ -882,24 +706,16 @@ func (m *MapInt32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapInt32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int32(1, &key)
 			c.Fixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt32Fixed64 implements map<int32,fixed64>.
@@ -921,24 +737,16 @@ func (m *MapInt32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapInt32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int32(1, &key)
 			c.Fixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt32Sfixed32 implements map<int32,sfixed32>.
@@ -960,24 +768,16 @@ func (m *MapInt32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapInt32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int32(1, &key)
 			c.Sfixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt32Sfixed64 implements map<int32,sfixed64>.
@@ -999,24 +799,16 @@ func (m *MapInt32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapInt32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int32(1, &key)
 			c.Sfixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt32Float implements map<int32,float>.
@@ -1038,24 +830,16 @@ func (m *MapInt32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapInt32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val float32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int32(1, &key)
 			c.Float(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt32Double implements map<int32,double>.
@@ -1077,24 +861,16 @@ func (m *MapInt32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapInt32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val float64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int32(1, &key)
 			c.Double(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt32String implements map<int32,string>.
@@ -1116,24 +892,16 @@ func (m *MapInt32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapInt32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val string
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]string{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int32(1, &key)
 			c.String(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt32Bytes implements map<int32,bytes>.
@@ -1155,24 +923,16 @@ func (m *MapInt32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapInt32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val []byte
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32][]byte{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int32(1, &key)
 			c.Bytes(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt64Bool implements map<int64,bool>.
@@ -1194,24 +954,16 @@ func (m *MapInt64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 func (m *MapInt64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val bool
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]bool{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int64(1, &key)
 			c.Bool(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt64Int32 implements map<int64,int32>.
@@ -1233,24 +985,16 @@ func (m *MapInt64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapInt64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int64(1, &key)
 			c.Int32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt64Int64 implements map<int64,int64>.
@@ -1272,24 +1016,16 @@ func (m *MapInt64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapInt64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int64(1, &key)
 			c.Int64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt64Uint32 implements map<int64,uint32>.
@@ -1311,24 +1047,16 @@ func (m *MapInt64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapInt64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int64(1, &key)
 			c.Uint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt64Uint64 implements map<int64,uint64>.
@@ -1350,24 +1078,16 @@ func (m *MapInt64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapInt64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int64(1, &key)
 			c.Uint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt64Sint32 implements map<int64,sint32>.
@@ -1389,24 +1109,16 @@ func (m *MapInt64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapInt64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int64(1, &key)
 			c.Sint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt64Sint64 implements map<int64,sint64>.
@@ -1428,24 +1140,16 @@ func (m *MapInt64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapInt64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int64(1, &key)
 			c.Sint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt64Fixed32 implements map<int64,fixed32>.
@@ -1467,24 +1171,16 @@ func (m *MapInt64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapInt64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int64(1, &key)
 			c.Fixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt64Fixed64 implements map<int64,fixed64>.
@@ -1506,24 +1202,16 @@ func (m *MapInt64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapInt64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int64(1, &key)
 			c.Fixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt64Sfixed32 implements map<int64,sfixed32>.
@@ -1545,24 +1233,16 @@ func (m *MapInt64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapInt64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int64(1, &key)
 			c.Sfixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt64Sfixed64 implements map<int64,sfixed64>.
@@ -1584,24 +1264,16 @@ func (m *MapInt64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapInt64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int64(1, &key)
 			c.Sfixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt64Float implements map<int64,float>.
@@ -1623,24 +1295,16 @@ func (m *MapInt64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapInt64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val float32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int64(1, &key)
 			c.Float(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt64Double implements map<int64,double>.
@@ -1662,24 +1326,16 @@ func (m *MapInt64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapInt64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val float64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int64(1, &key)
 			c.Double(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt64String implements map<int64,string>.
@@ -1701,24 +1357,16 @@ func (m *MapInt64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapInt64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val string
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]string{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int64(1, &key)
 			c.String(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapInt64Bytes implements map<int64,bytes>.
@@ -1740,24 +1388,16 @@ func (m *MapInt64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapInt64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val []byte
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64][]byte{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Int64(1, &key)
 			c.Bytes(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint32Bool implements map<uint32,bool>.
@@ -1779,24 +1419,16 @@ func (m *MapUint32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapUint32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val bool
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]bool{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint32(1, &key)
 			c.Bool(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint32Int32 implements map<uint32,int32>.
@@ -1818,24 +1450,16 @@ func (m *MapUint32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapUint32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint32(1, &key)
 			c.Int32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint32Int64 implements map<uint32,int64>.
@@ -1857,24 +1481,16 @@ func (m *MapUint32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapUint32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint32(1, &key)
 			c.Int64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint32Uint32 implements map<uint32,uint32>.
@@ -1896,24 +1512,16 @@ func (m *MapUint32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapUint32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint32(1, &key)
 			c.Uint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint32Uint64 implements map<uint32,uint64>.
@@ -1935,24 +1543,16 @@ func (m *MapUint32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapUint32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint32(1, &key)
 			c.Uint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint32Sint32 implements map<uint32,sint32>.
@@ -1974,24 +1574,16 @@ func (m *MapUint32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapUint32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint32(1, &key)
 			c.Sint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint32Sint64 implements map<uint32,sint64>.
@@ -2013,24 +1605,16 @@ func (m *MapUint32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapUint32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint32(1, &key)
 			c.Sint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint32Fixed32 implements map<uint32,fixed32>.
@@ -2052,24 +1636,16 @@ func (m *MapUint32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapUint32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint32(1, &key)
 			c.Fixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint32Fixed64 implements map<uint32,fixed64>.
@@ -2091,24 +1667,16 @@ func (m *MapUint32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapUint32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint32(1, &key)
 			c.Fixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint32Sfixed32 implements map<uint32,sfixed32>.
@@ -2130,24 +1698,16 @@ func (m *MapUint32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapUint32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint32(1, &key)
 			c.Sfixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint32Sfixed64 implements map<uint32,sfixed64>.
@@ -2169,24 +1729,16 @@ func (m *MapUint32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapUint32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint32(1, &key)
 			c.Sfixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint32Float implements map<uint32,float>.
@@ -2208,24 +1760,16 @@ func (m *MapUint32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapUint32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val float32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]float32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint32(1, &key)
 			c.Float(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint32Double implements map<uint32,double>.
@@ -2247,24 +1791,16 @@ func (m *MapUint32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapUint32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val float64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]float64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint32(1, &key)
 			c.Double(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint32String implements map<uint32,string>.
@@ -2286,24 +1822,16 @@ func (m *MapUint32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapUint32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val string
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]string{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint32(1, &key)
 			c.String(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint32Bytes implements map<uint32,bytes>.
@@ -2325,24 +1853,16 @@ func (m *MapUint32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapUint32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val []byte
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32][]byte{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint32(1, &key)
 			c.Bytes(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint64Bool implements map<uint64,bool>.
@@ -2364,24 +1884,16 @@ func (m *MapUint64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapUint64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val bool
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]bool{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint64(1, &key)
 			c.Bool(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint64Int32 implements map<uint64,int32>.
@@ -2403,24 +1915,16 @@ func (m *MapUint64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapUint64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint64(1, &key)
 			c.Int32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint64Int64 implements map<uint64,int64>.
@@ -2442,24 +1946,16 @@ func (m *MapUint64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapUint64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint64(1, &key)
 			c.Int64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint64Uint32 implements map<uint64,uint32>.
@@ -2481,24 +1977,16 @@ func (m *MapUint64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapUint64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint64(1, &key)
 			c.Uint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint64Uint64 implements map<uint64,uint64>.
@@ -2520,24 +2008,16 @@ func (m *MapUint64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapUint64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint64(1, &key)
 			c.Uint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint64Sint32 implements map<uint64,sint32>.
@@ -2559,24 +2039,16 @@ func (m *MapUint64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapUint64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint64(1, &key)
 			c.Sint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint64Sint64 implements map<uint64,sint64>.
@@ -2598,24 +2070,16 @@ func (m *MapUint64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapUint64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint64(1, &key)
 			c.Sint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint64Fixed32 implements map<uint64,fixed32>.
@@ -2637,24 +2101,16 @@ func (m *MapUint64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapUint64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint64(1, &key)
 			c.Fixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint64Fixed64 implements map<uint64,fixed64>.
@@ -2676,24 +2132,16 @@ func (m *MapUint64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapUint64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint64(1, &key)
 			c.Fixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint64Sfixed32 implements map<uint64,sfixed32>.
@@ -2715,24 +2163,16 @@ func (m *MapUint64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapUint64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint64(1, &key)
 			c.Sfixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint64Sfixed64 implements map<uint64,sfixed64>.
@@ -2754,24 +2194,16 @@ func (m *MapUint64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapUint64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint64(1, &key)
 			c.Sfixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint64Float implements map<uint64,float>.
@@ -2793,24 +2225,16 @@ func (m *MapUint64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapUint64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val float32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]float32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint64(1, &key)
 			c.Float(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint64Double implements map<uint64,double>.
@@ -2832,24 +2256,16 @@ func (m *MapUint64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapUint64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val float64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]float64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint64(1, &key)
 			c.Double(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint64String implements map<uint64,string>.
@@ -2871,24 +2287,16 @@ func (m *MapUint64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapUint64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val string
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]string{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint64(1, &key)
 			c.String(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapUint64Bytes implements map<uint64,bytes>.
@@ -2910,24 +2318,16 @@ func (m *MapUint64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapUint64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val []byte
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64][]byte{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Uint64(1, &key)
 			c.Bytes(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint32Bool implements map<sint32,bool>.
@@ -2949,24 +2349,16 @@ func (m *MapSint32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapSint32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val bool
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]bool{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint32(1, &key)
 			c.Bool(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint32Int32 implements map<sint32,int32>.
@@ -2988,24 +2380,16 @@ func (m *MapSint32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapSint32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint32(1, &key)
 			c.Int32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint32Int64 implements map<sint32,int64>.
@@ -3027,24 +2411,16 @@ func (m *MapSint32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapSint32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint32(1, &key)
 			c.Int64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint32Uint32 implements map<sint32,uint32>.
@@ -3066,24 +2442,16 @@ func (m *MapSint32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapSint32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint32(1, &key)
 			c.Uint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint32Uint64 implements map<sint32,uint64>.
@@ -3105,24 +2473,16 @@ func (m *MapSint32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapSint32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint32(1, &key)
 			c.Uint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint32Sint32 implements map<sint32,sint32>.
@@ -3144,24 +2504,16 @@ func (m *MapSint32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapSint32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint32(1, &key)
 			c.Sint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint32Sint64 implements map<sint32,sint64>.
@@ -3183,24 +2535,16 @@ func (m *MapSint32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapSint32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint32(1, &key)
 			c.Sint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint32Fixed32 implements map<sint32,fixed32>.
@@ -3222,24 +2566,16 @@ func (m *MapSint32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapSint32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint32(1, &key)
 			c.Fixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint32Fixed64 implements map<sint32,fixed64>.
@@ -3261,24 +2597,16 @@ func (m *MapSint32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapSint32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint32(1, &key)
 			c.Fixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint32Sfixed32 implements map<sint32,sfixed32>.
@@ -3300,24 +2628,16 @@ func (m *MapSint32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSint32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint32(1, &key)
 			c.Sfixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint32Sfixed64 implements map<sint32,sfixed64>.
@@ -3339,24 +2659,16 @@ func (m *MapSint32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSint32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint32(1, &key)
 			c.Sfixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint32Float implements map<sint32,float>.
@@ -3378,24 +2690,16 @@ func (m *MapSint32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapSint32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val float32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint32(1, &key)
 			c.Float(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint32Double implements map<sint32,double>.
@@ -3417,24 +2721,16 @@ func (m *MapSint32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapSint32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val float64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint32(1, &key)
 			c.Double(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint32String implements map<sint32,string>.
@@ -3456,24 +2752,16 @@ func (m *MapSint32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapSint32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val string
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]string{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint32(1, &key)
 			c.String(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint32Bytes implements map<sint32,bytes>.
@@ -3495,24 +2783,16 @@ func (m *MapSint32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapSint32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val []byte
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32][]byte{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint32(1, &key)
 			c.Bytes(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint64Bool implements map<sint64,bool>.
@@ -3534,24 +2814,16 @@ func (m *MapSint64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapSint64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val bool
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]bool{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint64(1, &key)
 			c.Bool(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint64Int32 implements map<sint64,int32>.
@@ -3573,24 +2845,16 @@ func (m *MapSint64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapSint64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint64(1, &key)
 			c.Int32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint64Int64 implements map<sint64,int64>.
@@ -3612,24 +2876,16 @@ func (m *MapSint64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapSint64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint64(1, &key)
 			c.Int64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint64Uint32 implements map<sint64,uint32>.
@@ -3651,24 +2907,16 @@ func (m *MapSint64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapSint64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint64(1, &key)
 			c.Uint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint64Uint64 implements map<sint64,uint64>.
@@ -3690,24 +2938,16 @@ func (m *MapSint64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapSint64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint64(1, &key)
 			c.Uint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint64Sint32 implements map<sint64,sint32>.
@@ -3729,24 +2969,16 @@ func (m *MapSint64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapSint64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint64(1, &key)
 			c.Sint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint64Sint64 implements map<sint64,sint64>.
@@ -3768,24 +3000,16 @@ func (m *MapSint64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapSint64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint64(1, &key)
 			c.Sint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint64Fixed32 implements map<sint64,fixed32>.
@@ -3807,24 +3031,16 @@ func (m *MapSint64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapSint64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint64(1, &key)
 			c.Fixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint64Fixed64 implements map<sint64,fixed64>.
@@ -3846,24 +3062,16 @@ func (m *MapSint64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapSint64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint64(1, &key)
 			c.Fixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint64Sfixed32 implements map<sint64,sfixed32>.
@@ -3885,24 +3093,16 @@ func (m *MapSint64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSint64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint64(1, &key)
 			c.Sfixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint64Sfixed64 implements map<sint64,sfixed64>.
@@ -3924,24 +3124,16 @@ func (m *MapSint64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSint64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint64(1, &key)
 			c.Sfixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint64Float implements map<sint64,float>.
@@ -3963,24 +3155,16 @@ func (m *MapSint64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapSint64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val float32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint64(1, &key)
 			c.Float(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint64Double implements map<sint64,double>.
@@ -4002,24 +3186,16 @@ func (m *MapSint64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapSint64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val float64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint64(1, &key)
 			c.Double(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint64String implements map<sint64,string>.
@@ -4041,24 +3217,16 @@ func (m *MapSint64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapSint64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val string
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]string{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint64(1, &key)
 			c.String(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSint64Bytes implements map<sint64,bytes>.
@@ -4080,24 +3248,16 @@ func (m *MapSint64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapSint64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val []byte
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64][]byte{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sint64(1, &key)
 			c.Bytes(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed32Bool implements map<fixed32,bool>.
@@ -4119,24 +3279,16 @@ func (m *MapFixed32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapFixed32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val bool
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]bool{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed32(1, &key)
 			c.Bool(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed32Int32 implements map<fixed32,int32>.
@@ -4158,24 +3310,16 @@ func (m *MapFixed32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapFixed32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed32(1, &key)
 			c.Int32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed32Int64 implements map<fixed32,int64>.
@@ -4197,24 +3341,16 @@ func (m *MapFixed32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapFixed32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed32(1, &key)
 			c.Int64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed32Uint32 implements map<fixed32,uint32>.
@@ -4236,24 +3372,16 @@ func (m *MapFixed32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapFixed32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed32(1, &key)
 			c.Uint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed32Uint64 implements map<fixed32,uint64>.
@@ -4275,24 +3403,16 @@ func (m *MapFixed32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapFixed32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed32(1, &key)
 			c.Uint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed32Sint32 implements map<fixed32,sint32>.
@@ -4314,24 +3434,16 @@ func (m *MapFixed32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapFixed32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed32(1, &key)
 			c.Sint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed32Sint64 implements map<fixed32,sint64>.
@@ -4353,24 +3465,16 @@ func (m *MapFixed32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapFixed32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed32(1, &key)
 			c.Sint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed32Fixed32 implements map<fixed32,fixed32>.
@@ -4392,24 +3496,16 @@ func (m *MapFixed32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapFixed32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed32(1, &key)
 			c.Fixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed32Fixed64 implements map<fixed32,fixed64>.
@@ -4431,24 +3527,16 @@ func (m *MapFixed32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapFixed32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed32(1, &key)
 			c.Fixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed32Sfixed32 implements map<fixed32,sfixed32>.
@@ -4470,24 +3558,16 @@ func (m *MapFixed32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 func (m *MapFixed32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed32(1, &key)
 			c.Sfixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed32Sfixed64 implements map<fixed32,sfixed64>.
@@ -4509,24 +3589,16 @@ func (m *MapFixed32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 func (m *MapFixed32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed32(1, &key)
 			c.Sfixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed32Float implements map<fixed32,float>.
@@ -4548,24 +3620,16 @@ func (m *MapFixed32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapFixed32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val float32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]float32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed32(1, &key)
 			c.Float(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed32Double implements map<fixed32,double>.
@@ -4587,24 +3651,16 @@ func (m *MapFixed32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapFixed32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val float64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]float64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed32(1, &key)
 			c.Double(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed32String implements map<fixed32,string>.
@@ -4626,24 +3682,16 @@ func (m *MapFixed32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapFixed32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val string
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]string{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed32(1, &key)
 			c.String(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed32Bytes implements map<fixed32,bytes>.
@@ -4665,24 +3713,16 @@ func (m *MapFixed32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapFixed32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
 	var val []byte
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32][]byte{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed32(1, &key)
 			c.Bytes(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed64Bool implements map<fixed64,bool>.
@@ -4704,24 +3744,16 @@ func (m *MapFixed64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapFixed64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val bool
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]bool{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed64(1, &key)
 			c.Bool(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed64Int32 implements map<fixed64,int32>.
@@ -4743,24 +3775,16 @@ func (m *MapFixed64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapFixed64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed64(1, &key)
 			c.Int32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed64Int64 implements map<fixed64,int64>.
@@ -4782,24 +3806,16 @@ func (m *MapFixed64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapFixed64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed64(1, &key)
 			c.Int64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed64Uint32 implements map<fixed64,uint32>.
@@ -4821,24 +3837,16 @@ func (m *MapFixed64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapFixed64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed64(1, &key)
 			c.Uint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed64Uint64 implements map<fixed64,uint64>.
@@ -4860,24 +3868,16 @@ func (m *MapFixed64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapFixed64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed64(1, &key)
 			c.Uint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed64Sint32 implements map<fixed64,sint32>.
@@ -4899,24 +3899,16 @@ func (m *MapFixed64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapFixed64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed64(1, &key)
 			c.Sint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed64Sint64 implements map<fixed64,sint64>.
@@ -4938,24 +3930,16 @@ func (m *MapFixed64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapFixed64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed64(1, &key)
 			c.Sint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed64Fixed32 implements map<fixed64,fixed32>.
@@ -4977,24 +3961,16 @@ func (m *MapFixed64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapFixed64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed64(1, &key)
 			c.Fixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed64Fixed64 implements map<fixed64,fixed64>.
@@ -5016,24 +3992,16 @@ func (m *MapFixed64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapFixed64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed64(1, &key)
 			c.Fixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed64Sfixed32 implements map<fixed64,sfixed32>.
@@ -5055,24 +4023,16 @@ func (m *MapFixed64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 func (m *MapFixed64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed64(1, &key)
 			c.Sfixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed64Sfixed64 implements map<fixed64,sfixed64>.
@@ -5094,24 +4054,16 @@ func (m *MapFixed64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 func (m *MapFixed64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed64(1, &key)
 			c.Sfixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed64Float implements map<fixed64,float>.
@@ -5133,24 +4085,16 @@ func (m *MapFixed64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapFixed64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val float32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]float32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed64(1, &key)
 			c.Float(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed64Double implements map<fixed64,double>.
@@ -5172,24 +4116,16 @@ func (m *MapFixed64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapFixed64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val float64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]float64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed64(1, &key)
 			c.Double(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed64String implements map<fixed64,string>.
@@ -5211,24 +4147,16 @@ func (m *MapFixed64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapFixed64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val string
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]string{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed64(1, &key)
 			c.String(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapFixed64Bytes implements map<fixed64,bytes>.
@@ -5250,24 +4178,16 @@ func (m *MapFixed64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapFixed64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
 	var val []byte
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64][]byte{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Fixed64(1, &key)
 			c.Bytes(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed32Bool implements map<sfixed32,bool>.
@@ -5289,24 +4209,16 @@ func (m *MapSfixed32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapSfixed32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val bool
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]bool{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed32(1, &key)
 			c.Bool(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed32Int32 implements map<sfixed32,int32>.
@@ -5328,24 +4240,16 @@ func (m *MapSfixed32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapSfixed32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed32(1, &key)
 			c.Int32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed32Int64 implements map<sfixed32,int64>.
@@ -5367,24 +4271,16 @@ func (m *MapSfixed32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapSfixed32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed32(1, &key)
 			c.Int64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed32Uint32 implements map<sfixed32,uint32>.
@@ -5406,24 +4302,16 @@ func (m *MapSfixed32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSfixed32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed32(1, &key)
 			c.Uint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed32Uint64 implements map<sfixed32,uint64>.
@@ -5445,24 +4333,16 @@ func (m *MapSfixed32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSfixed32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed32(1, &key)
 			c.Uint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed32Sint32 implements map<sfixed32,sint32>.
@@ -5484,24 +4364,16 @@ func (m *MapSfixed32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSfixed32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed32(1, &key)
 			c.Sint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed32Sint64 implements map<sfixed32,sint64>.
@@ -5523,24 +4395,16 @@ func (m *MapSfixed32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSfixed32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed32(1, &key)
 			c.Sint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed32Fixed32 implements map<sfixed32,fixed32>.
@@ -5562,24 +4426,16 @@ func (m *MapSfixed32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 func (m *MapSfixed32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed32(1, &key)
 			c.Fixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed32Fixed64 implements map<sfixed32,fixed64>.
@@ -5601,24 +4457,16 @@ func (m *MapSfixed32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 func (m *MapSfixed32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed32(1, &key)
 			c.Fixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed32Sfixed32 implements map<sfixed32,sfixed32>.
@@ -5640,24 +4488,16 @@ func (m *MapSfixed32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 func (m *MapSfixed32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed32(1, &key)
 			c.Sfixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed32Sfixed64 implements map<sfixed32,sfixed64>.
@@ -5679,24 +4519,16 @@ func (m *MapSfixed32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 func (m *MapSfixed32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed32(1, &key)
 			c.Sfixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed32Float implements map<sfixed32,float>.
@@ -5718,24 +4550,16 @@ func (m *MapSfixed32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapSfixed32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val float32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed32(1, &key)
 			c.Float(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed32Double implements map<sfixed32,double>.
@@ -5757,24 +4581,16 @@ func (m *MapSfixed32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSfixed32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val float64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed32(1, &key)
 			c.Double(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed32String implements map<sfixed32,string>.
@@ -5796,24 +4612,16 @@ func (m *MapSfixed32String) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSfixed32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val string
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]string{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed32(1, &key)
 			c.String(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed32Bytes implements map<sfixed32,bytes>.
@@ -5835,24 +4643,16 @@ func (m *MapSfixed32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapSfixed32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
 	var val []byte
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32][]byte{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed32(1, &key)
 			c.Bytes(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed64Bool implements map<sfixed64,bool>.
@@ -5874,24 +4674,16 @@ func (m *MapSfixed64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapSfixed64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val bool
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]bool{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed64(1, &key)
 			c.Bool(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed64Int32 implements map<sfixed64,int32>.
@@ -5913,24 +4705,16 @@ func (m *MapSfixed64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapSfixed64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed64(1, &key)
 			c.Int32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed64Int64 implements map<sfixed64,int64>.
@@ -5952,24 +4736,16 @@ func (m *MapSfixed64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapSfixed64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed64(1, &key)
 			c.Int64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed64Uint32 implements map<sfixed64,uint32>.
@@ -5991,24 +4767,16 @@ func (m *MapSfixed64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSfixed64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed64(1, &key)
 			c.Uint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed64Uint64 implements map<sfixed64,uint64>.
@@ -6030,24 +4798,16 @@ func (m *MapSfixed64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSfixed64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed64(1, &key)
 			c.Uint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed64Sint32 implements map<sfixed64,sint32>.
@@ -6069,24 +4829,16 @@ func (m *MapSfixed64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSfixed64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed64(1, &key)
 			c.Sint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed64Sint64 implements map<sfixed64,sint64>.
@@ -6108,24 +4860,16 @@ func (m *MapSfixed64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSfixed64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed64(1, &key)
 			c.Sint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed64Fixed32 implements map<sfixed64,fixed32>.
@@ -6147,24 +4891,16 @@ func (m *MapSfixed64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 func (m *MapSfixed64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed64(1, &key)
 			c.Fixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed64Fixed64 implements map<sfixed64,fixed64>.
@@ -6186,24 +4922,16 @@ func (m *MapSfixed64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 func (m *MapSfixed64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed64(1, &key)
 			c.Fixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed64Sfixed32 implements map<sfixed64,sfixed32>.
@@ -6225,24 +4953,16 @@ func (m *MapSfixed64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 func (m *MapSfixed64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed64(1, &key)
 			c.Sfixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed64Sfixed64 implements map<sfixed64,sfixed64>.
@@ -6264,24 +4984,16 @@ func (m *MapSfixed64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 func (m *MapSfixed64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed64(1, &key)
 			c.Sfixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed64Float implements map<sfixed64,float>.
@@ -6303,24 +5015,16 @@ func (m *MapSfixed64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapSfixed64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val float32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed64(1, &key)
 			c.Float(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed64Double implements map<sfixed64,double>.
@@ -6342,24 +5046,16 @@ func (m *MapSfixed64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSfixed64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val float64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed64(1, &key)
 			c.Double(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed64String implements map<sfixed64,string>.
@@ -6381,24 +5077,16 @@ func (m *MapSfixed64String) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapSfixed64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val string
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]string{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed64(1, &key)
 			c.String(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapSfixed64Bytes implements map<sfixed64,bytes>.
@@ -6420,24 +5108,16 @@ func (m *MapSfixed64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapSfixed64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
 	var val []byte
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64][]byte{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.Sfixed64(1, &key)
 			c.Bytes(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapStringBool implements map<string,bool>.
@@ -6459,24 +5139,16 @@ func (m *MapStringBool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 func (m *MapStringBool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
 	var val bool
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]bool{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.String(1, &key)
 			c.Bool(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapStringInt32 implements map<string,int32>.
@@ -6498,24 +5170,16 @@ func (m *MapStringInt32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapStringInt32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.String(1, &key)
 			c.Int32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapStringInt64 implements map<string,int64>.
@@ -6537,24 +5201,16 @@ func (m *MapStringInt64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapStringInt64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.String(1, &key)
 			c.Int64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapStringUint32 implements map<string,uint32>.
@@ -6576,24 +5232,16 @@ func (m *MapStringUint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapStringUint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.String(1, &key)
 			c.Uint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapStringUint64 implements map<string,uint64>.
@@ -6615,24 +5263,16 @@ func (m *MapStringUint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapStringUint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.String(1, &key)
 			c.Uint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapStringSint32 implements map<string,sint32>.
@@ -6654,24 +5294,16 @@ func (m *MapStringSint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapStringSint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.String(1, &key)
 			c.Sint32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapStringSint64 implements map<string,sint64>.
@@ -6693,24 +5325,16 @@ func (m *MapStringSint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapStringSint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.String(1, &key)
 			c.Sint64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapStringFixed32 implements map<string,fixed32>.
@@ -6732,24 +5356,16 @@ func (m *MapStringFixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapStringFixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
 	var val uint32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]uint32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.String(1, &key)
 			c.Fixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapStringFixed64 implements map<string,fixed64>.
@@ -6771,24 +5387,16 @@ func (m *MapStringFixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 func (m *MapStringFixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
 	var val uint64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]uint64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.String(1, &key)
 			c.Fixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapStringSfixed32 implements map<string,sfixed32>.
@@ -6810,24 +5418,16 @@ func (m *MapStringSfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapStringSfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
 	var val int32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.String(1, &key)
 			c.Sfixed32(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapStringSfixed64 implements map<string,sfixed64>.
@@ -6849,24 +5449,16 @@ func (m *MapStringSfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 func (m *MapStringSfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
 	var val int64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.String(1, &key)
 			c.Sfixed64(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapStringFloat implements map<string,float>.
@@ -6888,24 +5480,16 @@ func (m *MapStringFloat) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapStringFloat) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
 	var val float32
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]float32{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.String(1, &key)
 			c.Float(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapStringDouble implements map<string,double>.
@@ -6927,24 +5511,16 @@ func (m *MapStringDouble) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapStringDouble) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
 	var val float64
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]float64{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.String(1, &key)
 			c.Double(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapStringString implements map<string,string>.
@@ -6966,24 +5542,16 @@ func (m *MapStringString) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 func (m *MapStringString) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
 	var val string
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]string{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.String(1, &key)
 			c.String(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }
 
 // MapStringBytes implements map<string,bytes>.
@@ -7005,22 +5573,14 @@ func (m *MapStringBytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 func (m *MapStringBytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
 	var val []byte
-	var filled bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string][]byte{}
 		}
 		c.Loop(func(c *picobuf.Decoder) {
-			if filled {
-				(*m)[key] = val
-				filled = false
-			}
 			c.String(1, &key)
 			c.Bytes(2, &val)
-			filled = true
 		})
-	})
-	if filled {
 		(*m)[key] = val
-	}
+	})
 }

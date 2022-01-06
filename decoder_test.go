@@ -122,3 +122,44 @@ func TestDecoder_Repeated(t *testing.T) {
 	dec.Loop(func(c *picobuf.Decoder) { c.RepeatedInt32(4, &xs) })
 	assert.Equal(t, xs, []int32{3, 270, 86942, 3, 270, 86942})
 }
+
+func TestDecoder_Map(t *testing.T) {
+	// two map entries
+	var m1 picotest.Map
+	err := picobuf.Unmarshal([]byte{
+		0x0a, 0x04, // field: 1, length: 4
+		0x08, 0x01, 0x10, 0x01, // field: 1, val: 1; field: 2, val: 1
+		0x0a, 0x04, // field: 1, length: 4
+		0x08, 0x02, 0x10, 0x02, // field: 1, val: 2; field: 2, val: 2
+	}, &m1)
+	assert.NoError(t, err)
+	assert.DeepEqual(t, m1.Values, map[int32]int32{1: 1, 2: 2})
+
+	// missing key in map entry
+	var m2 picotest.Map
+	err = picobuf.Unmarshal([]byte{
+		0x0a, 0x02, // field: 1, length: 2
+		0x10, 0x01, // field: 2, val: 1
+	}, &m2)
+	assert.NoError(t, err)
+	assert.DeepEqual(t, m2.Values, map[int32]int32{0: 1})
+
+	// missing value in map entry
+	var m3 picotest.Map
+	err = picobuf.Unmarshal([]byte{
+		0x0a, 0x02, // field: 1, length: 2
+		0x10, 0x01, // field: 2, val: 1
+	}, &m3)
+	assert.NoError(t, err)
+	assert.DeepEqual(t, m3.Values, map[int32]int32{0: 1})
+
+	// duplicate key and value in map entry
+	var m4 picotest.Map
+	err = picobuf.Unmarshal([]byte{
+		0x0a, 0x08, // field: 1, length: 8
+		0x08, 0x01, 0x10, 0x01, // field: 1, val: 1; field: 2, val: 1
+		0x08, 0x02, 0x10, 0x02, // field: 1, val: 2; field: 2, val: 2
+	}, &m4)
+	assert.NoError(t, err)
+	assert.DeepEqual(t, m4.Values, map[int32]int32{2: 2})
+}
