@@ -66,3 +66,31 @@ func (id *RawString) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	c.Bytes(field, &xs)
 	*id = (RawString)(xs)
 }
+
+// Timestamp implements a custom pico encoder/decoder.
+type Timestamp struct {
+	Seconds int64
+	Nanos   int32
+}
+
+// PicoEncode implements picobuf field encoding.
+func (t *Timestamp) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+	if t == nil {
+		return false
+	}
+
+	c.AlwaysMessage(field, func(c *picobuf.Encoder) bool {
+		c.Int64(1, &t.Seconds)
+		c.Int32(2, &t.Nanos)
+		return true
+	})
+	return true
+}
+
+// PicoDecode implements picobuf field decoding.
+func (t *Timestamp) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
+	c.Message(field, func(c *picobuf.Decoder) {
+		c.Int64(1, &t.Seconds)
+		c.Int32(2, &t.Nanos)
+	})
+}

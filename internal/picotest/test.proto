@@ -130,3 +130,28 @@ message VariationsCustom {
   //   (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"
   // ];
 }
+
+message Timestamp {
+  int64 seconds = 1;
+  int32 nanos = 2;
+}
+
+message CustomMessageTypes {
+  Timestamp normal = 1;
+  Timestamp custom_type = 2 [
+    (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.Timestamp"
+  ];
+  Timestamp present_custom_type = 3 [
+    (pico.field).always_present = true,
+    (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.Timestamp"
+  ];
+  Timestamp custom_type_cast = 4 [
+    (pico.field).custom_type = "time.Time",
+    (pico.field).custom_cast = "storj.io/picobuf/picoconv.Timestamp"
+  ];
+  Timestamp present_custom_type_cast = 5 [
+    (pico.field).always_present = true,
+    (pico.field).custom_type = "time.Time",
+    (pico.field).custom_cast = "storj.io/picobuf/picoconv.Timestamp"
+  ];
+}

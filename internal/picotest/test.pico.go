@@ -3,13 +3,16 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v3.19.1
+//     protoc:          v3.20.0
 
 package picotest
 
 import (
+	time "time"
+
 	picobuf "storj.io/picobuf"
 	pic "storj.io/picobuf/internal/picotest/pic"
+	picoconv "storj.io/picobuf/picoconv"
 	picowire "storj.io/picobuf/picowire"
 )
 
@@ -408,7 +411,80 @@ func (m *VariationsCustom) Decode(c *picobuf.Decoder) {
 		return
 	}
 	m.Value.PicoDecode(c, 1)
-	m.Opt.PicoDecode(c, 2)
+	if c.PendingField() == 2 {
+		if m.Opt == nil {
+			m.Opt = new(pic.ID)
+		}
+		m.Opt.PicoDecode(c, 2)
+	}
 	m.PresentBasic.PicoDecode(c, 4)
 	m.PresentOpt.PicoDecode(c, 5)
+}
+
+type Timestamp struct {
+	Seconds int64
+	Nanos   int32
+}
+
+func (m *Timestamp) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.Int64(1, &m.Seconds)
+	c.Int32(2, &m.Nanos)
+	return true
+}
+
+func (m *Timestamp) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Int64(1, &m.Seconds)
+	c.Int32(2, &m.Nanos)
+}
+
+type CustomMessageTypes struct {
+	Normal                *Timestamp
+	CustomType            *pic.Timestamp
+	PresentCustomType     pic.Timestamp
+	CustomTypeCast        *time.Time
+	PresentCustomTypeCast time.Time
+}
+
+func (m *CustomMessageTypes) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.Message(1, m.Normal.Encode)
+	m.CustomType.PicoEncode(c, 2)
+	m.PresentCustomType.PicoEncode(c, 3)
+	(*picoconv.Timestamp)(m.CustomTypeCast).PicoEncode(c, 4)
+	(*picoconv.Timestamp)(&m.PresentCustomTypeCast).PicoEncode(c, 5)
+	return true
+}
+
+func (m *CustomMessageTypes) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Message(1, func(c *picobuf.Decoder) {
+		if m.Normal == nil {
+			m.Normal = new(Timestamp)
+		}
+		m.Normal.Decode(c)
+	})
+	if c.PendingField() == 2 {
+		if m.CustomType == nil {
+			m.CustomType = new(pic.Timestamp)
+		}
+		m.CustomType.PicoDecode(c, 2)
+	}
+	m.PresentCustomType.PicoDecode(c, 3)
+	if c.PendingField() == 4 {
+		if m.CustomTypeCast == nil {
+			m.CustomTypeCast = new(time.Time)
+		}
+		(*picoconv.Timestamp)(m.CustomTypeCast).PicoDecode(c, 4)
+	}
+	(*picoconv.Timestamp)(&m.PresentCustomTypeCast).PicoDecode(c, 5)
 }

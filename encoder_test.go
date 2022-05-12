@@ -5,11 +5,13 @@ package picobuf_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/zeebo/assert"
 
 	"storj.io/picobuf"
 	"storj.io/picobuf/internal/picotest"
+	"storj.io/picobuf/internal/picotest/pic"
 )
 
 func puint32(v uint32) *uint32 { return &v }
@@ -70,4 +72,34 @@ func TestEncoder_SubMessage(t *testing.T) {
 	data, err = picobuf.Marshal(person)
 	assert.NoError(t, err)
 	assert.Equal(t, data, []byte{0xa, 0x5, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x12, 0x0})
+}
+
+func TestEncoder_CustomMessageTypes(t *testing.T) {
+	base := time.Unix(31, 32).UTC()
+	msg := &picotest.CustomMessageTypes{
+		Normal: &picotest.Timestamp{
+			Seconds: 1,
+			Nanos:   2,
+		},
+		CustomType: &pic.Timestamp{
+			Seconds: 11,
+			Nanos:   12,
+		},
+		PresentCustomType: pic.Timestamp{
+			Seconds: 21,
+			Nanos:   22,
+		},
+		CustomTypeCast:        &base,
+		PresentCustomTypeCast: time.Unix(41, 42).UTC(),
+	}
+	data, err := picobuf.Marshal(msg)
+	assert.NoError(t, err)
+	assert.Equal(t, data, []byte{0xa, 0x4, 0x8, 0x1, 0x10, 0x2, 0x12, 0x4, 0x8, 0xb, 0x10, 0xc, 0x1a, 0x4, 0x8, 0x15, 0x10, 0x16, 0x22, 0x4, 0x8, 0x1f, 0x10, 0x20, 0x2a, 0x4, 0x8, 0x29, 0x10, 0x2a})
+}
+
+func TestEncoder_CustomMessageTypes_Empty(t *testing.T) {
+	msg := &picotest.CustomMessageTypes{}
+	data, err := picobuf.Marshal(msg)
+	assert.NoError(t, err)
+	assert.Equal(t, data, []byte{0x1a, 0x0})
 }

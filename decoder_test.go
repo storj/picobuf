@@ -5,11 +5,13 @@ package picobuf_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/zeebo/assert"
 
 	"storj.io/picobuf"
 	"storj.io/picobuf/internal/picotest"
+	"storj.io/picobuf/internal/picotest/pic"
 )
 
 func TestDecoder_Types(t *testing.T) {
@@ -162,4 +164,48 @@ func TestDecoder_Map(t *testing.T) {
 	}, &m4)
 	assert.NoError(t, err)
 	assert.DeepEqual(t, m4.Values, map[int32]int32{2: 2})
+}
+
+func TestDecoder_CustomMessageTypes(t *testing.T) {
+	var decoded picotest.CustomMessageTypes
+	err := picobuf.Unmarshal([]byte{
+		0x0a, 0x04, 0x08, 0x01, 0x10, 0x02,
+		0x12, 0x04, 0x08, 0x0b, 0x10, 0x0c,
+		0x1a, 0x04, 0x08, 0x15, 0x10, 0x16,
+		0x22, 0x04, 0x08, 0x1f, 0x10, 0x20,
+		0x2a, 0x04, 0x08, 0x29, 0x10, 0x2a,
+	}, &decoded)
+	assert.NoError(t, err)
+
+	base := time.Unix(31, 32).UTC()
+	assert.DeepEqual(t, &decoded, &picotest.CustomMessageTypes{
+		Normal: &picotest.Timestamp{
+			Seconds: 1,
+			Nanos:   2,
+		},
+		CustomType: &pic.Timestamp{
+			Seconds: 11,
+			Nanos:   12,
+		},
+		PresentCustomType: pic.Timestamp{
+			Seconds: 21,
+			Nanos:   22,
+		},
+		CustomTypeCast:        &base,
+		PresentCustomTypeCast: time.Unix(41, 42).UTC(),
+	})
+}
+
+func TestDecoder_CustomMessageTypes_Empty(t *testing.T) {
+	var decoded picotest.CustomMessageTypes
+	err := picobuf.Unmarshal([]byte{}, &decoded)
+	assert.NoError(t, err)
+
+	assert.DeepEqual(t, &decoded, &picotest.CustomMessageTypes{
+		Normal:                nil,
+		CustomType:            nil,
+		PresentCustomType:     pic.Timestamp{},
+		CustomTypeCast:        nil,
+		PresentCustomTypeCast: time.Time{},
+	})
 }

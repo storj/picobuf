@@ -19,9 +19,8 @@ import (
 //go:generate protoc -I.. --go_out=paths=source_relative:. pico.proto
 
 const (
-	picobufPackage     = protogen.GoImportPath("storj.io/picobuf")
-	picowirePackage    = protogen.GoImportPath("storj.io/picobuf/picowire")
-	timestamppbPackage = protogen.GoImportPath("google.golang.org/protobuf/types/known/timestamppb")
+	picobufPackage  = protogen.GoImportPath("storj.io/picobuf")
+	picowirePackage = protogen.GoImportPath("storj.io/picobuf/picowire")
 )
 
 type config struct{}
@@ -183,7 +182,11 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 		if info.repeated {
 			panic("custom decode with repeated not handled")
 		}
-		gf.P("(*", info.castType, ")(&m.", field.GoName, ").PicoEncode(c, ", field.Desc.Number(), ")")
+		if info.pointer {
+			gf.P("(*", info.castType, ")(m.", field.GoName, ").PicoEncode(c, ", field.Desc.Number(), ")")
+		} else {
+			gf.P("(*", info.castType, ")(&m.", field.GoName, ").PicoEncode(c, ", field.Desc.Number(), ")")
+		}
 
 	case info.kind == kindCustom:
 		if info.repeated {
@@ -294,13 +297,31 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 		if info.repeated {
 			panic("custom decode with repeated not handled")
 		}
-		gf.P("(*", info.castType, ")(&m.", field.GoName, ").PicoDecode(c, ", field.Desc.Number(), ")")
+		if info.pointer {
+			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("  if m.", field.GoName, " == nil {")
+			gf.P("    m.", field.GoName, " = new(", info.baseType, ")")
+			gf.P("  }")
+			gf.P("  (*", info.castType, ")(m.", field.GoName, ").PicoDecode(c, ", field.Desc.Number(), ")")
+			gf.P("}")
+		} else {
+			gf.P("(*", info.castType, ")(&m.", field.GoName, ").PicoDecode(c, ", field.Desc.Number(), ")")
+		}
 
 	case info.kind == kindCustom:
 		if info.repeated {
 			panic("custom type with repeated not handled")
 		}
-		gf.P("m.", field.GoName, ".PicoDecode(c, ", field.Desc.Number(), ")")
+		if info.pointer {
+			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("  if m.", field.GoName, " == nil {")
+			gf.P("    m.", field.GoName, " = new(", info.baseType, ")")
+			gf.P("  }")
+			gf.P("  m.", field.GoName, ".PicoDecode(c, ", field.Desc.Number(), ")")
+			gf.P("}")
+		} else {
+			gf.P("m.", field.GoName, ".PicoDecode(c, ", field.Desc.Number(), ")")
+		}
 
 	case info.kind == kindInternal:
 		method, ok := codecMethodName[field.Desc.Kind()]
@@ -476,14 +497,7 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 		} else {
 			info.kind = kindMessage
 			info.pointer = true
-
-			// intercept the well-known timestamp type to be our own type
-			switch field.Message.GoIdent {
-			case timestamppbPackage.Ident("Timestamp"):
-				info.baseType = "picobuf.Timestamp"
-			default:
-				info.baseType = gf.QualifiedGoIdent(field.Message.GoIdent)
-			}
+			info.baseType = gf.QualifiedGoIdent(field.Message.GoIdent)
 		}
 	default:
 		panic(fmt.Sprintf("unhandled: invalid field kind: %v", field.Desc.Kind()))
