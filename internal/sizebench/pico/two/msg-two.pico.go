@@ -49,41 +49,41 @@ func (m *Nop) Decode(c *picobuf.Decoder) {
 }
 
 type Types struct {
-	Int32     int32
-	Int64     int64
-	Uint32    uint32
-	Uint64    uint64
-	Sint32    int32
-	Sint64    int64
-	Fixed32   uint32
-	Fixed64   uint64
-	Sfixed32  int32
-	Sfixed64  int64
-	Float     float32
-	Double    float64
-	Bool      bool
-	String_   string
-	Bytes     []byte
-	Message   *Message
-	Language  Language
-	Int32S    []int32
-	Int64S    []int64
-	Uint32S   []uint32
-	Uint64S   []uint64
-	Sint32S   []int32
-	Sint64S   []int64
-	Fixed32S  []uint32
-	Fixed64S  []uint64
-	Sfixed32S []int32
-	Sfixed64S []int64
-	Floats    []float32
-	Doubles   []float64
-	Bools     []bool
-	Strings   []string
-	Bytess    [][]byte
-	Messages  []*Message
-	Languages []Language
-	Values    map[string]string
+	Int32     int32             `json:"int32,omitempty"`
+	Int64     int64             `json:"int64,omitempty"`
+	Uint32    uint32            `json:"uint32,omitempty"`
+	Uint64    uint64            `json:"uint64,omitempty"`
+	Sint32    int32             `json:"sint32,omitempty"`
+	Sint64    int64             `json:"sint64,omitempty"`
+	Fixed32   uint32            `json:"fixed32,omitempty"`
+	Fixed64   uint64            `json:"fixed64,omitempty"`
+	Sfixed32  int32             `json:"sfixed32,omitempty"`
+	Sfixed64  int64             `json:"sfixed64,omitempty"`
+	Float     float32           `json:"float,omitempty"`
+	Double    float64           `json:"double,omitempty"`
+	Bool      bool              `json:"bool,omitempty"`
+	String_   string            `json:"string,omitempty"`
+	Bytes     []byte            `json:"bytes,omitempty"`
+	Message   *Message          `json:"message,omitempty"`
+	Language  Language          `json:"language,omitempty"`
+	Int32S    []int32           `json:"int32s,omitempty"`
+	Int64S    []int64           `json:"int64s,omitempty"`
+	Uint32S   []uint32          `json:"uint32s,omitempty"`
+	Uint64S   []uint64          `json:"uint64s,omitempty"`
+	Sint32S   []int32           `json:"sint32s,omitempty"`
+	Sint64S   []int64           `json:"sint64s,omitempty"`
+	Fixed32S  []uint32          `json:"fixed32s,omitempty"`
+	Fixed64S  []uint64          `json:"fixed64s,omitempty"`
+	Sfixed32S []int32           `json:"sfixed32s,omitempty"`
+	Sfixed64S []int64           `json:"sfixed64s,omitempty"`
+	Floats    []float32         `json:"floats,omitempty"`
+	Doubles   []float64         `json:"doubles,omitempty"`
+	Bools     []bool            `json:"bools,omitempty"`
+	Strings   []string          `json:"strings,omitempty"`
+	Bytess    [][]byte          `json:"bytess,omitempty"`
+	Messages  []*Message        `json:"messages,omitempty"`
+	Languages []Language        `json:"languages,omitempty"`
+	Values    map[string]string `json:"values,omitempty"`
 }
 
 func (m *Types) Encode(c *picobuf.Encoder) bool {
@@ -188,7 +188,7 @@ func (m *Types) Decode(c *picobuf.Decoder) {
 }
 
 type Message struct {
-	Int32 int32
+	Int32 int32 `json:"int32,omitempty"`
 }
 
 func (m *Message) Encode(c *picobuf.Encoder) bool {
@@ -207,41 +207,41 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 }
 
 type Types2 struct {
-	Int32     int32
-	Int64     int64
-	Uint32    uint32
-	Uint64    uint64
-	Sint32    int32
-	Sint64    int64
-	Fixed32   uint32
-	Fixed64   uint64
-	Sfixed32  int32
-	Sfixed64  int64
-	Float     float32
-	Double    float64
-	Bool      bool
-	String_   string
-	Bytes     []byte
-	Message   *Message2
-	Language  Language2
-	Int32S    []int32
-	Int64S    []int64
-	Uint32S   []uint32
-	Uint64S   []uint64
-	Sint32S   []int32
-	Sint64S   []int64
-	Fixed32S  []uint32
-	Fixed64S  []uint64
-	Sfixed32S []int32
-	Sfixed64S []int64
-	Floats    []float32
-	Doubles   []float64
-	Bools     []bool
-	Strings   []string
-	Bytess    [][]byte
-	Messages  []*Message2
-	Languages []Language2
-	Values    map[string]string
+	Int32     int32             `json:"int32,omitempty"`
+	Int64     int64             `json:"int64,omitempty"`
+	Uint32    uint32            `json:"uint32,omitempty"`
+	Uint64    uint64            `json:"uint64,omitempty"`
+	Sint32    int32             `json:"sint32,omitempty"`
+	Sint64    int64             `json:"sint64,omitempty"`
+	Fixed32   uint32            `json:"fixed32,omitempty"`
+	Fixed64   uint64            `json:"fixed64,omitempty"`
+	Sfixed32  int32             `json:"sfixed32,omitempty"`
+	Sfixed64  int64             `json:"sfixed64,omitempty"`
+	Float     float32           `json:"float,omitempty"`
+	Double    float64           `json:"double,omitempty"`
+	Bool      bool              `json:"bool,omitempty"`
+	String_   string            `json:"string,omitempty"`
+	Bytes     []byte            `json:"bytes,omitempty"`
+	Message   *Message2         `json:"message,omitempty"`
+	Language  Language2         `json:"language,omitempty"`
+	Int32S    []int32           `json:"int32s,omitempty"`
+	Int64S    []int64           `json:"int64s,omitempty"`
+	Uint32S   []uint32          `json:"uint32s,omitempty"`
+	Uint64S   []uint64          `json:"uint64s,omitempty"`
+	Sint32S   []int32           `json:"sint32s,omitempty"`
+	Sint64S   []int64           `json:"sint64s,omitempty"`
+	Fixed32S  []uint32          `json:"fixed32s,omitempty"`
+	Fixed64S  []uint64          `json:"fixed64s,omitempty"`
+	Sfixed32S []int32           `json:"sfixed32s,omitempty"`
+	Sfixed64S []int64           `json:"sfixed64s,omitempty"`
+	Floats    []float32         `json:"floats,omitempty"`
+	Doubles   []float64         `json:"doubles,omitempty"`
+	Bools     []bool            `json:"bools,omitempty"`
+	Strings   []string          `json:"strings,omitempty"`
+	Bytess    [][]byte          `json:"bytess,omitempty"`
+	Messages  []*Message2       `json:"messages,omitempty"`
+	Languages []Language2       `json:"languages,omitempty"`
+	Values    map[string]string `json:"values,omitempty"`
 }
 
 func (m *Types2) Encode(c *picobuf.Encoder) bool {
@@ -346,7 +346,7 @@ func (m *Types2) Decode(c *picobuf.Decoder) {
 }
 
 type Message2 struct {
-	Int32 int32
+	Int32 int32 `json:"int32,omitempty"`
 }
 
 func (m *Message2) Encode(c *picobuf.Encoder) bool {

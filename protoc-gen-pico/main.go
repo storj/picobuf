@@ -138,11 +138,18 @@ func genMessageField(gf *generator, m *protogen.Message, field *protogen.Field) 
 		return
 	}
 
-	gf.P(field.GoName, " ", fieldGoType(gf, field))
+	gf.P(field.GoName, " ", fieldGoType(gf, field), " ", fieldJSONTag(gf, field))
 }
 
 func oneofInterfaceName(gf *generator, oneof *protogen.Oneof) string {
 	return "is" + oneof.GoIdent.GoName
+}
+
+func fieldJSONTag(gf *generator, field *protogen.Field) string {
+	// It seems the `field.JSONName()` and the json names std protobuf
+	// generates are different. The std protobuf-go generates using
+	// the original field name in protobuf.
+	return "`json:\"" + string(field.Desc.Name()) + ",omitempty\"`"
 }
 
 func genMessageMethods(gf *generator, m *protogen.Message) {
