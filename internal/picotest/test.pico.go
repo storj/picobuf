@@ -387,25 +387,35 @@ func (m *VariationsMessage) Decode(c *picobuf.Decoder) {
 	})
 }
 
-type VariationsCustom struct {
-	Value        pic.ID  `json:"value,omitempty"`
-	Opt          *pic.ID `json:"opt,omitempty"`
-	PresentBasic pic.ID  `json:"present_basic,omitempty"`
-	PresentOpt   pic.ID  `json:"present_opt,omitempty"`
+type CustomBytes struct {
+	Value        pic.ID   `json:"value,omitempty"`
+	Opt          *pic.ID  `json:"opt,omitempty"`
+	Rep          []pic.ID `json:"rep,omitempty"`
+	PresentBasic pic.ID   `json:"present_basic,omitempty"`
+	PresentOpt   pic.ID   `json:"present_opt,omitempty"`
+	PresentRep   []pic.ID `json:"present_rep,omitempty"`
 }
 
-func (m *VariationsCustom) Encode(c *picobuf.Encoder) bool {
+func (m *CustomBytes) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
 	m.Value.PicoEncode(c, 1)
 	m.Opt.PicoEncode(c, 2)
+	for i := range m.Rep {
+		x := &m.Rep[i]
+		x.PicoEncode(c, 3)
+	}
 	m.PresentBasic.PicoEncode(c, 4)
 	m.PresentOpt.PicoEncode(c, 5)
+	for i := range m.PresentRep {
+		x := &m.PresentRep[i]
+		x.PicoEncode(c, 6)
+	}
 	return true
 }
 
-func (m *VariationsCustom) Decode(c *picobuf.Decoder) {
+func (m *CustomBytes) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
@@ -416,8 +426,16 @@ func (m *VariationsCustom) Decode(c *picobuf.Decoder) {
 		}
 		m.Opt.PicoDecode(c, 2)
 	}
+	for c.PendingField() == 3 {
+		m.Rep = append(m.Rep, pic.ID{})
+		m.Rep[len(m.Rep)-1].PicoDecode(c, 3)
+	}
 	m.PresentBasic.PicoDecode(c, 4)
 	m.PresentOpt.PicoDecode(c, 5)
+	for c.PendingField() == 6 {
+		m.PresentRep = append(m.PresentRep, pic.ID{})
+		m.PresentRep[len(m.PresentRep)-1].PicoDecode(c, 6)
+	}
 }
 
 type Timestamp struct {

@@ -104,17 +104,16 @@ message VariationsMessage {
   repeated Message present_rep = 6 [(pico.field).always_present = true];
 }
 
-message VariationsCustom {
+message CustomBytes {
   bytes value = 1 [
     (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"
   ];
   optional bytes opt = 2 [
     (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"
   ];
-  // not supported:
-  // repeated bytes rep = 3 [
-  //   (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"
-  // ];
+  repeated bytes rep = 3 [
+   (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"
+  ];
 
   bytes present_basic = 4 [
     (pico.field).always_present = true,
@@ -124,11 +123,10 @@ message VariationsCustom {
     (pico.field).always_present = true,
     (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"
   ];
-  // not supported:
-  // repeated bytes present_rep = 6 [
-  //   (pico.field).always_present = true,
-  //   (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"
-  // ];
+  repeated bytes present_rep = 6 [
+   (pico.field).always_present = true,
+   (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"
+  ];
 }
 
 message Timestamp {
