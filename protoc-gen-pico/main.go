@@ -196,10 +196,19 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 		}
 
 	case info.kind == kindCustom:
-		if info.repeated {
-			panic("custom type with repeated not handled")
+		switch {
+		case !info.repeated:
+			gf.P("m.", field.GoName, ".PicoEncode(c, ", field.Desc.Number(), ")")
+		case info.pointer && info.repeated:
+			gf.P("for _, x := range m.", field.GoName, " {")
+			gf.P("  x.PicoEncode(c, ", field.Desc.Number(), ")")
+			gf.P("}")
+		case !info.pointer && info.repeated:
+			gf.P("for i := range m.", field.GoName, " {")
+			gf.P("  x := &m.", field.GoName, "[i]")
+			gf.P("  x.PicoEncode(c, ", field.Desc.Number(), ")")
+			gf.P("}")
 		}
-		gf.P("m.", field.GoName, ".PicoEncode(c, ", field.Desc.Number(), ")")
 
 	case info.kind == kindInternal:
 		method, ok := codecMethodName[field.Desc.Kind()]
@@ -316,18 +325,27 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 		}
 
 	case info.kind == kindCustom:
-		if info.repeated {
-			panic("custom type with repeated not handled")
-		}
-		if info.pointer {
+		switch {
+		case !info.repeated && info.pointer:
 			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
 			gf.P("  if m.", field.GoName, " == nil {")
 			gf.P("    m.", field.GoName, " = new(", info.baseType, ")")
 			gf.P("  }")
 			gf.P("  m.", field.GoName, ".PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("}")
-		} else {
+		case info.repeated && info.pointer:
+			gf.P("for c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("  x := new(", info.baseType, ")")
+			gf.P("  x.PicoDecode(c, ", field.Desc.Number(), ")")
+			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", x)")
+			gf.P("}")
+		case !info.repeated && !info.pointer:
 			gf.P("m.", field.GoName, ".PicoDecode(c, ", field.Desc.Number(), ")")
+		case info.repeated && !info.pointer:
+			gf.P("for c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", ", info.baseType, "{})")
+			gf.P("  m.", field.GoName, "[len(m.", field.GoName, ")-1].PicoDecode(c, ", field.Desc.Number(), ")")
+			gf.P("}")
 		}
 
 	case info.kind == kindInternal:
@@ -361,9 +379,9 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 			gf.P("})")
 		case info.pointer && info.repeated:
 			gf.P("c.RepeatedMessage(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Decoder"), ") {")
-			gf.P("  mm := new(", info.baseType, ")")
-			gf.P("  c.Loop(mm.Decode)")
-			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", mm)")
+			gf.P("  x := new(", info.baseType, ")")
+			gf.P("  c.Loop(x.Decode)")
+			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", x)")
 			gf.P("})")
 		case !info.pointer && !info.repeated:
 			gf.P("c.PresentMessage(", field.Desc.Number(), ", m.", field.GoName, ".Decode)")

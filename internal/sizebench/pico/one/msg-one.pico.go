@@ -167,9 +167,9 @@ func (m *Types) Decode(c *picobuf.Decoder) {
 	c.RepeatedString(31, &m.Strings)
 	c.RepeatedBytes(32, &m.Bytess)
 	c.RepeatedMessage(33, func(c *picobuf.Decoder) {
-		mm := new(Message)
-		c.Loop(mm.Decode)
-		m.Messages = append(m.Messages, mm)
+		x := new(Message)
+		c.Loop(x.Decode)
+		m.Messages = append(m.Messages, x)
 	})
 	c.RepeatedEnum(34, func(x int32) {
 		m.Languages = append(m.Languages, (Language)(x))

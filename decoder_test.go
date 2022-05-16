@@ -169,11 +169,22 @@ func TestDecoder_Map(t *testing.T) {
 func TestDecoder_CustomMessageTypes(t *testing.T) {
 	var decoded picotest.CustomMessageTypes
 	err := picobuf.Unmarshal([]byte{
+		// Normal
 		0x0a, 0x04, 0x08, 0x01, 0x10, 0x02,
+		// CustomType
 		0x12, 0x04, 0x08, 0x0b, 0x10, 0x0c,
+		// PresentCustomType
 		0x1a, 0x04, 0x08, 0x15, 0x10, 0x16,
+		// CustomTypeCast
 		0x22, 0x04, 0x08, 0x1f, 0x10, 0x20,
+		// PresentCustomTypeCast
 		0x2a, 0x04, 0x08, 0x29, 0x10, 0x2a,
+		// RepeatedCustomType
+		0x32, 0x04, 0x08, 0x33, 0x10, 0x34,
+		0x32, 0x04, 0x08, 0x35, 0x10, 0x36,
+		// RepeatedPresentCustomType
+		0x3a, 0x04, 0x08, 0x3d, 0x10, 0x3e,
+		0x3a, 0x04, 0x08, 0x3f, 0x10, 0x40,
 	}, &decoded)
 	assert.NoError(t, err)
 
@@ -193,6 +204,14 @@ func TestDecoder_CustomMessageTypes(t *testing.T) {
 		},
 		CustomTypeCast:        &base,
 		PresentCustomTypeCast: time.Unix(41, 42).UTC(),
+		RepeatedCustomType: []*pic.Timestamp{
+			{Seconds: 51, Nanos: 52},
+			{Seconds: 53, Nanos: 54},
+		},
+		RepeatedPresentCustomType: []pic.Timestamp{
+			{Seconds: 61, Nanos: 62},
+			{Seconds: 63, Nanos: 64},
+		},
 	})
 }
 
