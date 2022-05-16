@@ -74,8 +74,16 @@ func TestEncoder_SubMessage(t *testing.T) {
 	assert.Equal(t, data, []byte{0xa, 0x5, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x12, 0x0})
 }
 
+func utcTime(nanos, seconds int64) time.Time {
+	return time.Unix(nanos, seconds).UTC()
+}
+
+func utcTimePtr(nanos, seconds int64) *time.Time {
+	x := time.Unix(nanos, seconds).UTC()
+	return &x
+}
+
 func TestEncoder_CustomMessageTypes(t *testing.T) {
-	base := time.Unix(31, 32).UTC()
 	msg := &picotest.CustomMessageTypes{
 		Normal: &picotest.Timestamp{
 			Seconds: 1,
@@ -89,8 +97,8 @@ func TestEncoder_CustomMessageTypes(t *testing.T) {
 			Seconds: 21,
 			Nanos:   22,
 		},
-		CustomTypeCast:        &base,
-		PresentCustomTypeCast: time.Unix(41, 42).UTC(),
+		CustomTypeCast:        utcTimePtr(31, 32),
+		PresentCustomTypeCast: utcTime(41, 42),
 		RepeatedCustomType: []*pic.Timestamp{
 			{Seconds: 51, Nanos: 52},
 			{Seconds: 53, Nanos: 54},
@@ -98,6 +106,14 @@ func TestEncoder_CustomMessageTypes(t *testing.T) {
 		RepeatedPresentCustomType: []pic.Timestamp{
 			{Seconds: 61, Nanos: 62},
 			{Seconds: 63, Nanos: 64},
+		},
+		RepeatedCustomTypeCast: []*time.Time{
+			utcTimePtr(71, 72),
+			utcTimePtr(73, 74),
+		},
+		RepeatedPresentCustomTypeCast: []time.Time{
+			utcTime(81, 82),
+			utcTime(83, 84),
 		},
 	}
 	data, err := picobuf.Marshal(msg)
@@ -119,6 +135,12 @@ func TestEncoder_CustomMessageTypes(t *testing.T) {
 		// RepeatedPresentCustomType
 		0x3a, 0x04, 0x08, 0x3d, 0x10, 0x3e,
 		0x3a, 0x04, 0x08, 0x3f, 0x10, 0x40,
+		// RepeatedCustomTypeCast
+		0x42, 0x4, 0x8, 0x47, 0x10, 0x48,
+		0x42, 0x4, 0x8, 0x49, 0x10, 0x4a,
+		// RepeatedPresentCustomTypeCast
+		0x4a, 0x4, 0x8, 0x51, 0x10, 0x52,
+		0x4a, 0x4, 0x8, 0x53, 0x10, 0x54,
 	})
 }
 

@@ -186,13 +186,20 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 
 	switch {
 	case info.kind == kindCast:
-		if info.repeated {
-			panic("custom decode with repeated not handled")
-		}
-		if info.pointer {
+		switch {
+		case !info.repeated && info.pointer:
 			gf.P("(*", info.castType, ")(m.", field.GoName, ").PicoEncode(c, ", field.Desc.Number(), ")")
-		} else {
+		case info.repeated && info.pointer:
+			gf.P("for _, x := range m.", field.GoName, " {")
+			gf.P("  (*", info.castType, ")(x).PicoEncode(c, ", field.Desc.Number(), ")")
+			gf.P("}")
+		case !info.repeated && !info.pointer:
 			gf.P("(*", info.castType, ")(&m.", field.GoName, ").PicoEncode(c, ", field.Desc.Number(), ")")
+		case info.repeated && !info.pointer:
+			gf.P("for i := range m.", field.GoName, " {")
+			gf.P("  x := &m.", field.GoName, "[i]")
+			gf.P("  (*", info.castType, ")(x).PicoEncode(c, ", field.Desc.Number(), ")")
+			gf.P("}")
 		}
 
 	case info.kind == kindCustom:
@@ -310,18 +317,28 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 
 	switch {
 	case info.kind == kindCast:
-		if info.repeated {
-			panic("custom decode with repeated not handled")
-		}
-		if info.pointer {
+		switch {
+		case !info.repeated && info.pointer:
 			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
 			gf.P("  if m.", field.GoName, " == nil {")
 			gf.P("    m.", field.GoName, " = new(", info.baseType, ")")
 			gf.P("  }")
 			gf.P("  (*", info.castType, ")(m.", field.GoName, ").PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("}")
-		} else {
+		case info.repeated && info.pointer:
+			gf.P("for c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("  x := new(", info.baseType, ")")
+			gf.P("  (*", info.castType, ")(x).PicoDecode(c, ", field.Desc.Number(), ")")
+			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", x)")
+			gf.P("}")
+		case !info.repeated && !info.pointer:
 			gf.P("(*", info.castType, ")(&m.", field.GoName, ").PicoDecode(c, ", field.Desc.Number(), ")")
+		case info.repeated && !info.pointer:
+			gf.P("for c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", ", info.baseType, "{})")
+			gf.P("  x := &m.", field.GoName, "[len(m.", field.GoName, ")-1]")
+			gf.P("  (*", info.castType, ")(x).PicoDecode(c, ", field.Desc.Number(), ")")
+			gf.P("}")
 		}
 
 	case info.kind == kindCustom:

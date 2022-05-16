@@ -160,7 +160,7 @@ message CustomMessageTypes {
   repeated Timestamp repeated_present_custom_type = 7 [
     (pico.field).always_present = true,
     (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.Timestamp"
-  ];/*
+  ];
   repeated Timestamp repeated_custom_type_cast = 8 [
     (pico.field).custom_type = "time.Time",
     (pico.field).custom_cast = "storj.io/picobuf/picoconv.Timestamp"
@@ -169,5 +169,5 @@ message CustomMessageTypes {
     (pico.field).always_present = true,
     (pico.field).custom_type = "time.Time",
     (pico.field).custom_cast = "storj.io/picobuf/picoconv.Timestamp"
-  ];*/
+  ];
 }

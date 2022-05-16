@@ -443,13 +443,15 @@ func (m *Timestamp) Decode(c *picobuf.Decoder) {
 }
 
 type CustomMessageTypes struct {
-	Normal                    *Timestamp       `json:"normal,omitempty"`
-	CustomType                *pic.Timestamp   `json:"custom_type,omitempty"`
-	PresentCustomType         pic.Timestamp    `json:"present_custom_type,omitempty"`
-	CustomTypeCast            *time.Time       `json:"custom_type_cast,omitempty"`
-	PresentCustomTypeCast     time.Time        `json:"present_custom_type_cast,omitempty"`
-	RepeatedCustomType        []*pic.Timestamp `json:"repeated_custom_type,omitempty"`
-	RepeatedPresentCustomType []pic.Timestamp  `json:"repeated_present_custom_type,omitempty"`
+	Normal                        *Timestamp       `json:"normal,omitempty"`
+	CustomType                    *pic.Timestamp   `json:"custom_type,omitempty"`
+	PresentCustomType             pic.Timestamp    `json:"present_custom_type,omitempty"`
+	CustomTypeCast                *time.Time       `json:"custom_type_cast,omitempty"`
+	PresentCustomTypeCast         time.Time        `json:"present_custom_type_cast,omitempty"`
+	RepeatedCustomType            []*pic.Timestamp `json:"repeated_custom_type,omitempty"`
+	RepeatedPresentCustomType     []pic.Timestamp  `json:"repeated_present_custom_type,omitempty"`
+	RepeatedCustomTypeCast        []*time.Time     `json:"repeated_custom_type_cast,omitempty"`
+	RepeatedPresentCustomTypeCast []time.Time      `json:"repeated_present_custom_type_cast,omitempty"`
 }
 
 func (m *CustomMessageTypes) Encode(c *picobuf.Encoder) bool {
@@ -467,6 +469,13 @@ func (m *CustomMessageTypes) Encode(c *picobuf.Encoder) bool {
 	for i := range m.RepeatedPresentCustomType {
 		x := &m.RepeatedPresentCustomType[i]
 		x.PicoEncode(c, 7)
+	}
+	for _, x := range m.RepeatedCustomTypeCast {
+		(*picoconv.Timestamp)(x).PicoEncode(c, 8)
+	}
+	for i := range m.RepeatedPresentCustomTypeCast {
+		x := &m.RepeatedPresentCustomTypeCast[i]
+		(*picoconv.Timestamp)(x).PicoEncode(c, 9)
 	}
 	return true
 }
@@ -503,5 +512,15 @@ func (m *CustomMessageTypes) Decode(c *picobuf.Decoder) {
 	for c.PendingField() == 7 {
 		m.RepeatedPresentCustomType = append(m.RepeatedPresentCustomType, pic.Timestamp{})
 		m.RepeatedPresentCustomType[len(m.RepeatedPresentCustomType)-1].PicoDecode(c, 7)
+	}
+	for c.PendingField() == 8 {
+		x := new(time.Time)
+		(*picoconv.Timestamp)(x).PicoDecode(c, 8)
+		m.RepeatedCustomTypeCast = append(m.RepeatedCustomTypeCast, x)
+	}
+	for c.PendingField() == 9 {
+		m.RepeatedPresentCustomTypeCast = append(m.RepeatedPresentCustomTypeCast, time.Time{})
+		x := &m.RepeatedPresentCustomTypeCast[len(m.RepeatedPresentCustomTypeCast)-1]
+		(*picoconv.Timestamp)(x).PicoDecode(c, 9)
 	}
 }
