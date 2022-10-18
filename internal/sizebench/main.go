@@ -14,8 +14,6 @@ import (
 	"strings"
 	"sync"
 	"text/tabwriter"
-
-	"golang.org/x/sync/errgroup"
 )
 
 // Note, the names of packages has been chosen to be exactly the same to reduce the difference
@@ -86,12 +84,12 @@ func run() error {
 	pkgResults := map[idx]pkgResult{}
 	failures := []error{}
 
-	var g errgroup.Group
+	var g syncGroup
 	for _, osarch := range osarches {
 		osarch := osarch
 		for _, target := range exeTargets {
 			target := target
-			g.Go(func() error {
+			g.Go(func() {
 				limiter <- struct{}{}
 				defer func() { <-limiter }()
 
@@ -102,13 +100,12 @@ func run() error {
 					failures = append(failures, fmt.Errorf("%s %s: %w", osarch, target, err))
 				}
 				mu.Unlock()
-				return nil
 			})
 		}
 
 		for _, target := range pkgTargets {
 			target := target
-			g.Go(func() error {
+			g.Go(func() {
 				limiter <- struct{}{}
 				defer func() { <-limiter }()
 
@@ -119,11 +116,10 @@ func run() error {
 					failures = append(failures, fmt.Errorf("%s %s: %w", osarch, target, err))
 				}
 				mu.Unlock()
-				return nil
 			})
 		}
 	}
-	_ = g.Wait()
+	g.Wait()
 
 	if len(failures) > 0 {
 		for _, failure := range failures {
@@ -313,4 +309,14 @@ func parseSymbol(line string) (sym symbol, err error) {
 
 	sym.name = strings.Join(tokens[2:], " ")
 	return sym, nil
+}
+
+type syncGroup struct{ sync.WaitGroup }
+
+func (g *syncGroup) Go(fn func()) {
+	g.Add(1)
+	go func() {
+		defer g.Done()
+		fn()
+	}()
 }
