@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v3.20.0
+//     protoc:          v3.20.3
 
 package one
 

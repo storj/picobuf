@@ -74,7 +74,7 @@ message Piece {
   bytes id  = 1 [(pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"];
   bytes alt = 2 [
     (pico.field).custom_type = "string",
-    (pico.field).custom_cast = "storj.io/picobuf/internal/picotest/pic.RawString"
+    (pico.field).custom_serialize = "storj.io/picobuf/internal/picotest/pic.RawString"
   ];
 }
 
@@ -145,12 +145,12 @@ message CustomMessageTypes {
   ];
   Timestamp custom_type_cast = 4 [
     (pico.field).custom_type = "time.Time",
-    (pico.field).custom_cast = "storj.io/picobuf/picoconv.Timestamp"
+    (pico.field).custom_serialize = "storj.io/picobuf/picoconv.Timestamp"
   ];
   Timestamp present_custom_type_cast = 5 [
     (pico.field).always_present = true,
     (pico.field).custom_type = "time.Time",
-    (pico.field).custom_cast = "storj.io/picobuf/picoconv.Timestamp"
+    (pico.field).custom_serialize = "storj.io/picobuf/picoconv.Timestamp"
   ];
   repeated Timestamp repeated_custom_type = 6 [
     (pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.Timestamp"
@@ -161,11 +161,11 @@ message CustomMessageTypes {
   ];
   repeated Timestamp repeated_custom_type_cast = 8 [
     (pico.field).custom_type = "time.Time",
-    (pico.field).custom_cast = "storj.io/picobuf/picoconv.Timestamp"
+    (pico.field).custom_serialize = "storj.io/picobuf/picoconv.Timestamp"
   ];
   repeated Timestamp repeated_present_custom_type_cast = 9 [
     (pico.field).always_present = true,
     (pico.field).custom_type = "time.Time",
-    (pico.field).custom_cast = "storj.io/picobuf/picoconv.Timestamp"
+    (pico.field).custom_serialize = "storj.io/picobuf/picoconv.Timestamp"
   ];
 }

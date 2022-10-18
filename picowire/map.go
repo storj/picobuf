@@ -9,6 +9,7 @@ import "storj.io/picobuf"
 type MapBoolBool map[bool]bool
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolBool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -20,6 +21,7 @@ func (m *MapBoolBool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolBool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
@@ -40,6 +42,7 @@ func (m *MapBoolBool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber
 type MapBoolInt32 map[bool]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolInt32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -51,6 +54,7 @@ func (m *MapBoolInt32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolInt32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
@@ -71,6 +75,7 @@ func (m *MapBoolInt32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumbe
 type MapBoolInt64 map[bool]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolInt64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -82,6 +87,7 @@ func (m *MapBoolInt64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolInt64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
@@ -102,6 +108,7 @@ func (m *MapBoolInt64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumbe
 type MapBoolUint32 map[bool]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolUint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -113,6 +120,7 @@ func (m *MapBoolUint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolUint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
@@ -133,6 +141,7 @@ func (m *MapBoolUint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapBoolUint64 map[bool]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolUint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -144,6 +153,7 @@ func (m *MapBoolUint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolUint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
@@ -164,6 +174,7 @@ func (m *MapBoolUint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapBoolSint32 map[bool]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolSint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -175,6 +186,7 @@ func (m *MapBoolSint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolSint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
@@ -195,6 +207,7 @@ func (m *MapBoolSint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapBoolSint64 map[bool]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolSint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -206,6 +219,7 @@ func (m *MapBoolSint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolSint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
@@ -226,6 +240,7 @@ func (m *MapBoolSint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapBoolFixed32 map[bool]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolFixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -237,6 +252,7 @@ func (m *MapBoolFixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolFixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
@@ -257,6 +273,7 @@ func (m *MapBoolFixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapBoolFixed64 map[bool]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolFixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -268,6 +285,7 @@ func (m *MapBoolFixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolFixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
@@ -288,6 +306,7 @@ func (m *MapBoolFixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapBoolSfixed32 map[bool]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolSfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -299,6 +318,7 @@ func (m *MapBoolSfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolSfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
@@ -319,6 +339,7 @@ func (m *MapBoolSfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapBoolSfixed64 map[bool]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolSfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -330,6 +351,7 @@ func (m *MapBoolSfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolSfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
@@ -350,6 +372,7 @@ func (m *MapBoolSfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapBoolFloat map[bool]float32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolFloat) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -361,6 +384,7 @@ func (m *MapBoolFloat) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolFloat) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
@@ -381,6 +405,7 @@ func (m *MapBoolFloat) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumbe
 type MapBoolDouble map[bool]float64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolDouble) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -392,6 +417,7 @@ func (m *MapBoolDouble) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolDouble) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
@@ -412,6 +438,7 @@ func (m *MapBoolDouble) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapBoolString map[bool]string
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolString) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -423,6 +450,7 @@ func (m *MapBoolString) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolString) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
@@ -443,6 +471,7 @@ func (m *MapBoolString) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapBoolBytes map[bool][]byte
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolBytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -454,6 +483,7 @@ func (m *MapBoolBytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapBoolBytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key bool
@@ -474,6 +504,7 @@ func (m *MapBoolBytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumbe
 type MapInt32Bool map[int32]bool
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -485,6 +516,7 @@ func (m *MapInt32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -505,6 +537,7 @@ func (m *MapInt32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumbe
 type MapInt32Int32 map[int32]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -516,6 +549,7 @@ func (m *MapInt32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -536,6 +570,7 @@ func (m *MapInt32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapInt32Int64 map[int32]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -547,6 +582,7 @@ func (m *MapInt32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -567,6 +603,7 @@ func (m *MapInt32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapInt32Uint32 map[int32]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -578,6 +615,7 @@ func (m *MapInt32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -598,6 +636,7 @@ func (m *MapInt32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapInt32Uint64 map[int32]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -609,6 +648,7 @@ func (m *MapInt32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -629,6 +669,7 @@ func (m *MapInt32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapInt32Sint32 map[int32]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -640,6 +681,7 @@ func (m *MapInt32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -660,6 +702,7 @@ func (m *MapInt32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapInt32Sint64 map[int32]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -671,6 +714,7 @@ func (m *MapInt32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -691,6 +735,7 @@ func (m *MapInt32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapInt32Fixed32 map[int32]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -702,6 +747,7 @@ func (m *MapInt32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -722,6 +768,7 @@ func (m *MapInt32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapInt32Fixed64 map[int32]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -733,6 +780,7 @@ func (m *MapInt32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -753,6 +801,7 @@ func (m *MapInt32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapInt32Sfixed32 map[int32]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -764,6 +813,7 @@ func (m *MapInt32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -784,6 +834,7 @@ func (m *MapInt32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapInt32Sfixed64 map[int32]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -795,6 +846,7 @@ func (m *MapInt32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -815,6 +867,7 @@ func (m *MapInt32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapInt32Float map[int32]float32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -826,6 +879,7 @@ func (m *MapInt32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -846,6 +900,7 @@ func (m *MapInt32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapInt32Double map[int32]float64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -857,6 +912,7 @@ func (m *MapInt32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -877,6 +933,7 @@ func (m *MapInt32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapInt32String map[int32]string
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -888,6 +945,7 @@ func (m *MapInt32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -908,6 +966,7 @@ func (m *MapInt32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapInt32Bytes map[int32][]byte
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -919,6 +978,7 @@ func (m *MapInt32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -939,6 +999,7 @@ func (m *MapInt32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapInt64Bool map[int64]bool
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -950,6 +1011,7 @@ func (m *MapInt64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -970,6 +1032,7 @@ func (m *MapInt64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumbe
 type MapInt64Int32 map[int64]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -981,6 +1044,7 @@ func (m *MapInt64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -1001,6 +1065,7 @@ func (m *MapInt64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapInt64Int64 map[int64]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1012,6 +1077,7 @@ func (m *MapInt64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -1032,6 +1098,7 @@ func (m *MapInt64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapInt64Uint32 map[int64]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1043,6 +1110,7 @@ func (m *MapInt64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -1063,6 +1131,7 @@ func (m *MapInt64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapInt64Uint64 map[int64]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1074,6 +1143,7 @@ func (m *MapInt64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -1094,6 +1164,7 @@ func (m *MapInt64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapInt64Sint32 map[int64]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1105,6 +1176,7 @@ func (m *MapInt64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -1125,6 +1197,7 @@ func (m *MapInt64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapInt64Sint64 map[int64]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1136,6 +1209,7 @@ func (m *MapInt64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -1156,6 +1230,7 @@ func (m *MapInt64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapInt64Fixed32 map[int64]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1167,6 +1242,7 @@ func (m *MapInt64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -1187,6 +1263,7 @@ func (m *MapInt64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapInt64Fixed64 map[int64]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1198,6 +1275,7 @@ func (m *MapInt64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -1218,6 +1296,7 @@ func (m *MapInt64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapInt64Sfixed32 map[int64]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1229,6 +1308,7 @@ func (m *MapInt64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -1249,6 +1329,7 @@ func (m *MapInt64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapInt64Sfixed64 map[int64]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1260,6 +1341,7 @@ func (m *MapInt64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -1280,6 +1362,7 @@ func (m *MapInt64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapInt64Float map[int64]float32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1291,6 +1374,7 @@ func (m *MapInt64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -1311,6 +1395,7 @@ func (m *MapInt64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapInt64Double map[int64]float64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1322,6 +1407,7 @@ func (m *MapInt64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -1342,6 +1428,7 @@ func (m *MapInt64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapInt64String map[int64]string
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1353,6 +1440,7 @@ func (m *MapInt64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -1373,6 +1461,7 @@ func (m *MapInt64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapInt64Bytes map[int64][]byte
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1384,6 +1473,7 @@ func (m *MapInt64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapInt64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -1404,6 +1494,7 @@ func (m *MapInt64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapUint32Bool map[uint32]bool
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1415,6 +1506,7 @@ func (m *MapUint32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -1435,6 +1527,7 @@ func (m *MapUint32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapUint32Int32 map[uint32]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1446,6 +1539,7 @@ func (m *MapUint32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -1466,6 +1560,7 @@ func (m *MapUint32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapUint32Int64 map[uint32]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1477,6 +1572,7 @@ func (m *MapUint32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -1497,6 +1593,7 @@ func (m *MapUint32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapUint32Uint32 map[uint32]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1508,6 +1605,7 @@ func (m *MapUint32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -1528,6 +1626,7 @@ func (m *MapUint32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapUint32Uint64 map[uint32]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1539,6 +1638,7 @@ func (m *MapUint32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -1559,6 +1659,7 @@ func (m *MapUint32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapUint32Sint32 map[uint32]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1570,6 +1671,7 @@ func (m *MapUint32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -1590,6 +1692,7 @@ func (m *MapUint32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapUint32Sint64 map[uint32]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1601,6 +1704,7 @@ func (m *MapUint32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -1621,6 +1725,7 @@ func (m *MapUint32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapUint32Fixed32 map[uint32]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1632,6 +1737,7 @@ func (m *MapUint32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -1652,6 +1758,7 @@ func (m *MapUint32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapUint32Fixed64 map[uint32]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1663,6 +1770,7 @@ func (m *MapUint32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -1683,6 +1791,7 @@ func (m *MapUint32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapUint32Sfixed32 map[uint32]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1694,6 +1803,7 @@ func (m *MapUint32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -1714,6 +1824,7 @@ func (m *MapUint32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapUint32Sfixed64 map[uint32]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1725,6 +1836,7 @@ func (m *MapUint32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -1745,6 +1857,7 @@ func (m *MapUint32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapUint32Float map[uint32]float32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1756,6 +1869,7 @@ func (m *MapUint32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -1776,6 +1890,7 @@ func (m *MapUint32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapUint32Double map[uint32]float64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1787,6 +1902,7 @@ func (m *MapUint32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -1807,6 +1923,7 @@ func (m *MapUint32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapUint32String map[uint32]string
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1818,6 +1935,7 @@ func (m *MapUint32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -1838,6 +1956,7 @@ func (m *MapUint32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapUint32Bytes map[uint32][]byte
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1849,6 +1968,7 @@ func (m *MapUint32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -1869,6 +1989,7 @@ func (m *MapUint32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapUint64Bool map[uint64]bool
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1880,6 +2001,7 @@ func (m *MapUint64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -1900,6 +2022,7 @@ func (m *MapUint64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapUint64Int32 map[uint64]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1911,6 +2034,7 @@ func (m *MapUint64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -1931,6 +2055,7 @@ func (m *MapUint64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapUint64Int64 map[uint64]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1942,6 +2067,7 @@ func (m *MapUint64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -1962,6 +2088,7 @@ func (m *MapUint64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapUint64Uint32 map[uint64]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -1973,6 +2100,7 @@ func (m *MapUint64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -1993,6 +2121,7 @@ func (m *MapUint64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapUint64Uint64 map[uint64]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2004,6 +2133,7 @@ func (m *MapUint64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -2024,6 +2154,7 @@ func (m *MapUint64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapUint64Sint32 map[uint64]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2035,6 +2166,7 @@ func (m *MapUint64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -2055,6 +2187,7 @@ func (m *MapUint64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapUint64Sint64 map[uint64]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2066,6 +2199,7 @@ func (m *MapUint64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -2086,6 +2220,7 @@ func (m *MapUint64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapUint64Fixed32 map[uint64]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2097,6 +2232,7 @@ func (m *MapUint64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -2117,6 +2253,7 @@ func (m *MapUint64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapUint64Fixed64 map[uint64]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2128,6 +2265,7 @@ func (m *MapUint64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -2148,6 +2286,7 @@ func (m *MapUint64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapUint64Sfixed32 map[uint64]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2159,6 +2298,7 @@ func (m *MapUint64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -2179,6 +2319,7 @@ func (m *MapUint64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapUint64Sfixed64 map[uint64]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2190,6 +2331,7 @@ func (m *MapUint64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -2210,6 +2352,7 @@ func (m *MapUint64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapUint64Float map[uint64]float32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2221,6 +2364,7 @@ func (m *MapUint64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -2241,6 +2385,7 @@ func (m *MapUint64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapUint64Double map[uint64]float64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2252,6 +2397,7 @@ func (m *MapUint64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -2272,6 +2418,7 @@ func (m *MapUint64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapUint64String map[uint64]string
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2283,6 +2430,7 @@ func (m *MapUint64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -2303,6 +2451,7 @@ func (m *MapUint64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapUint64Bytes map[uint64][]byte
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2314,6 +2463,7 @@ func (m *MapUint64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapUint64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -2334,6 +2484,7 @@ func (m *MapUint64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapSint32Bool map[int32]bool
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2345,6 +2496,7 @@ func (m *MapSint32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -2365,6 +2517,7 @@ func (m *MapSint32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapSint32Int32 map[int32]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2376,6 +2529,7 @@ func (m *MapSint32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -2396,6 +2550,7 @@ func (m *MapSint32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapSint32Int64 map[int32]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2407,6 +2562,7 @@ func (m *MapSint32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -2427,6 +2583,7 @@ func (m *MapSint32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapSint32Uint32 map[int32]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2438,6 +2595,7 @@ func (m *MapSint32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -2458,6 +2616,7 @@ func (m *MapSint32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapSint32Uint64 map[int32]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2469,6 +2628,7 @@ func (m *MapSint32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -2489,6 +2649,7 @@ func (m *MapSint32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapSint32Sint32 map[int32]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2500,6 +2661,7 @@ func (m *MapSint32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -2520,6 +2682,7 @@ func (m *MapSint32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapSint32Sint64 map[int32]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2531,6 +2694,7 @@ func (m *MapSint32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -2551,6 +2715,7 @@ func (m *MapSint32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapSint32Fixed32 map[int32]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2562,6 +2727,7 @@ func (m *MapSint32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -2582,6 +2748,7 @@ func (m *MapSint32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapSint32Fixed64 map[int32]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2593,6 +2760,7 @@ func (m *MapSint32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -2613,6 +2781,7 @@ func (m *MapSint32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapSint32Sfixed32 map[int32]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2624,6 +2793,7 @@ func (m *MapSint32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -2644,6 +2814,7 @@ func (m *MapSint32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSint32Sfixed64 map[int32]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2655,6 +2826,7 @@ func (m *MapSint32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -2675,6 +2847,7 @@ func (m *MapSint32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSint32Float map[int32]float32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2686,6 +2859,7 @@ func (m *MapSint32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -2706,6 +2880,7 @@ func (m *MapSint32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapSint32Double map[int32]float64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2717,6 +2892,7 @@ func (m *MapSint32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -2737,6 +2913,7 @@ func (m *MapSint32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapSint32String map[int32]string
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2748,6 +2925,7 @@ func (m *MapSint32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -2768,6 +2946,7 @@ func (m *MapSint32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapSint32Bytes map[int32][]byte
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2779,6 +2958,7 @@ func (m *MapSint32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -2799,6 +2979,7 @@ func (m *MapSint32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapSint64Bool map[int64]bool
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2810,6 +2991,7 @@ func (m *MapSint64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -2830,6 +3012,7 @@ func (m *MapSint64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapSint64Int32 map[int64]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2841,6 +3024,7 @@ func (m *MapSint64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -2861,6 +3045,7 @@ func (m *MapSint64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapSint64Int64 map[int64]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2872,6 +3057,7 @@ func (m *MapSint64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -2892,6 +3078,7 @@ func (m *MapSint64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapSint64Uint32 map[int64]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2903,6 +3090,7 @@ func (m *MapSint64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -2923,6 +3111,7 @@ func (m *MapSint64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapSint64Uint64 map[int64]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2934,6 +3123,7 @@ func (m *MapSint64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -2954,6 +3144,7 @@ func (m *MapSint64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapSint64Sint32 map[int64]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2965,6 +3156,7 @@ func (m *MapSint64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -2985,6 +3177,7 @@ func (m *MapSint64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapSint64Sint64 map[int64]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -2996,6 +3189,7 @@ func (m *MapSint64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -3016,6 +3210,7 @@ func (m *MapSint64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapSint64Fixed32 map[int64]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3027,6 +3222,7 @@ func (m *MapSint64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -3047,6 +3243,7 @@ func (m *MapSint64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapSint64Fixed64 map[int64]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3058,6 +3255,7 @@ func (m *MapSint64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -3078,6 +3276,7 @@ func (m *MapSint64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapSint64Sfixed32 map[int64]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3089,6 +3288,7 @@ func (m *MapSint64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -3109,6 +3309,7 @@ func (m *MapSint64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSint64Sfixed64 map[int64]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3120,6 +3321,7 @@ func (m *MapSint64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -3140,6 +3342,7 @@ func (m *MapSint64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSint64Float map[int64]float32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3151,6 +3354,7 @@ func (m *MapSint64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -3171,6 +3375,7 @@ func (m *MapSint64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapSint64Double map[int64]float64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3182,6 +3387,7 @@ func (m *MapSint64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -3202,6 +3408,7 @@ func (m *MapSint64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapSint64String map[int64]string
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3213,6 +3420,7 @@ func (m *MapSint64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -3233,6 +3441,7 @@ func (m *MapSint64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapSint64Bytes map[int64][]byte
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3244,6 +3453,7 @@ func (m *MapSint64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSint64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -3264,6 +3474,7 @@ func (m *MapSint64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapFixed32Bool map[uint32]bool
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3275,6 +3486,7 @@ func (m *MapFixed32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -3295,6 +3507,7 @@ func (m *MapFixed32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapFixed32Int32 map[uint32]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3306,6 +3519,7 @@ func (m *MapFixed32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -3326,6 +3540,7 @@ func (m *MapFixed32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapFixed32Int64 map[uint32]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3337,6 +3552,7 @@ func (m *MapFixed32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -3357,6 +3573,7 @@ func (m *MapFixed32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapFixed32Uint32 map[uint32]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3368,6 +3585,7 @@ func (m *MapFixed32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -3388,6 +3606,7 @@ func (m *MapFixed32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapFixed32Uint64 map[uint32]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3399,6 +3618,7 @@ func (m *MapFixed32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -3419,6 +3639,7 @@ func (m *MapFixed32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapFixed32Sint32 map[uint32]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3430,6 +3651,7 @@ func (m *MapFixed32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -3450,6 +3672,7 @@ func (m *MapFixed32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapFixed32Sint64 map[uint32]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3461,6 +3684,7 @@ func (m *MapFixed32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -3481,6 +3705,7 @@ func (m *MapFixed32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapFixed32Fixed32 map[uint32]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3492,6 +3717,7 @@ func (m *MapFixed32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -3512,6 +3738,7 @@ func (m *MapFixed32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapFixed32Fixed64 map[uint32]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3523,6 +3750,7 @@ func (m *MapFixed32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -3543,6 +3771,7 @@ func (m *MapFixed32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapFixed32Sfixed32 map[uint32]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3554,6 +3783,7 @@ func (m *MapFixed32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -3574,6 +3804,7 @@ func (m *MapFixed32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 type MapFixed32Sfixed64 map[uint32]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3585,6 +3816,7 @@ func (m *MapFixed32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -3605,6 +3837,7 @@ func (m *MapFixed32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 type MapFixed32Float map[uint32]float32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3616,6 +3849,7 @@ func (m *MapFixed32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -3636,6 +3870,7 @@ func (m *MapFixed32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapFixed32Double map[uint32]float64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3647,6 +3882,7 @@ func (m *MapFixed32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -3667,6 +3903,7 @@ func (m *MapFixed32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapFixed32String map[uint32]string
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3678,6 +3915,7 @@ func (m *MapFixed32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -3698,6 +3936,7 @@ func (m *MapFixed32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapFixed32Bytes map[uint32][]byte
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3709,6 +3948,7 @@ func (m *MapFixed32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint32
@@ -3729,6 +3969,7 @@ func (m *MapFixed32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapFixed64Bool map[uint64]bool
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3740,6 +3981,7 @@ func (m *MapFixed64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -3760,6 +4002,7 @@ func (m *MapFixed64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapFixed64Int32 map[uint64]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3771,6 +4014,7 @@ func (m *MapFixed64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -3791,6 +4035,7 @@ func (m *MapFixed64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapFixed64Int64 map[uint64]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3802,6 +4047,7 @@ func (m *MapFixed64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -3822,6 +4068,7 @@ func (m *MapFixed64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapFixed64Uint32 map[uint64]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3833,6 +4080,7 @@ func (m *MapFixed64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -3853,6 +4101,7 @@ func (m *MapFixed64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapFixed64Uint64 map[uint64]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3864,6 +4113,7 @@ func (m *MapFixed64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -3884,6 +4134,7 @@ func (m *MapFixed64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapFixed64Sint32 map[uint64]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3895,6 +4146,7 @@ func (m *MapFixed64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -3915,6 +4167,7 @@ func (m *MapFixed64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapFixed64Sint64 map[uint64]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3926,6 +4179,7 @@ func (m *MapFixed64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -3946,6 +4200,7 @@ func (m *MapFixed64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapFixed64Fixed32 map[uint64]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3957,6 +4212,7 @@ func (m *MapFixed64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -3977,6 +4233,7 @@ func (m *MapFixed64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapFixed64Fixed64 map[uint64]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -3988,6 +4245,7 @@ func (m *MapFixed64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -4008,6 +4266,7 @@ func (m *MapFixed64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapFixed64Sfixed32 map[uint64]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4019,6 +4278,7 @@ func (m *MapFixed64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -4039,6 +4299,7 @@ func (m *MapFixed64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 type MapFixed64Sfixed64 map[uint64]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4050,6 +4311,7 @@ func (m *MapFixed64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -4070,6 +4332,7 @@ func (m *MapFixed64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 type MapFixed64Float map[uint64]float32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4081,6 +4344,7 @@ func (m *MapFixed64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -4101,6 +4365,7 @@ func (m *MapFixed64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapFixed64Double map[uint64]float64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4112,6 +4377,7 @@ func (m *MapFixed64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -4132,6 +4398,7 @@ func (m *MapFixed64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapFixed64String map[uint64]string
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4143,6 +4410,7 @@ func (m *MapFixed64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -4163,6 +4431,7 @@ func (m *MapFixed64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapFixed64Bytes map[uint64][]byte
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4174,6 +4443,7 @@ func (m *MapFixed64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapFixed64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key uint64
@@ -4194,6 +4464,7 @@ func (m *MapFixed64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapSfixed32Bool map[int32]bool
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4205,6 +4476,7 @@ func (m *MapSfixed32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -4225,6 +4497,7 @@ func (m *MapSfixed32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapSfixed32Int32 map[int32]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4236,6 +4509,7 @@ func (m *MapSfixed32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -4256,6 +4530,7 @@ func (m *MapSfixed32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapSfixed32Int64 map[int32]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4267,6 +4542,7 @@ func (m *MapSfixed32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -4287,6 +4563,7 @@ func (m *MapSfixed32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapSfixed32Uint32 map[int32]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4298,6 +4575,7 @@ func (m *MapSfixed32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -4318,6 +4596,7 @@ func (m *MapSfixed32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSfixed32Uint64 map[int32]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4329,6 +4608,7 @@ func (m *MapSfixed32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -4349,6 +4629,7 @@ func (m *MapSfixed32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSfixed32Sint32 map[int32]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4360,6 +4641,7 @@ func (m *MapSfixed32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -4380,6 +4662,7 @@ func (m *MapSfixed32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSfixed32Sint64 map[int32]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4391,6 +4674,7 @@ func (m *MapSfixed32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -4411,6 +4695,7 @@ func (m *MapSfixed32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSfixed32Fixed32 map[int32]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4422,6 +4707,7 @@ func (m *MapSfixed32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -4442,6 +4728,7 @@ func (m *MapSfixed32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 type MapSfixed32Fixed64 map[int32]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4453,6 +4740,7 @@ func (m *MapSfixed32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -4473,6 +4761,7 @@ func (m *MapSfixed32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 type MapSfixed32Sfixed32 map[int32]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4484,6 +4773,7 @@ func (m *MapSfixed32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -4504,6 +4794,7 @@ func (m *MapSfixed32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Fie
 type MapSfixed32Sfixed64 map[int32]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4515,6 +4806,7 @@ func (m *MapSfixed32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -4535,6 +4827,7 @@ func (m *MapSfixed32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Fie
 type MapSfixed32Float map[int32]float32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4546,6 +4839,7 @@ func (m *MapSfixed32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -4566,6 +4860,7 @@ func (m *MapSfixed32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapSfixed32Double map[int32]float64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4577,6 +4872,7 @@ func (m *MapSfixed32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -4597,6 +4893,7 @@ func (m *MapSfixed32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSfixed32String map[int32]string
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4608,6 +4905,7 @@ func (m *MapSfixed32String) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -4628,6 +4926,7 @@ func (m *MapSfixed32String) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSfixed32Bytes map[int32][]byte
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4639,6 +4938,7 @@ func (m *MapSfixed32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int32
@@ -4659,6 +4959,7 @@ func (m *MapSfixed32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapSfixed64Bool map[int64]bool
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4670,6 +4971,7 @@ func (m *MapSfixed64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -4690,6 +4992,7 @@ func (m *MapSfixed64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapSfixed64Int32 map[int64]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4701,6 +5004,7 @@ func (m *MapSfixed64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -4721,6 +5025,7 @@ func (m *MapSfixed64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapSfixed64Int64 map[int64]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4732,6 +5037,7 @@ func (m *MapSfixed64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -4752,6 +5058,7 @@ func (m *MapSfixed64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapSfixed64Uint32 map[int64]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4763,6 +5070,7 @@ func (m *MapSfixed64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -4783,6 +5091,7 @@ func (m *MapSfixed64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSfixed64Uint64 map[int64]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4794,6 +5103,7 @@ func (m *MapSfixed64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -4814,6 +5124,7 @@ func (m *MapSfixed64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSfixed64Sint32 map[int64]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4825,6 +5136,7 @@ func (m *MapSfixed64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -4845,6 +5157,7 @@ func (m *MapSfixed64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSfixed64Sint64 map[int64]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4856,6 +5169,7 @@ func (m *MapSfixed64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -4876,6 +5190,7 @@ func (m *MapSfixed64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSfixed64Fixed32 map[int64]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4887,6 +5202,7 @@ func (m *MapSfixed64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -4907,6 +5223,7 @@ func (m *MapSfixed64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 type MapSfixed64Fixed64 map[int64]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4918,6 +5235,7 @@ func (m *MapSfixed64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -4938,6 +5256,7 @@ func (m *MapSfixed64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 type MapSfixed64Sfixed32 map[int64]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4949,6 +5268,7 @@ func (m *MapSfixed64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -4969,6 +5289,7 @@ func (m *MapSfixed64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Fie
 type MapSfixed64Sfixed64 map[int64]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -4980,6 +5301,7 @@ func (m *MapSfixed64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -5000,6 +5322,7 @@ func (m *MapSfixed64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Fie
 type MapSfixed64Float map[int64]float32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5011,6 +5334,7 @@ func (m *MapSfixed64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -5031,6 +5355,7 @@ func (m *MapSfixed64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapSfixed64Double map[int64]float64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5042,6 +5367,7 @@ func (m *MapSfixed64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -5062,6 +5388,7 @@ func (m *MapSfixed64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSfixed64String map[int64]string
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5073,6 +5400,7 @@ func (m *MapSfixed64String) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -5093,6 +5421,7 @@ func (m *MapSfixed64String) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapSfixed64Bytes map[int64][]byte
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5104,6 +5433,7 @@ func (m *MapSfixed64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapSfixed64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key int64
@@ -5124,6 +5454,7 @@ func (m *MapSfixed64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapStringBool map[string]bool
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapStringBool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5135,6 +5466,7 @@ func (m *MapStringBool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapStringBool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
@@ -5155,6 +5487,7 @@ func (m *MapStringBool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 type MapStringInt32 map[string]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapStringInt32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5166,6 +5499,7 @@ func (m *MapStringInt32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapStringInt32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
@@ -5186,6 +5520,7 @@ func (m *MapStringInt32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapStringInt64 map[string]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapStringInt64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5197,6 +5532,7 @@ func (m *MapStringInt64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapStringInt64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
@@ -5217,6 +5553,7 @@ func (m *MapStringInt64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapStringUint32 map[string]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapStringUint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5228,6 +5565,7 @@ func (m *MapStringUint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapStringUint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
@@ -5248,6 +5586,7 @@ func (m *MapStringUint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapStringUint64 map[string]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapStringUint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5259,6 +5598,7 @@ func (m *MapStringUint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapStringUint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
@@ -5279,6 +5619,7 @@ func (m *MapStringUint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapStringSint32 map[string]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapStringSint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5290,6 +5631,7 @@ func (m *MapStringSint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapStringSint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
@@ -5310,6 +5652,7 @@ func (m *MapStringSint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapStringSint64 map[string]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapStringSint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5321,6 +5664,7 @@ func (m *MapStringSint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapStringSint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
@@ -5341,6 +5685,7 @@ func (m *MapStringSint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapStringFixed32 map[string]uint32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapStringFixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5352,6 +5697,7 @@ func (m *MapStringFixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapStringFixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
@@ -5372,6 +5718,7 @@ func (m *MapStringFixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapStringFixed64 map[string]uint64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapStringFixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5383,6 +5730,7 @@ func (m *MapStringFixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapStringFixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
@@ -5403,6 +5751,7 @@ func (m *MapStringFixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 type MapStringSfixed32 map[string]int32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapStringSfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5414,6 +5763,7 @@ func (m *MapStringSfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapStringSfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
@@ -5434,6 +5784,7 @@ func (m *MapStringSfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapStringSfixed64 map[string]int64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapStringSfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5445,6 +5796,7 @@ func (m *MapStringSfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapStringSfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
@@ -5465,6 +5817,7 @@ func (m *MapStringSfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 type MapStringFloat map[string]float32
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapStringFloat) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5476,6 +5829,7 @@ func (m *MapStringFloat) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapStringFloat) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
@@ -5496,6 +5850,7 @@ func (m *MapStringFloat) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 type MapStringDouble map[string]float64
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapStringDouble) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5507,6 +5862,7 @@ func (m *MapStringDouble) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapStringDouble) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
@@ -5527,6 +5883,7 @@ func (m *MapStringDouble) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapStringString map[string]string
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapStringString) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5538,6 +5895,7 @@ func (m *MapStringString) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapStringString) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string
@@ -5558,6 +5916,7 @@ func (m *MapStringString) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 type MapStringBytes map[string][]byte
 
 // PicoEncode encodes as protobuf.
+//
 //go:noinline
 func (m *MapStringBytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
@@ -5569,6 +5928,7 @@ func (m *MapStringBytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 }
 
 // PicoDecode decodes as protobuf.
+//
 //go:noinline
 func (m *MapStringBytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var key string

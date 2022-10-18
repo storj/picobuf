@@ -558,8 +558,8 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 			info.baseType = qualifiedIdent(gf, opts.CustomType)
 			info.kind = kindCustom
 		}
-		if opts.CustomCast != "" {
-			info.castType = qualifiedIdent(gf, opts.CustomCast)
+		if opts.CustomSerialize != "" {
+			info.castType = qualifiedIdent(gf, opts.CustomSerialize)
 			info.kind = kindCast
 		}
 	}
