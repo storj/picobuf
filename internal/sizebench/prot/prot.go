@@ -10,6 +10,7 @@ import (
 )
 
 // Test tests serialization of v.
+//
 //go:noinline
 func Test(v proto.Message) {
 	data, _ := proto.Marshal(v)

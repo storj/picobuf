@@ -28,18 +28,21 @@ func NewEncoderBuffer(buffer []byte) *Encoder {
 func (enc *Encoder) Buffer() []byte { return enc.buffer }
 
 // Message decodes a message.
+//
 //go:noinline
 func (enc *Encoder) Message(field FieldNumber, fn func(enc *Encoder) bool) {
 	enc.anyBytes(field, func() bool { return fn(enc) })
 }
 
 // AlwaysMessage encodes an message always.
+//
 //go:noinline
 func (enc *Encoder) AlwaysMessage(field FieldNumber, fn func(enc *Encoder) bool) {
 	enc.alwaysAnyBytes(field, func() { fn(enc) })
 }
 
 // PresentMessage encodes an always present message.
+//
 //go:noinline
 func (enc *Encoder) PresentMessage(field FieldNumber, fn func(enc *Encoder) bool) {
 	enc.anyBytes(field, func() bool {
@@ -50,6 +53,7 @@ func (enc *Encoder) PresentMessage(field FieldNumber, fn func(enc *Encoder) bool
 }
 
 // RepeatedEnum encodes a repeated enumeration.
+//
 //go:noinline
 func (enc *Encoder) RepeatedEnum(field FieldNumber, n int, fn func(index uint) int32) {
 	if n == 0 {

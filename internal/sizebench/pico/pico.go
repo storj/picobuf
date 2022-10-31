@@ -10,6 +10,7 @@ import (
 )
 
 // Test tests serialization of v.
+//
 //go:noinline
 func Test(v picobuf.Message) {
 	data, _ := picobuf.Marshal(v)
