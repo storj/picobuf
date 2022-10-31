@@ -5,7 +5,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -47,7 +46,7 @@ func main() {
 }
 
 func run() error {
-	tempdir, err := ioutil.TempDir("", "sizebench")
+	tempdir, err := os.MkdirTemp("", "sizebench")
 	if err != nil {
 		log.Fatal(err)
 	}

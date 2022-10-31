@@ -7,8 +7,8 @@ import (
 	"bytes"
 	"fmt"
 	"go/format"
-	"io/ioutil"
 	"log"
+	"os"
 	"path/filepath"
 	"reflect"
 	"strings"
@@ -114,17 +114,17 @@ var types = []PrimitiveType{
 func main() {
 	var err error
 
-	err = ioutil.WriteFile("encoder_types.go", generateEncoder(), 0644)
+	err = os.WriteFile("encoder_types.go", generateEncoder(), 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = ioutil.WriteFile("decoder_types.go", generateDecoder(), 0644)
+	err = os.WriteFile("decoder_types.go", generateDecoder(), 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = ioutil.WriteFile(filepath.Join("picowire", "map.go"), generateMaps(), 0644)
+	err = os.WriteFile(filepath.Join("picowire", "map.go"), generateMaps(), 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
