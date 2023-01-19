@@ -90,25 +90,7 @@ pipeline {
 
                 stage('Go Compatibility') {
                     steps {
-                        sh 'GOOS=linux   GOARCH=amd64 go build ./...'
-                        sh 'GOOS=linux   GOARCH=386   go build ./...'
-                        sh 'GOOS=linux   GOARCH=arm64 go build ./...'
-                        sh 'GOOS=linux   GOARCH=arm   go build ./...'
-                        sh 'GOOS=windows GOARCH=amd64 go build ./...'
-                        sh 'GOOS=windows GOARCH=386   go build ./...'
-                        sh 'GOOS=windows GOARCH=arm64 go build ./...'
-                        sh 'GOOS=darwin  GOARCH=amd64 go build ./...'
-                        sh 'GOOS=darwin  GOARCH=arm64 go build ./...'
-
-                        /* TODO: replace this with go1.17
-                        sh 'GOOS=linux   GOARCH=amd64 go1.14 build ./...'
-                        sh 'GOOS=linux   GOARCH=386   go1.14 build ./...'
-                        sh 'GOOS=linux   GOARCH=arm64 go1.14 build ./...'
-                        sh 'GOOS=linux   GOARCH=arm   go1.14 build ./...'
-                        sh 'GOOS=windows GOARCH=amd64 go1.14 build ./...'
-                        sh 'GOOS=windows GOARCH=386   go1.14 build ./...'
-                        sh 'GOOS=darwin  GOARCH=amd64 go1.14 build ./...'
-                        */
+                        sh 'check-cross-compile -compiler "go,go.min" storj.io/picobuf/...'
                     }
                 }
             }
