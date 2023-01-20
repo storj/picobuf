@@ -293,32 +293,34 @@ func (m *Person) Decode(c *picobuf.Decoder) {
 }
 
 type Map struct {
-	StringString   map[string]string  `json:"string_string,omitzero"`
-	StringInt32    map[string]int32   `json:"string_int32,omitzero"`
-	StringInt64    map[string]int64   `json:"string_int64,omitzero"`
-	StringUint32   map[string]uint32  `json:"string_uint32,omitzero"`
-	StringUint64   map[string]uint64  `json:"string_uint64,omitzero"`
-	StringSint32   map[string]int32   `json:"string_sint32,omitzero"`
-	StringSint64   map[string]int64   `json:"string_sint64,omitzero"`
-	StringFixed32  map[string]uint32  `json:"string_fixed32,omitzero"`
-	StringFixed64  map[string]uint64  `json:"string_fixed64,omitzero"`
-	StringSfixed32 map[string]int32   `json:"string_sfixed32,omitzero"`
-	StringSfixed64 map[string]int64   `json:"string_sfixed64,omitzero"`
-	StringFloat    map[string]float32 `json:"string_float,omitzero"`
-	StringDouble   map[string]float64 `json:"string_double,omitzero"`
-	StringBool     map[string]bool    `json:"string_bool,omitzero"`
-	StringBytes    map[string][]byte  `json:"string_bytes,omitzero"`
-	Int32String    map[int32]string   `json:"int32_string,omitzero"`
-	Int64String    map[int64]string   `json:"int64_string,omitzero"`
-	Uint32String   map[uint32]string  `json:"uint32_string,omitzero"`
-	Uint64String   map[uint64]string  `json:"uint64_string,omitzero"`
-	Sint32String   map[int32]string   `json:"sint32_string,omitzero"`
-	Sint64String   map[int64]string   `json:"sint64_string,omitzero"`
-	Fixed32String  map[uint32]string  `json:"fixed32_string,omitzero"`
-	Fixed64String  map[uint64]string  `json:"fixed64_string,omitzero"`
-	Sfixed32String map[int32]string   `json:"sfixed32_string,omitzero"`
-	Sfixed64String map[int64]string   `json:"sfixed64_string,omitzero"`
-	BoolString     map[bool]string    `json:"bool_string,omitzero"`
+	StringString   map[string]string           `json:"string_string,omitzero"`
+	StringInt32    map[string]int32            `json:"string_int32,omitzero"`
+	StringInt64    map[string]int64            `json:"string_int64,omitzero"`
+	StringUint32   map[string]uint32           `json:"string_uint32,omitzero"`
+	StringUint64   map[string]uint64           `json:"string_uint64,omitzero"`
+	StringSint32   map[string]int32            `json:"string_sint32,omitzero"`
+	StringSint64   map[string]int64            `json:"string_sint64,omitzero"`
+	StringFixed32  map[string]uint32           `json:"string_fixed32,omitzero"`
+	StringFixed64  map[string]uint64           `json:"string_fixed64,omitzero"`
+	StringSfixed32 map[string]int32            `json:"string_sfixed32,omitzero"`
+	StringSfixed64 map[string]int64            `json:"string_sfixed64,omitzero"`
+	StringFloat    map[string]float32          `json:"string_float,omitzero"`
+	StringDouble   map[string]float64          `json:"string_double,omitzero"`
+	StringBool     map[string]bool             `json:"string_bool,omitzero"`
+	StringBytes    map[string][]byte           `json:"string_bytes,omitzero"`
+	Int32String    map[int32]string            `json:"int32_string,omitzero"`
+	Int64String    map[int64]string            `json:"int64_string,omitzero"`
+	Uint32String   map[uint32]string           `json:"uint32_string,omitzero"`
+	Uint64String   map[uint64]string           `json:"uint64_string,omitzero"`
+	Sint32String   map[int32]string            `json:"sint32_string,omitzero"`
+	Sint64String   map[int64]string            `json:"sint64_string,omitzero"`
+	Fixed32String  map[uint32]string           `json:"fixed32_string,omitzero"`
+	Fixed64String  map[uint64]string           `json:"fixed64_string,omitzero"`
+	Sfixed32String map[int32]string            `json:"sfixed32_string,omitzero"`
+	Sfixed64String map[int64]string            `json:"sfixed64_string,omitzero"`
+	BoolString     map[bool]string             `json:"bool_string,omitzero"`
+	StringEnum     map[string]Language         `json:"string_enum,omitzero"`
+	StringMessage  map[string]*OptionalMessage `json:"string_message,omitzero"`
 }
 
 func (m *Map) Encode(c *picobuf.Encoder) bool {
@@ -351,6 +353,8 @@ func (m *Map) Encode(c *picobuf.Encoder) bool {
 	(*picowire.MapSfixed32String)(&m.Sfixed32String).PicoEncode(c, 25)
 	(*picowire.MapSfixed64String)(&m.Sfixed64String).PicoEncode(c, 26)
 	(*picowire.MapBoolString)(&m.BoolString).PicoEncode(c, 27)
+	(*picowire.MapOf[string, Language, picowire.StringCodec, picowire.EnumCodec[Language]])(&m.StringEnum).PicoEncode(c, 28)
+	(*picowire.MapOf[string, *OptionalMessage, picowire.StringCodec, picowire.MessageCodec[OptionalMessage, *OptionalMessage]])(&m.StringMessage).PicoEncode(c, 29)
 	return true
 }
 
@@ -384,6 +388,8 @@ func (m *Map) Decode(c *picobuf.Decoder) {
 	(*picowire.MapSfixed32String)(&m.Sfixed32String).PicoDecode(c, 25)
 	(*picowire.MapSfixed64String)(&m.Sfixed64String).PicoDecode(c, 26)
 	(*picowire.MapBoolString)(&m.BoolString).PicoDecode(c, 27)
+	(*picowire.MapOf[string, Language, picowire.StringCodec, picowire.EnumCodec[Language]])(&m.StringEnum).PicoDecode(c, 28)
+	(*picowire.MapOf[string, *OptionalMessage, picowire.StringCodec, picowire.MessageCodec[OptionalMessage, *OptionalMessage]])(&m.StringMessage).PicoDecode(c, 29)
 }
 
 type OptionalMessage struct {

@@ -340,6 +340,22 @@ func generateMaps() []byte {
 	pf(`import "storj.io/picobuf"`)
 	pf("\n")
 
+	for _, t := range types {
+		codec := t.Name + "Codec"
+		pf("// %s encodes and decodes %s map entries.\n", codec, strings.ToLower(t.Name))
+		pf("type %s struct{}\n\n", codec)
+
+		pf("// PicoEncode encodes a map entry key or value.\n")
+		pf("func(%s) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *%s) {\n", codec, t.TypeName())
+		pf("   enc.%s(field, value)\n", t.Name)
+		pf("}\n\n")
+
+		pf("// PicoDecode decodes a map entry key or value.\n")
+		pf("func(%s) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *%s) {\n", codec, t.TypeName())
+		pf("   dec.%s(field, value)\n", t.Name)
+		pf("}\n\n")
+	}
+
 	for _, key := range types {
 		if !key.IsValidMapKey() {
 			continue

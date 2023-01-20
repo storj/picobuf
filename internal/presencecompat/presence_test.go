@@ -385,6 +385,66 @@ func TestEditionsNestedLegacyRequiredMatchesProtobuf(t *testing.T) {
 	}
 }
 
+func TestEditionsMapLegacyRequiredMatchesProtobuf(t *testing.T) {
+	t.Run("nil value", func(t *testing.T) {
+		if _, err := proto.Marshal(&editionprot.RequiredMapParent{
+			Children: map[string]*editionprot.RequiredMessage{"a": nil},
+		}); err == nil {
+			t.Fatal("protobuf marshaled a nil map value with a missing required field")
+		}
+		message := &editionpico.RequiredMapParent{
+			Children: map[string]*editionpico.RequiredMessage{"a": nil},
+		}
+		if _, err := picobuf.Marshal(message); err == nil {
+			t.Error("picobuf marshaled a nil map value with a missing required field")
+		}
+		if _, err := picobuf.MarshalBuffer(message, nil); err == nil {
+			t.Error("picobuf MarshalBuffer accepted a nil map value with a missing required field")
+		}
+		if message.Children["a"] != nil {
+			t.Fatal("marshal mutated the nil map value")
+		}
+	})
+	t.Run("omitted value", func(t *testing.T) {
+		data := []byte{0x0a, 0x03, 0x0a, 0x01, 'a'}
+		var protoMessage editionprot.RequiredMapParent
+		if err := proto.Unmarshal(data, &protoMessage); err == nil {
+			t.Fatal("protobuf accepted an omitted map value with a missing required field")
+		}
+		var picoMessage editionpico.RequiredMapParent
+		if err := picobuf.Unmarshal(data, &picoMessage); err == nil {
+			t.Fatal("picobuf accepted an omitted map value with a missing required field")
+		}
+	})
+	if _, err := proto.Marshal(&editionprot.RequiredMapParent{
+		Children: map[string]*editionprot.RequiredMessage{"a": {}},
+	}); err == nil {
+		t.Fatal("protobuf marshaled a map value with a missing required field")
+	}
+	if _, err := picobuf.Marshal(&editionpico.RequiredMapParent{
+		Children: map[string]*editionpico.RequiredMessage{"a": {}},
+	}); err == nil {
+		t.Fatal("picobuf marshaled a map value with a missing required field")
+	}
+
+	// entry for key "a" with an empty message value
+	data := []byte{0x0a, 0x05, 0x0a, 0x01, 0x61, 0x12, 0x00}
+	var protoMessage editionprot.RequiredMapParent
+	if err := proto.Unmarshal(data, &protoMessage); err == nil {
+		t.Fatal("protobuf unmarshaled a map value with a missing required field")
+	}
+	var picoMessage editionpico.RequiredMapParent
+	if err := picobuf.Unmarshal(data, &picoMessage); err == nil {
+		t.Fatal("picobuf unmarshaled a map value with a missing required field")
+	}
+
+	if _, err := picobuf.Marshal(&editionpico.RequiredMapParent{
+		Children: map[string]*editionpico.RequiredMessage{"a": {RequiredNumber: new(int32)}},
+	}); err != nil {
+		t.Fatalf("picobuf rejected a valid map value: %v", err)
+	}
+}
+
 func TestRepeatedAndMapDoNotTrackPresence(t *testing.T) {
 	picoNil, err := picobuf.Marshal(&pico.Message{})
 	if err != nil {

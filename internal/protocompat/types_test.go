@@ -4,6 +4,7 @@
 package protocompat
 
 import (
+	"bytes"
 	"math"
 	"testing"
 
@@ -14,6 +15,48 @@ import (
 	"storj.io/picobuf/internal/protocompat/pico"
 	"storj.io/picobuf/internal/protocompat/prot"
 )
+
+func TestMessageMapDefaultsMatchProtobuf(t *testing.T) {
+	t.Run("marshal nil", func(t *testing.T) {
+		message := &pico.Map{StringMessage: map[string]*pico.OptionalMessage{"a": nil}}
+		got, err := picobuf.Marshal(message)
+		assert.NoError(t, err)
+		want, err := proto.Marshal(&prot.Map{StringMessage: map[string]*prot.OptionalMessage{"a": nil}})
+		assert.NoError(t, err)
+		if !bytes.Equal(got, want) {
+			t.Fatalf("encoded nil map value differs: pico %x, protobuf %x", got, want)
+		}
+		if message.StringMessage["a"] != nil {
+			t.Fatal("marshal mutated the nil map value")
+		}
+	})
+	for name, data := range map[string][]byte{
+		"omitted value": {0xea, 0x01, 0x03, 0x0a, 0x01, 'a'},
+		"empty value":   {0xea, 0x01, 0x05, 0x0a, 0x01, 'a', 0x12, 0x00},
+		"empty entry":   {0xea, 0x01, 0x00},
+		"unknown only":  {0xea, 0x01, 0x02, 0x18, 0x01},
+	} {
+		t.Run(name, func(t *testing.T) {
+			var got pico.Map
+			var want prot.Map
+			assert.NoError(t, picobuf.Unmarshal(data, &got))
+			assert.NoError(t, proto.Unmarshal(data, &want))
+			assert.Equal(t, len(got.StringMessage), len(want.StringMessage))
+			for key, value := range want.StringMessage {
+				if value == nil || got.StringMessage[key] == nil {
+					t.Fatalf("map entry %q must have a non-nil message value", key)
+				}
+			}
+			picoData, err := picobuf.Marshal(&got)
+			assert.NoError(t, err)
+			var roundtrip prot.Map
+			assert.NoError(t, proto.Unmarshal(picoData, &roundtrip))
+			if !proto.Equal(&roundtrip, &want) {
+				t.Fatalf("re-encoded map differs: got %v, want %v", &roundtrip, &want)
+			}
+		})
+	}
+}
 
 func TestDecodingMixed(t *testing.T) {
 	var x1 pico.RepeatedMixed
@@ -246,6 +289,11 @@ func TestMaps(t *testing.T) {
 			Sfixed32String: map[int32]string{1: "a"},
 			Sfixed64String: map[int64]string{1: "a"},
 			BoolString:     map[bool]string{true: "a"},
+			StringEnum:     map[string]pico.Language{"a": pico.Language_ENGLISH},
+			StringMessage:  map[string]*pico.OptionalMessage{"a": {Int32: 1}},
+		},
+		{
+			StringMessage: map[string]*pico.OptionalMessage{"empty": {}},
 		},
 	}
 
@@ -283,6 +331,7 @@ func TestMapZeroEntries(t *testing.T) {
 	test := pico.Map{
 		StringInt64: map[string]int64{"a": 1, "b": 0, "": 0},
 		BoolString:  map[bool]string{true: "a", false: ""},
+		StringEnum:  map[string]pico.Language{"a": pico.Language_ENGLISH, "zero": pico.Language_UNKNOWN},
 	}
 
 	data, err := picobuf.Marshal(&test)
@@ -298,6 +347,9 @@ func TestMapZeroEntries(t *testing.T) {
 	assert.NoError(t, err)
 	assert.DeepEqual(t, p.StringInt64, test.StringInt64)
 	assert.DeepEqual(t, p.BoolString, test.BoolString)
+	for key, value := range test.StringEnum {
+		assert.Equal(t, int32(p.StringEnum[key]), int32(value))
+	}
 }
 
 func TestEnum(t *testing.T) {

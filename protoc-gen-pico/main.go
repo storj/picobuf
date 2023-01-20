@@ -141,7 +141,6 @@ func genMessage(gf *generator, m *protogen.Message) {
 	if m.Desc.IsMapEntry() {
 		return
 	}
-
 	gf.P("type ", m.GoIdent, " struct {")
 	for _, field := range m.Fields {
 		genMessageField(gf, m, field)
@@ -743,17 +742,12 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 			keyInfo := fieldInfo(gf, nil, desc.MapKey())
 			info.key = &keyInfo
 
-			valueInfo := fieldInfo(gf, nil, desc.MapValue())
+			valueInfo := mapValueInfo(gf, field, desc.MapValue())
 			info.value = &valueInfo
 
 			info.baseType = "map[" + info.key.goType + "]" + info.value.goType
-
-			keyMethod, keyOk := codecMethodName[field.Desc.MapKey().Kind()]
-			valueMethod, valueOk := codecMethodName[field.Desc.MapValue().Kind()]
-			if keyOk && valueOk {
-				info.castType = gf.QualifiedGoIdent(picowirePackage.Ident("Map" + keyMethod + valueMethod))
-				info.kind = kindCast
-			}
+			info.castType = mapCastType(gf, &info, desc)
+			info.kind = kindCast
 			info.pointer = false
 		} else {
 			info.kind = kindMessage
@@ -802,6 +796,50 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 	}
 
 	return info
+}
+
+// mapValueInfo returns the type information for a map value. Message and enum
+// values need the synthetic map entry field to resolve their Go identifier.
+func mapValueInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDescriptor) (info fieldInformation) {
+	switch desc.Kind() {
+	case protoreflect.MessageKind, protoreflect.GroupKind:
+		info.kind = kindMessage
+		info.baseType = gf.QualifiedGoIdent(field.Message.Fields[1].Message.GoIdent)
+		info.goType = "*" + info.baseType
+	case protoreflect.EnumKind:
+		info.kind = kindEnum
+		info.baseType = gf.QualifiedGoIdent(field.Message.Fields[1].Enum.GoIdent)
+		info.goType = info.baseType
+	default:
+		info = fieldInfo(gf, nil, desc)
+	}
+	return info
+}
+
+// mapCastType returns the picowire type used to serialize the map. Maps with a
+// scalar value use the specialized implementations, the rest use MapOf with the
+// matching key and value codecs.
+func mapCastType(gf *generator, info *fieldInformation, desc protoreflect.FieldDescriptor) string {
+	keyMethod := codecMethodName[desc.MapKey().Kind()]
+	if valueMethod, ok := codecMethodName[desc.MapValue().Kind()]; ok {
+		return gf.QualifiedGoIdent(picowirePackage.Ident("Map" + keyMethod + valueMethod))
+	}
+
+	var valueCodec string
+	switch info.value.kind {
+	case kindMessage:
+		valueCodec = gf.QualifiedGoIdent(picowirePackage.Ident("MessageCodec")) +
+			"[" + info.value.baseType + ", " + info.value.goType + "]"
+	case kindEnum:
+		valueCodec = gf.QualifiedGoIdent(picowirePackage.Ident("EnumCodec")) +
+			"[" + info.value.baseType + "]"
+	default:
+		panic("unsupported map value " + desc.MapValue().Kind().String())
+	}
+
+	keyCodec := gf.QualifiedGoIdent(picowirePackage.Ident(keyMethod + "Codec"))
+	return gf.QualifiedGoIdent(picowirePackage.Ident("MapOf")) +
+		"[" + info.key.goType + ", " + info.value.goType + ", " + keyCodec + ", " + valueCodec + "]"
 }
 
 var validMapKey = map[protoreflect.Kind]bool{

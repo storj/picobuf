@@ -45,3 +45,7 @@ message RequiredMessage {
 message RequiredParent {
   RequiredMessage child = 1;
 }
+
+message RequiredMapParent {
+  map<string, RequiredMessage> children = 1;
+}

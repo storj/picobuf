@@ -12,8 +12,30 @@ import (
 	pic "storj.io/picobuf/internal/picotest/pic"
 	picoconv "storj.io/picobuf/picoconv"
 	picowire "storj.io/picobuf/picowire"
+	strconv "strconv"
 	time "time"
 )
+
+type MapEnum int32
+
+const (
+	MapEnum_MAP_ENUM_UNSPECIFIED MapEnum = 0
+	MapEnum_MAP_ENUM_FIRST       MapEnum = 1
+	MapEnum_MAP_ENUM_SECOND      MapEnum = 2
+)
+
+func (m MapEnum) String() string {
+	switch m {
+	case MapEnum_MAP_ENUM_UNSPECIFIED:
+		return "MAP_ENUM_UNSPECIFIED"
+	case MapEnum_MAP_ENUM_FIRST:
+		return "MAP_ENUM_FIRST"
+	case MapEnum_MAP_ENUM_SECOND:
+		return "MAP_ENUM_SECOND"
+	default:
+		return "MapEnum(" + strconv.Itoa(int(m)) + ")"
+	}
+}
 
 type Basic struct {
 	Byte0        int32  `json:"byte0,omitzero"`
@@ -607,6 +629,84 @@ func (m *Map) Decode(c *picobuf.Decoder) {
 }
 
 func (m *Map) GetValues() (v map[int32]int32) {
+	if m != nil {
+		return m.Values
+	}
+	return // zero
+}
+
+type GenericMap struct {
+	Values map[int32]*GenericMapValue `json:"values,omitzero"`
+}
+
+func (m *GenericMap) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	(*picowire.MapOf[int32, *GenericMapValue, picowire.Int32Codec, picowire.MessageCodec[GenericMapValue, *GenericMapValue]])(&m.Values).PicoEncode(c, 1)
+	return true
+}
+
+func (m *GenericMap) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	(*picowire.MapOf[int32, *GenericMapValue, picowire.Int32Codec, picowire.MessageCodec[GenericMapValue, *GenericMapValue]])(&m.Values).PicoDecode(c, 1)
+}
+
+func (m *GenericMap) GetValues() (v map[int32]*GenericMapValue) {
+	if m != nil {
+		return m.Values
+	}
+	return // zero
+}
+
+type GenericMapValue struct {
+	Name string `json:"name,omitzero"`
+}
+
+func (m *GenericMapValue) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.String(1, &m.Name)
+	return true
+}
+
+func (m *GenericMapValue) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.String(1, &m.Name)
+}
+
+func (m *GenericMapValue) GetName() (v string) {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+type EnumMap struct {
+	Values map[int32]MapEnum `json:"values,omitzero"`
+}
+
+func (m *EnumMap) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	(*picowire.MapOf[int32, MapEnum, picowire.Int32Codec, picowire.EnumCodec[MapEnum]])(&m.Values).PicoEncode(c, 1)
+	return true
+}
+
+func (m *EnumMap) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	(*picowire.MapOf[int32, MapEnum, picowire.Int32Codec, picowire.EnumCodec[MapEnum]])(&m.Values).PicoDecode(c, 1)
+}
+
+func (m *EnumMap) GetValues() (v map[int32]MapEnum) {
 	if m != nil {
 		return m.Values
 	}

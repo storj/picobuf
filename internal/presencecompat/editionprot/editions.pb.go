@@ -357,6 +357,50 @@ func (x *RequiredParent) GetChild() *RequiredMessage {
 	return nil
 }
 
+type RequiredMapParent struct {
+	state         protoimpl.MessageState      `protogen:"open.v1"`
+	Children      map[string]*RequiredMessage `protobuf:"bytes,1,rep,name=children" json:"children,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RequiredMapParent) Reset() {
+	*x = RequiredMapParent{}
+	mi := &file_editions_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RequiredMapParent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RequiredMapParent) ProtoMessage() {}
+
+func (x *RequiredMapParent) ProtoReflect() protoreflect.Message {
+	mi := &file_editions_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RequiredMapParent.ProtoReflect.Descriptor instead.
+func (*RequiredMapParent) Descriptor() ([]byte, []int) {
+	return file_editions_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *RequiredMapParent) GetChildren() map[string]*RequiredMessage {
+	if x != nil {
+		return x.Children
+	}
+	return nil
+}
+
 var File_editions_proto protoreflect.FileDescriptor
 
 const file_editions_proto_rawDesc = "" +
@@ -382,7 +426,12 @@ const file_editions_proto_rawDesc = "" +
 	"\x0fRequiredMessage\x12.\n" +
 	"\x0frequired_number\x18\x01 \x01(\x05B\x05\xaa\x01\x02\b\x03R\x0erequiredNumber\"P\n" +
 	"\x0eRequiredParent\x12>\n" +
-	"\x05child\x18\x01 \x01(\v2(.presencecompat.editions.RequiredMessageR\x05child*I\n" +
+	"\x05child\x18\x01 \x01(\v2(.presencecompat.editions.RequiredMessageR\x05child\"\xd0\x01\n" +
+	"\x11RequiredMapParent\x12T\n" +
+	"\bchildren\x18\x01 \x03(\v28.presencecompat.editions.RequiredMapParent.ChildrenEntryR\bchildren\x1ae\n" +
+	"\rChildrenEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12>\n" +
+	"\x05value\x18\x02 \x01(\v2(.presencecompat.editions.RequiredMessageR\x05value:\x028\x01*I\n" +
 	"\vClosedState\x12\x1c\n" +
 	"\x18CLOSED_STATE_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12CLOSED_STATE_READY\x10\x01\x1a\x04:\x02\x10\x02B\b\x92\x03\x05\xd2>\x02\x10\x01b\beditionsp\xe9\a"
@@ -400,13 +449,15 @@ func file_editions_proto_rawDescGZIP() []byte {
 }
 
 var file_editions_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_editions_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_editions_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_editions_proto_goTypes = []any{
-	(ClosedState)(0),        // 0: presencecompat.editions.ClosedState
-	(*Message)(nil),         // 1: presencecompat.editions.Message
-	(*Nested)(nil),          // 2: presencecompat.editions.Nested
-	(*RequiredMessage)(nil), // 3: presencecompat.editions.RequiredMessage
-	(*RequiredParent)(nil),  // 4: presencecompat.editions.RequiredParent
+	(ClosedState)(0),          // 0: presencecompat.editions.ClosedState
+	(*Message)(nil),           // 1: presencecompat.editions.Message
+	(*Nested)(nil),            // 2: presencecompat.editions.Nested
+	(*RequiredMessage)(nil),   // 3: presencecompat.editions.RequiredMessage
+	(*RequiredParent)(nil),    // 4: presencecompat.editions.RequiredParent
+	(*RequiredMapParent)(nil), // 5: presencecompat.editions.RequiredMapParent
+	nil,                       // 6: presencecompat.editions.RequiredMapParent.ChildrenEntry
 }
 var file_editions_proto_depIdxs = []int32{
 	2, // 0: presencecompat.editions.Message.nested:type_name -> presencecompat.editions.Nested
@@ -414,11 +465,13 @@ var file_editions_proto_depIdxs = []int32{
 	0, // 2: presencecompat.editions.Message.closed_states:type_name -> presencecompat.editions.ClosedState
 	0, // 3: presencecompat.editions.Message.selected_closed_state:type_name -> presencecompat.editions.ClosedState
 	3, // 4: presencecompat.editions.RequiredParent.child:type_name -> presencecompat.editions.RequiredMessage
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	6, // 5: presencecompat.editions.RequiredMapParent.children:type_name -> presencecompat.editions.RequiredMapParent.ChildrenEntry
+	3, // 6: presencecompat.editions.RequiredMapParent.ChildrenEntry.value:type_name -> presencecompat.editions.RequiredMessage
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_editions_proto_init() }
@@ -435,7 +488,7 @@ func file_editions_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_editions_proto_rawDesc), len(file_editions_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

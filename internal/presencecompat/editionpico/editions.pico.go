@@ -9,6 +9,7 @@ package editionpico
 
 import (
 	picobuf "storj.io/picobuf"
+	picowire "storj.io/picobuf/picowire"
 	strconv "strconv"
 )
 
@@ -229,4 +230,35 @@ func (m *RequiredParent) Decode(c *picobuf.Decoder) {
 		}
 		m.Child.Decode(c)
 	})
+}
+
+type RequiredMapParent struct {
+	Children map[string]*RequiredMessage `json:"children,omitzero"`
+}
+
+func (m *RequiredMapParent) PicoValidateRequired() error {
+	if m == nil {
+		return nil
+	}
+	for _, x := range m.Children {
+		if err := picobuf.ValidateRequired(x); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (m *RequiredMapParent) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	(*picowire.MapOf[string, *RequiredMessage, picowire.StringCodec, picowire.MessageCodec[RequiredMessage, *RequiredMessage]])(&m.Children).PicoEncode(c, 1)
+	return true
+}
+
+func (m *RequiredMapParent) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	(*picowire.MapOf[string, *RequiredMessage, picowire.StringCodec, picowire.MessageCodec[RequiredMessage, *RequiredMessage]])(&m.Children).PicoDecode(c, 1)
 }

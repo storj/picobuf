@@ -82,6 +82,24 @@ message Map {
   map<int32, int32> values = 1;
 }
 
+message GenericMap {
+  map<int32, GenericMapValue> values = 1;
+}
+
+message GenericMapValue {
+  string name = 1;
+}
+
+message EnumMap {
+  map<int32, MapEnum> values = 1;
+}
+
+enum MapEnum {
+  MAP_ENUM_UNSPECIFIED = 0;
+  MAP_ENUM_FIRST = 1;
+  MAP_ENUM_SECOND = 2;
+}
+
 message VariationsScalar {
   string value = 1;
   optional string opt = 2;

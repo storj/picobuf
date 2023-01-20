@@ -5,6 +5,201 @@ package picowire
 
 import "storj.io/picobuf"
 
+// BoolCodec encodes and decodes bool map entries.
+type BoolCodec struct{}
+
+// PicoEncode encodes a map entry key or value.
+func (BoolCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *bool) {
+	enc.Bool(field, value)
+}
+
+// PicoDecode decodes a map entry key or value.
+func (BoolCodec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *bool) {
+	dec.Bool(field, value)
+}
+
+// Int32Codec encodes and decodes int32 map entries.
+type Int32Codec struct{}
+
+// PicoEncode encodes a map entry key or value.
+func (Int32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int32) {
+	enc.Int32(field, value)
+}
+
+// PicoDecode decodes a map entry key or value.
+func (Int32Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *int32) {
+	dec.Int32(field, value)
+}
+
+// Int64Codec encodes and decodes int64 map entries.
+type Int64Codec struct{}
+
+// PicoEncode encodes a map entry key or value.
+func (Int64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int64) {
+	enc.Int64(field, value)
+}
+
+// PicoDecode decodes a map entry key or value.
+func (Int64Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *int64) {
+	dec.Int64(field, value)
+}
+
+// Uint32Codec encodes and decodes uint32 map entries.
+type Uint32Codec struct{}
+
+// PicoEncode encodes a map entry key or value.
+func (Uint32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *uint32) {
+	enc.Uint32(field, value)
+}
+
+// PicoDecode decodes a map entry key or value.
+func (Uint32Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *uint32) {
+	dec.Uint32(field, value)
+}
+
+// Uint64Codec encodes and decodes uint64 map entries.
+type Uint64Codec struct{}
+
+// PicoEncode encodes a map entry key or value.
+func (Uint64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *uint64) {
+	enc.Uint64(field, value)
+}
+
+// PicoDecode decodes a map entry key or value.
+func (Uint64Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *uint64) {
+	dec.Uint64(field, value)
+}
+
+// Sint32Codec encodes and decodes sint32 map entries.
+type Sint32Codec struct{}
+
+// PicoEncode encodes a map entry key or value.
+func (Sint32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int32) {
+	enc.Sint32(field, value)
+}
+
+// PicoDecode decodes a map entry key or value.
+func (Sint32Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *int32) {
+	dec.Sint32(field, value)
+}
+
+// Sint64Codec encodes and decodes sint64 map entries.
+type Sint64Codec struct{}
+
+// PicoEncode encodes a map entry key or value.
+func (Sint64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int64) {
+	enc.Sint64(field, value)
+}
+
+// PicoDecode decodes a map entry key or value.
+func (Sint64Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *int64) {
+	dec.Sint64(field, value)
+}
+
+// Fixed32Codec encodes and decodes fixed32 map entries.
+type Fixed32Codec struct{}
+
+// PicoEncode encodes a map entry key or value.
+func (Fixed32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *uint32) {
+	enc.Fixed32(field, value)
+}
+
+// PicoDecode decodes a map entry key or value.
+func (Fixed32Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *uint32) {
+	dec.Fixed32(field, value)
+}
+
+// Fixed64Codec encodes and decodes fixed64 map entries.
+type Fixed64Codec struct{}
+
+// PicoEncode encodes a map entry key or value.
+func (Fixed64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *uint64) {
+	enc.Fixed64(field, value)
+}
+
+// PicoDecode decodes a map entry key or value.
+func (Fixed64Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *uint64) {
+	dec.Fixed64(field, value)
+}
+
+// Sfixed32Codec encodes and decodes sfixed32 map entries.
+type Sfixed32Codec struct{}
+
+// PicoEncode encodes a map entry key or value.
+func (Sfixed32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int32) {
+	enc.Sfixed32(field, value)
+}
+
+// PicoDecode decodes a map entry key or value.
+func (Sfixed32Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *int32) {
+	dec.Sfixed32(field, value)
+}
+
+// Sfixed64Codec encodes and decodes sfixed64 map entries.
+type Sfixed64Codec struct{}
+
+// PicoEncode encodes a map entry key or value.
+func (Sfixed64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int64) {
+	enc.Sfixed64(field, value)
+}
+
+// PicoDecode decodes a map entry key or value.
+func (Sfixed64Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *int64) {
+	dec.Sfixed64(field, value)
+}
+
+// FloatCodec encodes and decodes float map entries.
+type FloatCodec struct{}
+
+// PicoEncode encodes a map entry key or value.
+func (FloatCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *float32) {
+	enc.Float(field, value)
+}
+
+// PicoDecode decodes a map entry key or value.
+func (FloatCodec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *float32) {
+	dec.Float(field, value)
+}
+
+// DoubleCodec encodes and decodes double map entries.
+type DoubleCodec struct{}
+
+// PicoEncode encodes a map entry key or value.
+func (DoubleCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *float64) {
+	enc.Double(field, value)
+}
+
+// PicoDecode decodes a map entry key or value.
+func (DoubleCodec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *float64) {
+	dec.Double(field, value)
+}
+
+// StringCodec encodes and decodes string map entries.
+type StringCodec struct{}
+
+// PicoEncode encodes a map entry key or value.
+func (StringCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *string) {
+	enc.String(field, value)
+}
+
+// PicoDecode decodes a map entry key or value.
+func (StringCodec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *string) {
+	dec.String(field, value)
+}
+
+// BytesCodec encodes and decodes bytes map entries.
+type BytesCodec struct{}
+
+// PicoEncode encodes a map entry key or value.
+func (BytesCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *[]byte) {
+	enc.Bytes(field, value)
+}
+
+// PicoDecode decodes a map entry key or value.
+func (BytesCodec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *[]byte) {
+	dec.Bytes(field, value)
+}
+
 // MapBoolBool implements map<bool,bool>.
 type MapBoolBool map[bool]bool
 

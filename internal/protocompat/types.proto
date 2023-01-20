@@ -108,6 +108,9 @@ message Map {
   map<sfixed32, string> sfixed32_string = 25;
   map<sfixed64, string> sfixed64_string = 26;
   map<bool, string>     bool_string = 27;
+
+  map<string, Language>        string_enum    = 28;
+  map<string, OptionalMessage> string_message = 29;
 }
 
 message OptionalMessage {
