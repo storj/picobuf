@@ -241,3 +241,57 @@ func TestDecoder_CustomMessageTypes_Empty(t *testing.T) {
 		PresentCustomTypeCast: time.Time{},
 	})
 }
+
+func TestDecoder_UnknownFields_Empty(t *testing.T) {
+	var decoded picotest.UnknownMessage
+	err := picobuf.Unmarshal([]byte{}, &decoded)
+	assert.NoError(t, err)
+
+	assert.DeepEqual(t, decoded, picotest.UnknownMessage{
+		Second:           0,
+		Fourth:           0,
+		XXX_unrecognized: nil,
+	})
+}
+
+func TestDecoder_UnknownFields_Decode(t *testing.T) {
+	decode := func(data []byte) picotest.UnknownMessage {
+		var decoded picotest.UnknownMessage
+		err := picobuf.Unmarshal(data, &decoded)
+		assert.NoError(t, err)
+		return decoded
+	}
+
+	assert.DeepEqual(t, picotest.UnknownMessage{
+		Second:           0x22,
+		Fourth:           0x44,
+		XXX_unrecognized: []byte{0x8, 0x13, 0x18, 0x25},
+	}, decode([]byte{
+		0x10, 0x22,
+		0x20, 0x44,
+		0x8, 0x13,
+		0x18, 0x25,
+	}))
+
+	assert.DeepEqual(t, picotest.UnknownMessage{
+		Second:           0x22,
+		Fourth:           0x44,
+		XXX_unrecognized: []byte{0x8, 0x13, 0x18, 0x25},
+	}, decode([]byte{
+		0x8, 0x13,
+		0x18, 0x25,
+		0x10, 0x22,
+		0x20, 0x44,
+	}))
+
+	assert.DeepEqual(t, picotest.UnknownMessage{
+		Second:           0x22,
+		Fourth:           0x44,
+		XXX_unrecognized: []byte{0x8, 0x13, 0x18, 0x25},
+	}, decode([]byte{
+		0x8, 0x13,
+		0x10, 0x22,
+		0x18, 0x25,
+		0x20, 0x44,
+	}))
+}

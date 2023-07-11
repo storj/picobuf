@@ -169,3 +169,9 @@ message CustomMessageTypes {
     (pico.field).custom_serialize = "storj.io/picobuf/picoconv.Timestamp"
   ];
 }
+
+message UnknownMessage {
+  option (pico.message).capture_unrecognized_fields = true;
+  int64 second = 2;
+  int64 fourth = 4;
+}

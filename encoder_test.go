@@ -150,3 +150,19 @@ func TestEncoder_CustomMessageTypes_Empty(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, data, []byte{0x1a, 0x0})
 }
+
+func TestEncoder_UnknownFields(t *testing.T) {
+	msg := &picotest.UnknownMessage{
+		Second:           0x22,
+		Fourth:           0x44,
+		XXX_unrecognized: []byte{0x8, 0x13, 0x18, 0x25},
+	}
+	data, err := picobuf.Marshal(msg)
+	assert.NoError(t, err)
+	assert.Equal(t, data, []byte{
+		0x10, 0x22,
+		0x20, 0x44,
+		0x8, 0x13,
+		0x18, 0x25,
+	})
+}

@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v3.20.3
+//     protoc:          v3.20.0
 
 package picotest
 
@@ -541,4 +541,29 @@ func (m *CustomMessageTypes) Decode(c *picobuf.Decoder) {
 		x := &m.RepeatedPresentCustomTypeCast[len(m.RepeatedPresentCustomTypeCast)-1]
 		(*picoconv.Timestamp)(x).PicoDecode(c, 9)
 	}
+}
+
+type UnknownMessage struct {
+	Second           int64 `json:"second,omitempty"`
+	Fourth           int64 `json:"fourth,omitempty"`
+	XXX_unrecognized []byte
+}
+
+func (m *UnknownMessage) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.Int64(2, &m.Second)
+	c.Int64(4, &m.Fourth)
+	c.UnknownFields(m.XXX_unrecognized)
+	return true
+}
+
+func (m *UnknownMessage) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Int64(2, &m.Second)
+	c.Int64(4, &m.Fourth)
+	c.UnknownFields(20, &m.XXX_unrecognized)
 }

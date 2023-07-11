@@ -114,6 +114,9 @@ func genMessage(gf *generator, m *protogen.Message) {
 	for _, field := range m.Fields {
 		genMessageField(gf, m, field)
 	}
+	if getMessageOpts(m).CaptureUnrecognizedFields {
+		gf.P("XXX_unrecognized", " ", "[]byte")
+	}
 	gf.P("}")
 
 	gf.P()
@@ -173,6 +176,9 @@ func genMessageEncode(gf *generator, m *protogen.Message) {
 
 	for _, field := range fields {
 		genFieldEncode(gf, field)
+	}
+	if getMessageOpts(m).CaptureUnrecognizedFields {
+		gf.P("c.UnknownFields(m.XXX_unrecognized)")
 	}
 }
 
@@ -297,6 +303,20 @@ func genMessageDecode(gf *generator, m *protogen.Message) {
 	for _, field := range fields {
 		genFieldDecode(gf, field)
 	}
+	if getMessageOpts(m).CaptureUnrecognizedFields {
+		gf.P("c.UnknownFields(", fieldsBitSet(m), ", &m.XXX_unrecognized)")
+	}
+}
+
+func fieldsBitSet(m *protogen.Message) (z uint64) {
+	for _, f := range m.Fields {
+		num := f.Desc.Number()
+		if num >= 64 {
+			panic("oh no, too many fields")
+		}
+		z |= 1 << num
+	}
+	return z
 }
 
 func genFieldDecode(gf *generator, field *protogen.Field) {
