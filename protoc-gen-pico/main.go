@@ -178,7 +178,7 @@ func genMessageEncode(gf *generator, m *protogen.Message) {
 		genFieldEncode(gf, field)
 	}
 	if getMessageOpts(m).CaptureUnrecognizedFields {
-		gf.P("c.UnknownFields(m.XXX_unrecognized)")
+		gf.P("c.UnrecognizedFields(m.XXX_unrecognized)")
 	}
 }
 
@@ -304,7 +304,7 @@ func genMessageDecode(gf *generator, m *protogen.Message) {
 		genFieldDecode(gf, field)
 	}
 	if getMessageOpts(m).CaptureUnrecognizedFields {
-		gf.P("c.UnknownFields(", fieldsBitSet(m), ", &m.XXX_unrecognized)")
+		gf.P("c.UnrecognizedFields(", fieldsBitSet(m), ", &m.XXX_unrecognized)")
 	}
 }
 

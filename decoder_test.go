@@ -242,7 +242,7 @@ func TestDecoder_CustomMessageTypes_Empty(t *testing.T) {
 	})
 }
 
-func TestDecoder_UnknownFields_Empty(t *testing.T) {
+func TestDecoder_UnrecognizedFields_Empty(t *testing.T) {
 	var decoded picotest.UnknownMessage
 	err := picobuf.Unmarshal([]byte{}, &decoded)
 	assert.NoError(t, err)
@@ -254,7 +254,7 @@ func TestDecoder_UnknownFields_Empty(t *testing.T) {
 	})
 }
 
-func TestDecoder_UnknownFields_Decode(t *testing.T) {
+func TestDecoder_UnrecognizedFields_Decode(t *testing.T) {
 	decode := func(data []byte) picotest.UnknownMessage {
 		var decoded picotest.UnknownMessage
 		err := picobuf.Unmarshal(data, &decoded)

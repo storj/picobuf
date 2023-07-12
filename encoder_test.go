@@ -151,7 +151,7 @@ func TestEncoder_CustomMessageTypes_Empty(t *testing.T) {
 	assert.Equal(t, data, []byte{0x1a, 0x0})
 }
 
-func TestEncoder_UnknownFields(t *testing.T) {
+func TestEncoder_UnrecognizedFields(t *testing.T) {
 	msg := &picotest.UnknownMessage{
 		Second:           0x22,
 		Fourth:           0x44,

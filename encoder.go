@@ -131,7 +131,7 @@ func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
 	return true
 }
 
-// UnknownFields encodes fields that are not in the provided set.
-func (enc *Encoder) UnknownFields(out []byte) {
+// UnrecognizedFields encodes fields that are not in the provided set.
+func (enc *Encoder) UnrecognizedFields(out []byte) {
 	enc.buffer = append(enc.buffer, out...)
 }

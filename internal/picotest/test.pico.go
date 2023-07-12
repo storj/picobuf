@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v3.20.0
+//     protoc:          v3.21.12
 
 package picotest
 
@@ -555,7 +555,7 @@ func (m *UnknownMessage) Encode(c *picobuf.Encoder) bool {
 	}
 	c.Int64(2, &m.Second)
 	c.Int64(4, &m.Fourth)
-	c.UnknownFields(m.XXX_unrecognized)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -565,5 +565,5 @@ func (m *UnknownMessage) Decode(c *picobuf.Decoder) {
 	}
 	c.Int64(2, &m.Second)
 	c.Int64(4, &m.Fourth)
-	c.UnknownFields(20, &m.XXX_unrecognized)
+	c.UnrecognizedFields(20, &m.XXX_unrecognized)
 }
