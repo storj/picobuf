@@ -295,3 +295,35 @@ func TestDecoder_UnrecognizedFields_Decode(t *testing.T) {
 		0x20, 0x44,
 	}))
 }
+
+func TestCodec_UnrecognizedFields(t *testing.T) {
+	initialKnown := picotest.KnownMessage{
+		First:  0x11,
+		Second: 0x22,
+		Third:  0x33,
+		Fourth: 0x44,
+	}
+
+	knownData, err := picobuf.Marshal(&initialKnown)
+	assert.NoError(t, err)
+	assert.Equal(t, knownData, []byte{0x8, 0x11, 0x10, 0x22, 0x18, 0x33, 0x20, 0x44})
+
+	unknown := picotest.UnknownMessage{}
+	err = picobuf.Unmarshal(knownData, &unknown)
+	assert.NoError(t, err)
+
+	assert.DeepEqual(t, unknown, picotest.UnknownMessage{
+		Second:           0x22,
+		Fourth:           0x44,
+		XXX_unrecognized: []byte{0x8, 0x11, 0x18, 0x33},
+	})
+
+	unknownData, err := picobuf.Marshal(&unknown)
+	assert.NoError(t, err)
+	assert.Equal(t, unknownData, []byte{0x10, 0x22, 0x20, 0x44, 0x8, 0x11, 0x18, 0x33})
+
+	parsedKnown := picotest.KnownMessage{}
+	err = picobuf.Unmarshal(unknownData, &parsedKnown)
+	assert.NoError(t, err)
+	assert.DeepEqual(t, parsedKnown, initialKnown)
+}

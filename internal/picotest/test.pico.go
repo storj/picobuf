@@ -567,3 +567,34 @@ func (m *UnknownMessage) Decode(c *picobuf.Decoder) {
 	c.Int64(4, &m.Fourth)
 	c.UnrecognizedFields(20, &m.XXX_unrecognized)
 }
+
+type KnownMessage struct {
+	First            int64 `json:"first,omitempty"`
+	Second           int64 `json:"second,omitempty"`
+	Third            int64 `json:"third,omitempty"`
+	Fourth           int64 `json:"fourth,omitempty"`
+	XXX_unrecognized []byte
+}
+
+func (m *KnownMessage) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.Int64(1, &m.First)
+	c.Int64(2, &m.Second)
+	c.Int64(3, &m.Third)
+	c.Int64(4, &m.Fourth)
+	c.UnrecognizedFields(m.XXX_unrecognized)
+	return true
+}
+
+func (m *KnownMessage) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Int64(1, &m.First)
+	c.Int64(2, &m.Second)
+	c.Int64(3, &m.Third)
+	c.Int64(4, &m.Fourth)
+	c.UnrecognizedFields(30, &m.XXX_unrecognized)
+}

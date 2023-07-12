@@ -175,3 +175,11 @@ message UnknownMessage {
   int64 second = 2;
   int64 fourth = 4;
 }
+
+message KnownMessage {
+  option (pico.message).capture_unrecognized_fields = true;
+  int64 first = 1;
+  int64 second = 2;
+  int64 third = 3;
+  int64 fourth = 4;
+}
