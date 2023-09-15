@@ -4,8 +4,6 @@
 package prot
 
 import (
-	"fmt"
-
 	"google.golang.org/protobuf/proto"
 )
 
@@ -15,5 +13,8 @@ import (
 func Test(v proto.Message) {
 	data, _ := proto.Marshal(v)
 	_ = proto.Unmarshal(data, v)
-	fmt.Println(data)
+	ignore(data)
 }
+
+//go:noinline
+func ignore(data []byte) {}

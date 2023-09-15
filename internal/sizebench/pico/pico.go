@@ -4,8 +4,6 @@
 package pico
 
 import (
-	"fmt"
-
 	"storj.io/picobuf"
 )
 
@@ -15,5 +13,8 @@ import (
 func Test(v picobuf.Message) {
 	data, _ := picobuf.Marshal(v)
 	_ = picobuf.Unmarshal(data, v)
-	fmt.Println(data)
+	ignore(data)
 }
+
+//go:noinline
+func ignore(data []byte) {}

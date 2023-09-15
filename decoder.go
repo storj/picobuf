@@ -4,7 +4,7 @@
 package picobuf
 
 import (
-	"fmt"
+	"strconv"
 
 	"storj.io/picobuf/internal/protowire"
 )
@@ -185,7 +185,16 @@ func (dec *Decoder) Fail(field FieldNumber, msg string) {
 func (dec *Decoder) fail(field FieldNumber, msg string) {
 	// TODO: use static error types
 	dec.pendingField = fieldDecodingErrored
-	dec.err = fmt.Errorf("failed while parsing %v: %s", field, msg)
+	dec.err = parseError{field: field, message: msg}
+}
+
+type parseError struct {
+	field   FieldNumber
+	message string
+}
+
+func (e parseError) Error() string {
+	return "failed while parsing " + strconv.Itoa(int(e.field)) + ": " + e.message
 }
 
 func (dec *Decoder) nextField(advance int) {
