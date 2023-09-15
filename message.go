@@ -3,7 +3,7 @@
 
 package picobuf
 
-import "google.golang.org/protobuf/encoding/protowire"
+import "storj.io/picobuf/internal/protowire"
 
 // Message is an interface that all generated messages implement.
 type Message interface {

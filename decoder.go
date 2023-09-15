@@ -6,7 +6,7 @@ package picobuf
 import (
 	"fmt"
 
-	"google.golang.org/protobuf/encoding/protowire"
+	"storj.io/picobuf/internal/protowire"
 )
 
 const (

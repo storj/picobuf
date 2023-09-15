@@ -6,7 +6,7 @@ package picobuf
 import (
 	"encoding/binary"
 
-	"google.golang.org/protobuf/encoding/protowire"
+	"storj.io/picobuf/internal/protowire"
 )
 
 // Encoder implements encoding of protobuf format.

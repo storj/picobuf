@@ -8,7 +8,7 @@ package picobuf
 import (
 	"math"
 
-	"google.golang.org/protobuf/encoding/protowire"
+	"storj.io/picobuf/internal/protowire"
 )
 
 // Bool encodes non-default bool protobuf type.

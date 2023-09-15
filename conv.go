@@ -3,7 +3,7 @@
 
 package picobuf
 
-import "google.golang.org/protobuf/encoding/protowire"
+import "storj.io/picobuf/internal/protowire"
 
 func encodeZigZag32(v int32) uint32 {
 	return (uint32(v) << 1) ^ (uint32(v) >> 31)
