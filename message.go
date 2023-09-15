@@ -3,7 +3,11 @@
 
 package picobuf
 
-import "storj.io/picobuf/internal/protowire"
+import (
+	"math"
+
+	"storj.io/picobuf/internal/protowire"
+)
 
 // Message is an interface that all generated messages implement.
 type Message interface {
@@ -22,6 +26,33 @@ type FieldNumber protowire.Number
 
 // IsValid returns whether the field number is in correct range.
 func (field FieldNumber) IsValid() bool { return protowire.Number(field).IsValid() }
+
+// String converts field number to a number.
+func (field FieldNumber) String() string {
+	const maxDigitsUint32 = len("-2147483648")
+	var z [maxDigitsUint32]byte // for 32bits
+	if field == 0 {
+		return "0"
+	}
+	if field == math.MinInt32 {
+		return "-2147483648"
+	}
+	negative := field < 0
+	if negative {
+		field = -field
+	}
+	i := len(z) - 1
+	for ; i >= 0 && field > 0; i-- {
+		z[i] = byte(field%10) + '0'
+		field /= 10
+	}
+	if negative {
+		z[i] = '-'
+	} else {
+		i++
+	}
+	return string(z[i:])
+}
 
 // Marshal encodes msg as bytes.
 func Marshal(msg Message) ([]byte, error) {

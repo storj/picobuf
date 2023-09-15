@@ -4,8 +4,6 @@
 package picobuf
 
 import (
-	"strconv"
-
 	"storj.io/picobuf/internal/protowire"
 )
 
@@ -194,7 +192,7 @@ type parseError struct {
 }
 
 func (e parseError) Error() string {
-	return "failed while parsing " + strconv.Itoa(int(e.field)) + ": " + e.message
+	return "failed while parsing " + e.field.String() + ": " + e.message
 }
 
 func (dec *Decoder) nextField(advance int) {
