@@ -4,8 +4,6 @@
 package picobuf
 
 import (
-	"encoding/binary"
-
 	"storj.io/picobuf/internal/protowire"
 )
 
@@ -86,7 +84,7 @@ func (enc *Encoder) anyBytes(field FieldNumber, fn func() bool) bool {
 	messageLength := len(enc.buffer) - messageStart
 	bytesForSize := protowire.SizeVarint(uint64(messageLength))
 	if bytesForSize == len(lengthBufferPrediction) {
-		binary.PutUvarint(enc.buffer[lengthStart:messageStart], uint64(messageLength))
+		protowire.PutUvarint(enc.buffer[lengthStart:messageStart], uint64(messageLength))
 		return true
 	}
 	if bytesForSize > len(lengthBufferPrediction) {
@@ -94,7 +92,7 @@ func (enc *Encoder) anyBytes(field FieldNumber, fn func() bool) bool {
 	}
 
 	copy(enc.buffer[lengthStart+bytesForSize:], enc.buffer[messageStart:])
-	binary.PutUvarint(enc.buffer[lengthStart:lengthStart+bytesForSize], uint64(messageLength))
+	protowire.PutUvarint(enc.buffer[lengthStart:lengthStart+bytesForSize], uint64(messageLength))
 	enc.buffer = enc.buffer[:lengthStart+bytesForSize+messageLength]
 	return true
 }
@@ -118,7 +116,7 @@ func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
 	messageLength := len(enc.buffer) - messageStart
 	bytesForSize := protowire.SizeVarint(uint64(messageLength))
 	if bytesForSize == len(lengthBufferPrediction) {
-		binary.PutUvarint(enc.buffer[lengthStart:messageStart], uint64(messageLength))
+		protowire.PutUvarint(enc.buffer[lengthStart:messageStart], uint64(messageLength))
 		return true
 	}
 	if bytesForSize > len(lengthBufferPrediction) {
@@ -126,7 +124,7 @@ func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
 	}
 
 	copy(enc.buffer[lengthStart+bytesForSize:], enc.buffer[messageStart:])
-	binary.PutUvarint(enc.buffer[lengthStart:lengthStart+bytesForSize], uint64(messageLength))
+	protowire.PutUvarint(enc.buffer[lengthStart:lengthStart+bytesForSize], uint64(messageLength))
 	enc.buffer = enc.buffer[:lengthStart+bytesForSize+messageLength]
 	return true
 }
