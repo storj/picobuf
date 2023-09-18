@@ -53,17 +53,21 @@ func run() error {
 	defer func() { _ = os.RemoveAll(tempdir) }()
 
 	exeTargets := []string{
-		"base-fmt",
-		"basz-fmt",
-		"pico-one",
-		"pico-two",
-		"pico-sml",
-		"picz-one",
-		"picz-two",
-		"picz-sml",
-		"prot-one",
-		"prot-two",
-		"prot-sml",
+		"base-run", // Base Go runtime
+		"base-fmt", // Base Go runtime + fmt.Println dependencies
+		"basz-fmt", // Base Go runtime + fmt.Println dependencies, in conservative mode
+		"pico-one", // Picobuf with a single message
+		"pico-two", // Picobuf with two messages
+		"pico-sml", // Picobuf with a small single message and one large unused message
+		"picz-one", // Picobuf with a single message, in conservative mode
+		"picz-two", // Picobuf with two messages, in conservative mode
+		"picz-sml", // Picobuf with a small single message and one large unused message, in conservative mode
+		"picr-one", // Picobuf with a single message, without fmt dependencies
+		"picr-two", // Picobuf with two messages, without fmt dependencies
+		"picr-sml", // Picobuf with a small single message and one large unused message, without fmt dependencies
+		"prot-one", // Protobuf with a single message
+		"prot-two", // Protobuf with two messages
+		"prot-sml", // Protobuf with a small single message and one large unused message
 	}
 
 	pkgTargets := []string{
@@ -160,10 +164,15 @@ func run() error {
 
 		fmt.Fprintf(w, "BenchmarkExeBase\t1\t%v\n", exeSize("base-fmt"))
 		fmt.Fprintf(w, "BenchmarkExeBaseConserv\t1\t%v\n", exeSize("basz-fmt"))
+		fmt.Fprintf(w, "BenchmarkExeBaseRuntime\t1\t%v\n", exeSize("base-run"))
 
 		fmt.Fprintf(w, "BenchmarkExePico/One\t1\t%v\n", exeDelta("pico-one", "base-fmt"))
 		fmt.Fprintf(w, "BenchmarkExePico/Two\t1\t%v\n", exeDelta("pico-two", "base-fmt"))
 		fmt.Fprintf(w, "BenchmarkExePico/Sml\t1\t%v\n", exeDelta("pico-sml", "base-fmt"))
+
+		fmt.Fprintf(w, "BenchmarkExePicoRuntime/One\t1\t%v\n", exeDelta("picr-one", "base-run"))
+		fmt.Fprintf(w, "BenchmarkExePicoRuntime/Two\t1\t%v\n", exeDelta("picr-two", "base-run"))
+		fmt.Fprintf(w, "BenchmarkExePicoRuntime/Sml\t1\t%v\n", exeDelta("picr-sml", "base-run"))
 
 		fmt.Fprintf(w, "BenchmarkPkgPico/One\t1\t%v\n", pkgSize("pico/one"))
 		fmt.Fprintf(w, "BenchmarkPkgPico/One/Encode\t1\t%v\t%v-f\n", pkgSizeMatch("pico/one", "one.(*Types).Encode"), pkgSizeMatch("pico/one", "one.(*Types).Encode.func"))
