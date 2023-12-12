@@ -183,3 +183,16 @@ message KnownMessage {
   int64 third = 3;
   int64 fourth = 4;
 }
+
+message Tag {
+    string key = 1;
+    oneof value {
+        bytes     string = 2;
+        int64     int64 = 3;
+        double    double = 4;
+        bytes     bytes = 5;
+        bool      bool = 6;
+        int64     duration_ns = 7;
+        Timestamp timestamp = 8;
+    }
+}

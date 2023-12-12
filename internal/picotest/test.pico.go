@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v3.21.12
+//     protoc:          v4.23.4
 
 package picotest
 
@@ -598,3 +598,184 @@ func (m *KnownMessage) Decode(c *picobuf.Decoder) {
 	c.Int64(4, &m.Fourth)
 	c.UnrecognizedFields(30, &m.XXX_unrecognized)
 }
+
+type Tag struct {
+	Key   string `json:"key,omitempty"`
+	Value isTag_Value
+}
+
+func (m *Tag) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.String(1, &m.Key)
+	if m, ok := m.Value.(*Tag_String_); ok {
+		c.Bytes(2, &m.String_)
+	}
+	if m, ok := m.Value.(*Tag_Int64); ok {
+		if m.Int64 != nil {
+			c.Int64(3, m.Int64)
+		}
+	}
+	if m, ok := m.Value.(*Tag_Double); ok {
+		if m.Double != nil {
+			c.Double(4, m.Double)
+		}
+	}
+	if m, ok := m.Value.(*Tag_Bytes); ok {
+		c.Bytes(5, &m.Bytes)
+	}
+	if m, ok := m.Value.(*Tag_Bool); ok {
+		if m.Bool != nil {
+			c.Bool(6, m.Bool)
+		}
+	}
+	if m, ok := m.Value.(*Tag_DurationNs); ok {
+		if m.DurationNs != nil {
+			c.Int64(7, m.DurationNs)
+		}
+	}
+	if m, ok := m.Value.(*Tag_Timestamp); ok {
+		c.Message(8, m.Timestamp.Encode)
+	}
+	return true
+}
+
+func (m *Tag) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.String(1, &m.Key)
+	if c.PendingField() == 2 {
+		var x *Tag_String_
+		if z, ok := m.Value.(*Tag_String_); ok {
+			x = z
+		} else {
+			x = new(Tag_String_)
+			m.Value = x
+		}
+		m := x
+		c.Bytes(2, &m.String_)
+	}
+	if c.PendingField() == 3 {
+		var x *Tag_Int64
+		if z, ok := m.Value.(*Tag_Int64); ok {
+			x = z
+		} else {
+			x = new(Tag_Int64)
+			m.Value = x
+		}
+		m := x
+		if c.PendingField() == 3 {
+			m.Int64 = new(int64)
+			c.Int64(3, m.Int64)
+		}
+	}
+	if c.PendingField() == 4 {
+		var x *Tag_Double
+		if z, ok := m.Value.(*Tag_Double); ok {
+			x = z
+		} else {
+			x = new(Tag_Double)
+			m.Value = x
+		}
+		m := x
+		if c.PendingField() == 4 {
+			m.Double = new(float64)
+			c.Double(4, m.Double)
+		}
+	}
+	if c.PendingField() == 5 {
+		var x *Tag_Bytes
+		if z, ok := m.Value.(*Tag_Bytes); ok {
+			x = z
+		} else {
+			x = new(Tag_Bytes)
+			m.Value = x
+		}
+		m := x
+		c.Bytes(5, &m.Bytes)
+	}
+	if c.PendingField() == 6 {
+		var x *Tag_Bool
+		if z, ok := m.Value.(*Tag_Bool); ok {
+			x = z
+		} else {
+			x = new(Tag_Bool)
+			m.Value = x
+		}
+		m := x
+		if c.PendingField() == 6 {
+			m.Bool = new(bool)
+			c.Bool(6, m.Bool)
+		}
+	}
+	if c.PendingField() == 7 {
+		var x *Tag_DurationNs
+		if z, ok := m.Value.(*Tag_DurationNs); ok {
+			x = z
+		} else {
+			x = new(Tag_DurationNs)
+			m.Value = x
+		}
+		m := x
+		if c.PendingField() == 7 {
+			m.DurationNs = new(int64)
+			c.Int64(7, m.DurationNs)
+		}
+	}
+	if c.PendingField() == 8 {
+		var x *Tag_Timestamp
+		if z, ok := m.Value.(*Tag_Timestamp); ok {
+			x = z
+		} else {
+			x = new(Tag_Timestamp)
+			m.Value = x
+		}
+		m := x
+		c.Message(8, func(c *picobuf.Decoder) {
+			if m.Timestamp == nil {
+				m.Timestamp = new(Timestamp)
+			}
+			m.Timestamp.Decode(c)
+		})
+	}
+}
+
+type isTag_Value interface{ isTag_Value() }
+
+type Tag_String_ struct {
+	String_ []byte
+}
+
+type Tag_Int64 struct {
+	Int64 *int64
+}
+
+type Tag_Double struct {
+	Double *float64
+}
+
+type Tag_Bytes struct {
+	Bytes []byte
+}
+
+type Tag_Bool struct {
+	Bool *bool
+}
+
+type Tag_DurationNs struct {
+	DurationNs *int64
+}
+
+type Tag_Timestamp struct {
+	Timestamp *Timestamp
+}
+
+func (*Tag_String_) isTag_Value()    {}
+func (*Tag_Int64) isTag_Value()      {}
+func (*Tag_Double) isTag_Value()     {}
+func (*Tag_Bytes) isTag_Value()      {}
+func (*Tag_Bool) isTag_Value()       {}
+func (*Tag_DurationNs) isTag_Value() {}
+func (*Tag_Timestamp) isTag_Value()  {}
