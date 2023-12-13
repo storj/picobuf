@@ -565,6 +565,11 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 		panic(fmt.Sprintf("unhandled: invalid field kind: %v", field.Desc.Kind()))
 	}
 
+	// only messages in oneof should be pointers, by default
+	if info.pointer && info.kind != kindMessage && info.oneof {
+		info.pointer = false
+	}
+
 	if field != nil {
 		if getMessageOpts(field.Message).AlwaysPresent {
 			info.pointer = false

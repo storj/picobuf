@@ -613,27 +613,19 @@ func (m *Tag) Encode(c *picobuf.Encoder) bool {
 		c.Bytes(2, &m.String_)
 	}
 	if m, ok := m.Value.(*Tag_Int64); ok {
-		if m.Int64 != nil {
-			c.Int64(3, m.Int64)
-		}
+		c.Int64(3, &m.Int64)
 	}
 	if m, ok := m.Value.(*Tag_Double); ok {
-		if m.Double != nil {
-			c.Double(4, m.Double)
-		}
+		c.Double(4, &m.Double)
 	}
 	if m, ok := m.Value.(*Tag_Bytes); ok {
 		c.Bytes(5, &m.Bytes)
 	}
 	if m, ok := m.Value.(*Tag_Bool); ok {
-		if m.Bool != nil {
-			c.Bool(6, m.Bool)
-		}
+		c.Bool(6, &m.Bool)
 	}
 	if m, ok := m.Value.(*Tag_DurationNs); ok {
-		if m.DurationNs != nil {
-			c.Int64(7, m.DurationNs)
-		}
+		c.Int64(7, &m.DurationNs)
 	}
 	if m, ok := m.Value.(*Tag_Timestamp); ok {
 		c.Message(8, m.Timestamp.Encode)
@@ -666,10 +658,7 @@ func (m *Tag) Decode(c *picobuf.Decoder) {
 			m.Value = x
 		}
 		m := x
-		if c.PendingField() == 3 {
-			m.Int64 = new(int64)
-			c.Int64(3, m.Int64)
-		}
+		c.Int64(3, &m.Int64)
 	}
 	if c.PendingField() == 4 {
 		var x *Tag_Double
@@ -680,10 +669,7 @@ func (m *Tag) Decode(c *picobuf.Decoder) {
 			m.Value = x
 		}
 		m := x
-		if c.PendingField() == 4 {
-			m.Double = new(float64)
-			c.Double(4, m.Double)
-		}
+		c.Double(4, &m.Double)
 	}
 	if c.PendingField() == 5 {
 		var x *Tag_Bytes
@@ -705,10 +691,7 @@ func (m *Tag) Decode(c *picobuf.Decoder) {
 			m.Value = x
 		}
 		m := x
-		if c.PendingField() == 6 {
-			m.Bool = new(bool)
-			c.Bool(6, m.Bool)
-		}
+		c.Bool(6, &m.Bool)
 	}
 	if c.PendingField() == 7 {
 		var x *Tag_DurationNs
@@ -719,10 +702,7 @@ func (m *Tag) Decode(c *picobuf.Decoder) {
 			m.Value = x
 		}
 		m := x
-		if c.PendingField() == 7 {
-			m.DurationNs = new(int64)
-			c.Int64(7, m.DurationNs)
-		}
+		c.Int64(7, &m.DurationNs)
 	}
 	if c.PendingField() == 8 {
 		var x *Tag_Timestamp
@@ -749,11 +729,11 @@ type Tag_String_ struct {
 }
 
 type Tag_Int64 struct {
-	Int64 *int64
+	Int64 int64
 }
 
 type Tag_Double struct {
-	Double *float64
+	Double float64
 }
 
 type Tag_Bytes struct {
@@ -761,11 +741,11 @@ type Tag_Bytes struct {
 }
 
 type Tag_Bool struct {
-	Bool *bool
+	Bool bool
 }
 
 type Tag_DurationNs struct {
-	DurationNs *int64
+	DurationNs int64
 }
 
 type Tag_Timestamp struct {
