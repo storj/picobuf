@@ -10,6 +10,7 @@ package two
 import (
 	picobuf "storj.io/picobuf"
 	picowire "storj.io/picobuf/picowire"
+	strconv "strconv"
 )
 
 type Language int32
@@ -22,6 +23,23 @@ const (
 	Language_GERMAN  Language = 5
 )
 
+func (m Language) String() string {
+	switch m {
+	case Language_UNKNOWN:
+		return "UNKNOWN"
+	case Language_ENGLISH:
+		return "ENGLISH"
+	case Language_SPANISH:
+		return "SPANISH"
+	case Language_FRENCH:
+		return "FRENCH"
+	case Language_GERMAN:
+		return "GERMAN"
+	default:
+		return "Language(" + strconv.Itoa(int(m)) + ")"
+	}
+}
+
 type Language2 int32
 
 const (
@@ -31,6 +49,23 @@ const (
 	Language2_FRENCH2  Language2 = 4
 	Language2_GERMAN2  Language2 = 5
 )
+
+func (m Language2) String() string {
+	switch m {
+	case Language2_UNKNOWN2:
+		return "UNKNOWN2"
+	case Language2_ENGLISH2:
+		return "ENGLISH2"
+	case Language2_SPANISH2:
+		return "SPANISH2"
+	case Language2_FRENCH2:
+		return "FRENCH2"
+	case Language2_GERMAN2:
+		return "GERMAN2"
+	default:
+		return "Language2(" + strconv.Itoa(int(m)) + ")"
+	}
+}
 
 type Nop struct {
 }

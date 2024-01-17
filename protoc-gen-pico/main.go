@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"runtime/debug"
 	"sort"
+	"strconv"
 	"strings"
 
 	"google.golang.org/protobuf/compiler/protogen"
@@ -21,6 +22,7 @@ import (
 const (
 	picobufPackage  = protogen.GoImportPath("storj.io/picobuf")
 	picowirePackage = protogen.GoImportPath("storj.io/picobuf/picowire")
+	strconvPackage  = protogen.GoImportPath("strconv")
 )
 
 type config struct{}
@@ -101,6 +103,17 @@ func genEnum(gf *generator, e *protogen.Enum) {
 		gf.P(v.GoIdent, " ", e.GoIdent, " = ", v.Desc.Number())
 	}
 	gf.P(")")
+	gf.P()
+
+	gf.P("func (m ", e.GoIdent, ") String() string {")
+	gf.P("switch m {")
+	for _, v := range e.Values {
+		gf.P("case ", v.GoIdent, ": return ", strconv.Quote(string(v.Desc.Name())))
+	}
+	itoaName := gf.QualifiedGoIdent(strconvPackage.Ident("Itoa"))
+	gf.P("default: return ", strconv.Quote(e.GoIdent.GoName+"("), " + ", itoaName, "(int(m)) + \")\" ")
+	gf.P("}")
+	gf.P("}")
 
 	gf.P()
 }
