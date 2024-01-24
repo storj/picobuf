@@ -416,10 +416,13 @@ func (m *CommandMessage) Encode(c *picobuf.Encoder) bool {
 	}
 	c.String(1, &m.Class)
 	if m, ok := m.Command.(*CommandMessage_Name); ok {
-		c.String(2, &m.Name)
+		c.AlwaysString(2, &m.Name)
 	}
 	if m, ok := m.Command.(*CommandMessage_Message); ok {
 		c.Message(3, m.Message.Encode)
+	}
+	if m, ok := m.Command.(*CommandMessage_Count); ok {
+		c.AlwaysInt32(4, &m.Count)
 	}
 	return true
 }
@@ -456,6 +459,17 @@ func (m *CommandMessage) Decode(c *picobuf.Decoder) {
 			m.Message.Decode(c)
 		})
 	}
+	if c.PendingField() == 4 {
+		var x *CommandMessage_Count
+		if z, ok := m.Command.(*CommandMessage_Count); ok {
+			x = z
+		} else {
+			x = new(CommandMessage_Count)
+			m.Command = x
+		}
+		m := x
+		c.Int32(4, &m.Count)
+	}
 }
 
 type isCommandMessage_Command interface{ isCommandMessage_Command() }
@@ -468,5 +482,10 @@ type CommandMessage_Message struct {
 	Message *Message
 }
 
+type CommandMessage_Count struct {
+	Count int32
+}
+
 func (*CommandMessage_Name) isCommandMessage_Command()    {}
 func (*CommandMessage_Message) isCommandMessage_Command() {}
+func (*CommandMessage_Count) isCommandMessage_Command()   {}

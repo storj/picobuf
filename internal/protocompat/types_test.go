@@ -266,3 +266,61 @@ func TestOneOf(t *testing.T) {
 		assert.DeepEqual(t, got, test)
 	}
 }
+
+func TestOneOf_Nil(t *testing.T) {
+	test := pico.CommandMessage{
+		Class:   "Hello",
+		Command: nil,
+	}
+
+	data, err := picobuf.Marshal(&test)
+	assert.NoError(t, err)
+
+	{
+		var got prot.CommandMessage
+		err = proto.Unmarshal(data, &got)
+		assert.NoError(t, err)
+
+		assert.Equal(t, got.Class, test.Class)
+		assert.Nil(t, got.Command)
+	}
+
+	{
+		var got pico.CommandMessage
+		err = picobuf.Unmarshal(data, &got)
+		assert.NoError(t, err)
+		assert.DeepEqual(t, got, test)
+	}
+}
+
+func TestOneOf_Default(t *testing.T) {
+	test := pico.CommandMessage{
+		Class:   "Hello",
+		Command: &pico.CommandMessage_Count{},
+	}
+
+	data, err := picobuf.Marshal(&test)
+	assert.NoError(t, err)
+	assert.Equal(t,
+		[]byte{0x0a, 0x05, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x00},
+		data,
+	)
+
+	{
+		var got prot.CommandMessage
+		err = proto.Unmarshal(data, &got)
+		assert.NoError(t, err)
+
+		assert.Equal(t, got.Class, test.Class)
+		cmd, isName := got.Command.(*prot.CommandMessage_Count)
+		assert.True(t, isName)
+		assert.Equal(t, cmd.Count, 0)
+	}
+
+	{
+		var got pico.CommandMessage
+		err = picobuf.Unmarshal(data, &got)
+		assert.NoError(t, err)
+		assert.DeepEqual(t, got, test)
+	}
+}

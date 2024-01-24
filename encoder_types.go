@@ -36,6 +36,25 @@ func (enc *Encoder) RepeatedBool(field FieldNumber, v *[]bool) {
 	}
 }
 
+// AlwaysBool encodes bool protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysBool(field FieldNumber, v *bool) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
+	enc.buffer = protowire.AppendVarint(enc.buffer, encodeBool64(*v))
+}
+
+// AlwaysRepeatedBool encodes all repeated bool protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedBool(field FieldNumber, v *[]bool) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)))
+	for _, x := range *v {
+		enc.buffer = append(enc.buffer, encodeBool8(x))
+	}
+}
+
 // Int32 encodes non-default int32 protobuf type.
 //
 //go:noinline
@@ -54,6 +73,25 @@ func (enc *Encoder) RepeatedInt32(field FieldNumber, v *[]int32) {
 	if len(*v) == 0 {
 		return
 	}
+	enc.alwaysAnyBytes(field, func() {
+		for _, x := range *v {
+			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(x))
+		}
+	})
+}
+
+// AlwaysInt32 encodes int32 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysInt32(field FieldNumber, v *int32) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
+	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(*v))
+}
+
+// AlwaysRepeatedInt32 encodes all repeated int32 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedInt32(field FieldNumber, v *[]int32) {
 	enc.alwaysAnyBytes(field, func() {
 		for _, x := range *v {
 			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(x))
@@ -86,6 +124,25 @@ func (enc *Encoder) RepeatedInt64(field FieldNumber, v *[]int64) {
 	})
 }
 
+// AlwaysInt64 encodes int64 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysInt64(field FieldNumber, v *int64) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
+	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(*v))
+}
+
+// AlwaysRepeatedInt64 encodes all repeated int64 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedInt64(field FieldNumber, v *[]int64) {
+	enc.alwaysAnyBytes(field, func() {
+		for _, x := range *v {
+			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(x))
+		}
+	})
+}
+
 // Uint32 encodes non-default uint32 protobuf type.
 //
 //go:noinline
@@ -104,6 +161,25 @@ func (enc *Encoder) RepeatedUint32(field FieldNumber, v *[]uint32) {
 	if len(*v) == 0 {
 		return
 	}
+	enc.alwaysAnyBytes(field, func() {
+		for _, x := range *v {
+			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(x))
+		}
+	})
+}
+
+// AlwaysUint32 encodes uint32 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysUint32(field FieldNumber, v *uint32) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
+	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(*v))
+}
+
+// AlwaysRepeatedUint32 encodes all repeated uint32 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedUint32(field FieldNumber, v *[]uint32) {
 	enc.alwaysAnyBytes(field, func() {
 		for _, x := range *v {
 			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(x))
@@ -136,6 +212,25 @@ func (enc *Encoder) RepeatedUint64(field FieldNumber, v *[]uint64) {
 	})
 }
 
+// AlwaysUint64 encodes uint64 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysUint64(field FieldNumber, v *uint64) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
+	enc.buffer = protowire.AppendVarint(enc.buffer, *v)
+}
+
+// AlwaysRepeatedUint64 encodes all repeated uint64 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedUint64(field FieldNumber, v *[]uint64) {
+	enc.alwaysAnyBytes(field, func() {
+		for _, x := range *v {
+			enc.buffer = protowire.AppendVarint(enc.buffer, x)
+		}
+	})
+}
+
 // Sint32 encodes non-default sint32 protobuf type.
 //
 //go:noinline
@@ -154,6 +249,25 @@ func (enc *Encoder) RepeatedSint32(field FieldNumber, v *[]int32) {
 	if len(*v) == 0 {
 		return
 	}
+	enc.alwaysAnyBytes(field, func() {
+		for _, x := range *v {
+			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(encodeZigZag32(x)))
+		}
+	})
+}
+
+// AlwaysSint32 encodes sint32 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysSint32(field FieldNumber, v *int32) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
+	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(encodeZigZag32(*v)))
+}
+
+// AlwaysRepeatedSint32 encodes all repeated sint32 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedSint32(field FieldNumber, v *[]int32) {
 	enc.alwaysAnyBytes(field, func() {
 		for _, x := range *v {
 			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(encodeZigZag32(x)))
@@ -186,6 +300,25 @@ func (enc *Encoder) RepeatedSint64(field FieldNumber, v *[]int64) {
 	})
 }
 
+// AlwaysSint64 encodes sint64 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysSint64(field FieldNumber, v *int64) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.VarintType)
+	enc.buffer = protowire.AppendVarint(enc.buffer, protowire.EncodeZigZag(*v))
+}
+
+// AlwaysRepeatedSint64 encodes all repeated sint64 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedSint64(field FieldNumber, v *[]int64) {
+	enc.alwaysAnyBytes(field, func() {
+		for _, x := range *v {
+			enc.buffer = protowire.AppendVarint(enc.buffer, protowire.EncodeZigZag(x))
+		}
+	})
+}
+
 // Fixed32 encodes non-default fixed32 protobuf type.
 //
 //go:noinline
@@ -204,6 +337,25 @@ func (enc *Encoder) RepeatedFixed32(field FieldNumber, v *[]uint32) {
 	if len(*v) == 0 {
 		return
 	}
+	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*4))
+	for _, x := range *v {
+		enc.buffer = protowire.AppendFixed32(enc.buffer, x)
+	}
+}
+
+// AlwaysFixed32 encodes fixed32 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysFixed32(field FieldNumber, v *uint32) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed32Type)
+	enc.buffer = protowire.AppendFixed32(enc.buffer, *v)
+}
+
+// AlwaysRepeatedFixed32 encodes all repeated fixed32 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedFixed32(field FieldNumber, v *[]uint32) {
 	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*4))
 	for _, x := range *v {
@@ -236,6 +388,25 @@ func (enc *Encoder) RepeatedFixed64(field FieldNumber, v *[]uint64) {
 	}
 }
 
+// AlwaysFixed64 encodes fixed64 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysFixed64(field FieldNumber, v *uint64) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed64Type)
+	enc.buffer = protowire.AppendFixed64(enc.buffer, *v)
+}
+
+// AlwaysRepeatedFixed64 encodes all repeated fixed64 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedFixed64(field FieldNumber, v *[]uint64) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*8))
+	for _, x := range *v {
+		enc.buffer = protowire.AppendFixed64(enc.buffer, x)
+	}
+}
+
 // Sfixed32 encodes non-default sfixed32 protobuf type.
 //
 //go:noinline
@@ -254,6 +425,25 @@ func (enc *Encoder) RepeatedSfixed32(field FieldNumber, v *[]int32) {
 	if len(*v) == 0 {
 		return
 	}
+	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*4))
+	for _, x := range *v {
+		enc.buffer = protowire.AppendFixed32(enc.buffer, encodeZigZag32(x))
+	}
+}
+
+// AlwaysSfixed32 encodes sfixed32 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysSfixed32(field FieldNumber, v *int32) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed32Type)
+	enc.buffer = protowire.AppendFixed32(enc.buffer, encodeZigZag32(*v))
+}
+
+// AlwaysRepeatedSfixed32 encodes all repeated sfixed32 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedSfixed32(field FieldNumber, v *[]int32) {
 	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*4))
 	for _, x := range *v {
@@ -286,6 +476,25 @@ func (enc *Encoder) RepeatedSfixed64(field FieldNumber, v *[]int64) {
 	}
 }
 
+// AlwaysSfixed64 encodes sfixed64 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysSfixed64(field FieldNumber, v *int64) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed64Type)
+	enc.buffer = protowire.AppendFixed64(enc.buffer, protowire.EncodeZigZag(*v))
+}
+
+// AlwaysRepeatedSfixed64 encodes all repeated sfixed64 protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedSfixed64(field FieldNumber, v *[]int64) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*8))
+	for _, x := range *v {
+		enc.buffer = protowire.AppendFixed64(enc.buffer, protowire.EncodeZigZag(x))
+	}
+}
+
 // Float encodes non-default float protobuf type.
 //
 //go:noinline
@@ -304,6 +513,25 @@ func (enc *Encoder) RepeatedFloat(field FieldNumber, v *[]float32) {
 	if len(*v) == 0 {
 		return
 	}
+	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*4))
+	for _, x := range *v {
+		enc.buffer = protowire.AppendFixed32(enc.buffer, math.Float32bits(x))
+	}
+}
+
+// AlwaysFloat encodes float protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysFloat(field FieldNumber, v *float32) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed32Type)
+	enc.buffer = protowire.AppendFixed32(enc.buffer, math.Float32bits(*v))
+}
+
+// AlwaysRepeatedFloat encodes all repeated float protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedFloat(field FieldNumber, v *[]float32) {
 	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*4))
 	for _, x := range *v {
@@ -336,6 +564,25 @@ func (enc *Encoder) RepeatedDouble(field FieldNumber, v *[]float64) {
 	}
 }
 
+// AlwaysDouble encodes double protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysDouble(field FieldNumber, v *float64) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed64Type)
+	enc.buffer = protowire.AppendFixed64(enc.buffer, math.Float64bits(*v))
+}
+
+// AlwaysRepeatedDouble encodes all repeated double protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedDouble(field FieldNumber, v *[]float64) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*8))
+	for _, x := range *v {
+		enc.buffer = protowire.AppendFixed64(enc.buffer, math.Float64bits(x))
+	}
+}
+
 // String encodes non-default string protobuf type.
 //
 //go:noinline
@@ -360,6 +607,24 @@ func (enc *Encoder) RepeatedString(field FieldNumber, v *[]string) {
 	}
 }
 
+// AlwaysString encodes string protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysString(field FieldNumber, v *string) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+	enc.buffer = protowire.AppendString(enc.buffer, *v)
+}
+
+// AlwaysRepeatedString encodes all repeated string protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedString(field FieldNumber, v *[]string) {
+	for _, x := range *v {
+		enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+		enc.buffer = protowire.AppendString(enc.buffer, x)
+	}
+}
+
 // Bytes encodes non-default bytes protobuf type.
 //
 //go:noinline
@@ -378,6 +643,24 @@ func (enc *Encoder) RepeatedBytes(field FieldNumber, v *[][]byte) {
 	if len(*v) == 0 {
 		return
 	}
+	for _, x := range *v {
+		enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+		enc.buffer = protowire.AppendBytes(enc.buffer, x)
+	}
+}
+
+// AlwaysBytes encodes bytes protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysBytes(field FieldNumber, v *[]byte) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+	enc.buffer = protowire.AppendBytes(enc.buffer, *v)
+}
+
+// AlwaysRepeatedBytes encodes all repeated bytes protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedBytes(field FieldNumber, v *[][]byte) {
 	for _, x := range *v {
 		enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 		enc.buffer = protowire.AppendBytes(enc.buffer, x)

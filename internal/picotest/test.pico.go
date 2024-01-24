@@ -610,22 +610,22 @@ func (m *Tag) Encode(c *picobuf.Encoder) bool {
 	}
 	c.String(1, &m.Key)
 	if m, ok := m.Value.(*Tag_String_); ok {
-		c.Bytes(2, &m.String_)
+		c.AlwaysBytes(2, &m.String_)
 	}
 	if m, ok := m.Value.(*Tag_Int64); ok {
-		c.Int64(3, &m.Int64)
+		c.AlwaysInt64(3, &m.Int64)
 	}
 	if m, ok := m.Value.(*Tag_Double); ok {
-		c.Double(4, &m.Double)
+		c.AlwaysDouble(4, &m.Double)
 	}
 	if m, ok := m.Value.(*Tag_Bytes); ok {
-		c.Bytes(5, &m.Bytes)
+		c.AlwaysBytes(5, &m.Bytes)
 	}
 	if m, ok := m.Value.(*Tag_Bool); ok {
-		c.Bool(6, &m.Bool)
+		c.AlwaysBool(6, &m.Bool)
 	}
 	if m, ok := m.Value.(*Tag_DurationNs); ok {
-		c.Int64(7, &m.DurationNs)
+		c.AlwaysInt64(7, &m.DurationNs)
 	}
 	if m, ok := m.Value.(*Tag_Timestamp); ok {
 		c.Message(8, m.Timestamp.Encode)

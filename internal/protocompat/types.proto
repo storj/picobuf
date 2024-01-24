@@ -117,8 +117,9 @@ message OptionalMessage {
 message CommandMessage {
   string class = 1;
   oneof command {
-    string name = 2;
+    string  name = 2;
     Message message = 3;
+    int32   count = 4;
   }
 }
 

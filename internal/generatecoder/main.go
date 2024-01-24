@@ -145,69 +145,84 @@ func generateEncoder() []byte {
 	pf("\n")
 
 	for _, t := range types {
-		{ // encoding a single value
-			pf("// %s encodes non-default %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
-			pf("//go:noinline\n")
-			pf("func (enc *Encoder) %s(field FieldNumber, v *%s) {\n", t.Name, t.TypeName())
-			if t.Wire == protowire.BytesType {
-				pf("if len(*v) == 0 { return }\n")
-			} else if _, isBool := t.Zero.(bool); isBool {
-				pf("if !*v { return }\n")
-			} else {
-				pf("if *v == %v { return }\n", t.Zero)
-			}
-
-			pf("enc.buffer = appendTag(enc.buffer, field, %s)\n", t.WireName())
-			pf("enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "*v")
-			pf("}\n")
-		}
-
-		{ // encoding repeated values
-			pf("// Repeated%s encodes non-empty repeated %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
-			pf("//go:noinline\n")
-			pf("func (enc *Encoder) Repeated%s(field FieldNumber, v *[]%s) {\n", t.Name, t.TypeName())
-			pf("if len(*v) == 0 { return }\n")
-
-			if t.IsScalar() {
-				// generate packed encoding
-				switch t.Wire {
-				case protowire.VarintType:
-					if t.Name == "Bool" {
-						pf("enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)\n")
-						pf("enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)))\n")
-						pf("for _, x := range *v {\n")
-						pf("    enc.buffer = append(enc.buffer, encodeBool8(x))\n")
-						pf("}\n")
+		for _, always := range []bool{false, true} {
+			{ // encoding a single value
+				if always {
+					pf("// Always%s encodes %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
+					pf("//go:noinline\n")
+					pf("func (enc *Encoder) Always%s(field FieldNumber, v *%s) {\n", t.Name, t.TypeName())
+				} else {
+					pf("// %s encodes non-default %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
+					pf("//go:noinline\n")
+					pf("func (enc *Encoder) %s(field FieldNumber, v *%s) {\n", t.Name, t.TypeName())
+					if t.Wire == protowire.BytesType {
+						pf("if len(*v) == 0 { return }\n")
+					} else if _, isBool := t.Zero.(bool); isBool {
+						pf("if !*v { return }\n")
 					} else {
-						pf("enc.alwaysAnyBytes(field, func() {\n")
-						pf("    for _, x := range *v {\n")
-						pf("         enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "x")
-						pf("    }\n")
-						pf("})\n")
+						pf("if *v == %v { return }\n", t.Zero)
 					}
-				case protowire.Fixed32Type:
-					pf("enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)\n")
-					pf("enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*4))\n")
-					pf("for _, x := range *v {\n")
-					pf("    enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "x")
-					pf("}\n")
-				case protowire.Fixed64Type:
-					pf("enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)\n")
-					pf("enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*8))\n")
-					pf("for _, x := range *v {\n")
-					pf("    enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "x")
-					pf("}\n")
-				default:
-					panic("unhandled scalar wire type")
 				}
 
-			} else {
-				pf("for _, x := range *v {\n")
-				pf("    enc.buffer = appendTag(enc.buffer, field, %s)\n", t.WireName())
-				pf("    enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "x")
+				pf("enc.buffer = appendTag(enc.buffer, field, %s)\n", t.WireName())
+				pf("enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "*v")
 				pf("}\n")
 			}
-			pf("}\n")
+
+			{
+				// encoding repeated values
+				if always {
+					pf("// AlwaysRepeated%s encodes all repeated %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
+					pf("//go:noinline\n")
+					pf("func (enc *Encoder) AlwaysRepeated%s(field FieldNumber, v *[]%s) {\n", t.Name, t.TypeName())
+				} else {
+					pf("// Repeated%s encodes non-empty repeated %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
+					pf("//go:noinline\n")
+					pf("func (enc *Encoder) Repeated%s(field FieldNumber, v *[]%s) {\n", t.Name, t.TypeName())
+					pf("if len(*v) == 0 { return }\n")
+				}
+
+				if t.IsScalar() {
+					// generate packed encoding
+					switch t.Wire {
+					case protowire.VarintType:
+						if t.Name == "Bool" {
+							pf("enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)\n")
+							pf("enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)))\n")
+							pf("for _, x := range *v {\n")
+							pf("    enc.buffer = append(enc.buffer, encodeBool8(x))\n")
+							pf("}\n")
+						} else {
+							pf("enc.alwaysAnyBytes(field, func() {\n")
+							pf("    for _, x := range *v {\n")
+							pf("         enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "x")
+							pf("    }\n")
+							pf("})\n")
+						}
+					case protowire.Fixed32Type:
+						pf("enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)\n")
+						pf("enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*4))\n")
+						pf("for _, x := range *v {\n")
+						pf("    enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "x")
+						pf("}\n")
+					case protowire.Fixed64Type:
+						pf("enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)\n")
+						pf("enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*8))\n")
+						pf("for _, x := range *v {\n")
+						pf("    enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "x")
+						pf("}\n")
+					default:
+						panic("unhandled scalar wire type")
+					}
+
+				} else {
+					pf("for _, x := range *v {\n")
+					pf("    enc.buffer = appendTag(enc.buffer, field, %s)\n", t.WireName())
+					pf("    enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "x")
+					pf("}\n")
+				}
+				pf("}\n")
+			}
 		}
 	}
 

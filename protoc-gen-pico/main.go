@@ -197,10 +197,12 @@ func genMessageEncode(gf *generator, m *protogen.Message) {
 
 func genFieldEncode(gf *generator, field *protogen.Field) {
 	info := fieldInfo(gf, field, field.Desc)
+	always := false
 
 	if info.oneof {
 		gf.P("if m, ok := m.", field.Oneof.GoName, ".(*", oneofWrapperTypeName(gf, field), "); ok {")
 		defer gf.P("}")
+		always = true
 	}
 
 	switch {
@@ -244,6 +246,10 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 		if info.repeated {
 			method = "Repeated" + method
 		}
+		if always {
+			method = "Always" + method
+		}
+
 		if info.repeated && info.pointer {
 			panic("pointer not supported for repeated internal type " + info.goType)
 		}
