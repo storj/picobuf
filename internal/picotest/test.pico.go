@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v4.23.4
+//     protoc:          v4.25.2
 
 package picotest
 
