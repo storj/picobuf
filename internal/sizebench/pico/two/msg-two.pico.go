@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v4.25.2
+//     protoc:          v5.27.3
 
 package two
 

@@ -25,11 +25,15 @@ const (
 	strconvPackage  = protogen.GoImportPath("strconv")
 )
 
-type config struct{}
+type config struct {
+	GenerateFieldAccess bool
+}
 
 func main() {
 	var flags flag.FlagSet
 	var conf config
+
+	flags.BoolVar(&conf.GenerateFieldAccess, "field_access", false, "generate methods for accessing fields")
 
 	protogen.Options{
 		ParamFunc: flags.Set,
@@ -45,12 +49,14 @@ func main() {
 }
 
 type generator struct {
+	Config config
 	*protogen.GeneratedFile
 	*protogen.File
 }
 
 func genFile(plugin *protogen.Plugin, file *protogen.File, conf config) {
 	gf := &generator{
+		Config:        conf,
 		GeneratedFile: plugin.NewGeneratedFile(file.GeneratedFilenamePrefix+".pico.go", file.GoImportPath),
 		File:          file,
 	}
@@ -171,6 +177,9 @@ func fieldJSONTag(gf *generator, field *protogen.Field) string {
 func genMessageMethods(gf *generator, m *protogen.Message) {
 	genMessageEncode(gf, m)
 	genMessageDecode(gf, m)
+	if gf.Config.GenerateFieldAccess {
+		genMessageFieldAccess(gf, m)
+	}
 }
 
 func genMessageEncode(gf *generator, m *protogen.Message) {
@@ -702,4 +711,60 @@ func genMessageOneofWrapperTypes(gf *generator, m *protogen.Message) {
 
 func oneofWrapperTypeName(gf *generator, field *protogen.Field) string {
 	return field.GoIdent.GoName
+}
+
+func genMessageFieldAccess(gf *generator, m *protogen.Message) {
+	fields := append([]*protogen.Field(nil), m.Fields...)
+	sort.Slice(fields, func(i, j int) bool {
+		return fields[i].Desc.Number() < fields[j].Desc.Number()
+	})
+
+	for _, field := range fields {
+		genFieldAccess(gf, m, field)
+	}
+}
+
+func genFieldAccess(gf *generator, m *protogen.Message, field *protogen.Field) {
+	info := fieldInfo(gf, field, field.Desc)
+
+	if info.oneof {
+		return
+	}
+
+	gf.P("func (m *", m.GoIdent, ") Get", field.GoName, "() (v ", info.goType, ") {")
+	defer gf.P("}\n")
+
+	gf.P("if m != nil {")
+	gf.P("    return m.", field.GoName)
+	gf.P("}")
+
+	gf.P("return ", gf.defaultValue(&info, field))
+}
+
+func (gf *generator) defaultValue(info *fieldInformation, field *protogen.Field) string {
+	if info.repeated {
+		return "nil"
+	}
+
+	if field.Desc.HasDefault() {
+		panic("explicit default values not supported")
+	}
+	if info.pointer {
+		return "nil"
+	}
+	switch info.goType {
+	case "string":
+		return `""`
+	case "bool":
+		return "false"
+	case "[]byte":
+		return "nil"
+	case "int", "int8", "int16", "int32", "int64",
+		"uint", "uint8", "uint16", "uint32", "uint64",
+		"byte":
+		return "0"
+	}
+
+	// fallback to empty return
+	return "// zero"
 }

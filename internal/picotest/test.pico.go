@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: (devel)
-//     protoc:          v4.25.2
+//     protoc:          v5.27.3
 
 package picotest
 
@@ -55,6 +55,62 @@ func (m *Basic) Decode(c *picobuf.Decoder) {
 	c.Bytes(8, &m.BytesNumbers)
 }
 
+func (m *Basic) GetByte0() (v int32) {
+	if m != nil {
+		return m.Byte0
+	}
+	return 0
+}
+
+func (m *Basic) GetByte1() (v int32) {
+	if m != nil {
+		return m.Byte1
+	}
+	return 0
+}
+
+func (m *Basic) GetByte100() (v int32) {
+	if m != nil {
+		return m.Byte100
+	}
+	return 0
+}
+
+func (m *Basic) GetByte255() (v int32) {
+	if m != nil {
+		return m.Byte255
+	}
+	return 0
+}
+
+func (m *Basic) GetStringEmpty() (v string) {
+	if m != nil {
+		return m.StringEmpty
+	}
+	return ""
+}
+
+func (m *Basic) GetStringHello() (v string) {
+	if m != nil {
+		return m.StringHello
+	}
+	return ""
+}
+
+func (m *Basic) GetBytesZero() (v []byte) {
+	if m != nil {
+		return m.BytesZero
+	}
+	return nil
+}
+
+func (m *Basic) GetBytesNumbers() (v []byte) {
+	if m != nil {
+		return m.BytesNumbers
+	}
+	return nil
+}
+
 type Person struct {
 	Name    string   `json:"name,omitempty"`
 	Address *Address `json:"address,omitempty"`
@@ -82,6 +138,20 @@ func (m *Person) Decode(c *picobuf.Decoder) {
 	})
 }
 
+func (m *Person) GetName() (v string) {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *Person) GetAddress() (v *Address) {
+	if m != nil {
+		return m.Address
+	}
+	return nil
+}
+
 type Address struct {
 	Street string `json:"street,omitempty"`
 }
@@ -99,6 +169,13 @@ func (m *Address) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.String(1, &m.Street)
+}
+
+func (m *Address) GetStreet() (v string) {
+	if m != nil {
+		return m.Street
+	}
+	return ""
 }
 
 type AllTypes struct {
@@ -224,6 +301,230 @@ func (m *AllTypes) Decode(c *picobuf.Decoder) {
 	})
 }
 
+func (m *AllTypes) GetInt32() (v int32) {
+	if m != nil {
+		return m.Int32
+	}
+	return 0
+}
+
+func (m *AllTypes) GetInt64() (v int64) {
+	if m != nil {
+		return m.Int64
+	}
+	return 0
+}
+
+func (m *AllTypes) GetUint32() (v uint32) {
+	if m != nil {
+		return m.Uint32
+	}
+	return 0
+}
+
+func (m *AllTypes) GetUint64() (v uint64) {
+	if m != nil {
+		return m.Uint64
+	}
+	return 0
+}
+
+func (m *AllTypes) GetSint32() (v int32) {
+	if m != nil {
+		return m.Sint32
+	}
+	return 0
+}
+
+func (m *AllTypes) GetSint64() (v int64) {
+	if m != nil {
+		return m.Sint64
+	}
+	return 0
+}
+
+func (m *AllTypes) GetFixed32() (v uint32) {
+	if m != nil {
+		return m.Fixed32
+	}
+	return 0
+}
+
+func (m *AllTypes) GetFixed64() (v uint64) {
+	if m != nil {
+		return m.Fixed64
+	}
+	return 0
+}
+
+func (m *AllTypes) GetSfixed32() (v int32) {
+	if m != nil {
+		return m.Sfixed32
+	}
+	return 0
+}
+
+func (m *AllTypes) GetSfixed64() (v int64) {
+	if m != nil {
+		return m.Sfixed64
+	}
+	return 0
+}
+
+func (m *AllTypes) GetFloat() (v float32) {
+	if m != nil {
+		return m.Float
+	}
+	return // zero
+}
+
+func (m *AllTypes) GetDouble() (v float64) {
+	if m != nil {
+		return m.Double
+	}
+	return // zero
+}
+
+func (m *AllTypes) GetBool() (v bool) {
+	if m != nil {
+		return m.Bool
+	}
+	return false
+}
+
+func (m *AllTypes) GetString_() (v string) {
+	if m != nil {
+		return m.String_
+	}
+	return ""
+}
+
+func (m *AllTypes) GetBytes() (v []byte) {
+	if m != nil {
+		return m.Bytes
+	}
+	return nil
+}
+
+func (m *AllTypes) GetMessage() (v *Message) {
+	if m != nil {
+		return m.Message
+	}
+	return nil
+}
+
+func (m *AllTypes) GetInt32S() (v []int32) {
+	if m != nil {
+		return m.Int32S
+	}
+	return nil
+}
+
+func (m *AllTypes) GetInt64S() (v []int64) {
+	if m != nil {
+		return m.Int64S
+	}
+	return nil
+}
+
+func (m *AllTypes) GetUint32S() (v []uint32) {
+	if m != nil {
+		return m.Uint32S
+	}
+	return nil
+}
+
+func (m *AllTypes) GetUint64S() (v []uint64) {
+	if m != nil {
+		return m.Uint64S
+	}
+	return nil
+}
+
+func (m *AllTypes) GetSint32S() (v []int32) {
+	if m != nil {
+		return m.Sint32S
+	}
+	return nil
+}
+
+func (m *AllTypes) GetSint64S() (v []int64) {
+	if m != nil {
+		return m.Sint64S
+	}
+	return nil
+}
+
+func (m *AllTypes) GetFixed32S() (v []uint32) {
+	if m != nil {
+		return m.Fixed32S
+	}
+	return nil
+}
+
+func (m *AllTypes) GetFixed64S() (v []uint64) {
+	if m != nil {
+		return m.Fixed64S
+	}
+	return nil
+}
+
+func (m *AllTypes) GetSfixed32S() (v []int32) {
+	if m != nil {
+		return m.Sfixed32S
+	}
+	return nil
+}
+
+func (m *AllTypes) GetSfixed64S() (v []int64) {
+	if m != nil {
+		return m.Sfixed64S
+	}
+	return nil
+}
+
+func (m *AllTypes) GetFloats() (v []float32) {
+	if m != nil {
+		return m.Floats
+	}
+	return nil
+}
+
+func (m *AllTypes) GetDoubles() (v []float64) {
+	if m != nil {
+		return m.Doubles
+	}
+	return nil
+}
+
+func (m *AllTypes) GetBools() (v []bool) {
+	if m != nil {
+		return m.Bools
+	}
+	return nil
+}
+
+func (m *AllTypes) GetStrings() (v []string) {
+	if m != nil {
+		return m.Strings
+	}
+	return nil
+}
+
+func (m *AllTypes) GetBytess() (v [][]byte) {
+	if m != nil {
+		return m.Bytess
+	}
+	return nil
+}
+
+func (m *AllTypes) GetMessages() (v []*Message) {
+	if m != nil {
+		return m.Messages
+	}
+	return nil
+}
+
 type Message struct {
 	Int32 int32 `json:"int32,omitempty"`
 }
@@ -241,6 +542,13 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.Int32(1, &m.Int32)
+}
+
+func (m *Message) GetInt32() (v int32) {
+	if m != nil {
+		return m.Int32
+	}
+	return 0
 }
 
 type Piece struct {
@@ -265,6 +573,20 @@ func (m *Piece) Decode(c *picobuf.Decoder) {
 	(*pic.RawString)(&m.Alt).PicoDecode(c, 2)
 }
 
+func (m *Piece) GetId() (v pic.ID) {
+	if m != nil {
+		return m.Id
+	}
+	return // zero
+}
+
+func (m *Piece) GetAlt() (v string) {
+	if m != nil {
+		return m.Alt
+	}
+	return ""
+}
+
 type Map struct {
 	Values map[int32]int32 `json:"values,omitempty"`
 }
@@ -282,6 +604,13 @@ func (m *Map) Decode(c *picobuf.Decoder) {
 		return
 	}
 	(*picowire.MapInt32Int32)(&m.Values).PicoDecode(c, 1)
+}
+
+func (m *Map) GetValues() (v map[int32]int32) {
+	if m != nil {
+		return m.Values
+	}
+	return // zero
 }
 
 type VariationsScalar struct {
@@ -329,6 +658,55 @@ func (m *VariationsScalar) Decode(c *picobuf.Decoder) {
 		m.OptBytes = new([]byte)
 		c.Bytes(7, m.OptBytes)
 	}
+}
+
+func (m *VariationsScalar) GetValue() (v string) {
+	if m != nil {
+		return m.Value
+	}
+	return ""
+}
+
+func (m *VariationsScalar) GetOpt() (v *string) {
+	if m != nil {
+		return m.Opt
+	}
+	return nil
+}
+
+func (m *VariationsScalar) GetRep() (v []string) {
+	if m != nil {
+		return m.Rep
+	}
+	return nil
+}
+
+func (m *VariationsScalar) GetPresentBasic() (v string) {
+	if m != nil {
+		return m.PresentBasic
+	}
+	return ""
+}
+
+func (m *VariationsScalar) GetPresentOpt() (v string) {
+	if m != nil {
+		return m.PresentOpt
+	}
+	return ""
+}
+
+func (m *VariationsScalar) GetPresentRep() (v []string) {
+	if m != nil {
+		return m.PresentRep
+	}
+	return nil
+}
+
+func (m *VariationsScalar) GetOptBytes() (v *[]byte) {
+	if m != nil {
+		return m.OptBytes
+	}
+	return nil
 }
 
 type VariationsMessage struct {
@@ -387,6 +765,48 @@ func (m *VariationsMessage) Decode(c *picobuf.Decoder) {
 	})
 }
 
+func (m *VariationsMessage) GetValue() (v *Message) {
+	if m != nil {
+		return m.Value
+	}
+	return nil
+}
+
+func (m *VariationsMessage) GetOpt() (v *Message) {
+	if m != nil {
+		return m.Opt
+	}
+	return nil
+}
+
+func (m *VariationsMessage) GetRep() (v []*Message) {
+	if m != nil {
+		return m.Rep
+	}
+	return nil
+}
+
+func (m *VariationsMessage) GetPresentBasic() (v Message) {
+	if m != nil {
+		return m.PresentBasic
+	}
+	return // zero
+}
+
+func (m *VariationsMessage) GetPresentOpt() (v Message) {
+	if m != nil {
+		return m.PresentOpt
+	}
+	return // zero
+}
+
+func (m *VariationsMessage) GetPresentRep() (v []Message) {
+	if m != nil {
+		return m.PresentRep
+	}
+	return nil
+}
+
 type CustomBytes struct {
 	Value        pic.ID   `json:"value,omitempty"`
 	Opt          *pic.ID  `json:"opt,omitempty"`
@@ -438,6 +858,48 @@ func (m *CustomBytes) Decode(c *picobuf.Decoder) {
 	}
 }
 
+func (m *CustomBytes) GetValue() (v pic.ID) {
+	if m != nil {
+		return m.Value
+	}
+	return // zero
+}
+
+func (m *CustomBytes) GetOpt() (v *pic.ID) {
+	if m != nil {
+		return m.Opt
+	}
+	return nil
+}
+
+func (m *CustomBytes) GetRep() (v []pic.ID) {
+	if m != nil {
+		return m.Rep
+	}
+	return nil
+}
+
+func (m *CustomBytes) GetPresentBasic() (v pic.ID) {
+	if m != nil {
+		return m.PresentBasic
+	}
+	return // zero
+}
+
+func (m *CustomBytes) GetPresentOpt() (v pic.ID) {
+	if m != nil {
+		return m.PresentOpt
+	}
+	return // zero
+}
+
+func (m *CustomBytes) GetPresentRep() (v []pic.ID) {
+	if m != nil {
+		return m.PresentRep
+	}
+	return nil
+}
+
 type Timestamp struct {
 	Seconds int64 `json:"seconds,omitempty"`
 	Nanos   int32 `json:"nanos,omitempty"`
@@ -458,6 +920,20 @@ func (m *Timestamp) Decode(c *picobuf.Decoder) {
 	}
 	c.Int64(1, &m.Seconds)
 	c.Int32(2, &m.Nanos)
+}
+
+func (m *Timestamp) GetSeconds() (v int64) {
+	if m != nil {
+		return m.Seconds
+	}
+	return 0
+}
+
+func (m *Timestamp) GetNanos() (v int32) {
+	if m != nil {
+		return m.Nanos
+	}
+	return 0
 }
 
 type CustomMessageTypes struct {
@@ -543,6 +1019,69 @@ func (m *CustomMessageTypes) Decode(c *picobuf.Decoder) {
 	}
 }
 
+func (m *CustomMessageTypes) GetNormal() (v *Timestamp) {
+	if m != nil {
+		return m.Normal
+	}
+	return nil
+}
+
+func (m *CustomMessageTypes) GetCustomType() (v *pic.Timestamp) {
+	if m != nil {
+		return m.CustomType
+	}
+	return nil
+}
+
+func (m *CustomMessageTypes) GetPresentCustomType() (v pic.Timestamp) {
+	if m != nil {
+		return m.PresentCustomType
+	}
+	return // zero
+}
+
+func (m *CustomMessageTypes) GetCustomTypeCast() (v *time.Time) {
+	if m != nil {
+		return m.CustomTypeCast
+	}
+	return nil
+}
+
+func (m *CustomMessageTypes) GetPresentCustomTypeCast() (v time.Time) {
+	if m != nil {
+		return m.PresentCustomTypeCast
+	}
+	return // zero
+}
+
+func (m *CustomMessageTypes) GetRepeatedCustomType() (v []*pic.Timestamp) {
+	if m != nil {
+		return m.RepeatedCustomType
+	}
+	return nil
+}
+
+func (m *CustomMessageTypes) GetRepeatedPresentCustomType() (v []pic.Timestamp) {
+	if m != nil {
+		return m.RepeatedPresentCustomType
+	}
+	return nil
+}
+
+func (m *CustomMessageTypes) GetRepeatedCustomTypeCast() (v []*time.Time) {
+	if m != nil {
+		return m.RepeatedCustomTypeCast
+	}
+	return nil
+}
+
+func (m *CustomMessageTypes) GetRepeatedPresentCustomTypeCast() (v []time.Time) {
+	if m != nil {
+		return m.RepeatedPresentCustomTypeCast
+	}
+	return nil
+}
+
 type UnknownMessage struct {
 	Second           int64 `json:"second,omitempty"`
 	Fourth           int64 `json:"fourth,omitempty"`
@@ -566,6 +1105,20 @@ func (m *UnknownMessage) Decode(c *picobuf.Decoder) {
 	c.Int64(2, &m.Second)
 	c.Int64(4, &m.Fourth)
 	c.UnrecognizedFields(20, &m.XXX_unrecognized)
+}
+
+func (m *UnknownMessage) GetSecond() (v int64) {
+	if m != nil {
+		return m.Second
+	}
+	return 0
+}
+
+func (m *UnknownMessage) GetFourth() (v int64) {
+	if m != nil {
+		return m.Fourth
+	}
+	return 0
 }
 
 type KnownMessage struct {
@@ -597,6 +1150,34 @@ func (m *KnownMessage) Decode(c *picobuf.Decoder) {
 	c.Int64(3, &m.Third)
 	c.Int64(4, &m.Fourth)
 	c.UnrecognizedFields(30, &m.XXX_unrecognized)
+}
+
+func (m *KnownMessage) GetFirst() (v int64) {
+	if m != nil {
+		return m.First
+	}
+	return 0
+}
+
+func (m *KnownMessage) GetSecond() (v int64) {
+	if m != nil {
+		return m.Second
+	}
+	return 0
+}
+
+func (m *KnownMessage) GetThird() (v int64) {
+	if m != nil {
+		return m.Third
+	}
+	return 0
+}
+
+func (m *KnownMessage) GetFourth() (v int64) {
+	if m != nil {
+		return m.Fourth
+	}
+	return 0
 }
 
 type Tag struct {
@@ -720,6 +1301,13 @@ func (m *Tag) Decode(c *picobuf.Decoder) {
 			m.Timestamp.Decode(c)
 		})
 	}
+}
+
+func (m *Tag) GetKey() (v string) {
+	if m != nil {
+		return m.Key
+	}
+	return ""
 }
 
 type isTag_Value interface{ isTag_Value() }
