@@ -375,14 +375,14 @@ func (m *AllTypes) GetFloat() (v float32) {
 	if m != nil {
 		return m.Float
 	}
-	return // zero
+	return 0
 }
 
 func (m *AllTypes) GetDouble() (v float64) {
 	if m != nil {
 		return m.Double
 	}
-	return // zero
+	return 0
 }
 
 func (m *AllTypes) GetBool() (v bool) {
@@ -1317,6 +1317,62 @@ func (m *Tag) GetKey() (v string) {
 		return m.Key
 	}
 	return ""
+}
+
+func (m *Tag) GetValue() (v isTag_Value) {
+	if m != nil {
+		return m.Value
+	}
+	return nil
+}
+
+func (m *Tag) GetString_() (v []byte) {
+	if x, ok := m.GetValue().(*Tag_String_); ok {
+		return x.String_
+	}
+	return nil
+}
+
+func (m *Tag) GetInt64() (v int64) {
+	if x, ok := m.GetValue().(*Tag_Int64); ok {
+		return x.Int64
+	}
+	return 0
+}
+
+func (m *Tag) GetDouble() (v float64) {
+	if x, ok := m.GetValue().(*Tag_Double); ok {
+		return x.Double
+	}
+	return 0
+}
+
+func (m *Tag) GetBytes() (v []byte) {
+	if x, ok := m.GetValue().(*Tag_Bytes); ok {
+		return x.Bytes
+	}
+	return nil
+}
+
+func (m *Tag) GetBool() (v bool) {
+	if x, ok := m.GetValue().(*Tag_Bool); ok {
+		return x.Bool
+	}
+	return false
+}
+
+func (m *Tag) GetDurationNs() (v int64) {
+	if x, ok := m.GetValue().(*Tag_DurationNs); ok {
+		return x.DurationNs
+	}
+	return 0
+}
+
+func (m *Tag) GetTimestamp() (v *Timestamp) {
+	if x, ok := m.GetValue().(*Tag_Timestamp); ok {
+		return x.Timestamp
+	}
+	return nil
 }
 
 type isTag_Value interface{ isTag_Value() }

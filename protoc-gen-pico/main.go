@@ -727,12 +727,12 @@ func genMessageFieldAccess(gf *generator, m *protogen.Message) {
 
 	for _, field := range fields {
 		genFieldAccess(gf, m, field)
+		genFieldOneOfAccess(gf, m, field)
 	}
 }
 
 func genFieldAccess(gf *generator, m *protogen.Message, field *protogen.Field) {
 	info := fieldInfo(gf, field, field.Desc)
-
 	if info.oneof {
 		return
 	}
@@ -747,6 +747,34 @@ func genFieldAccess(gf *generator, m *protogen.Message, field *protogen.Field) {
 	gf.P("return ", gf.defaultValue(&info, field))
 }
 
+func genFieldOneOfAccess(gf *generator, m *protogen.Message, field *protogen.Field) {
+	info := fieldInfo(gf, field, field.Desc)
+	if !info.oneof {
+		return
+	}
+
+	if field.Oneof.Fields[0] == field {
+		gf.P("func (m *", m.GoIdent, ") Get", field.Oneof.GoName, "() (v ", oneofInterfaceName(gf, field.Oneof), ") {")
+
+		gf.P("if m != nil {")
+		gf.P("    return m.", field.Oneof.GoName)
+		gf.P("}")
+
+		gf.P("return nil")
+
+		gf.P("}\n")
+	}
+
+	gf.P("func (m *", m.GoIdent, ") Get", field.GoName, "() (v ", info.goType, ") {")
+	defer gf.P("}\n")
+
+	gf.P("if x, ok := m.Get", field.Oneof.GoName, "().(*", oneofWrapperTypeName(gf, field), "); ok {")
+	gf.P("    return x.", field.GoName)
+	gf.P("}")
+
+	gf.P("return ", gf.defaultValue(&info, field))
+}
+
 func (gf *generator) defaultValue(info *fieldInformation, field *protogen.Field) string {
 	if info.repeated {
 		return "nil"
@@ -755,6 +783,7 @@ func (gf *generator) defaultValue(info *fieldInformation, field *protogen.Field)
 	if field.Desc.HasDefault() {
 		panic("explicit default values not supported")
 	}
+
 	if info.pointer {
 		return "nil"
 	}
@@ -767,7 +796,7 @@ func (gf *generator) defaultValue(info *fieldInformation, field *protogen.Field)
 		return "nil"
 	case "int", "int8", "int16", "int32", "int64",
 		"uint", "uint8", "uint16", "uint32", "uint64",
-		"byte":
+		"byte", "float32", "float64":
 		return "0"
 	}
 
