@@ -133,7 +133,7 @@ func main() {
 func generateEncoder() []byte {
 	var b bytes.Buffer
 	pf := func(format string, args ...interface{}) {
-		fmt.Fprintf(&b, format, args...)
+		_, _ = fmt.Fprintf(&b, format, args...)
 	}
 	pf("// Copyright (C) 2021 Storj Labs, Inc.\n")
 	pf("// See LICENSE for copying information.\n")
@@ -238,7 +238,7 @@ func generateEncoder() []byte {
 func generateDecoder() []byte {
 	var b bytes.Buffer
 	pf := func(format string, args ...interface{}) {
-		fmt.Fprintf(&b, format, args...)
+		_, _ = fmt.Fprintf(&b, format, args...)
 	}
 	pf("// Copyright (C) 2021 Storj Labs, Inc.\n")
 	pf("// See LICENSE for copying information.\n")
@@ -317,7 +317,7 @@ func generateDecoder() []byte {
 func generateMaps() []byte {
 	var b bytes.Buffer
 	pf := func(format string, args ...interface{}) {
-		fmt.Fprintf(&b, format, args...)
+		_, _ = fmt.Fprintf(&b, format, args...)
 	}
 	pf("// Copyright (C) 2021 Storj Labs, Inc.\n")
 	pf("// See LICENSE for copying information.\n")

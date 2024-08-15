@@ -40,7 +40,7 @@ var osarches = []OsArch{
 
 func main() {
 	if err := run(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		_, _ = fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
@@ -126,7 +126,7 @@ func run() error {
 
 	if len(failures) > 0 {
 		for _, failure := range failures {
-			fmt.Fprintln(os.Stderr, failure)
+			_, _ = fmt.Fprintln(os.Stderr, failure)
 		}
 		return fmt.Errorf("compilation failed")
 	}
@@ -135,8 +135,8 @@ func run() error {
 	defer func() { _ = w.Flush() }()
 
 	for _, osarch := range osarches {
-		fmt.Fprintf(w, "goos: %v\n", osarch.Os)
-		fmt.Fprintf(w, "goarch: %v\n", osarch.Arch)
+		_, _ = fmt.Fprintf(w, "goos: %v\n", osarch.Os)
+		_, _ = fmt.Fprintf(w, "goarch: %v\n", osarch.Arch)
 
 		exeSize := func(target string) string {
 			size := exeResults[idx{osarch, target}].size
@@ -162,32 +162,32 @@ func run() error {
 			return fmt.Sprintf("%12v\t%12v-Δ", memorySize(asize), memorySize(asize-bsize))
 		}
 
-		fmt.Fprintf(w, "BenchmarkExeBase\t1\t%v\n", exeSize("base-fmt"))
-		fmt.Fprintf(w, "BenchmarkExeBaseConserv\t1\t%v\n", exeSize("basz-fmt"))
-		fmt.Fprintf(w, "BenchmarkExeBaseRuntime\t1\t%v\n", exeSize("base-run"))
+		_, _ = fmt.Fprintf(w, "BenchmarkExeBase\t1\t%v\n", exeSize("base-fmt"))
+		_, _ = fmt.Fprintf(w, "BenchmarkExeBaseConserv\t1\t%v\n", exeSize("basz-fmt"))
+		_, _ = fmt.Fprintf(w, "BenchmarkExeBaseRuntime\t1\t%v\n", exeSize("base-run"))
 
-		fmt.Fprintf(w, "BenchmarkExePico/One\t1\t%v\n", exeDelta("pico-one", "base-fmt"))
-		fmt.Fprintf(w, "BenchmarkExePico/Two\t1\t%v\n", exeDelta("pico-two", "base-fmt"))
-		fmt.Fprintf(w, "BenchmarkExePico/Sml\t1\t%v\n", exeDelta("pico-sml", "base-fmt"))
+		_, _ = fmt.Fprintf(w, "BenchmarkExePico/One\t1\t%v\n", exeDelta("pico-one", "base-fmt"))
+		_, _ = fmt.Fprintf(w, "BenchmarkExePico/Two\t1\t%v\n", exeDelta("pico-two", "base-fmt"))
+		_, _ = fmt.Fprintf(w, "BenchmarkExePico/Sml\t1\t%v\n", exeDelta("pico-sml", "base-fmt"))
 
-		fmt.Fprintf(w, "BenchmarkExePicoRuntime/One\t1\t%v\n", exeDelta("picr-one", "base-run"))
-		fmt.Fprintf(w, "BenchmarkExePicoRuntime/Two\t1\t%v\n", exeDelta("picr-two", "base-run"))
-		fmt.Fprintf(w, "BenchmarkExePicoRuntime/Sml\t1\t%v\n", exeDelta("picr-sml", "base-run"))
+		_, _ = fmt.Fprintf(w, "BenchmarkExePicoRuntime/One\t1\t%v\n", exeDelta("picr-one", "base-run"))
+		_, _ = fmt.Fprintf(w, "BenchmarkExePicoRuntime/Two\t1\t%v\n", exeDelta("picr-two", "base-run"))
+		_, _ = fmt.Fprintf(w, "BenchmarkExePicoRuntime/Sml\t1\t%v\n", exeDelta("picr-sml", "base-run"))
 
-		fmt.Fprintf(w, "BenchmarkPkgPico/One\t1\t%v\n", pkgSize("pico/one"))
-		fmt.Fprintf(w, "BenchmarkPkgPico/One/Encode\t1\t%v\t%v-f\n", pkgSizeMatch("pico/one", "one.(*Types).Encode"), pkgSizeMatch("pico/one", "one.(*Types).Encode.func"))
-		fmt.Fprintf(w, "BenchmarkPkgPico/One/Decode\t1\t%v\t%v-f\n", pkgSizeMatch("pico/one", "one.(*Types).Decode"), pkgSizeMatch("pico/one", "one.(*Types).Decode.func"))
-		fmt.Fprintf(w, "BenchmarkPkgPico/Two\t1\t%v\n", pkgDelta("pico/two", "pico/one"))
+		_, _ = fmt.Fprintf(w, "BenchmarkPkgPico/One\t1\t%v\n", pkgSize("pico/one"))
+		_, _ = fmt.Fprintf(w, "BenchmarkPkgPico/One/Encode\t1\t%v\t%v-f\n", pkgSizeMatch("pico/one", "one.(*Types).Encode"), pkgSizeMatch("pico/one", "one.(*Types).Encode.func"))
+		_, _ = fmt.Fprintf(w, "BenchmarkPkgPico/One/Decode\t1\t%v\t%v-f\n", pkgSizeMatch("pico/one", "one.(*Types).Decode"), pkgSizeMatch("pico/one", "one.(*Types).Decode.func"))
+		_, _ = fmt.Fprintf(w, "BenchmarkPkgPico/Two\t1\t%v\n", pkgDelta("pico/two", "pico/one"))
 
-		fmt.Fprintf(w, "BenchmarkExePicoConserv/One\t1\t%v\n", exeDelta("picz-one", "basz-fmt"))
-		fmt.Fprintf(w, "BenchmarkExePicoConserv/Two\t1\t%v\n", exeDelta("picz-two", "basz-fmt"))
-		fmt.Fprintf(w, "BenchmarkExePicoConserv/Sml\t1\t%v\n", exeDelta("picz-sml", "basz-fmt"))
+		_, _ = fmt.Fprintf(w, "BenchmarkExePicoConserv/One\t1\t%v\n", exeDelta("picz-one", "basz-fmt"))
+		_, _ = fmt.Fprintf(w, "BenchmarkExePicoConserv/Two\t1\t%v\n", exeDelta("picz-two", "basz-fmt"))
+		_, _ = fmt.Fprintf(w, "BenchmarkExePicoConserv/Sml\t1\t%v\n", exeDelta("picz-sml", "basz-fmt"))
 
-		fmt.Fprintf(w, "BenchmarkExeProto/One\t1\t%v\n", exeDelta("prot-one", "basz-fmt"))
-		fmt.Fprintf(w, "BenchmarkExeProto/Two\t1\t%v\n", exeDelta("prot-two", "basz-fmt"))
-		fmt.Fprintf(w, "BenchmarkExeProto/Sml\t1\t%v\n", exeDelta("prot-sml", "basz-fmt"))
+		_, _ = fmt.Fprintf(w, "BenchmarkExeProto/One\t1\t%v\n", exeDelta("prot-one", "basz-fmt"))
+		_, _ = fmt.Fprintf(w, "BenchmarkExeProto/Two\t1\t%v\n", exeDelta("prot-two", "basz-fmt"))
+		_, _ = fmt.Fprintf(w, "BenchmarkExeProto/Sml\t1\t%v\n", exeDelta("prot-sml", "basz-fmt"))
 
-		fmt.Fprintf(w, "\n")
+		_, _ = fmt.Fprintf(w, "\n")
 	}
 
 	return nil
