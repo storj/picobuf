@@ -156,6 +156,12 @@ func genMessageField(gf *generator, m *protogen.Message, field *protogen.Field) 
 		if oneof.Fields[0] != field {
 			return // only generate for first appearance
 		}
+
+		gf.P("// Types that are assignable to ", oneof.GoName, ":")
+		gf.P("//")
+		for _, field := range oneof.Fields {
+			gf.P("//\t*", oneofWrapperTypeName(gf, field))
+		}
 		gf.P(oneof.GoName, " ", oneofInterfaceName(gf, oneof))
 		return
 	}

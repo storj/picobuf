@@ -1181,7 +1181,16 @@ func (m *KnownMessage) GetFourth() (v int64) {
 }
 
 type Tag struct {
-	Key   string `json:"key,omitempty"`
+	Key string `json:"key,omitempty"`
+	// Types that are assignable to Value:
+	//
+	//	*Tag_String_
+	//	*Tag_Int64
+	//	*Tag_Double
+	//	*Tag_Bytes
+	//	*Tag_Bool
+	//	*Tag_DurationNs
+	//	*Tag_Timestamp
 	Value isTag_Value
 }
 

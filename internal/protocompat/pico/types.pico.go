@@ -406,7 +406,12 @@ func (m *OptionalMessage) Decode(c *picobuf.Decoder) {
 }
 
 type CommandMessage struct {
-	Class   string `json:"class,omitempty"`
+	Class string `json:"class,omitempty"`
+	// Types that are assignable to Command:
+	//
+	//	*CommandMessage_Name
+	//	*CommandMessage_Message
+	//	*CommandMessage_Count
 	Command isCommandMessage_Command
 }
 
