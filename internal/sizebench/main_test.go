@@ -16,7 +16,7 @@ func TestMessageSize(t *testing.T) {
 	}
 
 	checkSize(t, "message size", pkg.size, 83602, 4000)
-	checkSize(t, "encode size", pkg.symbols.sum("one.(*Types).Encode"), 1391, 128)
+	checkSize(t, "encode size", pkg.symbols.sum("one.(*Types).Encode"), 1239, 128)
 	checkSize(t, "decode size", pkg.symbols.sum("one.(*Types).Decode"), 1834, 128)
 }
 
