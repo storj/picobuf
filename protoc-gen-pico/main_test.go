@@ -84,8 +84,8 @@ func TestSupportedFeatures(t *testing.T) {
 		t.Fatalf("supported features = %d, want %d", plugin.SupportedFeatures, wantFeatures)
 	}
 	if plugin.SupportedEditionsMinimum != descriptorpb.Edition_EDITION_2023 ||
-		plugin.SupportedEditionsMaximum != descriptorpb.Edition_EDITION_2023 {
-		t.Fatalf("supported editions = %v..%v, want 2023..2023", plugin.SupportedEditionsMinimum, plugin.SupportedEditionsMaximum)
+		plugin.SupportedEditionsMaximum != descriptorpb.Edition_EDITION_2024 {
+		t.Fatalf("supported editions = %v..%v, want 2023..2024", plugin.SupportedEditionsMinimum, plugin.SupportedEditionsMaximum)
 	}
 }
 

@@ -1,9 +1,13 @@
 // Copyright (C) 2026 Storj Labs, Inc.
 // See LICENSE for copying information.
 
-edition = "2023";
+edition = "2024";
 
 package presencecompat.editions;
+
+import "google/protobuf/go_features.proto";
+
+option features.(pb.go).api_level = API_OPEN;
 
 enum ClosedState {
   option features.enum_type = CLOSED;

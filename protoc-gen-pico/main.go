@@ -53,7 +53,7 @@ func setSupportedFeatures(plugin *protogen.Plugin) {
 	plugin.SupportedFeatures = uint64(pluginpb.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL) |
 		uint64(pluginpb.CodeGeneratorResponse_FEATURE_SUPPORTS_EDITIONS)
 	plugin.SupportedEditionsMinimum = descriptorpb.Edition_EDITION_2023
-	plugin.SupportedEditionsMaximum = descriptorpb.Edition_EDITION_2023
+	plugin.SupportedEditionsMaximum = descriptorpb.Edition_EDITION_2024
 }
 
 type generator struct {
