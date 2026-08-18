@@ -6,7 +6,7 @@ package picobuf
 import "storj.io/picobuf/internal/protowire"
 
 func encodeZigZag32(v int32) uint32 {
-	return (uint32(v) << 1) ^ (uint32(v) >> 31)
+	return (uint32(v) << 1) ^ uint32(v>>31)
 }
 
 func decodeZigZag32(v uint32) int32 {

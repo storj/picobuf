@@ -54,6 +54,8 @@ func TestTypes(t *testing.T) {
 		{
 			Int32:    -2,
 			Int64:    -2,
+			Sint32:   -2,
+			Sint64:   -2,
 			Sfixed32: -2,
 			Sfixed64: -2,
 			Float:    -2,
@@ -93,10 +95,12 @@ func TestTypesSignedWire(t *testing.T) {
 	for _, v := range []int64{-2, -1, 0, 1, 2, math.MinInt32, math.MaxInt32, math.MinInt64, math.MaxInt64} {
 		p := pico.Types{
 			Int32: int32(v), Int64: v,
+			Sint32: int32(v), Sint64: v,
 			Sfixed32: int32(v), Sfixed64: v,
 		}
 		r := prot.Types{
 			Int32: int32(v), Int64: v,
+			Sint32: int32(v), Sint64: v,
 			Sfixed32: int32(v), Sfixed64: v,
 		}
 
@@ -107,6 +111,8 @@ func TestTypesSignedWire(t *testing.T) {
 		assert.NoError(t, proto.Unmarshal(data, &gotProt))
 		assert.Equal(t, gotProt.Int32, r.Int32)
 		assert.Equal(t, gotProt.Int64, r.Int64)
+		assert.Equal(t, gotProt.Sint32, r.Sint32)
+		assert.Equal(t, gotProt.Sint64, r.Sint64)
 		assert.Equal(t, gotProt.Sfixed32, r.Sfixed32)
 		assert.Equal(t, gotProt.Sfixed64, r.Sfixed64)
 
