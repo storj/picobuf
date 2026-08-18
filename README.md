@@ -72,6 +72,16 @@ message Person {
 
 Take a look at [picoconv.Timestamp](picoconv/timestamp.go) on how to implement custom serialization.
 
+### Editions and JSON
+
+Picobuf implements the protobuf binary wire format. It does not provide a
+ProtoJSON parser or serializer, so the Editions `features.json_format` setting
+does not change generated picobuf code. The protobuf compiler still validates
+the schema-level requirements of `ALLOW` before invoking the generator.
+
+Using Go's `encoding/json` with generated structs is not a substitute for
+ProtoJSON and is not guaranteed to produce the protobuf JSON mapping.
+
 ## Why?
 
 This library came out of a concern of creating smaller binaries. The official
