@@ -12,6 +12,7 @@ import (
 	"storj.io/picobuf"
 	"storj.io/picobuf/internal/picotest"
 	"storj.io/picobuf/internal/picotest/pic"
+	"storj.io/picobuf/internal/protowire"
 )
 
 func TestDecoder_Types(t *testing.T) {
@@ -240,6 +241,53 @@ func TestDecoder_CustomMessageTypes_Empty(t *testing.T) {
 		CustomTypeCast:        nil,
 		PresentCustomTypeCast: time.Time{},
 	})
+}
+
+// nested is a self-referential message, which picotest does not have.
+type nested struct{ Inner *nested }
+
+func (m *nested) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.Message(1, m.Inner.Encode)
+	return true
+}
+
+func (m *nested) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Message(1, func(c *picobuf.Decoder) {
+		if m.Inner == nil {
+			m.Inner = new(nested)
+		}
+		m.Inner.Decode(c)
+	})
+}
+
+// nestedMessage builds depth levels of nested, innermost first.
+func nestedMessage(depth int) []byte {
+	var data []byte
+	for i := 0; i < depth; i++ {
+		if len(data) > 0x7f {
+			t := []byte{0xa}
+			t = protowire.AppendVarint(t, uint64(len(data)))
+			data = append(t, data...)
+			continue
+		}
+		data = append([]byte{0xa, byte(len(data))}, data...)
+	}
+	return data
+}
+
+func TestDecoder_RecursionLimit(t *testing.T) {
+	var shallow nested
+	assert.NoError(t, picobuf.Unmarshal(nestedMessage(100), &shallow))
+
+	// Without a limit this exhausts the stack rather than returning an error.
+	var deep nested
+	assert.Error(t, picobuf.Unmarshal(nestedMessage(protowire.DefaultRecursionLimit+10), &deep))
 }
 
 func TestDecoder_Bool_NonOne(t *testing.T) {

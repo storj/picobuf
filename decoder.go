@@ -43,11 +43,23 @@ func (dec *Decoder) Err() error {
 }
 
 func (dec *Decoder) pushState(message []byte) {
+	// Nesting is bounded by the input for a self-referential message, so
+	// refuse to descend further rather than exhausting the stack. Still push,
+	// so that the caller's matching popState stays balanced.
+	tooDeep := len(dec.stack) >= protowire.DefaultRecursionLimit
+	if tooDeep {
+		message = nil
+	}
+
 	dec.stack = append(dec.stack, dec.messageDecodeState)
 	dec.messageDecodeState = messageDecodeState{
 		buffer: message,
 	}
 	dec.nextField(0)
+
+	if tooDeep {
+		dec.fail(0, "exceeded maximum recursion depth")
+	}
 }
 
 func (dec *Decoder) popState() {
