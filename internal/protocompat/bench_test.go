@@ -73,7 +73,7 @@ func BenchmarkPicobuf(b *testing.B) {
 func BenchmarkPicobufBytes(b *testing.B) {
 	r := rand.New(rand.NewSource(1))
 	msg := pico.RepeatedTypes{}
-	for i := 0; i < 32; i++ {
+	for range 32 {
 		msg.Bytes = append(msg.Bytes, []byte(randString(r, 64)))
 	}
 	encoded, err := picobuf.Marshal(&msg)

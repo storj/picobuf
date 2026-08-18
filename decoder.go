@@ -241,8 +241,8 @@ func (dec *Decoder) UnrecognizedFields(exclude uint64, out *[]byte, excludeHigh 
 // It does a linear scan, because a message that captures unrecognized fields has
 // few fields numbered 64 or above. Sort and binary search if that changes.
 func containsField(fields []FieldNumber, field FieldNumber) bool {
-	for _, f := range fields {
-		if f == field {
+	for _, candidate := range fields {
+		if candidate == field {
 			return true
 		}
 	}

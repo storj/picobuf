@@ -348,7 +348,7 @@ func genMessageDecode(gf *generator, m *protogen.Message) {
 	}
 	if getMessageOpts(m).CaptureUnrecognizedFields {
 		low, high := fieldsBitSet(m)
-		args := []interface{}{"c.UnrecognizedFields(", low, ", &m.XXX_unrecognized"}
+		args := []any{"c.UnrecognizedFields(", low, ", &m.XXX_unrecognized"}
 		for _, num := range high {
 			args = append(args, ", ", uint64(num))
 		}

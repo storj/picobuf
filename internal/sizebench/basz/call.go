@@ -11,6 +11,6 @@ import (
 // This forces conservative mode for everything reachable from v.
 //
 //go:noinline
-func CallDynamicMethod(v interface{}) {
+func CallDynamicMethod(v any) {
 	reflect.ValueOf(v).MethodByName("Parsed").Call(nil)
 }

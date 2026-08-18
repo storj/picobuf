@@ -269,7 +269,7 @@ func (m *nested) Decode(c *picobuf.Decoder) {
 // nestedMessage builds depth levels of nested, innermost first.
 func nestedMessage(depth int) []byte {
 	var data []byte
-	for i := 0; i < depth; i++ {
+	for range depth {
 		if len(data) > 0x7f {
 			t := []byte{0xa}
 			t = protowire.AppendVarint(t, uint64(len(data)))

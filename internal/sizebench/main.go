@@ -89,9 +89,7 @@ func run() error {
 
 	var g syncGroup
 	for _, osarch := range osarches {
-		osarch := osarch
 		for _, target := range exeTargets {
-			target := target
 			g.Go(func() {
 				limiter <- struct{}{}
 				defer func() { <-limiter }()
@@ -107,7 +105,6 @@ func run() error {
 		}
 
 		for _, target := range pkgTargets {
-			target := target
 			g.Go(func() {
 				limiter <- struct{}{}
 				defer func() { <-limiter }()
@@ -289,7 +286,7 @@ func analyzeSymbols(bin string) (symbols, error) {
 	}
 
 	var syms symbols
-	for _, line := range strings.Split(string(out), "\n") {
+	for line := range strings.SplitSeq(string(out), "\n") {
 		if strings.TrimSpace(line) == "" {
 			continue
 		}
@@ -322,9 +319,5 @@ func parseSymbol(line string) (sym symbol, err error) {
 type syncGroup struct{ sync.WaitGroup }
 
 func (g *syncGroup) Go(fn func()) {
-	g.Add(1)
-	go func() {
-		defer g.Done()
-		fn()
-	}()
+	g.WaitGroup.Go(fn)
 }

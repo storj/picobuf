@@ -124,7 +124,7 @@ func (enc *Encoder) RepeatedEnum(field FieldNumber, n int, fn func(index uint) i
 		return
 	}
 	enc.alwaysAnyBytes(field, func() {
-		for i := 0; i < n; i++ {
+		for i := range n {
 			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(fn(uint(i))))
 		}
 	})

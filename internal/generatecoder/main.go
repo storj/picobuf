@@ -19,7 +19,7 @@ import (
 // PrimitiveType represents a primitive type that the codec supports directly.
 type PrimitiveType struct {
 	Name      string
-	Zero      interface{}
+	Zero      any
 	Wire      protowire.Type
 	Suffix    string // Suffix corresponds to `AppendSuffix` and `ConsumeSuffix`.
 	EncodeFmt string
@@ -132,7 +132,7 @@ func main() {
 
 func generateEncoder() []byte {
 	var b bytes.Buffer
-	pf := func(format string, args ...interface{}) {
+	pf := func(format string, args ...any) {
 		_, _ = fmt.Fprintf(&b, format, args...)
 	}
 	pf("// Copyright (C) 2021 Storj Labs, Inc.\n")
@@ -243,7 +243,7 @@ func generateEncoder() []byte {
 
 func generateDecoder() []byte {
 	var b bytes.Buffer
-	pf := func(format string, args ...interface{}) {
+	pf := func(format string, args ...any) {
 		_, _ = fmt.Fprintf(&b, format, args...)
 	}
 	pf("// Copyright (C) 2021 Storj Labs, Inc.\n")
@@ -330,7 +330,7 @@ func generateDecoder() []byte {
 
 func generateMaps() []byte {
 	var b bytes.Buffer
-	pf := func(format string, args ...interface{}) {
+	pf := func(format string, args ...any) {
 		_, _ = fmt.Fprintf(&b, format, args...)
 	}
 	pf("// Copyright (C) 2021 Storj Labs, Inc.\n")
