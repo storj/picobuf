@@ -94,7 +94,7 @@ func (t *PrimitiveType) IsValidMapKey() bool {
 }
 
 var types = []PrimitiveType{
-	{"Bool", bool(false), protowire.VarintType, "Varint", "encodeBool64(%s)", "%s == 1"},
+	{"Bool", bool(false), protowire.VarintType, "Varint", "encodeBool64(%s)", "%s != 0"},
 	{"Int32", int32(0), protowire.VarintType, "Varint", "uint64(%s)", "int32(%s)"},
 	{"Int64", int64(0), protowire.VarintType, "Varint", "uint64(%s)", "int64(%s)"},
 	{"Uint32", uint32(0), protowire.VarintType, "Varint", "uint64(%s)", "uint32(%s)"},

@@ -27,7 +27,7 @@ func (dec *Decoder) Bool(field FieldNumber, v *bool) {
 		dec.fail(field, "unable to parse Varint")
 		return
 	}
-	*v = x == 1
+	*v = x != 0
 	dec.nextField(n)
 }
 
@@ -45,7 +45,7 @@ func (dec *Decoder) RepeatedBool(field FieldNumber, v *[]bool) {
 					dec.fail(field, "unable to parse Varint")
 					return
 				}
-				*v = append(*v, x == 1)
+				*v = append(*v, x != 0)
 				packed = packed[xn:]
 			}
 			dec.nextField(n)
@@ -55,7 +55,7 @@ func (dec *Decoder) RepeatedBool(field FieldNumber, v *[]bool) {
 				dec.fail(field, "unable to parse Varint")
 				return
 			}
-			*v = append(*v, x == 1)
+			*v = append(*v, x != 0)
 			dec.nextField(n)
 		default:
 			dec.fail(field, "expected wire type Varint")

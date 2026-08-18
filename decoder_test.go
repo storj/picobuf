@@ -242,6 +242,14 @@ func TestDecoder_CustomMessageTypes_Empty(t *testing.T) {
 	})
 }
 
+func TestDecoder_Bool_NonOne(t *testing.T) {
+	// Any non-zero varint decodes as true, as protobuf requires.
+	var decoded picotest.AllTypes
+	err := picobuf.Unmarshal([]byte{0x68, 0x02}, &decoded)
+	assert.NoError(t, err)
+	assert.That(t, decoded.Bool)
+}
+
 func TestDecoder_UnrecognizedFields_Empty(t *testing.T) {
 	var decoded picotest.UnknownMessage
 	err := picobuf.Unmarshal([]byte{}, &decoded)
