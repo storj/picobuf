@@ -305,11 +305,17 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 	case info.kind == kindEnum:
 		switch {
 		case info.pointer && !info.repeated:
-			panic("enum with pointer not supported")
+			gf.P("if m.", field.GoName, " != nil {")
+			gf.P("  c.AlwaysInt32(", field.Desc.Number(), ", (*int32)(m.", field.GoName, "))")
+			gf.P("}")
 		case info.pointer && info.repeated:
 			panic("enum with pointer and repeated not supported")
 		case !info.pointer && !info.repeated:
-			gf.P("c.Int32(", field.Desc.Number(), ", (*int32)(&m.", field.GoName, "))")
+			method := "Int32"
+			if always {
+				method = "AlwaysInt32"
+			}
+			gf.P("c.", method, "(", field.Desc.Number(), ", (*int32)(&m.", field.GoName, "))")
 		case !info.pointer && info.repeated:
 			gf.P("c.RepeatedEnum(", field.Desc.Number(), ", len(m.", field.GoName, ")", ", func(index uint) int32 {")
 			gf.P("  if index < uint(len(m.", field.GoName, ")) {")
@@ -487,7 +493,10 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 	case info.kind == kindEnum:
 		switch {
 		case info.pointer && !info.repeated:
-			panic("enum with pointer not supported")
+			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("  m.", field.GoName, " = new(", info.baseType, ")")
+			gf.P("  c.Int32(", field.Desc.Number(), ", (*int32)(m.", field.GoName, "))")
+			gf.P("}")
 		case info.pointer && info.repeated:
 			panic("enum with pointer and repeated not supported")
 		case !info.pointer && !info.repeated:

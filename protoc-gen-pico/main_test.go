@@ -129,3 +129,60 @@ func TestGenerateExplicitScalarPresence(t *testing.T) {
 		t.Fatalf("explicit scalar does not use presence-preserving encoder:\n%s", content)
 	}
 }
+
+func TestGenerateEnumPresence(t *testing.T) {
+	file := &descriptorpb.FileDescriptorProto{
+		Name:    proto.String("test.proto"),
+		Package: proto.String("test"),
+		Syntax:  proto.String("proto3"),
+		Options: &descriptorpb.FileOptions{GoPackage: proto.String("example.com/test;test")},
+		EnumType: []*descriptorpb.EnumDescriptorProto{{
+			Name: proto.String("State"),
+			Value: []*descriptorpb.EnumValueDescriptorProto{
+				{Name: proto.String("STATE_UNSPECIFIED"), Number: proto.Int32(0)},
+				{Name: proto.String("STATE_READY"), Number: proto.Int32(1)},
+			},
+		}},
+		MessageType: []*descriptorpb.DescriptorProto{{
+			Name: proto.String("Message"),
+			OneofDecl: []*descriptorpb.OneofDescriptorProto{
+				{Name: proto.String("choice")},
+				{Name: proto.String("_optional_state")},
+			},
+			Field: []*descriptorpb.FieldDescriptorProto{
+				{
+					Name: proto.String("optional_state"), Number: proto.Int32(1),
+					Label: descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+					Type:  descriptorpb.FieldDescriptorProto_TYPE_ENUM.Enum(), TypeName: proto.String(".test.State"),
+					Proto3Optional: proto.Bool(true), OneofIndex: proto.Int32(1),
+				},
+				{
+					Name: proto.String("selected_state"), Number: proto.Int32(2),
+					Label: descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+					Type:  descriptorpb.FieldDescriptorProto_TYPE_ENUM.Enum(), TypeName: proto.String(".test.State"),
+					OneofIndex: proto.Int32(0),
+				},
+			},
+		}},
+	}
+	plugin, err := (protogen.Options{}).New(&pluginpb.CodeGeneratorRequest{
+		ProtoFile: []*descriptorpb.FileDescriptorProto{file}, FileToGenerate: []string{"test.proto"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	genFile(plugin, plugin.Files[0], config{})
+	content := plugin.Response().File[0].GetContent()
+
+	for _, want := range []string{
+		"OptionalState *State",
+		"c.AlwaysInt32(1, (*int32)(m.OptionalState))",
+		"m.OptionalState = new(State)",
+		"c.Int32(1, (*int32)(m.OptionalState))",
+		"c.AlwaysInt32(2, (*int32)(&m.SelectedState))",
+	} {
+		if !strings.Contains(content, want) {
+			t.Fatalf("generated enum presence code does not contain %q:\n%s", want, content)
+		}
+	}
+}
