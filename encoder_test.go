@@ -18,6 +18,18 @@ func puint32(v uint32) *uint32 { return &v }
 func pstring(v string) *string { return &v }
 func pbytes(v []byte) *[]byte  { return &v }
 
+func TestMarshal_InvalidUTF8(t *testing.T) {
+	invalid := string([]byte{0xff})
+
+	data, err := picobuf.Marshal(&picotest.AllTypes{String_: invalid})
+	assert.Error(t, err)
+	assert.Nil(t, data)
+
+	data, err = picobuf.Marshal(&picotest.AllTypes{Strings: []string{invalid}})
+	assert.Error(t, err)
+	assert.Nil(t, data)
+}
+
 func TestEncoder_Types(t *testing.T) {
 	enc := picobuf.NewEncoder()
 

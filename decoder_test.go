@@ -319,6 +319,17 @@ func TestUnmarshalOptions_MaxRepeatedElements(t *testing.T) {
 	assert.DeepEqual(t, message.Int32S, []int32{1, 2, 3})
 }
 
+func TestUnmarshalOptions_InvalidUTF8(t *testing.T) {
+	data := []byte{0x72, 0x01, 0xff, 0xf2, 0x01, 0x01, 0xff}
+
+	var message picotest.AllTypes
+	assert.Error(t, picobuf.Unmarshal(data, &message))
+
+	assert.NoError(t, (picobuf.UnmarshalOptions{AllowInvalidUTF8: true}).Unmarshal(data, &message))
+	assert.Equal(t, message.String_, string([]byte{0xff}))
+	assert.DeepEqual(t, message.Strings, []string{string([]byte{0xff})})
+}
+
 func TestUnmarshalOptions_AliasInput(t *testing.T) {
 	data, err := picobuf.Marshal(&picotest.AllTypes{
 		String_: "hello",

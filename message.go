@@ -58,6 +58,9 @@ func (field FieldNumber) String() string {
 func Marshal(msg Message) ([]byte, error) {
 	enc := &Encoder{}
 	msg.Encode(enc)
+	if enc.err != nil {
+		return nil, enc.err
+	}
 	return enc.Buffer(), nil
 }
 
@@ -65,6 +68,9 @@ func Marshal(msg Message) ([]byte, error) {
 func MarshalBuffer(msg Message, buffer []byte) ([]byte, error) {
 	enc := &Encoder{buffer: buffer[:0]}
 	msg.Encode(enc)
+	if enc.err != nil {
+		return nil, enc.err
+	}
 	return enc.Buffer(), nil
 }
 
@@ -76,6 +82,9 @@ type UnmarshalOptions struct {
 	// and must not be modified or reused, otherwise the message changes with
 	// it. String fields are always copied.
 	AliasInput bool
+	// AllowInvalidUTF8 permits string fields containing invalid UTF-8. By
+	// default, invalid protobuf strings cause unmarshalling to fail.
+	AllowInvalidUTF8 bool
 
 	// MaxInputSize rejects inputs larger than this many bytes. Zero disables
 	// the limit.
@@ -94,6 +103,7 @@ func (opts UnmarshalOptions) Unmarshal(data []byte, msg Message) error {
 	}
 	dec := &Decoder{
 		aliasInput:          opts.AliasInput,
+		allowInvalidUTF8:    opts.AllowInvalidUTF8,
 		maxRecursionDepth:   opts.MaxRecursionDepth,
 		maxRepeatedElements: opts.MaxRepeatedElements,
 	}

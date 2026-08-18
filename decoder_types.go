@@ -7,6 +7,7 @@ package picobuf
 
 import (
 	"math"
+	"unicode/utf8"
 
 	"storj.io/picobuf/internal/protowire"
 )
@@ -794,6 +795,10 @@ func (dec *Decoder) String(field FieldNumber, v *string) {
 		dec.fail(field, "unable to parse String")
 		return
 	}
+	if !dec.allowInvalidUTF8 && !utf8.ValidString(x) {
+		dec.fail(field, "invalid UTF-8")
+		return
+	}
 	*v = x
 	dec.nextField(n)
 }
@@ -811,6 +816,10 @@ func (dec *Decoder) RepeatedString(field FieldNumber, v *[]string) {
 			x, n := protowire.ConsumeString(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse String")
+				return
+			}
+			if !dec.allowInvalidUTF8 && !utf8.ValidString(x) {
+				dec.fail(field, "invalid UTF-8")
 				return
 			}
 			*v = append(*v, x)

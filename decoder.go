@@ -17,9 +17,10 @@ const (
 // Decoder implements decoding of protobuf messages.
 type Decoder struct {
 	messageDecodeState
-	stack      []messageDecodeState
-	init       bool
-	aliasInput bool
+	stack            []messageDecodeState
+	init             bool
+	aliasInput       bool
+	allowInvalidUTF8 bool
 
 	maxRecursionDepth   int
 	maxRepeatedElements int

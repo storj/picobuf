@@ -10,6 +10,31 @@ import (
 // Encoder implements encoding of protobuf format.
 type Encoder struct {
 	buffer []byte
+	err    error
+}
+
+// Err returns the error that occurred during encoding.
+func (enc *Encoder) Err() error { return enc.err }
+
+// Fail fails the encoding process.
+func (enc *Encoder) Fail(field FieldNumber, msg string) {
+	enc.fail(field, msg)
+}
+
+//go:noinline
+func (enc *Encoder) fail(field FieldNumber, msg string) {
+	if enc.err == nil {
+		enc.err = &encodeError{field: field, message: msg}
+	}
+}
+
+type encodeError struct {
+	field   FieldNumber
+	message string
+}
+
+func (e encodeError) Error() string {
+	return "failed while encoding " + e.field.String() + ": " + e.message
 }
 
 // NewEncoder creates a new Encoder.
