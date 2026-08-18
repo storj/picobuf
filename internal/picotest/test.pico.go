@@ -2,7 +2,7 @@
 // source: test.proto
 //
 // versions:
-//     protoc-gen-pico: v0.0.5-0.20260818114458-cdee8cf8013f+dirty
+//     protoc-gen-pico: v0.0.5-0.20260818140818-34684aac4c25+dirty
 //     protoc:          v7.35.1
 
 package picotest
@@ -16,14 +16,14 @@ import (
 )
 
 type Basic struct {
-	Byte0        int32  `json:"byte0,omitempty"`
-	Byte1        int32  `json:"byte1,omitempty"`
-	Byte100      int32  `json:"byte100,omitempty"`
-	Byte255      int32  `json:"byte255,omitempty"`
-	StringEmpty  string `json:"string_empty,omitempty"`
-	StringHello  string `json:"string_hello,omitempty"`
-	BytesZero    []byte `json:"bytes_zero,omitempty"`
-	BytesNumbers []byte `json:"bytes_numbers,omitempty"`
+	Byte0        int32  `json:"byte0,omitzero"`
+	Byte1        int32  `json:"byte1,omitzero"`
+	Byte100      int32  `json:"byte100,omitzero"`
+	Byte255      int32  `json:"byte255,omitzero"`
+	StringEmpty  string `json:"string_empty,omitzero"`
+	StringHello  string `json:"string_hello,omitzero"`
+	BytesZero    []byte `json:"bytes_zero,omitzero"`
+	BytesNumbers []byte `json:"bytes_numbers,omitzero"`
 }
 
 func (m *Basic) Encode(c *picobuf.Encoder) bool {
@@ -112,8 +112,8 @@ func (m *Basic) GetBytesNumbers() (v []byte) {
 }
 
 type Person struct {
-	Name    string   `json:"name,omitempty"`
-	Address *Address `json:"address,omitempty"`
+	Name    string   `json:"name,omitzero"`
+	Address *Address `json:"address,omitzero"`
 }
 
 func (m *Person) Encode(c *picobuf.Encoder) bool {
@@ -153,7 +153,7 @@ func (m *Person) GetAddress() (v *Address) {
 }
 
 type Address struct {
-	Street string `json:"street,omitempty"`
+	Street string `json:"street,omitzero"`
 }
 
 func (m *Address) Encode(c *picobuf.Encoder) bool {
@@ -179,38 +179,38 @@ func (m *Address) GetStreet() (v string) {
 }
 
 type AllTypes struct {
-	Int32     int32      `json:"int32,omitempty"`
-	Int64     int64      `json:"int64,omitempty"`
-	Uint32    uint32     `json:"uint32,omitempty"`
-	Uint64    uint64     `json:"uint64,omitempty"`
-	Sint32    int32      `json:"sint32,omitempty"`
-	Sint64    int64      `json:"sint64,omitempty"`
-	Fixed32   uint32     `json:"fixed32,omitempty"`
-	Fixed64   uint64     `json:"fixed64,omitempty"`
-	Sfixed32  int32      `json:"sfixed32,omitempty"`
-	Sfixed64  int64      `json:"sfixed64,omitempty"`
-	Float     float32    `json:"float,omitempty"`
-	Double    float64    `json:"double,omitempty"`
-	Bool      bool       `json:"bool,omitempty"`
-	String_   string     `json:"string,omitempty"`
-	Bytes     []byte     `json:"bytes,omitempty"`
-	Message   *Message   `json:"message,omitempty"`
-	Int32S    []int32    `json:"int32s,omitempty"`
-	Int64S    []int64    `json:"int64s,omitempty"`
-	Uint32S   []uint32   `json:"uint32s,omitempty"`
-	Uint64S   []uint64   `json:"uint64s,omitempty"`
-	Sint32S   []int32    `json:"sint32s,omitempty"`
-	Sint64S   []int64    `json:"sint64s,omitempty"`
-	Fixed32S  []uint32   `json:"fixed32s,omitempty"`
-	Fixed64S  []uint64   `json:"fixed64s,omitempty"`
-	Sfixed32S []int32    `json:"sfixed32s,omitempty"`
-	Sfixed64S []int64    `json:"sfixed64s,omitempty"`
-	Floats    []float32  `json:"floats,omitempty"`
-	Doubles   []float64  `json:"doubles,omitempty"`
-	Bools     []bool     `json:"bools,omitempty"`
-	Strings   []string   `json:"strings,omitempty"`
-	Bytess    [][]byte   `json:"bytess,omitempty"`
-	Messages  []*Message `json:"messages,omitempty"`
+	Int32     int32      `json:"int32,omitzero"`
+	Int64     int64      `json:"int64,omitzero"`
+	Uint32    uint32     `json:"uint32,omitzero"`
+	Uint64    uint64     `json:"uint64,omitzero"`
+	Sint32    int32      `json:"sint32,omitzero"`
+	Sint64    int64      `json:"sint64,omitzero"`
+	Fixed32   uint32     `json:"fixed32,omitzero"`
+	Fixed64   uint64     `json:"fixed64,omitzero"`
+	Sfixed32  int32      `json:"sfixed32,omitzero"`
+	Sfixed64  int64      `json:"sfixed64,omitzero"`
+	Float     float32    `json:"float,omitzero"`
+	Double    float64    `json:"double,omitzero"`
+	Bool      bool       `json:"bool,omitzero"`
+	String_   string     `json:"string,omitzero"`
+	Bytes     []byte     `json:"bytes,omitzero"`
+	Message   *Message   `json:"message,omitzero"`
+	Int32S    []int32    `json:"int32s,omitzero"`
+	Int64S    []int64    `json:"int64s,omitzero"`
+	Uint32S   []uint32   `json:"uint32s,omitzero"`
+	Uint64S   []uint64   `json:"uint64s,omitzero"`
+	Sint32S   []int32    `json:"sint32s,omitzero"`
+	Sint64S   []int64    `json:"sint64s,omitzero"`
+	Fixed32S  []uint32   `json:"fixed32s,omitzero"`
+	Fixed64S  []uint64   `json:"fixed64s,omitzero"`
+	Sfixed32S []int32    `json:"sfixed32s,omitzero"`
+	Sfixed64S []int64    `json:"sfixed64s,omitzero"`
+	Floats    []float32  `json:"floats,omitzero"`
+	Doubles   []float64  `json:"doubles,omitzero"`
+	Bools     []bool     `json:"bools,omitzero"`
+	Strings   []string   `json:"strings,omitzero"`
+	Bytess    [][]byte   `json:"bytess,omitzero"`
+	Messages  []*Message `json:"messages,omitzero"`
 }
 
 func (m *AllTypes) Encode(c *picobuf.Encoder) bool {
@@ -526,7 +526,7 @@ func (m *AllTypes) GetMessages() (v []*Message) {
 }
 
 type Message struct {
-	Int32 int32 `json:"int32,omitempty"`
+	Int32 int32 `json:"int32,omitzero"`
 }
 
 func (m *Message) Encode(c *picobuf.Encoder) bool {
@@ -552,8 +552,8 @@ func (m *Message) GetInt32() (v int32) {
 }
 
 type Piece struct {
-	Id  pic.ID `json:"id,omitempty"`
-	Alt string `json:"alt,omitempty"`
+	Id  pic.ID `json:"id,omitzero"`
+	Alt string `json:"alt,omitzero"`
 }
 
 func (m *Piece) Encode(c *picobuf.Encoder) bool {
@@ -588,7 +588,7 @@ func (m *Piece) GetAlt() (v string) {
 }
 
 type Map struct {
-	Values map[int32]int32 `json:"values,omitempty"`
+	Values map[int32]int32 `json:"values,omitzero"`
 }
 
 func (m *Map) Encode(c *picobuf.Encoder) bool {
@@ -614,13 +614,13 @@ func (m *Map) GetValues() (v map[int32]int32) {
 }
 
 type VariationsScalar struct {
-	Value        string   `json:"value,omitempty"`
-	Opt          *string  `json:"opt,omitempty"`
-	Rep          []string `json:"rep,omitempty"`
-	PresentBasic string   `json:"present_basic,omitempty"`
-	PresentOpt   string   `json:"present_opt,omitempty"`
-	PresentRep   []string `json:"present_rep,omitempty"`
-	OptBytes     *[]byte  `json:"opt_bytes,omitempty"`
+	Value        string   `json:"value,omitzero"`
+	Opt          *string  `json:"opt,omitzero"`
+	Rep          []string `json:"rep,omitzero"`
+	PresentBasic string   `json:"present_basic,omitzero"`
+	PresentOpt   string   `json:"present_opt,omitzero"`
+	PresentRep   []string `json:"present_rep,omitzero"`
+	OptBytes     *[]byte  `json:"opt_bytes,omitzero"`
 }
 
 func (m *VariationsScalar) Encode(c *picobuf.Encoder) bool {
@@ -710,12 +710,12 @@ func (m *VariationsScalar) GetOptBytes() (v *[]byte) {
 }
 
 type VariationsMessage struct {
-	Value        *Message   `json:"value,omitempty"`
-	Opt          *Message   `json:"opt,omitempty"`
-	Rep          []*Message `json:"rep,omitempty"`
-	PresentBasic Message    `json:"present_basic,omitempty"`
-	PresentOpt   Message    `json:"present_opt,omitempty"`
-	PresentRep   []Message  `json:"present_rep,omitempty"`
+	Value        *Message   `json:"value,omitzero"`
+	Opt          *Message   `json:"opt,omitzero"`
+	Rep          []*Message `json:"rep,omitzero"`
+	PresentBasic Message    `json:"present_basic,omitzero"`
+	PresentOpt   Message    `json:"present_opt,omitzero"`
+	PresentRep   []Message  `json:"present_rep,omitzero"`
 }
 
 func (m *VariationsMessage) Encode(c *picobuf.Encoder) bool {
@@ -808,12 +808,12 @@ func (m *VariationsMessage) GetPresentRep() (v []Message) {
 }
 
 type CustomBytes struct {
-	Value        pic.ID   `json:"value,omitempty"`
-	Opt          *pic.ID  `json:"opt,omitempty"`
-	Rep          []pic.ID `json:"rep,omitempty"`
-	PresentBasic pic.ID   `json:"present_basic,omitempty"`
-	PresentOpt   pic.ID   `json:"present_opt,omitempty"`
-	PresentRep   []pic.ID `json:"present_rep,omitempty"`
+	Value        pic.ID   `json:"value,omitzero"`
+	Opt          *pic.ID  `json:"opt,omitzero"`
+	Rep          []pic.ID `json:"rep,omitzero"`
+	PresentBasic pic.ID   `json:"present_basic,omitzero"`
+	PresentOpt   pic.ID   `json:"present_opt,omitzero"`
+	PresentRep   []pic.ID `json:"present_rep,omitzero"`
 }
 
 func (m *CustomBytes) Encode(c *picobuf.Encoder) bool {
@@ -901,8 +901,8 @@ func (m *CustomBytes) GetPresentRep() (v []pic.ID) {
 }
 
 type Timestamp struct {
-	Seconds int64 `json:"seconds,omitempty"`
-	Nanos   int32 `json:"nanos,omitempty"`
+	Seconds int64 `json:"seconds,omitzero"`
+	Nanos   int32 `json:"nanos,omitzero"`
 }
 
 func (m *Timestamp) Encode(c *picobuf.Encoder) bool {
@@ -937,15 +937,15 @@ func (m *Timestamp) GetNanos() (v int32) {
 }
 
 type CustomMessageTypes struct {
-	Normal                        *Timestamp       `json:"normal,omitempty"`
-	CustomType                    *pic.Timestamp   `json:"custom_type,omitempty"`
-	PresentCustomType             pic.Timestamp    `json:"present_custom_type,omitempty"`
-	CustomTypeCast                *time.Time       `json:"custom_type_cast,omitempty"`
-	PresentCustomTypeCast         time.Time        `json:"present_custom_type_cast,omitempty"`
-	RepeatedCustomType            []*pic.Timestamp `json:"repeated_custom_type,omitempty"`
-	RepeatedPresentCustomType     []pic.Timestamp  `json:"repeated_present_custom_type,omitempty"`
-	RepeatedCustomTypeCast        []*time.Time     `json:"repeated_custom_type_cast,omitempty"`
-	RepeatedPresentCustomTypeCast []time.Time      `json:"repeated_present_custom_type_cast,omitempty"`
+	Normal                        *Timestamp       `json:"normal,omitzero"`
+	CustomType                    *pic.Timestamp   `json:"custom_type,omitzero"`
+	PresentCustomType             pic.Timestamp    `json:"present_custom_type,omitzero"`
+	CustomTypeCast                *time.Time       `json:"custom_type_cast,omitzero"`
+	PresentCustomTypeCast         time.Time        `json:"present_custom_type_cast,omitzero"`
+	RepeatedCustomType            []*pic.Timestamp `json:"repeated_custom_type,omitzero"`
+	RepeatedPresentCustomType     []pic.Timestamp  `json:"repeated_present_custom_type,omitzero"`
+	RepeatedCustomTypeCast        []*time.Time     `json:"repeated_custom_type_cast,omitzero"`
+	RepeatedPresentCustomTypeCast []time.Time      `json:"repeated_present_custom_type_cast,omitzero"`
 }
 
 func (m *CustomMessageTypes) Encode(c *picobuf.Encoder) bool {
@@ -1083,8 +1083,8 @@ func (m *CustomMessageTypes) GetRepeatedPresentCustomTypeCast() (v []time.Time) 
 }
 
 type UnknownMessage struct {
-	Second           int64 `json:"second,omitempty"`
-	Fourth           int64 `json:"fourth,omitempty"`
+	Second           int64 `json:"second,omitzero"`
+	Fourth           int64 `json:"fourth,omitzero"`
 	XXX_unrecognized []byte
 }
 
@@ -1122,10 +1122,10 @@ func (m *UnknownMessage) GetFourth() (v int64) {
 }
 
 type KnownMessage struct {
-	First            int64 `json:"first,omitempty"`
-	Second           int64 `json:"second,omitempty"`
-	Third            int64 `json:"third,omitempty"`
-	Fourth           int64 `json:"fourth,omitempty"`
+	First            int64 `json:"first,omitzero"`
+	Second           int64 `json:"second,omitzero"`
+	Third            int64 `json:"third,omitzero"`
+	Fourth           int64 `json:"fourth,omitzero"`
 	XXX_unrecognized []byte
 }
 
@@ -1181,7 +1181,7 @@ func (m *KnownMessage) GetFourth() (v int64) {
 }
 
 type Tag struct {
-	Key string `json:"key,omitempty"`
+	Key string `json:"key,omitzero"`
 	// Types that are assignable to Value:
 	//
 	//	*Tag_String_
@@ -1414,9 +1414,9 @@ func (*Tag_DurationNs) isTag_Value() {}
 func (*Tag_Timestamp) isTag_Value()  {}
 
 type HighUnknown struct {
-	Low              int64 `json:"low,omitempty"`
-	High             int64 `json:"high,omitempty"`
-	Higher           int64 `json:"higher,omitempty"`
+	Low              int64 `json:"low,omitzero"`
+	High             int64 `json:"high,omitzero"`
+	Higher           int64 `json:"higher,omitzero"`
 	XXX_unrecognized []byte
 }
 

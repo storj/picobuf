@@ -182,7 +182,7 @@ func fieldJSONTag(gf *generator, field *protogen.Field) string {
 	// It seems the `field.JSONName()` and the json names std protobuf
 	// generates are different. The std protobuf-go generates using
 	// the original field name in protobuf.
-	return "`json:\"" + string(field.Desc.Name()) + ",omitempty\"`"
+	return "`json:\"" + string(field.Desc.Name()) + ",omitzero\"`"
 }
 
 func genMessageMethods(gf *generator, m *protogen.Message) {
