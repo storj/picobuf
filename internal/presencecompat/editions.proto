@@ -14,4 +14,9 @@ message Message {
   bytes implicit_data = 6 [features.field_presence = IMPLICIT];
   repeated int32 packed_numbers = 7;
   repeated int32 expanded_numbers = 8 [features.repeated_field_encoding = EXPANDED];
+  Nested nested = 9 [features.message_encoding = DELIMITED];
+}
+
+message Nested {
+  int32 value = 1;
 }

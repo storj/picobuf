@@ -293,19 +293,27 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 		}
 
 	case info.kind == kindMessage:
+		messageMethod := "Message"
+		alwaysMethod := "AlwaysMessage"
+		presentMethod := "PresentMessage"
+		if info.delimited {
+			messageMethod = "Group"
+			alwaysMethod = "AlwaysGroup"
+			presentMethod = "PresentGroup"
+		}
 		switch {
 		case info.pointer && !info.repeated:
-			gf.P("c.Message(", field.Desc.Number(), ", m.", field.GoName, ".Encode)")
+			gf.P("c.", messageMethod, "(", field.Desc.Number(), ", m.", field.GoName, ".Encode)")
 		case info.pointer && info.repeated:
 			gf.P("for _, x := range m.", field.GoName, " {")
-			gf.P("  c.AlwaysMessage(", field.Desc.Number(), ", x.Encode)")
+			gf.P("  c.", alwaysMethod, "(", field.Desc.Number(), ", x.Encode)")
 			gf.P("}")
 		case !info.pointer && !info.repeated:
-			gf.P("c.PresentMessage(", field.Desc.Number(), ", m.", field.GoName, ".Encode)")
+			gf.P("c.", presentMethod, "(", field.Desc.Number(), ", m.", field.GoName, ".Encode)")
 		case !info.pointer && info.repeated:
 			gf.P("for i := range m.", field.GoName, " {")
 			gf.P("  x := &m.", field.GoName, "[i]")
-			gf.P("  c.AlwaysMessage(", field.Desc.Number(), ", x.Encode)")
+			gf.P("  c.", alwaysMethod, "(", field.Desc.Number(), ", x.Encode)")
 			gf.P("}")
 		}
 
@@ -480,24 +488,32 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 		}
 
 	case info.kind == kindMessage:
+		messageMethod := "Message"
+		repeatedMethod := "RepeatedMessage"
+		presentMethod := "PresentMessage"
+		if info.delimited {
+			messageMethod = "Group"
+			repeatedMethod = "RepeatedGroup"
+			presentMethod = "PresentGroup"
+		}
 		switch {
 		case info.pointer && !info.repeated:
-			gf.P("c.Message(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Decoder"), ") {")
+			gf.P("c.", messageMethod, "(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Decoder"), ") {")
 			gf.P("  if m.", field.GoName, " == nil {")
 			gf.P("    m.", field.GoName, " = new(", info.baseType, ")")
 			gf.P("  }")
 			gf.P("  m.", field.GoName, ".Decode(c)")
 			gf.P("})")
 		case info.pointer && info.repeated:
-			gf.P("c.RepeatedMessage(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Decoder"), ") {")
+			gf.P("c.", repeatedMethod, "(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Decoder"), ") {")
 			gf.P("  x := new(", info.baseType, ")")
 			gf.P("  c.Loop(x.Decode)")
 			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", x)")
 			gf.P("})")
 		case !info.pointer && !info.repeated:
-			gf.P("c.PresentMessage(", field.Desc.Number(), ", m.", field.GoName, ".Decode)")
+			gf.P("c.", presentMethod, "(", field.Desc.Number(), ", m.", field.GoName, ".Decode)")
 		case !info.pointer && info.repeated:
-			gf.P("c.RepeatedMessage(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Decoder"), ") {")
+			gf.P("c.", repeatedMethod, "(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Decoder"), ") {")
 			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", ", info.baseType, "{})")
 			gf.P("  c.Loop(m.", field.GoName, "[len(m.", field.GoName, ")-1].Decode)")
 			gf.P("})")
@@ -588,13 +604,14 @@ const (
 )
 
 type fieldInformation struct {
-	baseType string
-	goType   string
-	castType string
-	kind     fieldKind
-	pointer  bool
-	repeated bool
-	oneof    bool
+	baseType  string
+	goType    string
+	castType  string
+	kind      fieldKind
+	pointer   bool
+	repeated  bool
+	oneof     bool
+	delimited bool
 
 	key   *fieldInformation
 	value *fieldInformation
@@ -631,7 +648,7 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 		info.baseType = "string"
 	case protoreflect.BytesKind:
 		info.baseType = "[]byte"
-	case protoreflect.MessageKind:
+	case protoreflect.MessageKind, protoreflect.GroupKind:
 		if field.Desc.IsMap() {
 			info.kind = kindMap
 
@@ -657,6 +674,7 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 		} else {
 			info.kind = kindMessage
 			info.pointer = true
+			info.delimited = desc.Kind() == protoreflect.GroupKind
 			info.baseType = gf.QualifiedGoIdent(field.Message.GoIdent)
 		}
 	default:

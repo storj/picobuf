@@ -211,6 +211,55 @@ func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Decoder)) {
 	dec.nextField(n)
 }
 
+// Group decodes a delimited message.
+func (dec *Decoder) Group(field FieldNumber, fn func(*Decoder)) {
+	if field != dec.pendingField {
+		return
+	}
+	if dec.pendingWire != protowire.StartGroupType {
+		dec.fail(field, "expected wire type StartGroup")
+		return
+	}
+
+	message, n := protowire.ConsumeGroup(protowire.Number(field), dec.buffer)
+	if n < 0 {
+		dec.fail(field, "unable to parse group")
+		return
+	}
+	dec.pushState(message)
+	dec.Loop(fn)
+	dec.popState()
+	dec.nextField(n)
+}
+
+// PresentGroup decodes an always-present delimited message.
+func (dec *Decoder) PresentGroup(field FieldNumber, fn func(*Decoder)) {
+	dec.Group(field, fn)
+}
+
+// RepeatedGroup decodes repeated delimited messages.
+func (dec *Decoder) RepeatedGroup(field FieldNumber, fn func(*Decoder)) {
+	for field == dec.pendingField {
+		if !dec.takeRepeated(field) {
+			return
+		}
+		if dec.pendingWire != protowire.StartGroupType {
+			dec.fail(field, "expected wire type StartGroup")
+			return
+		}
+
+		message, n := protowire.ConsumeGroup(protowire.Number(field), dec.buffer)
+		if n < 0 {
+			dec.fail(field, "unable to parse group")
+			return
+		}
+		dec.pushState(message)
+		fn(dec)
+		dec.popState()
+		dec.nextField(n)
+	}
+}
+
 // UnrecognizedFields decodes fields that are not in the provided set.
 //
 // Fields below 64 are excluded via the exclude bitmask, higher field numbers

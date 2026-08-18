@@ -255,6 +255,40 @@ func TestEditionsRepeatedEncodingMatchesProtobuf(t *testing.T) {
 	}
 }
 
+func TestEditionsDelimitedMessageMatchesProtobuf(t *testing.T) {
+	for _, value := range []*int32{new(int32), pointerTo(int32(123))} {
+		picoMessage := &editionpico.Message{Nested: &editionpico.Nested{Value: value}}
+		protoMessage := &editionprot.Message{Nested: &editionprot.Nested{Value: value}}
+
+		picoData, err := picobuf.Marshal(picoMessage)
+		if err != nil {
+			t.Fatal(err)
+		}
+		protoData, err := proto.Marshal(protoMessage)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.Equal(picoData, protoData) {
+			t.Fatalf("encoded Editions delimited message differs: pico %x, protobuf %x", picoData, protoData)
+		}
+
+		var decodedProto editionprot.Message
+		if err := proto.Unmarshal(picoData, &decodedProto); err != nil {
+			t.Fatal(err)
+		}
+		if !proto.Equal(&decodedProto, protoMessage) {
+			t.Fatalf("protobuf decoded delimited message as %v", &decodedProto)
+		}
+		var decodedPico editionpico.Message
+		if err := picobuf.Unmarshal(protoData, &decodedPico); err != nil {
+			t.Fatal(err)
+		}
+		if decodedPico.Nested == nil || decodedPico.Nested.Value == nil || *decodedPico.Nested.Value != *value {
+			t.Fatalf("picobuf decoded delimited message as %+v", decodedPico.Nested)
+		}
+	}
+}
+
 func TestRepeatedAndMapDoNotTrackPresence(t *testing.T) {
 	picoNil, err := picobuf.Marshal(&pico.Message{})
 	if err != nil {

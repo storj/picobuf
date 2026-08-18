@@ -20,6 +20,7 @@ type Message struct {
 	ImplicitData    []byte  `json:"implicit_data,omitzero"`
 	PackedNumbers   []int32 `json:"packed_numbers,omitzero"`
 	ExpandedNumbers []int32 `json:"expanded_numbers,omitzero"`
+	Nested          *Nested `json:"nested,omitzero"`
 }
 
 func (m *Message) Encode(c *picobuf.Encoder) bool {
@@ -42,6 +43,7 @@ func (m *Message) Encode(c *picobuf.Encoder) bool {
 	for i := range m.ExpandedNumbers {
 		c.AlwaysInt32(8, &m.ExpandedNumbers[i])
 	}
+	c.Group(9, m.Nested.Encode)
 	return true
 }
 
@@ -66,4 +68,34 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 	c.Bytes(6, &m.ImplicitData)
 	c.RepeatedInt32(7, &m.PackedNumbers)
 	c.RepeatedInt32(8, &m.ExpandedNumbers)
+	c.Group(9, func(c *picobuf.Decoder) {
+		if m.Nested == nil {
+			m.Nested = new(Nested)
+		}
+		m.Nested.Decode(c)
+	})
+}
+
+type Nested struct {
+	Value *int32 `json:"value,omitzero"`
+}
+
+func (m *Nested) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	if m.Value != nil {
+		c.AlwaysInt32(1, m.Value)
+	}
+	return true
+}
+
+func (m *Nested) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	if c.PendingField() == 1 {
+		m.Value = new(int32)
+		c.Int32(1, m.Value)
+	}
 }

@@ -116,6 +116,57 @@ func (enc *Encoder) PresentMessage(field FieldNumber, fn func(enc *Encoder) bool
 	})
 }
 
+// Group encodes a delimited message when it is present.
+//
+//go:noinline
+func (enc *Encoder) Group(field FieldNumber, fn func(enc *Encoder) bool) {
+	enc.anyGroup(field, fn)
+}
+
+// AlwaysGroup always encodes a delimited message.
+//
+//go:noinline
+func (enc *Encoder) AlwaysGroup(field FieldNumber, fn func(enc *Encoder) bool) {
+	enc.alwaysGroup(field, func() { fn(enc) })
+}
+
+// PresentGroup encodes a non-empty always-present delimited message.
+//
+//go:noinline
+func (enc *Encoder) PresentGroup(field FieldNumber, fn func(enc *Encoder) bool) {
+	enc.anyGroup(field, func(enc *Encoder) bool {
+		start := len(enc.buffer)
+		fn(enc)
+		return len(enc.buffer) > start
+	})
+}
+
+func (enc *Encoder) anyGroup(field FieldNumber, fn func(enc *Encoder) bool) bool {
+	start := len(enc.buffer)
+	enc.buffer = appendTag(enc.buffer, field, protowire.StartGroupType)
+	if !enc.enterMessage() {
+		enc.buffer = enc.buffer[:start]
+		return false
+	}
+	ok := fn(enc)
+	enc.depth--
+	if !ok {
+		enc.buffer = enc.buffer[:start]
+		return false
+	}
+	enc.buffer = appendTag(enc.buffer, field, protowire.EndGroupType)
+	return true
+}
+
+func (enc *Encoder) alwaysGroup(field FieldNumber, fn func()) {
+	enc.buffer = appendTag(enc.buffer, field, protowire.StartGroupType)
+	if enc.enterMessage() {
+		fn()
+		enc.depth--
+	}
+	enc.buffer = appendTag(enc.buffer, field, protowire.EndGroupType)
+}
+
 // RepeatedEnum encodes a repeated enumeration.
 //
 //go:noinline

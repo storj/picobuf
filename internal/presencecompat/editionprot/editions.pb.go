@@ -34,6 +34,7 @@ type Message struct {
 	ImplicitData    []byte                 `protobuf:"bytes,6,opt,name=implicit_data,json=implicitData" json:"implicit_data,omitempty"`
 	PackedNumbers   []int32                `protobuf:"varint,7,rep,packed,name=packed_numbers,json=packedNumbers" json:"packed_numbers,omitempty"`
 	ExpandedNumbers []int32                `protobuf:"varint,8,rep,name=expanded_numbers,json=expandedNumbers" json:"expanded_numbers,omitempty"`
+	Nested          *Nested                `protobuf:"group,9,opt,name=Nested,json=nested" json:"nested,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -124,11 +125,62 @@ func (x *Message) GetExpandedNumbers() []int32 {
 	return nil
 }
 
+func (x *Message) GetNested() *Nested {
+	if x != nil {
+		return x.Nested
+	}
+	return nil
+}
+
+type Nested struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Value         *int32                 `protobuf:"varint,1,opt,name=value" json:"value,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Nested) Reset() {
+	*x = Nested{}
+	mi := &file_editions_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Nested) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Nested) ProtoMessage() {}
+
+func (x *Nested) ProtoReflect() protoreflect.Message {
+	mi := &file_editions_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Nested.ProtoReflect.Descriptor instead.
+func (*Nested) Descriptor() ([]byte, []int) {
+	return file_editions_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *Nested) GetValue() int32 {
+	if x != nil && x.Value != nil {
+		return *x.Value
+	}
+	return 0
+}
+
 var File_editions_proto protoreflect.FileDescriptor
 
 const file_editions_proto_rawDesc = "" +
 	"\n" +
-	"\x0eeditions.proto\x12\x17presencecompat.editions\"\xdd\x02\n" +
+	"\x0eeditions.proto\x12\x17presencecompat.editions\"\x9d\x03\n" +
 	"\aMessage\x12'\n" +
 	"\x0fexplicit_number\x18\x01 \x01(\x05R\x0eexplicitNumber\x12#\n" +
 	"\rexplicit_text\x18\x02 \x01(\tR\fexplicitText\x12#\n" +
@@ -137,7 +189,10 @@ const file_editions_proto_rawDesc = "" +
 	"\rimplicit_text\x18\x05 \x01(\tB\x05\xaa\x01\x02\b\x02R\fimplicitText\x12*\n" +
 	"\rimplicit_data\x18\x06 \x01(\fB\x05\xaa\x01\x02\b\x02R\fimplicitData\x12%\n" +
 	"\x0epacked_numbers\x18\a \x03(\x05R\rpackedNumbers\x120\n" +
-	"\x10expanded_numbers\x18\b \x03(\x05B\x05\xaa\x01\x02\x18\x02R\x0fexpandedNumbersb\beditionsp\xe8\a"
+	"\x10expanded_numbers\x18\b \x03(\x05B\x05\xaa\x01\x02\x18\x02R\x0fexpandedNumbers\x12>\n" +
+	"\x06nested\x18\t \x01(\v2\x1f.presencecompat.editions.NestedB\x05\xaa\x01\x02(\x02R\x06nested\"\x1e\n" +
+	"\x06Nested\x12\x14\n" +
+	"\x05value\x18\x01 \x01(\x05R\x05valueb\beditionsp\xe8\a"
 
 var (
 	file_editions_proto_rawDescOnce sync.Once
@@ -151,16 +206,18 @@ func file_editions_proto_rawDescGZIP() []byte {
 	return file_editions_proto_rawDescData
 }
 
-var file_editions_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_editions_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_editions_proto_goTypes = []any{
 	(*Message)(nil), // 0: presencecompat.editions.Message
+	(*Nested)(nil),  // 1: presencecompat.editions.Nested
 }
 var file_editions_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	1, // 0: presencecompat.editions.Message.nested:type_name -> presencecompat.editions.Nested
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_editions_proto_init() }
@@ -174,7 +231,7 @@ func file_editions_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_editions_proto_rawDesc), len(file_editions_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
