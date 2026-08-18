@@ -296,6 +296,13 @@ func TestDecoder_UnrecognizedFields_Decode(t *testing.T) {
 	}))
 }
 
+func TestDecoder_UnrecognizedFields_Truncated(t *testing.T) {
+	// field 5, wire type Bytes, with a length that runs past the buffer
+	var decoded picotest.UnknownMessage
+	err := picobuf.Unmarshal([]byte{0x2a, 0x7f}, &decoded)
+	assert.Error(t, err)
+}
+
 func TestCodec_UnrecognizedFields(t *testing.T) {
 	initialKnown := picotest.KnownMessage{
 		First:  0x11,

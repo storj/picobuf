@@ -147,6 +147,10 @@ func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Decoder)) {
 func (dec *Decoder) UnrecognizedFields(exclude uint64, out *[]byte) {
 	for dec.pendingField >= 0 && (dec.pendingField >= 64 || exclude&(1<<uint64(dec.pendingField)) == 0) {
 		n := protowire.ConsumeFieldValue(protowire.Number(dec.pendingField), dec.pendingWire, dec.buffer)
+		if n < 0 {
+			dec.fail(dec.pendingField, "unable to parse unrecognized field")
+			return
+		}
 		*out = protowire.AppendTag(*out, protowire.Number(dec.pendingField), dec.pendingWire)
 		*out = append(*out, dec.buffer[:n]...)
 		dec.nextField(n)
