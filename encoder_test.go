@@ -30,6 +30,24 @@ func TestMarshal_InvalidUTF8(t *testing.T) {
 	assert.Nil(t, data)
 }
 
+func TestEncoder_RecursionLimit(t *testing.T) {
+	// nested is the self-referential message from decoder_test.go.
+	shallow := new(nested)
+	for m, i := shallow, 0; i < 100; i++ {
+		m.Inner = new(nested)
+		m = m.Inner
+	}
+	_, err := picobuf.Marshal(shallow)
+	assert.NoError(t, err)
+
+	// A cycle nests without bound. Without a limit this exhausts the stack,
+	// which is a fatal error that no recover can catch.
+	cyclic := new(nested)
+	cyclic.Inner = cyclic
+	_, err = picobuf.Marshal(cyclic)
+	assert.Error(t, err)
+}
+
 func TestEncoder_Types(t *testing.T) {
 	enc := picobuf.NewEncoder()
 

@@ -4,6 +4,8 @@
 package picobuf
 
 import (
+	"errors"
+
 	"storj.io/picobuf/internal/protowire"
 )
 
@@ -15,6 +17,8 @@ type Encoder struct {
 	skipUTF8Validation bool
 	skipUTF8Depth      int
 }
+
+var errEncodeRecursionDepth = errors.New("picobuf: exceeded maximum nesting depth while encoding")
 
 // WithoutUTF8Validation runs fn without validating encoded string fields.
 // It is intended for generated code implementing protobuf schema features.
@@ -58,6 +62,20 @@ type encodeError struct {
 
 func (e encodeError) Error() string {
 	return "failed while encoding " + e.field.String() + ": " + e.message
+}
+
+// enterMessage reports whether another level of nesting may be encoded. A
+// self-referential message can nest without bound, which would exhaust the
+// stack, so refuse to descend past the limit the decoder also uses.
+func (enc *Encoder) enterMessage() bool {
+	if enc.depth >= protowire.DefaultRecursionLimit {
+		if enc.err == nil {
+			enc.err = errEncodeRecursionDepth
+		}
+		return false
+	}
+	enc.depth++
+	return true
 }
 
 // NewEncoder creates a new Encoder.
@@ -123,11 +141,13 @@ func (enc *Encoder) anyBytes(field FieldNumber, fn func() bool) bool {
 	enc.buffer = append(enc.buffer, lengthBufferPrediction[:]...)
 	messageStart := len(enc.buffer)
 	// encode the submessage
-	enc.depth++
-	ok := fn()
-	enc.depth--
+	ok := enc.enterMessage()
+	if ok {
+		ok = fn()
+		enc.depth--
+	}
 	if !ok {
-		// The message was nil, we can remove the tag.
+		// The message was nil or too deeply nested, we can remove the tag.
 		enc.buffer = enc.buffer[:tagStart]
 		return false
 	}
@@ -162,9 +182,10 @@ func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
 	enc.buffer = append(enc.buffer, lengthBufferPrediction[:]...)
 	messageStart := len(enc.buffer)
 	// encode the submessage
-	enc.depth++
-	fn()
-	enc.depth--
+	if enc.enterMessage() {
+		fn()
+		enc.depth--
+	}
 	messageLength := len(enc.buffer) - messageStart
 	bytesForSize := protowire.SizeVarint(uint64(messageLength))
 	if bytesForSize == len(lengthBufferPrediction) {
