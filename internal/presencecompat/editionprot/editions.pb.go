@@ -268,6 +268,94 @@ func (x *Nested) GetValue() int32 {
 	return 0
 }
 
+type RequiredMessage struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	RequiredNumber *int32                 `protobuf:"varint,1,req,name=required_number,json=requiredNumber" json:"required_number,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *RequiredMessage) Reset() {
+	*x = RequiredMessage{}
+	mi := &file_editions_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RequiredMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RequiredMessage) ProtoMessage() {}
+
+func (x *RequiredMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_editions_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RequiredMessage.ProtoReflect.Descriptor instead.
+func (*RequiredMessage) Descriptor() ([]byte, []int) {
+	return file_editions_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *RequiredMessage) GetRequiredNumber() int32 {
+	if x != nil && x.RequiredNumber != nil {
+		return *x.RequiredNumber
+	}
+	return 0
+}
+
+type RequiredParent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Child         *RequiredMessage       `protobuf:"bytes,1,opt,name=child" json:"child,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RequiredParent) Reset() {
+	*x = RequiredParent{}
+	mi := &file_editions_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RequiredParent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RequiredParent) ProtoMessage() {}
+
+func (x *RequiredParent) ProtoReflect() protoreflect.Message {
+	mi := &file_editions_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RequiredParent.ProtoReflect.Descriptor instead.
+func (*RequiredParent) Descriptor() ([]byte, []int) {
+	return file_editions_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *RequiredParent) GetChild() *RequiredMessage {
+	if x != nil {
+		return x.Child
+	}
+	return nil
+}
+
 var File_editions_proto protoreflect.FileDescriptor
 
 const file_editions_proto_rawDesc = "" +
@@ -289,7 +377,11 @@ const file_editions_proto_rawDesc = "" +
 	"\x15selected_closed_state\x18\f \x01(\x0e2$.presencecompat.editions.ClosedStateH\x00R\x13selectedClosedStateB\x12\n" +
 	"\x10closed_selection\"\x1e\n" +
 	"\x06Nested\x12\x14\n" +
-	"\x05value\x18\x01 \x01(\x05R\x05value*I\n" +
+	"\x05value\x18\x01 \x01(\x05R\x05value\"A\n" +
+	"\x0fRequiredMessage\x12.\n" +
+	"\x0frequired_number\x18\x01 \x01(\x05B\x05\xaa\x01\x02\b\x03R\x0erequiredNumber\"P\n" +
+	"\x0eRequiredParent\x12>\n" +
+	"\x05child\x18\x01 \x01(\v2(.presencecompat.editions.RequiredMessageR\x05child*I\n" +
 	"\vClosedState\x12\x1c\n" +
 	"\x18CLOSED_STATE_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12CLOSED_STATE_READY\x10\x01\x1a\x04:\x02\x10\x02b\beditionsp\xe8\a"
@@ -307,22 +399,25 @@ func file_editions_proto_rawDescGZIP() []byte {
 }
 
 var file_editions_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_editions_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_editions_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_editions_proto_goTypes = []any{
-	(ClosedState)(0), // 0: presencecompat.editions.ClosedState
-	(*Message)(nil),  // 1: presencecompat.editions.Message
-	(*Nested)(nil),   // 2: presencecompat.editions.Nested
+	(ClosedState)(0),        // 0: presencecompat.editions.ClosedState
+	(*Message)(nil),         // 1: presencecompat.editions.Message
+	(*Nested)(nil),          // 2: presencecompat.editions.Nested
+	(*RequiredMessage)(nil), // 3: presencecompat.editions.RequiredMessage
+	(*RequiredParent)(nil),  // 4: presencecompat.editions.RequiredParent
 }
 var file_editions_proto_depIdxs = []int32{
 	2, // 0: presencecompat.editions.Message.nested:type_name -> presencecompat.editions.Nested
 	0, // 1: presencecompat.editions.Message.closed_state:type_name -> presencecompat.editions.ClosedState
 	0, // 2: presencecompat.editions.Message.closed_states:type_name -> presencecompat.editions.ClosedState
 	0, // 3: presencecompat.editions.Message.selected_closed_state:type_name -> presencecompat.editions.ClosedState
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	3, // 4: presencecompat.editions.RequiredParent.child:type_name -> presencecompat.editions.RequiredMessage
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_editions_proto_init() }
@@ -339,7 +434,7 @@ func file_editions_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_editions_proto_rawDesc), len(file_editions_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -162,3 +162,71 @@ func (m *Nested) Decode(c *picobuf.Decoder) {
 		c.Int32(1, m.Value)
 	}
 }
+
+type RequiredMessage struct {
+	RequiredNumber *int32 `json:"required_number,omitzero"`
+}
+
+func (m *RequiredMessage) PicoValidateRequired() error {
+	if m == nil {
+		return nil
+	}
+	if m.RequiredNumber == nil {
+		return picobuf.MissingRequiredField(1)
+	}
+	return nil
+}
+
+func (m *RequiredMessage) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	if m.RequiredNumber != nil {
+		c.AlwaysInt32(1, m.RequiredNumber)
+	}
+	return true
+}
+
+func (m *RequiredMessage) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	if c.PendingField() == 1 {
+		m.RequiredNumber = new(int32)
+		c.Int32(1, m.RequiredNumber)
+	}
+}
+
+type RequiredParent struct {
+	Child *RequiredMessage `json:"child,omitzero"`
+}
+
+func (m *RequiredParent) PicoValidateRequired() error {
+	if m == nil {
+		return nil
+	}
+	if err := picobuf.ValidateRequired(m.Child); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *RequiredParent) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.Message(1, m.Child.Encode)
+	return true
+}
+
+func (m *RequiredParent) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Message(1, func(c *picobuf.Decoder) {
+		if m.Child == nil {
+			m.Child = new(RequiredMessage)
+		}
+		m.Child.Decode(c)
+	})
+}

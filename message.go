@@ -4,6 +4,7 @@
 package picobuf
 
 import (
+	"fmt"
 	"math"
 
 	"storj.io/picobuf/internal/protowire"
@@ -13,6 +14,25 @@ import (
 type Message interface {
 	Encode(*Encoder) bool
 	Decode(*Decoder)
+}
+
+// RequiredFields is implemented by generated messages that can validate
+// legacy required fields.
+type RequiredFields interface {
+	PicoValidateRequired() error
+}
+
+// ValidateRequired validates all legacy required fields known to msg.
+func ValidateRequired(msg any) error {
+	if required, ok := msg.(RequiredFields); ok {
+		return required.PicoValidateRequired()
+	}
+	return nil
+}
+
+// MissingRequiredField returns an error for an unset legacy required field.
+func MissingRequiredField(field FieldNumber) error {
+	return fmt.Errorf("required field %s is not set", field)
 }
 
 // CustomType defines methods that are used for custom encode or decode behaviors.
@@ -56,6 +76,9 @@ func (field FieldNumber) String() string {
 
 // Marshal encodes msg as bytes.
 func Marshal(msg Message) ([]byte, error) {
+	if err := ValidateRequired(msg); err != nil {
+		return nil, err
+	}
 	enc := &Encoder{}
 	msg.Encode(enc)
 	if enc.err != nil {
@@ -66,6 +89,9 @@ func Marshal(msg Message) ([]byte, error) {
 
 // MarshalBuffer encodes msg as bytes with buffer.
 func MarshalBuffer(msg Message, buffer []byte) ([]byte, error) {
+	if err := ValidateRequired(msg); err != nil {
+		return nil, err
+	}
 	enc := &Encoder{buffer: buffer[:0]}
 	msg.Encode(enc)
 	if enc.err != nil {
@@ -109,6 +135,9 @@ func (opts UnmarshalOptions) Unmarshal(data []byte, msg Message) error {
 	}
 	dec.maxRepeatedElements = opts.MaxRepeatedElements
 	dec.Loop(msg.Decode)
+	if dec.err == nil {
+		dec.err = ValidateRequired(msg)
+	}
 	return dec.err
 }
 

@@ -336,6 +336,55 @@ func TestEditionsClosedEnumsMatchProtobuf(t *testing.T) {
 	}
 }
 
+func TestEditionsLegacyRequiredMatchesProtobuf(t *testing.T) {
+	if _, err := proto.Marshal(&editionprot.RequiredMessage{}); err == nil {
+		t.Fatal("protobuf marshaled a message with a missing required field")
+	}
+	if _, err := picobuf.Marshal(&editionpico.RequiredMessage{}); err == nil {
+		t.Fatal("picobuf marshaled a message with a missing required field")
+	}
+
+	var protoMissing editionprot.RequiredMessage
+	if err := proto.Unmarshal(nil, &protoMissing); err == nil {
+		t.Fatal("protobuf unmarshaled a message with a missing required field")
+	}
+	var picoMissing editionpico.RequiredMessage
+	if err := picobuf.Unmarshal(nil, &picoMissing); err == nil {
+		t.Fatal("picobuf unmarshaled a message with a missing required field")
+	}
+
+	picoData, err := picobuf.Marshal(&editionpico.RequiredMessage{RequiredNumber: new(int32)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	protoData, err := proto.Marshal(&editionprot.RequiredMessage{RequiredNumber: new(int32)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(picoData, protoData) {
+		t.Fatalf("encoded required defaults differ: pico %x, protobuf %x", picoData, protoData)
+	}
+}
+
+func TestEditionsNestedLegacyRequiredMatchesProtobuf(t *testing.T) {
+	if _, err := proto.Marshal(&editionprot.RequiredParent{Child: &editionprot.RequiredMessage{}}); err == nil {
+		t.Fatal("protobuf marshaled a nested message with a missing required field")
+	}
+	if _, err := picobuf.Marshal(&editionpico.RequiredParent{Child: &editionpico.RequiredMessage{}}); err == nil {
+		t.Fatal("picobuf marshaled a nested message with a missing required field")
+	}
+
+	data := []byte{0x0a, 0x00}
+	var protoMessage editionprot.RequiredParent
+	if err := proto.Unmarshal(data, &protoMessage); err == nil {
+		t.Fatal("protobuf unmarshaled a nested message with a missing required field")
+	}
+	var picoMessage editionpico.RequiredParent
+	if err := picobuf.Unmarshal(data, &picoMessage); err == nil {
+		t.Fatal("picobuf unmarshaled a nested message with a missing required field")
+	}
+}
+
 func TestRepeatedAndMapDoNotTrackPresence(t *testing.T) {
 	picoNil, err := picobuf.Marshal(&pico.Message{})
 	if err != nil {

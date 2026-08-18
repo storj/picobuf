@@ -33,3 +33,11 @@ message Message {
 message Nested {
   int32 value = 1;
 }
+
+message RequiredMessage {
+  int32 required_number = 1 [features.field_presence = LEGACY_REQUIRED];
+}
+
+message RequiredParent {
+  RequiredMessage child = 1;
+}
