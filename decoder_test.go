@@ -324,6 +324,26 @@ func TestUnmarshalOptions_AliasInput(t *testing.T) {
 	assert.Equal(t, aliased.String_, "hello")
 }
 
+func TestDecoder_InvalidFieldNumber(t *testing.T) {
+	// ConsumeTag only rejects field numbers below the minimum, so numbers from
+	// MaxValidNumber up to MaxInt32 reach the decoder. Loop considers those
+	// invalid and stops, which used to discard the rest of the message and
+	// still report success.
+	for _, num := range []uint64{1 << 29, 1<<31 - 1} {
+		data := appendField(nil, 1, 7)
+		data = protowire.AppendVarint(data, num<<3)
+		data = protowire.AppendVarint(data, 1)
+		data = appendField(data, 2, 99)
+
+		var m picotest.AllTypes
+		assert.Error(t, picobuf.Unmarshal(data, &m))
+	}
+
+	// The largest valid field number is still accepted.
+	var m picotest.AllTypes
+	assert.NoError(t, picobuf.Unmarshal(appendField(nil, 1<<29-1, 1), &m))
+}
+
 func TestDecoder_Bool_NonOne(t *testing.T) {
 	// Any non-zero varint decodes as true, as protobuf requires.
 	var decoded picotest.AllTypes

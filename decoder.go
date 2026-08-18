@@ -263,6 +263,13 @@ func (dec *Decoder) nextField(advance int) {
 		dec.fail(0, "failed to parse") // TODO: better error message
 		return
 	}
+	// ConsumeTag only rejects field numbers below the minimum, so numbers
+	// between MaxValidNumber and MaxInt32 arrive here. Loop treats those as
+	// invalid and stops, which would silently discard the rest of the message.
+	if !FieldNumber(field).IsValid() {
+		dec.fail(FieldNumber(field), "invalid field number")
+		return
+	}
 	dec.buffer = dec.buffer[n:]
 	dec.pendingField, dec.pendingWire = FieldNumber(field), wire
 }
