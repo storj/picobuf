@@ -18,9 +18,9 @@ import (
 // Note, the names of packages has been chosen to be exactly the same to reduce the difference
 // in package names that end up in the binary.
 
-//go:generate protoc --pico_out=paths=source_relative:./pico/one --pico_opt=Mmsg-one.proto=storj.io/picobuf/internal/sizebench/pico/one msg-one.proto
-//go:generate protoc --pico_out=paths=source_relative:./pico/two --pico_opt=Mmsg-two.proto=storj.io/picobuf/internal/sizebench/pico/two msg-two.proto
-//go:generate protoc --pico_out=paths=source_relative:./pico/sml --pico_opt=Mmsg-sml.proto=storj.io/picobuf/internal/sizebench/pico/sml msg-sml.proto
+//go:generate protoc --pico_opt=version_override=dev --pico_out=paths=source_relative:./pico/one --pico_opt=Mmsg-one.proto=storj.io/picobuf/internal/sizebench/pico/one msg-one.proto
+//go:generate protoc --pico_opt=version_override=dev --pico_out=paths=source_relative:./pico/two --pico_opt=Mmsg-two.proto=storj.io/picobuf/internal/sizebench/pico/two msg-two.proto
+//go:generate protoc --pico_opt=version_override=dev --pico_out=paths=source_relative:./pico/sml --pico_opt=Mmsg-sml.proto=storj.io/picobuf/internal/sizebench/pico/sml msg-sml.proto
 //go:generate protoc --go_out=paths=source_relative:./prot/one --go_opt=Mmsg-one.proto=storj.io/picobuf/internal/sizebench/prot/one msg-one.proto
 //go:generate protoc --go_out=paths=source_relative:./prot/two --go_opt=Mmsg-two.proto=storj.io/picobuf/internal/sizebench/prot/two msg-two.proto
 //go:generate protoc --go_out=paths=source_relative:./prot/sml --go_opt=Mmsg-sml.proto=storj.io/picobuf/internal/sizebench/prot/sml msg-sml.proto

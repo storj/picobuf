@@ -5,4 +5,4 @@
 package protocompat
 
 //go:generate protoc -I../.. -I. --go_out=paths=source_relative:./prot --go_opt=Mtypes.proto=storj.io/picobuf/internal/protocompat/prot types.proto
-//go:generate protoc -I../.. -I. --pico_out=paths=source_relative:./pico --pico_opt=Mtypes.proto=storj.io/picobuf/internal/protocompat/pico types.proto
+//go:generate protoc -I../.. -I. --pico_opt=version_override=dev --pico_out=paths=source_relative:./pico --pico_opt=Mtypes.proto=storj.io/picobuf/internal/protocompat/pico types.proto

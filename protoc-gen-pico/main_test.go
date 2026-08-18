@@ -13,6 +13,33 @@ import (
 	"google.golang.org/protobuf/types/pluginpb"
 )
 
+func TestGenerateVersionOverride(t *testing.T) {
+	file := &descriptorpb.FileDescriptorProto{
+		Name:    proto.String("test.proto"),
+		Package: proto.String("test"),
+		Syntax:  proto.String("proto3"),
+		Options: &descriptorpb.FileOptions{GoPackage: proto.String("example.com/test;test")},
+	}
+	plugin, err := (protogen.Options{}).New(&pluginpb.CodeGeneratorRequest{
+		ProtoFile: []*descriptorpb.FileDescriptorProto{file}, FileToGenerate: []string{"test.proto"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	genFile(plugin, plugin.Files[0], config{VersionOverride: "fixture-version"})
+	response := plugin.Response()
+	if response.GetError() != "" {
+		t.Fatal(response.GetError())
+	}
+	if len(response.File) != 1 {
+		t.Fatalf("generated %d files, want 1", len(response.File))
+	}
+	content := response.File[0].GetContent()
+	if !strings.Contains(content, "//     protoc-gen-pico: fixture-version\n") {
+		t.Fatalf("generated header does not contain the requested version:\n%s", content)
+	}
+}
+
 func TestGenerateUTF8ValidationFeatures(t *testing.T) {
 	for _, test := range []struct {
 		name            string

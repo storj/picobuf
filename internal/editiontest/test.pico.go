@@ -2,7 +2,7 @@
 // source: internal/editiontest/test.proto
 //
 // versions:
-//     protoc-gen-pico: v0.0.5-0.20260818122039-f13310837730+dirty
+//     protoc-gen-pico: dev
 //     protoc:          v7.35.1
 
 package editiontest

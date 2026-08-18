@@ -28,6 +28,7 @@ const (
 
 type config struct {
 	GenerateFieldAccess bool
+	VersionOverride     string
 }
 
 func main() {
@@ -35,6 +36,7 @@ func main() {
 	var conf config
 
 	flags.BoolVar(&conf.GenerateFieldAccess, "field_access", false, "generate methods for accessing fields")
+	flags.StringVar(&conf.VersionOverride, "version_override", "", "override the version reported in generated code")
 
 	protogen.Options{
 		ParamFunc: flags.Set,
@@ -74,9 +76,12 @@ func genFile(plugin *protogen.Plugin, file *protogen.File, conf config) {
 	gf.P("//")
 	gf.P("// versions:")
 	{
-		picoVersion := "(unknown)"
-		if bi, ok := debug.ReadBuildInfo(); ok {
-			picoVersion = bi.Main.Version
+		picoVersion := conf.VersionOverride
+		if picoVersion == "" {
+			picoVersion = "(unknown)"
+			if bi, ok := debug.ReadBuildInfo(); ok {
+				picoVersion = bi.Main.Version
+			}
 		}
 		gf.P("//     protoc-gen-pico: ", picoVersion)
 	}

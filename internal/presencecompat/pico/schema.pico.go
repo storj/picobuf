@@ -2,7 +2,7 @@
 // source: schema.proto
 //
 // versions:
-//     protoc-gen-pico: v0.0.5-0.20260818151457-457df939b0d3
+//     protoc-gen-pico: dev
 //     protoc:          v7.35.1
 
 package pico
