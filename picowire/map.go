@@ -24,12 +24,12 @@ func (m *MapBoolBool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber
 //
 //go:noinline
 func (m *MapBoolBool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key bool
-	var val bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]bool{}
 		}
+		var key bool
+		var val bool
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Bool(1, &key)
 			c.Bool(2, &val)
@@ -57,12 +57,12 @@ func (m *MapBoolInt32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 //
 //go:noinline
 func (m *MapBoolInt32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key bool
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int32{}
 		}
+		var key bool
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Bool(1, &key)
 			c.Int32(2, &val)
@@ -90,12 +90,12 @@ func (m *MapBoolInt64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 //
 //go:noinline
 func (m *MapBoolInt64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key bool
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int64{}
 		}
+		var key bool
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Bool(1, &key)
 			c.Int64(2, &val)
@@ -123,12 +123,12 @@ func (m *MapBoolUint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapBoolUint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key bool
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]uint32{}
 		}
+		var key bool
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Bool(1, &key)
 			c.Uint32(2, &val)
@@ -156,12 +156,12 @@ func (m *MapBoolUint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapBoolUint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key bool
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]uint64{}
 		}
+		var key bool
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Bool(1, &key)
 			c.Uint64(2, &val)
@@ -189,12 +189,12 @@ func (m *MapBoolSint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapBoolSint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key bool
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int32{}
 		}
+		var key bool
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Bool(1, &key)
 			c.Sint32(2, &val)
@@ -222,12 +222,12 @@ func (m *MapBoolSint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapBoolSint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key bool
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int64{}
 		}
+		var key bool
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Bool(1, &key)
 			c.Sint64(2, &val)
@@ -255,12 +255,12 @@ func (m *MapBoolFixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapBoolFixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key bool
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]uint32{}
 		}
+		var key bool
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Bool(1, &key)
 			c.Fixed32(2, &val)
@@ -288,12 +288,12 @@ func (m *MapBoolFixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapBoolFixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key bool
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]uint64{}
 		}
+		var key bool
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Bool(1, &key)
 			c.Fixed64(2, &val)
@@ -321,12 +321,12 @@ func (m *MapBoolSfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapBoolSfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key bool
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int32{}
 		}
+		var key bool
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Bool(1, &key)
 			c.Sfixed32(2, &val)
@@ -354,12 +354,12 @@ func (m *MapBoolSfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapBoolSfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key bool
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int64{}
 		}
+		var key bool
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Bool(1, &key)
 			c.Sfixed64(2, &val)
@@ -387,12 +387,12 @@ func (m *MapBoolFloat) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 //
 //go:noinline
 func (m *MapBoolFloat) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key bool
-	var val float32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]float32{}
 		}
+		var key bool
+		var val float32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Bool(1, &key)
 			c.Float(2, &val)
@@ -420,12 +420,12 @@ func (m *MapBoolDouble) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapBoolDouble) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key bool
-	var val float64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]float64{}
 		}
+		var key bool
+		var val float64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Bool(1, &key)
 			c.Double(2, &val)
@@ -453,12 +453,12 @@ func (m *MapBoolString) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapBoolString) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key bool
-	var val string
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]string{}
 		}
+		var key bool
+		var val string
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Bool(1, &key)
 			c.String(2, &val)
@@ -486,12 +486,12 @@ func (m *MapBoolBytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 //
 //go:noinline
 func (m *MapBoolBytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key bool
-	var val []byte
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool][]byte{}
 		}
+		var key bool
+		var val []byte
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Bool(1, &key)
 			c.Bytes(2, &val)
@@ -519,12 +519,12 @@ func (m *MapInt32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 //
 //go:noinline
 func (m *MapInt32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]bool{}
 		}
+		var key int32
+		var val bool
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int32(1, &key)
 			c.Bool(2, &val)
@@ -552,12 +552,12 @@ func (m *MapInt32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapInt32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
+		var key int32
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int32(1, &key)
 			c.Int32(2, &val)
@@ -585,12 +585,12 @@ func (m *MapInt32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapInt32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
+		var key int32
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int32(1, &key)
 			c.Int64(2, &val)
@@ -618,12 +618,12 @@ func (m *MapInt32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapInt32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
+		var key int32
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int32(1, &key)
 			c.Uint32(2, &val)
@@ -651,12 +651,12 @@ func (m *MapInt32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapInt32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
+		var key int32
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int32(1, &key)
 			c.Uint64(2, &val)
@@ -684,12 +684,12 @@ func (m *MapInt32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapInt32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
+		var key int32
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int32(1, &key)
 			c.Sint32(2, &val)
@@ -717,12 +717,12 @@ func (m *MapInt32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapInt32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
+		var key int32
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int32(1, &key)
 			c.Sint64(2, &val)
@@ -750,12 +750,12 @@ func (m *MapInt32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapInt32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
+		var key int32
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int32(1, &key)
 			c.Fixed32(2, &val)
@@ -783,12 +783,12 @@ func (m *MapInt32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapInt32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
+		var key int32
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int32(1, &key)
 			c.Fixed64(2, &val)
@@ -816,12 +816,12 @@ func (m *MapInt32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapInt32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
+		var key int32
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int32(1, &key)
 			c.Sfixed32(2, &val)
@@ -849,12 +849,12 @@ func (m *MapInt32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapInt32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
+		var key int32
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int32(1, &key)
 			c.Sfixed64(2, &val)
@@ -882,12 +882,12 @@ func (m *MapInt32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapInt32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val float32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float32{}
 		}
+		var key int32
+		var val float32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int32(1, &key)
 			c.Float(2, &val)
@@ -915,12 +915,12 @@ func (m *MapInt32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapInt32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val float64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float64{}
 		}
+		var key int32
+		var val float64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int32(1, &key)
 			c.Double(2, &val)
@@ -948,12 +948,12 @@ func (m *MapInt32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapInt32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val string
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]string{}
 		}
+		var key int32
+		var val string
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int32(1, &key)
 			c.String(2, &val)
@@ -981,12 +981,12 @@ func (m *MapInt32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapInt32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val []byte
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32][]byte{}
 		}
+		var key int32
+		var val []byte
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int32(1, &key)
 			c.Bytes(2, &val)
@@ -1014,12 +1014,12 @@ func (m *MapInt64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumbe
 //
 //go:noinline
 func (m *MapInt64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]bool{}
 		}
+		var key int64
+		var val bool
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int64(1, &key)
 			c.Bool(2, &val)
@@ -1047,12 +1047,12 @@ func (m *MapInt64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapInt64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
+		var key int64
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int64(1, &key)
 			c.Int32(2, &val)
@@ -1080,12 +1080,12 @@ func (m *MapInt64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapInt64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
+		var key int64
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int64(1, &key)
 			c.Int64(2, &val)
@@ -1113,12 +1113,12 @@ func (m *MapInt64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapInt64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
+		var key int64
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int64(1, &key)
 			c.Uint32(2, &val)
@@ -1146,12 +1146,12 @@ func (m *MapInt64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapInt64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
+		var key int64
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int64(1, &key)
 			c.Uint64(2, &val)
@@ -1179,12 +1179,12 @@ func (m *MapInt64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapInt64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
+		var key int64
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int64(1, &key)
 			c.Sint32(2, &val)
@@ -1212,12 +1212,12 @@ func (m *MapInt64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapInt64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
+		var key int64
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int64(1, &key)
 			c.Sint64(2, &val)
@@ -1245,12 +1245,12 @@ func (m *MapInt64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapInt64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
+		var key int64
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int64(1, &key)
 			c.Fixed32(2, &val)
@@ -1278,12 +1278,12 @@ func (m *MapInt64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapInt64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
+		var key int64
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int64(1, &key)
 			c.Fixed64(2, &val)
@@ -1311,12 +1311,12 @@ func (m *MapInt64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapInt64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
+		var key int64
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int64(1, &key)
 			c.Sfixed32(2, &val)
@@ -1344,12 +1344,12 @@ func (m *MapInt64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapInt64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
+		var key int64
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int64(1, &key)
 			c.Sfixed64(2, &val)
@@ -1377,12 +1377,12 @@ func (m *MapInt64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapInt64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val float32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float32{}
 		}
+		var key int64
+		var val float32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int64(1, &key)
 			c.Float(2, &val)
@@ -1410,12 +1410,12 @@ func (m *MapInt64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapInt64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val float64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float64{}
 		}
+		var key int64
+		var val float64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int64(1, &key)
 			c.Double(2, &val)
@@ -1443,12 +1443,12 @@ func (m *MapInt64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapInt64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val string
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]string{}
 		}
+		var key int64
+		var val string
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int64(1, &key)
 			c.String(2, &val)
@@ -1476,12 +1476,12 @@ func (m *MapInt64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapInt64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val []byte
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64][]byte{}
 		}
+		var key int64
+		var val []byte
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Int64(1, &key)
 			c.Bytes(2, &val)
@@ -1509,12 +1509,12 @@ func (m *MapUint32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapUint32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]bool{}
 		}
+		var key uint32
+		var val bool
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint32(1, &key)
 			c.Bool(2, &val)
@@ -1542,12 +1542,12 @@ func (m *MapUint32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapUint32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
+		var key uint32
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint32(1, &key)
 			c.Int32(2, &val)
@@ -1575,12 +1575,12 @@ func (m *MapUint32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapUint32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
+		var key uint32
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint32(1, &key)
 			c.Int64(2, &val)
@@ -1608,12 +1608,12 @@ func (m *MapUint32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapUint32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint32{}
 		}
+		var key uint32
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint32(1, &key)
 			c.Uint32(2, &val)
@@ -1641,12 +1641,12 @@ func (m *MapUint32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapUint32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint64{}
 		}
+		var key uint32
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint32(1, &key)
 			c.Uint64(2, &val)
@@ -1674,12 +1674,12 @@ func (m *MapUint32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapUint32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
+		var key uint32
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint32(1, &key)
 			c.Sint32(2, &val)
@@ -1707,12 +1707,12 @@ func (m *MapUint32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapUint32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
+		var key uint32
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint32(1, &key)
 			c.Sint64(2, &val)
@@ -1740,12 +1740,12 @@ func (m *MapUint32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapUint32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint32{}
 		}
+		var key uint32
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint32(1, &key)
 			c.Fixed32(2, &val)
@@ -1773,12 +1773,12 @@ func (m *MapUint32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapUint32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint64{}
 		}
+		var key uint32
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint32(1, &key)
 			c.Fixed64(2, &val)
@@ -1806,12 +1806,12 @@ func (m *MapUint32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapUint32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
+		var key uint32
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint32(1, &key)
 			c.Sfixed32(2, &val)
@@ -1839,12 +1839,12 @@ func (m *MapUint32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapUint32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
+		var key uint32
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint32(1, &key)
 			c.Sfixed64(2, &val)
@@ -1872,12 +1872,12 @@ func (m *MapUint32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapUint32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val float32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]float32{}
 		}
+		var key uint32
+		var val float32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint32(1, &key)
 			c.Float(2, &val)
@@ -1905,12 +1905,12 @@ func (m *MapUint32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapUint32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val float64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]float64{}
 		}
+		var key uint32
+		var val float64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint32(1, &key)
 			c.Double(2, &val)
@@ -1938,12 +1938,12 @@ func (m *MapUint32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapUint32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val string
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]string{}
 		}
+		var key uint32
+		var val string
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint32(1, &key)
 			c.String(2, &val)
@@ -1971,12 +1971,12 @@ func (m *MapUint32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapUint32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val []byte
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32][]byte{}
 		}
+		var key uint32
+		var val []byte
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint32(1, &key)
 			c.Bytes(2, &val)
@@ -2004,12 +2004,12 @@ func (m *MapUint64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapUint64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]bool{}
 		}
+		var key uint64
+		var val bool
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint64(1, &key)
 			c.Bool(2, &val)
@@ -2037,12 +2037,12 @@ func (m *MapUint64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapUint64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
+		var key uint64
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint64(1, &key)
 			c.Int32(2, &val)
@@ -2070,12 +2070,12 @@ func (m *MapUint64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapUint64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
+		var key uint64
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint64(1, &key)
 			c.Int64(2, &val)
@@ -2103,12 +2103,12 @@ func (m *MapUint64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapUint64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint32{}
 		}
+		var key uint64
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint64(1, &key)
 			c.Uint32(2, &val)
@@ -2136,12 +2136,12 @@ func (m *MapUint64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapUint64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint64{}
 		}
+		var key uint64
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint64(1, &key)
 			c.Uint64(2, &val)
@@ -2169,12 +2169,12 @@ func (m *MapUint64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapUint64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
+		var key uint64
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint64(1, &key)
 			c.Sint32(2, &val)
@@ -2202,12 +2202,12 @@ func (m *MapUint64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapUint64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
+		var key uint64
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint64(1, &key)
 			c.Sint64(2, &val)
@@ -2235,12 +2235,12 @@ func (m *MapUint64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapUint64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint32{}
 		}
+		var key uint64
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint64(1, &key)
 			c.Fixed32(2, &val)
@@ -2268,12 +2268,12 @@ func (m *MapUint64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapUint64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint64{}
 		}
+		var key uint64
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint64(1, &key)
 			c.Fixed64(2, &val)
@@ -2301,12 +2301,12 @@ func (m *MapUint64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapUint64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
+		var key uint64
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint64(1, &key)
 			c.Sfixed32(2, &val)
@@ -2334,12 +2334,12 @@ func (m *MapUint64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapUint64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
+		var key uint64
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint64(1, &key)
 			c.Sfixed64(2, &val)
@@ -2367,12 +2367,12 @@ func (m *MapUint64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapUint64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val float32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]float32{}
 		}
+		var key uint64
+		var val float32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint64(1, &key)
 			c.Float(2, &val)
@@ -2400,12 +2400,12 @@ func (m *MapUint64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapUint64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val float64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]float64{}
 		}
+		var key uint64
+		var val float64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint64(1, &key)
 			c.Double(2, &val)
@@ -2433,12 +2433,12 @@ func (m *MapUint64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapUint64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val string
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]string{}
 		}
+		var key uint64
+		var val string
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint64(1, &key)
 			c.String(2, &val)
@@ -2466,12 +2466,12 @@ func (m *MapUint64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapUint64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val []byte
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64][]byte{}
 		}
+		var key uint64
+		var val []byte
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Uint64(1, &key)
 			c.Bytes(2, &val)
@@ -2499,12 +2499,12 @@ func (m *MapSint32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapSint32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]bool{}
 		}
+		var key int32
+		var val bool
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint32(1, &key)
 			c.Bool(2, &val)
@@ -2532,12 +2532,12 @@ func (m *MapSint32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapSint32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
+		var key int32
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint32(1, &key)
 			c.Int32(2, &val)
@@ -2565,12 +2565,12 @@ func (m *MapSint32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapSint32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
+		var key int32
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint32(1, &key)
 			c.Int64(2, &val)
@@ -2598,12 +2598,12 @@ func (m *MapSint32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapSint32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
+		var key int32
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint32(1, &key)
 			c.Uint32(2, &val)
@@ -2631,12 +2631,12 @@ func (m *MapSint32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapSint32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
+		var key int32
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint32(1, &key)
 			c.Uint64(2, &val)
@@ -2664,12 +2664,12 @@ func (m *MapSint32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapSint32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
+		var key int32
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint32(1, &key)
 			c.Sint32(2, &val)
@@ -2697,12 +2697,12 @@ func (m *MapSint32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapSint32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
+		var key int32
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint32(1, &key)
 			c.Sint64(2, &val)
@@ -2730,12 +2730,12 @@ func (m *MapSint32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapSint32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
+		var key int32
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint32(1, &key)
 			c.Fixed32(2, &val)
@@ -2763,12 +2763,12 @@ func (m *MapSint32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapSint32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
+		var key int32
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint32(1, &key)
 			c.Fixed64(2, &val)
@@ -2796,12 +2796,12 @@ func (m *MapSint32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSint32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
+		var key int32
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint32(1, &key)
 			c.Sfixed32(2, &val)
@@ -2829,12 +2829,12 @@ func (m *MapSint32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSint32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
+		var key int32
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint32(1, &key)
 			c.Sfixed64(2, &val)
@@ -2862,12 +2862,12 @@ func (m *MapSint32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapSint32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val float32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float32{}
 		}
+		var key int32
+		var val float32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint32(1, &key)
 			c.Float(2, &val)
@@ -2895,12 +2895,12 @@ func (m *MapSint32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapSint32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val float64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float64{}
 		}
+		var key int32
+		var val float64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint32(1, &key)
 			c.Double(2, &val)
@@ -2928,12 +2928,12 @@ func (m *MapSint32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapSint32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val string
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]string{}
 		}
+		var key int32
+		var val string
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint32(1, &key)
 			c.String(2, &val)
@@ -2961,12 +2961,12 @@ func (m *MapSint32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapSint32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val []byte
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32][]byte{}
 		}
+		var key int32
+		var val []byte
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint32(1, &key)
 			c.Bytes(2, &val)
@@ -2994,12 +2994,12 @@ func (m *MapSint64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapSint64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]bool{}
 		}
+		var key int64
+		var val bool
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint64(1, &key)
 			c.Bool(2, &val)
@@ -3027,12 +3027,12 @@ func (m *MapSint64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapSint64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
+		var key int64
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint64(1, &key)
 			c.Int32(2, &val)
@@ -3060,12 +3060,12 @@ func (m *MapSint64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapSint64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
+		var key int64
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint64(1, &key)
 			c.Int64(2, &val)
@@ -3093,12 +3093,12 @@ func (m *MapSint64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapSint64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
+		var key int64
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint64(1, &key)
 			c.Uint32(2, &val)
@@ -3126,12 +3126,12 @@ func (m *MapSint64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapSint64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
+		var key int64
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint64(1, &key)
 			c.Uint64(2, &val)
@@ -3159,12 +3159,12 @@ func (m *MapSint64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapSint64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
+		var key int64
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint64(1, &key)
 			c.Sint32(2, &val)
@@ -3192,12 +3192,12 @@ func (m *MapSint64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapSint64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
+		var key int64
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint64(1, &key)
 			c.Sint64(2, &val)
@@ -3225,12 +3225,12 @@ func (m *MapSint64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapSint64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
+		var key int64
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint64(1, &key)
 			c.Fixed32(2, &val)
@@ -3258,12 +3258,12 @@ func (m *MapSint64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapSint64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
+		var key int64
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint64(1, &key)
 			c.Fixed64(2, &val)
@@ -3291,12 +3291,12 @@ func (m *MapSint64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSint64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
+		var key int64
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint64(1, &key)
 			c.Sfixed32(2, &val)
@@ -3324,12 +3324,12 @@ func (m *MapSint64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSint64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
+		var key int64
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint64(1, &key)
 			c.Sfixed64(2, &val)
@@ -3357,12 +3357,12 @@ func (m *MapSint64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapSint64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val float32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float32{}
 		}
+		var key int64
+		var val float32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint64(1, &key)
 			c.Float(2, &val)
@@ -3390,12 +3390,12 @@ func (m *MapSint64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapSint64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val float64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float64{}
 		}
+		var key int64
+		var val float64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint64(1, &key)
 			c.Double(2, &val)
@@ -3423,12 +3423,12 @@ func (m *MapSint64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapSint64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val string
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]string{}
 		}
+		var key int64
+		var val string
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint64(1, &key)
 			c.String(2, &val)
@@ -3456,12 +3456,12 @@ func (m *MapSint64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapSint64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val []byte
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64][]byte{}
 		}
+		var key int64
+		var val []byte
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sint64(1, &key)
 			c.Bytes(2, &val)
@@ -3489,12 +3489,12 @@ func (m *MapFixed32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapFixed32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]bool{}
 		}
+		var key uint32
+		var val bool
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed32(1, &key)
 			c.Bool(2, &val)
@@ -3522,12 +3522,12 @@ func (m *MapFixed32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapFixed32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
+		var key uint32
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed32(1, &key)
 			c.Int32(2, &val)
@@ -3555,12 +3555,12 @@ func (m *MapFixed32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapFixed32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
+		var key uint32
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed32(1, &key)
 			c.Int64(2, &val)
@@ -3588,12 +3588,12 @@ func (m *MapFixed32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapFixed32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint32{}
 		}
+		var key uint32
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed32(1, &key)
 			c.Uint32(2, &val)
@@ -3621,12 +3621,12 @@ func (m *MapFixed32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapFixed32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint64{}
 		}
+		var key uint32
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed32(1, &key)
 			c.Uint64(2, &val)
@@ -3654,12 +3654,12 @@ func (m *MapFixed32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapFixed32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
+		var key uint32
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed32(1, &key)
 			c.Sint32(2, &val)
@@ -3687,12 +3687,12 @@ func (m *MapFixed32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapFixed32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
+		var key uint32
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed32(1, &key)
 			c.Sint64(2, &val)
@@ -3720,12 +3720,12 @@ func (m *MapFixed32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapFixed32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint32{}
 		}
+		var key uint32
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed32(1, &key)
 			c.Fixed32(2, &val)
@@ -3753,12 +3753,12 @@ func (m *MapFixed32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapFixed32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint64{}
 		}
+		var key uint32
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed32(1, &key)
 			c.Fixed64(2, &val)
@@ -3786,12 +3786,12 @@ func (m *MapFixed32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 //
 //go:noinline
 func (m *MapFixed32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
+		var key uint32
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed32(1, &key)
 			c.Sfixed32(2, &val)
@@ -3819,12 +3819,12 @@ func (m *MapFixed32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 //
 //go:noinline
 func (m *MapFixed32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
+		var key uint32
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed32(1, &key)
 			c.Sfixed64(2, &val)
@@ -3852,12 +3852,12 @@ func (m *MapFixed32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapFixed32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val float32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]float32{}
 		}
+		var key uint32
+		var val float32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed32(1, &key)
 			c.Float(2, &val)
@@ -3885,12 +3885,12 @@ func (m *MapFixed32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapFixed32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val float64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]float64{}
 		}
+		var key uint32
+		var val float64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed32(1, &key)
 			c.Double(2, &val)
@@ -3918,12 +3918,12 @@ func (m *MapFixed32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapFixed32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val string
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]string{}
 		}
+		var key uint32
+		var val string
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed32(1, &key)
 			c.String(2, &val)
@@ -3951,12 +3951,12 @@ func (m *MapFixed32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapFixed32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint32
-	var val []byte
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32][]byte{}
 		}
+		var key uint32
+		var val []byte
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed32(1, &key)
 			c.Bytes(2, &val)
@@ -3984,12 +3984,12 @@ func (m *MapFixed64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapFixed64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]bool{}
 		}
+		var key uint64
+		var val bool
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed64(1, &key)
 			c.Bool(2, &val)
@@ -4017,12 +4017,12 @@ func (m *MapFixed64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapFixed64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
+		var key uint64
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed64(1, &key)
 			c.Int32(2, &val)
@@ -4050,12 +4050,12 @@ func (m *MapFixed64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapFixed64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
+		var key uint64
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed64(1, &key)
 			c.Int64(2, &val)
@@ -4083,12 +4083,12 @@ func (m *MapFixed64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapFixed64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint32{}
 		}
+		var key uint64
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed64(1, &key)
 			c.Uint32(2, &val)
@@ -4116,12 +4116,12 @@ func (m *MapFixed64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapFixed64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint64{}
 		}
+		var key uint64
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed64(1, &key)
 			c.Uint64(2, &val)
@@ -4149,12 +4149,12 @@ func (m *MapFixed64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapFixed64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
+		var key uint64
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed64(1, &key)
 			c.Sint32(2, &val)
@@ -4182,12 +4182,12 @@ func (m *MapFixed64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapFixed64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
+		var key uint64
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed64(1, &key)
 			c.Sint64(2, &val)
@@ -4215,12 +4215,12 @@ func (m *MapFixed64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapFixed64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint32{}
 		}
+		var key uint64
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed64(1, &key)
 			c.Fixed32(2, &val)
@@ -4248,12 +4248,12 @@ func (m *MapFixed64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapFixed64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint64{}
 		}
+		var key uint64
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed64(1, &key)
 			c.Fixed64(2, &val)
@@ -4281,12 +4281,12 @@ func (m *MapFixed64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 //
 //go:noinline
 func (m *MapFixed64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
+		var key uint64
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed64(1, &key)
 			c.Sfixed32(2, &val)
@@ -4314,12 +4314,12 @@ func (m *MapFixed64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 //
 //go:noinline
 func (m *MapFixed64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
+		var key uint64
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed64(1, &key)
 			c.Sfixed64(2, &val)
@@ -4347,12 +4347,12 @@ func (m *MapFixed64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapFixed64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val float32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]float32{}
 		}
+		var key uint64
+		var val float32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed64(1, &key)
 			c.Float(2, &val)
@@ -4380,12 +4380,12 @@ func (m *MapFixed64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapFixed64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val float64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]float64{}
 		}
+		var key uint64
+		var val float64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed64(1, &key)
 			c.Double(2, &val)
@@ -4413,12 +4413,12 @@ func (m *MapFixed64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapFixed64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val string
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]string{}
 		}
+		var key uint64
+		var val string
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed64(1, &key)
 			c.String(2, &val)
@@ -4446,12 +4446,12 @@ func (m *MapFixed64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapFixed64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key uint64
-	var val []byte
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64][]byte{}
 		}
+		var key uint64
+		var val []byte
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Fixed64(1, &key)
 			c.Bytes(2, &val)
@@ -4479,12 +4479,12 @@ func (m *MapSfixed32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapSfixed32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]bool{}
 		}
+		var key int32
+		var val bool
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed32(1, &key)
 			c.Bool(2, &val)
@@ -4512,12 +4512,12 @@ func (m *MapSfixed32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapSfixed32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
+		var key int32
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed32(1, &key)
 			c.Int32(2, &val)
@@ -4545,12 +4545,12 @@ func (m *MapSfixed32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapSfixed32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
+		var key int32
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed32(1, &key)
 			c.Int64(2, &val)
@@ -4578,12 +4578,12 @@ func (m *MapSfixed32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSfixed32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
+		var key int32
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed32(1, &key)
 			c.Uint32(2, &val)
@@ -4611,12 +4611,12 @@ func (m *MapSfixed32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSfixed32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
+		var key int32
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed32(1, &key)
 			c.Uint64(2, &val)
@@ -4644,12 +4644,12 @@ func (m *MapSfixed32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSfixed32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
+		var key int32
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed32(1, &key)
 			c.Sint32(2, &val)
@@ -4677,12 +4677,12 @@ func (m *MapSfixed32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSfixed32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
+		var key int32
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed32(1, &key)
 			c.Sint64(2, &val)
@@ -4710,12 +4710,12 @@ func (m *MapSfixed32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 //
 //go:noinline
 func (m *MapSfixed32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
+		var key int32
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed32(1, &key)
 			c.Fixed32(2, &val)
@@ -4743,12 +4743,12 @@ func (m *MapSfixed32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 //
 //go:noinline
 func (m *MapSfixed32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
+		var key int32
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed32(1, &key)
 			c.Fixed64(2, &val)
@@ -4776,12 +4776,12 @@ func (m *MapSfixed32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 //
 //go:noinline
 func (m *MapSfixed32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
+		var key int32
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed32(1, &key)
 			c.Sfixed32(2, &val)
@@ -4809,12 +4809,12 @@ func (m *MapSfixed32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 //
 //go:noinline
 func (m *MapSfixed32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
+		var key int32
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed32(1, &key)
 			c.Sfixed64(2, &val)
@@ -4842,12 +4842,12 @@ func (m *MapSfixed32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapSfixed32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val float32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float32{}
 		}
+		var key int32
+		var val float32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed32(1, &key)
 			c.Float(2, &val)
@@ -4875,12 +4875,12 @@ func (m *MapSfixed32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSfixed32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val float64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float64{}
 		}
+		var key int32
+		var val float64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed32(1, &key)
 			c.Double(2, &val)
@@ -4908,12 +4908,12 @@ func (m *MapSfixed32String) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSfixed32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val string
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]string{}
 		}
+		var key int32
+		var val string
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed32(1, &key)
 			c.String(2, &val)
@@ -4941,12 +4941,12 @@ func (m *MapSfixed32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapSfixed32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int32
-	var val []byte
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32][]byte{}
 		}
+		var key int32
+		var val []byte
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed32(1, &key)
 			c.Bytes(2, &val)
@@ -4974,12 +4974,12 @@ func (m *MapSfixed64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapSfixed64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]bool{}
 		}
+		var key int64
+		var val bool
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed64(1, &key)
 			c.Bool(2, &val)
@@ -5007,12 +5007,12 @@ func (m *MapSfixed64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapSfixed64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
+		var key int64
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed64(1, &key)
 			c.Int32(2, &val)
@@ -5040,12 +5040,12 @@ func (m *MapSfixed64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapSfixed64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
+		var key int64
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed64(1, &key)
 			c.Int64(2, &val)
@@ -5073,12 +5073,12 @@ func (m *MapSfixed64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSfixed64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
+		var key int64
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed64(1, &key)
 			c.Uint32(2, &val)
@@ -5106,12 +5106,12 @@ func (m *MapSfixed64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSfixed64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
+		var key int64
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed64(1, &key)
 			c.Uint64(2, &val)
@@ -5139,12 +5139,12 @@ func (m *MapSfixed64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSfixed64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
+		var key int64
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed64(1, &key)
 			c.Sint32(2, &val)
@@ -5172,12 +5172,12 @@ func (m *MapSfixed64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSfixed64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
+		var key int64
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed64(1, &key)
 			c.Sint64(2, &val)
@@ -5205,12 +5205,12 @@ func (m *MapSfixed64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 //
 //go:noinline
 func (m *MapSfixed64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
+		var key int64
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed64(1, &key)
 			c.Fixed32(2, &val)
@@ -5238,12 +5238,12 @@ func (m *MapSfixed64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fiel
 //
 //go:noinline
 func (m *MapSfixed64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
+		var key int64
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed64(1, &key)
 			c.Fixed64(2, &val)
@@ -5271,12 +5271,12 @@ func (m *MapSfixed64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 //
 //go:noinline
 func (m *MapSfixed64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
+		var key int64
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed64(1, &key)
 			c.Sfixed32(2, &val)
@@ -5304,12 +5304,12 @@ func (m *MapSfixed64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 //
 //go:noinline
 func (m *MapSfixed64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
+		var key int64
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed64(1, &key)
 			c.Sfixed64(2, &val)
@@ -5337,12 +5337,12 @@ func (m *MapSfixed64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapSfixed64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val float32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float32{}
 		}
+		var key int64
+		var val float32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed64(1, &key)
 			c.Float(2, &val)
@@ -5370,12 +5370,12 @@ func (m *MapSfixed64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSfixed64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val float64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float64{}
 		}
+		var key int64
+		var val float64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed64(1, &key)
 			c.Double(2, &val)
@@ -5403,12 +5403,12 @@ func (m *MapSfixed64String) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapSfixed64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val string
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]string{}
 		}
+		var key int64
+		var val string
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed64(1, &key)
 			c.String(2, &val)
@@ -5436,12 +5436,12 @@ func (m *MapSfixed64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapSfixed64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key int64
-	var val []byte
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64][]byte{}
 		}
+		var key int64
+		var val []byte
 		c.Loop(func(c *picobuf.Decoder) {
 			c.Sfixed64(1, &key)
 			c.Bytes(2, &val)
@@ -5469,12 +5469,12 @@ func (m *MapStringBool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumb
 //
 //go:noinline
 func (m *MapStringBool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key string
-	var val bool
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]bool{}
 		}
+		var key string
+		var val bool
 		c.Loop(func(c *picobuf.Decoder) {
 			c.String(1, &key)
 			c.Bool(2, &val)
@@ -5502,12 +5502,12 @@ func (m *MapStringInt32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapStringInt32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key string
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int32{}
 		}
+		var key string
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.String(1, &key)
 			c.Int32(2, &val)
@@ -5535,12 +5535,12 @@ func (m *MapStringInt64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapStringInt64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key string
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int64{}
 		}
+		var key string
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.String(1, &key)
 			c.Int64(2, &val)
@@ -5568,12 +5568,12 @@ func (m *MapStringUint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapStringUint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key string
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]uint32{}
 		}
+		var key string
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.String(1, &key)
 			c.Uint32(2, &val)
@@ -5601,12 +5601,12 @@ func (m *MapStringUint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapStringUint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key string
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]uint64{}
 		}
+		var key string
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.String(1, &key)
 			c.Uint64(2, &val)
@@ -5634,12 +5634,12 @@ func (m *MapStringSint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapStringSint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key string
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int32{}
 		}
+		var key string
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.String(1, &key)
 			c.Sint32(2, &val)
@@ -5667,12 +5667,12 @@ func (m *MapStringSint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapStringSint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key string
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int64{}
 		}
+		var key string
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.String(1, &key)
 			c.Sint64(2, &val)
@@ -5700,12 +5700,12 @@ func (m *MapStringFixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapStringFixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key string
-	var val uint32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]uint32{}
 		}
+		var key string
+		var val uint32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.String(1, &key)
 			c.Fixed32(2, &val)
@@ -5733,12 +5733,12 @@ func (m *MapStringFixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldN
 //
 //go:noinline
 func (m *MapStringFixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key string
-	var val uint64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]uint64{}
 		}
+		var key string
+		var val uint64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.String(1, &key)
 			c.Fixed64(2, &val)
@@ -5766,12 +5766,12 @@ func (m *MapStringSfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapStringSfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key string
-	var val int32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int32{}
 		}
+		var key string
+		var val int32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.String(1, &key)
 			c.Sfixed32(2, &val)
@@ -5799,12 +5799,12 @@ func (m *MapStringSfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.Field
 //
 //go:noinline
 func (m *MapStringSfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key string
-	var val int64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int64{}
 		}
+		var key string
+		var val int64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.String(1, &key)
 			c.Sfixed64(2, &val)
@@ -5832,12 +5832,12 @@ func (m *MapStringFloat) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapStringFloat) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key string
-	var val float32
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]float32{}
 		}
+		var key string
+		var val float32
 		c.Loop(func(c *picobuf.Decoder) {
 			c.String(1, &key)
 			c.Float(2, &val)
@@ -5865,12 +5865,12 @@ func (m *MapStringDouble) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapStringDouble) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key string
-	var val float64
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]float64{}
 		}
+		var key string
+		var val float64
 		c.Loop(func(c *picobuf.Decoder) {
 			c.String(1, &key)
 			c.Double(2, &val)
@@ -5898,12 +5898,12 @@ func (m *MapStringString) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 //
 //go:noinline
 func (m *MapStringString) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key string
-	var val string
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]string{}
 		}
+		var key string
+		var val string
 		c.Loop(func(c *picobuf.Decoder) {
 			c.String(1, &key)
 			c.String(2, &val)
@@ -5931,12 +5931,12 @@ func (m *MapStringBytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNum
 //
 //go:noinline
 func (m *MapStringBytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
-	var key string
-	var val []byte
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string][]byte{}
 		}
+		var key string
+		var val []byte
 		c.Loop(func(c *picobuf.Decoder) {
 			c.String(1, &key)
 			c.Bytes(2, &val)

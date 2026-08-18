@@ -350,12 +350,14 @@ func generateMaps() []byte {
 			pf("// PicoDecode decodes as protobuf.\n")
 			pf("//go:noinline\n")
 			pf("func(m *%s) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {\n", mapType)
-			pf("   var key %s\n", key.TypeName())
-			pf("   var val %s\n", val.TypeName())
 			pf("   dec.RepeatedMessage(field, func(c *picobuf.Decoder) {\n")
 			pf("       if *m == nil {\n")
 			pf("           *m = map[%s]%s{}\n", key.TypeName(), val.TypeName())
 			pf("       }\n")
+			// key and val must be per-entry: protobuf allows omitting either
+			// when it has the zero value.
+			pf("       var key %s\n", key.TypeName())
+			pf("       var val %s\n", val.TypeName())
 			pf("       c.Loop(func(c *picobuf.Decoder) {\n")
 			pf("           c.%s(1, &key)\n", key.Name)
 			pf("           c.%s(2, &val)\n", val.Name)

@@ -203,6 +203,29 @@ func TestMaps(t *testing.T) {
 	}
 }
 
+func TestMapZeroEntries(t *testing.T) {
+	// Zero keys and values are omitted on the wire, so each map entry must
+	// start from the zero value rather than inheriting the previous entry's.
+	test := pico.Map{
+		StringInt64: map[string]int64{"a": 1, "b": 0, "": 0},
+		BoolString:  map[bool]string{true: "a", false: ""},
+	}
+
+	data, err := picobuf.Marshal(&test)
+	assert.NoError(t, err)
+
+	var got pico.Map
+	err = picobuf.Unmarshal(data, &got)
+	assert.NoError(t, err)
+	assert.DeepEqual(t, got, test)
+
+	var p prot.Map
+	err = proto.Unmarshal(data, &p)
+	assert.NoError(t, err)
+	assert.DeepEqual(t, p.StringInt64, test.StringInt64)
+	assert.DeepEqual(t, p.BoolString, test.BoolString)
+}
+
 func TestEnum(t *testing.T) {
 	test := pico.Person{
 		Primary: pico.Language_ENGLISH,
