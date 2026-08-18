@@ -9,18 +9,43 @@ package editionpico
 
 import (
 	picobuf "storj.io/picobuf"
+	strconv "strconv"
 )
 
+type ClosedState int32
+
+const (
+	ClosedState_CLOSED_STATE_UNSPECIFIED ClosedState = 0
+	ClosedState_CLOSED_STATE_READY       ClosedState = 1
+)
+
+func (m ClosedState) String() string {
+	switch m {
+	case ClosedState_CLOSED_STATE_UNSPECIFIED:
+		return "CLOSED_STATE_UNSPECIFIED"
+	case ClosedState_CLOSED_STATE_READY:
+		return "CLOSED_STATE_READY"
+	default:
+		return "ClosedState(" + strconv.Itoa(int(m)) + ")"
+	}
+}
+
 type Message struct {
-	ExplicitNumber  *int32  `json:"explicit_number,omitzero"`
-	ExplicitText    *string `json:"explicit_text,omitzero"`
-	ExplicitData    *[]byte `json:"explicit_data,omitzero"`
-	ImplicitNumber  int32   `json:"implicit_number,omitzero"`
-	ImplicitText    string  `json:"implicit_text,omitzero"`
-	ImplicitData    []byte  `json:"implicit_data,omitzero"`
-	PackedNumbers   []int32 `json:"packed_numbers,omitzero"`
-	ExpandedNumbers []int32 `json:"expanded_numbers,omitzero"`
-	Nested          *Nested `json:"nested,omitzero"`
+	ExplicitNumber  *int32        `json:"explicit_number,omitzero"`
+	ExplicitText    *string       `json:"explicit_text,omitzero"`
+	ExplicitData    *[]byte       `json:"explicit_data,omitzero"`
+	ImplicitNumber  int32         `json:"implicit_number,omitzero"`
+	ImplicitText    string        `json:"implicit_text,omitzero"`
+	ImplicitData    []byte        `json:"implicit_data,omitzero"`
+	PackedNumbers   []int32       `json:"packed_numbers,omitzero"`
+	ExpandedNumbers []int32       `json:"expanded_numbers,omitzero"`
+	Nested          *Nested       `json:"nested,omitzero"`
+	ClosedState     *ClosedState  `json:"closed_state,omitzero"`
+	ClosedStates    []ClosedState `json:"closed_states,omitzero"`
+	// Types that are assignable to ClosedSelection:
+	//
+	//	*Message_SelectedClosedState
+	ClosedSelection isMessage_ClosedSelection
 }
 
 func (m *Message) Encode(c *picobuf.Encoder) bool {
@@ -44,6 +69,18 @@ func (m *Message) Encode(c *picobuf.Encoder) bool {
 		c.AlwaysInt32(8, &m.ExpandedNumbers[i])
 	}
 	c.Group(9, m.Nested.Encode)
+	if m.ClosedState != nil {
+		c.AlwaysInt32(10, (*int32)(m.ClosedState))
+	}
+	c.RepeatedEnum(11, len(m.ClosedStates), func(index uint) int32 {
+		if index < uint(len(m.ClosedStates)) {
+			return (int32)(m.ClosedStates[index])
+		}
+		return 0
+	})
+	if m, ok := m.ClosedSelection.(*Message_SelectedClosedState); ok {
+		c.AlwaysInt32(12, (*int32)(&m.SelectedClosedState))
+	}
 	return true
 }
 
@@ -74,7 +111,33 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 		}
 		m.Nested.Decode(c)
 	})
+	if c.PendingField() == 10 {
+		m.ClosedState = new(ClosedState)
+		c.Int32(10, (*int32)(m.ClosedState))
+	}
+	c.RepeatedEnum(11, func(x int32) {
+		m.ClosedStates = append(m.ClosedStates, (ClosedState)(x))
+	})
+	if c.PendingField() == 12 {
+		var x *Message_SelectedClosedState
+		if z, ok := m.ClosedSelection.(*Message_SelectedClosedState); ok {
+			x = z
+		} else {
+			x = new(Message_SelectedClosedState)
+			m.ClosedSelection = x
+		}
+		m := x
+		c.Int32(12, (*int32)(&m.SelectedClosedState))
+	}
 }
+
+type isMessage_ClosedSelection interface{ isMessage_ClosedSelection() }
+
+type Message_SelectedClosedState struct {
+	SelectedClosedState ClosedState
+}
+
+func (*Message_SelectedClosedState) isMessage_ClosedSelection() {}
 
 type Nested struct {
 	Value *int32 `json:"value,omitzero"`

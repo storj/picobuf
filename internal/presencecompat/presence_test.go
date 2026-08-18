@@ -289,6 +289,53 @@ func TestEditionsDelimitedMessageMatchesProtobuf(t *testing.T) {
 	}
 }
 
+func TestEditionsClosedEnumsMatchProtobuf(t *testing.T) {
+	// Unknown values occur in a singular field, a packed repeated field, and
+	// a oneof. The repeated field also contains the known values 0 and 1.
+	data := []byte{0x50, 0x7b, 0x5a, 0x03, 0x00, 0x7b, 0x01, 0x60, 0x7b}
+
+	var protoMessage editionprot.Message
+	if err := proto.Unmarshal(data, &protoMessage); err != nil {
+		t.Fatal(err)
+	}
+	fields := protoMessage.ProtoReflect().Descriptor().Fields()
+	if !protoMessage.ProtoReflect().Has(fields.ByNumber(10)) || protoMessage.GetClosedState() != 123 {
+		t.Fatalf("protobuf decoded singular closed enum as %v", protoMessage.GetClosedState())
+	}
+	if !protoMessage.ProtoReflect().Has(fields.ByNumber(12)) || protoMessage.GetSelectedClosedState() != 123 {
+		t.Fatalf("protobuf decoded closed enum oneof as %v", protoMessage.GetClosedSelection())
+	}
+	if got := protoMessage.GetClosedStates(); !slices.Equal(got, []editionprot.ClosedState{0, 123, 1}) {
+		t.Fatalf("protobuf decoded closed enum values as %v", got)
+	}
+	protoData, err := proto.Marshal(&protoMessage)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var picoMessage editionpico.Message
+	if err := picobuf.Unmarshal(data, &picoMessage); err != nil {
+		t.Fatal(err)
+	}
+	if picoMessage.ClosedState == nil || *picoMessage.ClosedState != 123 {
+		t.Fatalf("picobuf decoded singular closed enum as %v", picoMessage.ClosedState)
+	}
+	selection, ok := picoMessage.ClosedSelection.(*editionpico.Message_SelectedClosedState)
+	if !ok || selection.SelectedClosedState != 123 {
+		t.Fatalf("picobuf decoded closed enum oneof as %T", picoMessage.ClosedSelection)
+	}
+	if !slices.Equal(picoMessage.ClosedStates, []editionpico.ClosedState{0, 123, 1}) {
+		t.Fatalf("picobuf decoded closed enum values as %v", picoMessage.ClosedStates)
+	}
+	picoData, err := picobuf.Marshal(&picoMessage)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(picoData, protoData) {
+		t.Fatalf("reserialized closed enums differ: pico %x, protobuf %x", picoData, protoData)
+	}
+}
+
 func TestRepeatedAndMapDoNotTrackPresence(t *testing.T) {
 	picoNil, err := picobuf.Marshal(&pico.Message{})
 	if err != nil {

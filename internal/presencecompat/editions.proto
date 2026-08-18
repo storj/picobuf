@@ -5,6 +5,13 @@ edition = "2023";
 
 package presencecompat.editions;
 
+enum ClosedState {
+  option features.enum_type = CLOSED;
+
+  CLOSED_STATE_UNSPECIFIED = 0;
+  CLOSED_STATE_READY = 1;
+}
+
 message Message {
   int32 explicit_number = 1;
   string explicit_text = 2;
@@ -15,6 +22,12 @@ message Message {
   repeated int32 packed_numbers = 7;
   repeated int32 expanded_numbers = 8 [features.repeated_field_encoding = EXPANDED];
   Nested nested = 9 [features.message_encoding = DELIMITED];
+  ClosedState closed_state = 10;
+  repeated ClosedState closed_states = 11;
+
+  oneof closed_selection {
+    ClosedState selected_closed_state = 12;
+  }
 }
 
 message Nested {

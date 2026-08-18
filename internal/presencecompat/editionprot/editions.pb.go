@@ -24,6 +24,52 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type ClosedState int32
+
+const (
+	ClosedState_CLOSED_STATE_UNSPECIFIED ClosedState = 0
+	ClosedState_CLOSED_STATE_READY       ClosedState = 1
+)
+
+// Enum value maps for ClosedState.
+var (
+	ClosedState_name = map[int32]string{
+		0: "CLOSED_STATE_UNSPECIFIED",
+		1: "CLOSED_STATE_READY",
+	}
+	ClosedState_value = map[string]int32{
+		"CLOSED_STATE_UNSPECIFIED": 0,
+		"CLOSED_STATE_READY":       1,
+	}
+)
+
+func (x ClosedState) Enum() *ClosedState {
+	p := new(ClosedState)
+	*p = x
+	return p
+}
+
+func (x ClosedState) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ClosedState) Descriptor() protoreflect.EnumDescriptor {
+	return file_editions_proto_enumTypes[0].Descriptor()
+}
+
+func (ClosedState) Type() protoreflect.EnumType {
+	return &file_editions_proto_enumTypes[0]
+}
+
+func (x ClosedState) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ClosedState.Descriptor instead.
+func (ClosedState) EnumDescriptor() ([]byte, []int) {
+	return file_editions_proto_rawDescGZIP(), []int{0}
+}
+
 type Message struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	ExplicitNumber  *int32                 `protobuf:"varint,1,opt,name=explicit_number,json=explicitNumber" json:"explicit_number,omitempty"`
@@ -35,6 +81,12 @@ type Message struct {
 	PackedNumbers   []int32                `protobuf:"varint,7,rep,packed,name=packed_numbers,json=packedNumbers" json:"packed_numbers,omitempty"`
 	ExpandedNumbers []int32                `protobuf:"varint,8,rep,name=expanded_numbers,json=expandedNumbers" json:"expanded_numbers,omitempty"`
 	Nested          *Nested                `protobuf:"group,9,opt,name=Nested,json=nested" json:"nested,omitempty"`
+	ClosedState     *ClosedState           `protobuf:"varint,10,opt,name=closed_state,json=closedState,enum=presencecompat.editions.ClosedState" json:"closed_state,omitempty"`
+	ClosedStates    []ClosedState          `protobuf:"varint,11,rep,packed,name=closed_states,json=closedStates,enum=presencecompat.editions.ClosedState" json:"closed_states,omitempty"`
+	// Types that are valid to be assigned to ClosedSelection:
+	//
+	//	*Message_SelectedClosedState
+	ClosedSelection isMessage_ClosedSelection `protobuf_oneof:"closed_selection"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -132,6 +184,46 @@ func (x *Message) GetNested() *Nested {
 	return nil
 }
 
+func (x *Message) GetClosedState() ClosedState {
+	if x != nil && x.ClosedState != nil {
+		return *x.ClosedState
+	}
+	return ClosedState_CLOSED_STATE_UNSPECIFIED
+}
+
+func (x *Message) GetClosedStates() []ClosedState {
+	if x != nil {
+		return x.ClosedStates
+	}
+	return nil
+}
+
+func (x *Message) GetClosedSelection() isMessage_ClosedSelection {
+	if x != nil {
+		return x.ClosedSelection
+	}
+	return nil
+}
+
+func (x *Message) GetSelectedClosedState() ClosedState {
+	if x != nil {
+		if x, ok := x.ClosedSelection.(*Message_SelectedClosedState); ok {
+			return x.SelectedClosedState
+		}
+	}
+	return ClosedState_CLOSED_STATE_UNSPECIFIED
+}
+
+type isMessage_ClosedSelection interface {
+	isMessage_ClosedSelection()
+}
+
+type Message_SelectedClosedState struct {
+	SelectedClosedState ClosedState `protobuf:"varint,12,opt,name=selected_closed_state,json=selectedClosedState,enum=presencecompat.editions.ClosedState,oneof"`
+}
+
+func (*Message_SelectedClosedState) isMessage_ClosedSelection() {}
+
 type Nested struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Value         *int32                 `protobuf:"varint,1,opt,name=value" json:"value,omitempty"`
@@ -180,7 +272,7 @@ var File_editions_proto protoreflect.FileDescriptor
 
 const file_editions_proto_rawDesc = "" +
 	"\n" +
-	"\x0eeditions.proto\x12\x17presencecompat.editions\"\x9d\x03\n" +
+	"\x0eeditions.proto\x12\x17presencecompat.editions\"\xa1\x05\n" +
 	"\aMessage\x12'\n" +
 	"\x0fexplicit_number\x18\x01 \x01(\x05R\x0eexplicitNumber\x12#\n" +
 	"\rexplicit_text\x18\x02 \x01(\tR\fexplicitText\x12#\n" +
@@ -190,9 +282,17 @@ const file_editions_proto_rawDesc = "" +
 	"\rimplicit_data\x18\x06 \x01(\fB\x05\xaa\x01\x02\b\x02R\fimplicitData\x12%\n" +
 	"\x0epacked_numbers\x18\a \x03(\x05R\rpackedNumbers\x120\n" +
 	"\x10expanded_numbers\x18\b \x03(\x05B\x05\xaa\x01\x02\x18\x02R\x0fexpandedNumbers\x12>\n" +
-	"\x06nested\x18\t \x01(\v2\x1f.presencecompat.editions.NestedB\x05\xaa\x01\x02(\x02R\x06nested\"\x1e\n" +
+	"\x06nested\x18\t \x01(\v2\x1f.presencecompat.editions.NestedB\x05\xaa\x01\x02(\x02R\x06nested\x12G\n" +
+	"\fclosed_state\x18\n" +
+	" \x01(\x0e2$.presencecompat.editions.ClosedStateR\vclosedState\x12I\n" +
+	"\rclosed_states\x18\v \x03(\x0e2$.presencecompat.editions.ClosedStateR\fclosedStates\x12Z\n" +
+	"\x15selected_closed_state\x18\f \x01(\x0e2$.presencecompat.editions.ClosedStateH\x00R\x13selectedClosedStateB\x12\n" +
+	"\x10closed_selection\"\x1e\n" +
 	"\x06Nested\x12\x14\n" +
-	"\x05value\x18\x01 \x01(\x05R\x05valueb\beditionsp\xe8\a"
+	"\x05value\x18\x01 \x01(\x05R\x05value*I\n" +
+	"\vClosedState\x12\x1c\n" +
+	"\x18CLOSED_STATE_UNSPECIFIED\x10\x00\x12\x16\n" +
+	"\x12CLOSED_STATE_READY\x10\x01\x1a\x04:\x02\x10\x02b\beditionsp\xe8\a"
 
 var (
 	file_editions_proto_rawDescOnce sync.Once
@@ -206,18 +306,23 @@ func file_editions_proto_rawDescGZIP() []byte {
 	return file_editions_proto_rawDescData
 }
 
+var file_editions_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_editions_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_editions_proto_goTypes = []any{
-	(*Message)(nil), // 0: presencecompat.editions.Message
-	(*Nested)(nil),  // 1: presencecompat.editions.Nested
+	(ClosedState)(0), // 0: presencecompat.editions.ClosedState
+	(*Message)(nil),  // 1: presencecompat.editions.Message
+	(*Nested)(nil),   // 2: presencecompat.editions.Nested
 }
 var file_editions_proto_depIdxs = []int32{
-	1, // 0: presencecompat.editions.Message.nested:type_name -> presencecompat.editions.Nested
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	2, // 0: presencecompat.editions.Message.nested:type_name -> presencecompat.editions.Nested
+	0, // 1: presencecompat.editions.Message.closed_state:type_name -> presencecompat.editions.ClosedState
+	0, // 2: presencecompat.editions.Message.closed_states:type_name -> presencecompat.editions.ClosedState
+	0, // 3: presencecompat.editions.Message.selected_closed_state:type_name -> presencecompat.editions.ClosedState
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_editions_proto_init() }
@@ -225,18 +330,22 @@ func file_editions_proto_init() {
 	if File_editions_proto != nil {
 		return
 	}
+	file_editions_proto_msgTypes[0].OneofWrappers = []any{
+		(*Message_SelectedClosedState)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_editions_proto_rawDesc), len(file_editions_proto_rawDesc)),
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_editions_proto_goTypes,
 		DependencyIndexes: file_editions_proto_depIdxs,
+		EnumInfos:         file_editions_proto_enumTypes,
 		MessageInfos:      file_editions_proto_msgTypes,
 	}.Build()
 	File_editions_proto = out.File
