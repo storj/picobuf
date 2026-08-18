@@ -1,0 +1,15 @@
+// Copyright (C) 2026 Storj Labs, Inc.
+// See LICENSE for copying information.
+
+edition = "2023";
+
+package presencecompat.editions;
+
+message Message {
+  int32 explicit_number = 1;
+  string explicit_text = 2;
+  bytes explicit_data = 3;
+  int32 implicit_number = 4 [features.field_presence = IMPLICIT];
+  string implicit_text = 5 [features.field_presence = IMPLICIT];
+  bytes implicit_data = 6 [features.field_presence = IMPLICIT];
+}

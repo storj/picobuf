@@ -1,0 +1,18 @@
+// Copyright (C) 2026 Storj Labs, Inc.
+// See LICENSE for copying information.
+
+syntax = "proto2";
+
+package presencecompat.proto2;
+
+enum State {
+  STATE_UNSPECIFIED = 0;
+  STATE_READY = 1;
+}
+
+message Message {
+  optional int32 number = 1;
+  optional string text = 2;
+  optional bytes data = 3;
+  optional State state = 4;
+}

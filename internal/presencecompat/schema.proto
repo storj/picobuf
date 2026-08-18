@@ -1,0 +1,41 @@
+// Copyright (C) 2026 Storj Labs, Inc.
+// See LICENSE for copying information.
+
+syntax = "proto3";
+
+package presencecompat;
+
+import "pico.proto";
+
+enum State {
+  STATE_UNSPECIFIED = 0;
+  STATE_READY = 1;
+}
+
+message Message {
+  optional int32 number = 1;
+  optional string text = 2;
+  optional bytes data = 3;
+  optional State state = 4;
+  optional bool boolean = 5;
+  optional int64 int64_value = 6;
+  optional uint32 uint32_value = 7;
+  optional uint64 uint64_value = 8;
+  optional sint32 sint32_value = 9;
+  optional sint64 sint64_value = 10;
+  optional fixed32 fixed32_value = 11;
+  optional fixed64 fixed64_value = 12;
+  optional sfixed32 sfixed32_value = 13;
+  optional sfixed64 sfixed64_value = 14;
+  optional float float_value = 15;
+  optional double double_value = 16;
+
+  oneof selection {
+    State selected_state = 17;
+    string selected_text = 18;
+  }
+
+  repeated int32 numbers = 19;
+  map<string, string> names = 20;
+  optional string always_text = 21 [(pico.field).always_present = true];
+}
