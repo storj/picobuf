@@ -4,6 +4,8 @@
 package picobuf
 
 import (
+	"bytes"
+
 	"storj.io/picobuf/internal/protowire"
 )
 
@@ -15,9 +17,10 @@ const (
 // Decoder implements decoding of protobuf messages.
 type Decoder struct {
 	messageDecodeState
-	stack []messageDecodeState
-	init  bool
-	err   error
+	stack      []messageDecodeState
+	init       bool
+	aliasInput bool
+	err        error
 }
 
 type messageDecodeState struct {
@@ -212,6 +215,15 @@ func (dec *Decoder) Loop(fn func(*Decoder)) {
 			dec.nextField(n)
 		}
 	}
+}
+
+// copyBytes returns x, copied out of the input unless the decoder was asked to
+// alias it. See UnmarshalOptions.AliasInput.
+func (dec *Decoder) copyBytes(x []byte) []byte {
+	if dec.aliasInput {
+		return x
+	}
+	return bytes.Clone(x)
 }
 
 // Fail fails the decoding process.

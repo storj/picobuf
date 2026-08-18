@@ -757,7 +757,7 @@ func (dec *Decoder) Bytes(field FieldNumber, v *[]byte) {
 		dec.fail(field, "unable to parse Bytes")
 		return
 	}
-	*v = x
+	*v = dec.copyBytes(x)
 	dec.nextField(n)
 }
 
@@ -773,7 +773,7 @@ func (dec *Decoder) RepeatedBytes(field FieldNumber, v *[][]byte) {
 				dec.fail(field, "unable to parse Bytes")
 				return
 			}
-			*v = append(*v, x)
+			*v = append(*v, dec.copyBytes(x))
 			dec.nextField(n)
 		default:
 			dec.fail(field, "expected wire type Bytes")

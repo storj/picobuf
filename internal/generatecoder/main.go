@@ -108,7 +108,7 @@ var types = []PrimitiveType{
 	{"Float", float32(0), protowire.Fixed32Type, "Fixed32", "math.Float32bits(%s)", "math.Float32frombits(%s)"},
 	{"Double", float64(0), protowire.Fixed64Type, "Fixed64", "math.Float64bits(%s)", "math.Float64frombits(%s)"},
 	{"String", string(""), protowire.BytesType, "String", "%s", "%s"},
-	{"Bytes", []byte{}, protowire.BytesType, "Bytes", "%s", "%s"}, //TODO: reuse the existing bytes buffer to reduce allocs.
+	{"Bytes", []byte{}, protowire.BytesType, "Bytes", "%s", "dec.copyBytes(%s)"}, //TODO: reuse the existing bytes buffer to reduce allocs.
 }
 
 func main() {

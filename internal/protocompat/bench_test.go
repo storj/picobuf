@@ -68,6 +68,36 @@ func BenchmarkPicobuf(b *testing.B) {
 	})
 }
 
+// BenchmarkPicobufBytes measures the cost of copying bytes fields out of the
+// input, which UnmarshalOptions.AliasInput avoids.
+func BenchmarkPicobufBytes(b *testing.B) {
+	r := rand.New(rand.NewSource(1))
+	msg := pico.RepeatedTypes{}
+	for i := 0; i < 32; i++ {
+		msg.Bytes = append(msg.Bytes, []byte(randString(r, 64)))
+	}
+	encoded, err := picobuf.Marshal(&msg)
+	if err != nil {
+		b.Fatal(err)
+	}
+
+	b.Run("Decode", func(b *testing.B) {
+		b.ReportAllocs()
+		for k := 0; k < b.N; k++ {
+			var x pico.RepeatedTypes
+			_ = picobuf.Unmarshal(encoded, &x)
+		}
+	})
+	b.Run("DecodeAliasInput", func(b *testing.B) {
+		b.ReportAllocs()
+		opts := picobuf.UnmarshalOptions{AliasInput: true}
+		for k := 0; k < b.N; k++ {
+			var x pico.RepeatedTypes
+			_ = opts.Unmarshal(encoded, &x)
+		}
+	})
+}
+
 func generateProtobuf(n int) []prot.Person {
 	r := rand.New(rand.NewSource(int64(n)))
 	xs := make([]prot.Person, n)

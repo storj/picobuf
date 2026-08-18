@@ -68,10 +68,25 @@ func MarshalBuffer(msg Message, buffer []byte) ([]byte, error) {
 	return enc.Buffer(), nil
 }
 
-// Unmarshal decodes msg as bytes.
-func Unmarshal(data []byte, msg Message) error {
-	dec := &Decoder{}
+// UnmarshalOptions configures decoding.
+type UnmarshalOptions struct {
+	// AliasInput allows decoded bytes fields to point into data rather than
+	// being copied out of it. It avoids an allocation per bytes field, at the
+	// cost of tying the decoded message to data: data must outlive the message
+	// and must not be modified or reused, otherwise the message changes with
+	// it. String fields are always copied.
+	AliasInput bool
+}
+
+// Unmarshal decodes data into msg.
+func (opts UnmarshalOptions) Unmarshal(data []byte, msg Message) error {
+	dec := &Decoder{aliasInput: opts.AliasInput}
 	dec.buffer = data
 	dec.Loop(msg.Decode)
 	return dec.err
+}
+
+// Unmarshal decodes msg as bytes.
+func Unmarshal(data []byte, msg Message) error {
+	return UnmarshalOptions{}.Unmarshal(data, msg)
 }

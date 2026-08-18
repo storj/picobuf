@@ -290,6 +290,40 @@ func TestDecoder_RecursionLimit(t *testing.T) {
 	assert.Error(t, picobuf.Unmarshal(nestedMessage(protowire.DefaultRecursionLimit+10), &deep))
 }
 
+func TestUnmarshalOptions_AliasInput(t *testing.T) {
+	data, err := picobuf.Marshal(&picotest.AllTypes{
+		String_: "hello",
+		Bytes:   []byte{1, 2, 3},
+		Bytess:  [][]byte{{4}, {5}},
+	})
+	assert.NoError(t, err)
+
+	// By default the decoded message owns its bytes, so overwriting the input
+	// leaves it untouched.
+	buffer := append([]byte(nil), data...)
+	var copied picotest.AllTypes
+	assert.NoError(t, picobuf.Unmarshal(buffer, &copied))
+	for i := range buffer {
+		buffer[i] = 0xff
+	}
+	assert.Equal(t, copied.String_, "hello")
+	assert.DeepEqual(t, copied.Bytes, []byte{1, 2, 3})
+	assert.DeepEqual(t, copied.Bytess, [][]byte{{4}, {5}})
+
+	// With AliasInput the bytes fields point into the input.
+	buffer = append([]byte(nil), data...)
+	var aliased picotest.AllTypes
+	assert.NoError(t, picobuf.UnmarshalOptions{AliasInput: true}.Unmarshal(buffer, &aliased))
+	assert.DeepEqual(t, aliased.Bytes, []byte{1, 2, 3})
+	for i := range buffer {
+		buffer[i] = 0xff
+	}
+	assert.DeepEqual(t, aliased.Bytes, []byte{0xff, 0xff, 0xff})
+	assert.DeepEqual(t, aliased.Bytess, [][]byte{{0xff}, {0xff}})
+	// Strings are copied either way.
+	assert.Equal(t, aliased.String_, "hello")
+}
+
 func TestDecoder_Bool_NonOne(t *testing.T) {
 	// Any non-zero varint decodes as true, as protobuf requires.
 	var decoded picotest.AllTypes
