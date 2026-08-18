@@ -94,8 +94,6 @@ func TestDuration_Overflow(t *testing.T) {
 		{seconds: 1, nanos: 1, expected: time.Second + time.Nanosecond},
 		{seconds: -300 * 365 * 24 * 60 * 60, nanos: 0, expected: math.MinInt64},
 		{seconds: 300 * 365 * 24 * 60 * 60, nanos: 0, expected: math.MaxInt64},
-		{seconds: math.MinInt64, nanos: math.MinInt32, expected: math.MinInt64},
-		{seconds: math.MaxInt64, nanos: math.MaxInt32, expected: math.MaxInt64},
 	} {
 		data, err := picobuf.Marshal(&RawDurationMessage{RawDuration{Seconds: tt.seconds, Nanos: tt.nanos}})
 		assert.NoError(t, err)
@@ -104,6 +102,23 @@ func TestDuration_Overflow(t *testing.T) {
 		err = picobuf.Unmarshal(data, &r)
 		assert.NoError(t, err)
 		assert.Equal(t, tt.expected, r.Value)
+	}
+}
+
+func TestDuration_Invalid(t *testing.T) {
+	for _, tt := range []RawDuration{
+		{Seconds: 315576000001},
+		{Seconds: -315576000001},
+		{Nanos: 1000000000},
+		{Nanos: -1000000000},
+		{Seconds: 1, Nanos: -1},
+		{Seconds: -1, Nanos: 1},
+	} {
+		data, err := picobuf.Marshal(&RawDurationMessage{Value: tt})
+		assert.NoError(t, err)
+
+		var message DurationMessage
+		assert.Error(t, picobuf.Unmarshal(data, &message))
 	}
 }
 

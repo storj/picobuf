@@ -20,6 +20,8 @@ func (d *Duration) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) boo
 	}
 	z := time.Duration(*d)
 
+	// No range check is needed on encode: time.Duration caps out around
+	// ±292 years, well within the ±10000 years protobuf durations allow.
 	n := z.Nanoseconds()
 	seconds := n / 1e9
 	nanos := int32(n - seconds*1e9)
@@ -44,6 +46,21 @@ func (d *Duration) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 		c.Int64(1, &seconds)
 		c.Int32(2, &nanos)
 	})
+	if c.Err() != nil {
+		return
+	}
+	if seconds < -315576000000 || seconds > 315576000000 {
+		c.Fail(field, "duration seconds out of range")
+		return
+	}
+	if nanos < -999999999 || nanos > 999999999 {
+		c.Fail(field, "duration nanos out of range")
+		return
+	}
+	if (seconds < 0 && nanos > 0) || (seconds > 0 && nanos < 0) {
+		c.Fail(field, "duration seconds and nanos have different signs")
+		return
+	}
 
 	z := time.Duration(seconds) * time.Second
 	overflow := z/time.Second != time.Duration(seconds)
