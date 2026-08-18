@@ -7,6 +7,7 @@
 package picobuf_test
 
 import (
+	"bytes"
 	"testing"
 
 	"storj.io/picobuf"
@@ -60,9 +61,25 @@ func FuzzDecode(f *testing.F) {
 			return
 		}
 
-		_, err = picobuf.Marshal(&z)
+		encoded, err := picobuf.Marshal(&z)
 		if err != nil {
 			t.Fatal(err)
+		}
+
+		// Whatever the encoder produces must decode again, and encoding what
+		// comes back must reproduce the same bytes. Comparing encodings rather
+		// than messages avoids tripping over proto3 not distinguishing an
+		// empty bytes field from an absent one.
+		var redecoded picotest.AllTypes
+		if err := picobuf.Unmarshal(encoded, &redecoded); err != nil {
+			t.Fatalf("cannot decode own output: %v\ninput:   %x\nencoded: %x", err, data, encoded)
+		}
+		reencoded, err := picobuf.Marshal(&redecoded)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.Equal(encoded, reencoded) {
+			t.Fatalf("encoding is not stable\ninput:     %x\nencoded:   %x\nreencoded: %x", data, encoded, reencoded)
 		}
 	})
 }
