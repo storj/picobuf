@@ -40,6 +40,9 @@ func (dec *Decoder) RepeatedBool(field FieldNumber, v *[]bool) {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
 			for len(packed) > 0 {
+				if !dec.takeRepeated(field) {
+					return
+				}
 				x, xn := protowire.ConsumeVarint(packed)
 				if xn < 0 {
 					dec.fail(field, "unable to parse Varint")
@@ -50,6 +53,9 @@ func (dec *Decoder) RepeatedBool(field FieldNumber, v *[]bool) {
 			}
 			dec.nextField(n)
 		case protowire.VarintType:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeVarint(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse Varint")
@@ -93,6 +99,9 @@ func (dec *Decoder) RepeatedInt32(field FieldNumber, v *[]int32) {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
 			for len(packed) > 0 {
+				if !dec.takeRepeated(field) {
+					return
+				}
 				x, xn := protowire.ConsumeVarint(packed)
 				if xn < 0 {
 					dec.fail(field, "unable to parse Varint")
@@ -103,6 +112,9 @@ func (dec *Decoder) RepeatedInt32(field FieldNumber, v *[]int32) {
 			}
 			dec.nextField(n)
 		case protowire.VarintType:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeVarint(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse Varint")
@@ -146,6 +158,9 @@ func (dec *Decoder) RepeatedInt64(field FieldNumber, v *[]int64) {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
 			for len(packed) > 0 {
+				if !dec.takeRepeated(field) {
+					return
+				}
 				x, xn := protowire.ConsumeVarint(packed)
 				if xn < 0 {
 					dec.fail(field, "unable to parse Varint")
@@ -156,6 +171,9 @@ func (dec *Decoder) RepeatedInt64(field FieldNumber, v *[]int64) {
 			}
 			dec.nextField(n)
 		case protowire.VarintType:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeVarint(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse Varint")
@@ -199,6 +217,9 @@ func (dec *Decoder) RepeatedUint32(field FieldNumber, v *[]uint32) {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
 			for len(packed) > 0 {
+				if !dec.takeRepeated(field) {
+					return
+				}
 				x, xn := protowire.ConsumeVarint(packed)
 				if xn < 0 {
 					dec.fail(field, "unable to parse Varint")
@@ -209,6 +230,9 @@ func (dec *Decoder) RepeatedUint32(field FieldNumber, v *[]uint32) {
 			}
 			dec.nextField(n)
 		case protowire.VarintType:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeVarint(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse Varint")
@@ -252,6 +276,9 @@ func (dec *Decoder) RepeatedUint64(field FieldNumber, v *[]uint64) {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
 			for len(packed) > 0 {
+				if !dec.takeRepeated(field) {
+					return
+				}
 				x, xn := protowire.ConsumeVarint(packed)
 				if xn < 0 {
 					dec.fail(field, "unable to parse Varint")
@@ -262,6 +289,9 @@ func (dec *Decoder) RepeatedUint64(field FieldNumber, v *[]uint64) {
 			}
 			dec.nextField(n)
 		case protowire.VarintType:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeVarint(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse Varint")
@@ -305,6 +335,9 @@ func (dec *Decoder) RepeatedSint32(field FieldNumber, v *[]int32) {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
 			for len(packed) > 0 {
+				if !dec.takeRepeated(field) {
+					return
+				}
 				x, xn := protowire.ConsumeVarint(packed)
 				if xn < 0 {
 					dec.fail(field, "unable to parse Varint")
@@ -315,6 +348,9 @@ func (dec *Decoder) RepeatedSint32(field FieldNumber, v *[]int32) {
 			}
 			dec.nextField(n)
 		case protowire.VarintType:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeVarint(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse Varint")
@@ -358,6 +394,9 @@ func (dec *Decoder) RepeatedSint64(field FieldNumber, v *[]int64) {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
 			for len(packed) > 0 {
+				if !dec.takeRepeated(field) {
+					return
+				}
 				x, xn := protowire.ConsumeVarint(packed)
 				if xn < 0 {
 					dec.fail(field, "unable to parse Varint")
@@ -368,6 +407,9 @@ func (dec *Decoder) RepeatedSint64(field FieldNumber, v *[]int64) {
 			}
 			dec.nextField(n)
 		case protowire.VarintType:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeVarint(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse Varint")
@@ -411,6 +453,9 @@ func (dec *Decoder) RepeatedFixed32(field FieldNumber, v *[]uint32) {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
 			for len(packed) > 0 {
+				if !dec.takeRepeated(field) {
+					return
+				}
 				x, xn := protowire.ConsumeFixed32(packed)
 				if xn < 0 {
 					dec.fail(field, "unable to parse Fixed32")
@@ -421,6 +466,9 @@ func (dec *Decoder) RepeatedFixed32(field FieldNumber, v *[]uint32) {
 			}
 			dec.nextField(n)
 		case protowire.Fixed32Type:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeFixed32(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse Fixed32")
@@ -464,6 +512,9 @@ func (dec *Decoder) RepeatedFixed64(field FieldNumber, v *[]uint64) {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
 			for len(packed) > 0 {
+				if !dec.takeRepeated(field) {
+					return
+				}
 				x, xn := protowire.ConsumeFixed64(packed)
 				if xn < 0 {
 					dec.fail(field, "unable to parse Fixed64")
@@ -474,6 +525,9 @@ func (dec *Decoder) RepeatedFixed64(field FieldNumber, v *[]uint64) {
 			}
 			dec.nextField(n)
 		case protowire.Fixed64Type:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeFixed64(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse Fixed64")
@@ -517,6 +571,9 @@ func (dec *Decoder) RepeatedSfixed32(field FieldNumber, v *[]int32) {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
 			for len(packed) > 0 {
+				if !dec.takeRepeated(field) {
+					return
+				}
 				x, xn := protowire.ConsumeFixed32(packed)
 				if xn < 0 {
 					dec.fail(field, "unable to parse Fixed32")
@@ -527,6 +584,9 @@ func (dec *Decoder) RepeatedSfixed32(field FieldNumber, v *[]int32) {
 			}
 			dec.nextField(n)
 		case protowire.Fixed32Type:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeFixed32(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse Fixed32")
@@ -570,6 +630,9 @@ func (dec *Decoder) RepeatedSfixed64(field FieldNumber, v *[]int64) {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
 			for len(packed) > 0 {
+				if !dec.takeRepeated(field) {
+					return
+				}
 				x, xn := protowire.ConsumeFixed64(packed)
 				if xn < 0 {
 					dec.fail(field, "unable to parse Fixed64")
@@ -580,6 +643,9 @@ func (dec *Decoder) RepeatedSfixed64(field FieldNumber, v *[]int64) {
 			}
 			dec.nextField(n)
 		case protowire.Fixed64Type:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeFixed64(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse Fixed64")
@@ -623,6 +689,9 @@ func (dec *Decoder) RepeatedFloat(field FieldNumber, v *[]float32) {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
 			for len(packed) > 0 {
+				if !dec.takeRepeated(field) {
+					return
+				}
 				x, xn := protowire.ConsumeFixed32(packed)
 				if xn < 0 {
 					dec.fail(field, "unable to parse Fixed32")
@@ -633,6 +702,9 @@ func (dec *Decoder) RepeatedFloat(field FieldNumber, v *[]float32) {
 			}
 			dec.nextField(n)
 		case protowire.Fixed32Type:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeFixed32(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse Fixed32")
@@ -676,6 +748,9 @@ func (dec *Decoder) RepeatedDouble(field FieldNumber, v *[]float64) {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
 			for len(packed) > 0 {
+				if !dec.takeRepeated(field) {
+					return
+				}
 				x, xn := protowire.ConsumeFixed64(packed)
 				if xn < 0 {
 					dec.fail(field, "unable to parse Fixed64")
@@ -686,6 +761,9 @@ func (dec *Decoder) RepeatedDouble(field FieldNumber, v *[]float64) {
 			}
 			dec.nextField(n)
 		case protowire.Fixed64Type:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeFixed64(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse Fixed64")
@@ -727,6 +805,9 @@ func (dec *Decoder) RepeatedString(field FieldNumber, v *[]string) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
 		case protowire.BytesType:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeString(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse String")
@@ -768,6 +849,9 @@ func (dec *Decoder) RepeatedBytes(field FieldNumber, v *[][]byte) {
 	for field == dec.pendingField {
 		switch dec.pendingWire {
 		case protowire.BytesType:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeBytes(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse Bytes")

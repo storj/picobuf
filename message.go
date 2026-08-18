@@ -76,11 +76,27 @@ type UnmarshalOptions struct {
 	// and must not be modified or reused, otherwise the message changes with
 	// it. String fields are always copied.
 	AliasInput bool
+
+	// MaxInputSize rejects inputs larger than this many bytes. Zero disables
+	// the limit.
+	MaxInputSize int
+	// MaxRecursionDepth limits nested messages. Zero uses the default limit.
+	MaxRecursionDepth int
+	// MaxRepeatedElements limits the total number of repeated values decoded
+	// across the message. Zero disables the limit.
+	MaxRepeatedElements int
 }
 
 // Unmarshal decodes data into msg.
 func (opts UnmarshalOptions) Unmarshal(data []byte, msg Message) error {
-	dec := &Decoder{aliasInput: opts.AliasInput}
+	if opts.MaxInputSize > 0 && len(data) > opts.MaxInputSize {
+		return parseError{message: "input exceeds maximum size"}
+	}
+	dec := &Decoder{
+		aliasInput:          opts.AliasInput,
+		maxRecursionDepth:   opts.MaxRecursionDepth,
+		maxRepeatedElements: opts.MaxRepeatedElements,
+	}
 	dec.buffer = data
 	dec.Loop(msg.Decode)
 	return dec.err

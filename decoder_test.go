@@ -290,6 +290,35 @@ func TestDecoder_RecursionLimit(t *testing.T) {
 	assert.Error(t, picobuf.Unmarshal(nestedMessage(protowire.DefaultRecursionLimit+10), &deep))
 }
 
+func TestUnmarshalOptions_MaxInputSize(t *testing.T) {
+	var message picotest.AllTypes
+	err := (picobuf.UnmarshalOptions{MaxInputSize: 1}).Unmarshal([]byte{0x08, 0x01}, &message)
+	assert.Error(t, err)
+
+	assert.NoError(t, (picobuf.UnmarshalOptions{MaxInputSize: 2}).Unmarshal([]byte{0x08, 0x01}, &message))
+}
+
+func TestUnmarshalOptions_MaxRecursionDepth(t *testing.T) {
+	var message nested
+	err := (picobuf.UnmarshalOptions{MaxRecursionDepth: 2}).Unmarshal(nestedMessage(3), &message)
+	assert.Error(t, err)
+
+	assert.NoError(t, (picobuf.UnmarshalOptions{MaxRecursionDepth: 3}).Unmarshal(nestedMessage(3), &message))
+}
+
+func TestUnmarshalOptions_MaxRepeatedElements(t *testing.T) {
+	data, err := picobuf.Marshal(&picotest.AllTypes{Int32S: []int32{1, 2, 3}})
+	assert.NoError(t, err)
+
+	var message picotest.AllTypes
+	err = (picobuf.UnmarshalOptions{MaxRepeatedElements: 2}).Unmarshal(data, &message)
+	assert.Error(t, err)
+
+	message = picotest.AllTypes{}
+	assert.NoError(t, (picobuf.UnmarshalOptions{MaxRepeatedElements: 3}).Unmarshal(data, &message))
+	assert.DeepEqual(t, message.Int32S, []int32{1, 2, 3})
+}
+
 func TestUnmarshalOptions_AliasInput(t *testing.T) {
 	data, err := picobuf.Marshal(&picotest.AllTypes{
 		String_: "hello",

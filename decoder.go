@@ -20,7 +20,11 @@ type Decoder struct {
 	stack      []messageDecodeState
 	init       bool
 	aliasInput bool
-	err        error
+
+	maxRecursionDepth   int
+	maxRepeatedElements int
+	repeatedElements    int
+	err                 error
 }
 
 type messageDecodeState struct {
@@ -49,7 +53,11 @@ func (dec *Decoder) pushState(message []byte) {
 	// Nesting is bounded by the input for a self-referential message, so
 	// refuse to descend further rather than exhausting the stack. Still push,
 	// so that the caller's matching popState stays balanced.
-	tooDeep := len(dec.stack) >= protowire.DefaultRecursionLimit
+	limit := dec.maxRecursionDepth
+	if limit <= 0 {
+		limit = protowire.DefaultRecursionLimit
+	}
+	tooDeep := len(dec.stack) >= limit
 	if tooDeep {
 		message = nil
 	}
@@ -77,6 +85,9 @@ func (dec *Decoder) popState() {
 // RepeatedMessage decodes a message.
 func (dec *Decoder) RepeatedMessage(field FieldNumber, fn func(c *Decoder)) {
 	for field == dec.pendingField {
+		if !dec.takeRepeated(field) {
+			return
+		}
 		if dec.pendingWire != protowire.BytesType {
 			dec.fail(field, "expected wire type Bytes")
 			return
@@ -98,6 +109,9 @@ func (dec *Decoder) RepeatedEnum(field FieldNumber, add func(x int32)) {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
 			for len(packed) > 0 {
+				if !dec.takeRepeated(field) {
+					return
+				}
 				x, xn := protowire.ConsumeVarint(packed)
 				if xn < 0 {
 					dec.fail(field, "unable to parse Varint")
@@ -108,6 +122,9 @@ func (dec *Decoder) RepeatedEnum(field FieldNumber, add func(x int32)) {
 			}
 			dec.nextField(n)
 		case protowire.VarintType:
+			if !dec.takeRepeated(field) {
+				return
+			}
 			x, n := protowire.ConsumeVarint(dec.buffer)
 			if n < 0 {
 				dec.fail(field, "unable to parse Varint")
@@ -120,6 +137,18 @@ func (dec *Decoder) RepeatedEnum(field FieldNumber, add func(x int32)) {
 			return
 		}
 	}
+}
+
+func (dec *Decoder) takeRepeated(field FieldNumber) bool {
+	if dec.maxRepeatedElements <= 0 {
+		return true
+	}
+	dec.repeatedElements++
+	if dec.repeatedElements > dec.maxRepeatedElements {
+		dec.fail(field, "exceeded maximum repeated elements")
+		return false
+	}
+	return true
 }
 
 // Message decodes a message.

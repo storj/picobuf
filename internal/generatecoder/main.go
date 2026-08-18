@@ -282,6 +282,7 @@ func generateDecoder() []byte {
 				pf("case protowire.BytesType:\n")
 				pf("    packed, n := protowire.ConsumeBytes(dec.buffer)\n")
 				pf("    for len(packed) > 0 {\n")
+				pf("         if !dec.takeRepeated(field) { return }\n")
 				pf("         x, xn := protowire.Consume%v(packed)\n", t.Suffix)
 				pf("         if xn < 0 { dec.fail(field, \"unable to parse %v\"); return }\n", t.Suffix)
 				pf("         *v = append(*v, "+t.DecodeFmt+")\n", "x")
@@ -290,6 +291,7 @@ func generateDecoder() []byte {
 				pf("    dec.nextField(n)\n")
 			}
 			pf("case %v:\n", t.WireName())
+			pf("    if !dec.takeRepeated(field) { return }\n")
 			pf("    x, n := protowire.Consume%v(dec.buffer)\n", t.Suffix)
 			pf("    if n < 0 { dec.fail(field, \"unable to parse %v\"); return }\n", t.Suffix)
 			pf("    *v = append(*v, "+t.DecodeFmt+")\n", "x")
