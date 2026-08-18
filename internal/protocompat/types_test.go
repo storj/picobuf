@@ -125,6 +125,31 @@ func TestTypesSignedWire(t *testing.T) {
 	}
 }
 
+func TestHighFieldNumbers(t *testing.T) {
+	// Field numbers up to 2^29-1 are valid; the tag varint grows past one byte
+	// at 16 and the exclude bitmask in UnrecognizedFields stops at 64.
+	test := pico.HighFields{Low: 1, Boundary: 2, FirstHigh: 3, Large: 4, Max: 5}
+
+	data, err := picobuf.Marshal(&test)
+	assert.NoError(t, err)
+
+	var p prot.HighFields
+	assert.NoError(t, proto.Unmarshal(data, &p))
+	assert.Equal(t, p.Low, test.Low)
+	assert.Equal(t, p.Boundary, test.Boundary)
+	assert.Equal(t, p.FirstHigh, test.FirstHigh)
+	assert.Equal(t, p.Large, test.Large)
+	assert.Equal(t, p.Max, test.Max)
+
+	canonical, err := proto.MarshalOptions{Deterministic: true}.Marshal(&p)
+	assert.NoError(t, err)
+	assert.Equal(t, canonical, data)
+
+	var got pico.HighFields
+	assert.NoError(t, picobuf.Unmarshal(canonical, &got))
+	assert.DeepEqual(t, got, test)
+}
+
 func TestRepeated(t *testing.T) {
 	tests := []pico.RepeatedTypes{
 		{},

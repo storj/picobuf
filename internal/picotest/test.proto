@@ -196,3 +196,10 @@ message Tag {
         Timestamp timestamp = 8;
     }
 }
+
+message HighUnknown {
+  option (pico.message).capture_unrecognized_fields = true;
+  int64 low = 1;
+  int64 high = 64;
+  int64 higher = 100000;
+}

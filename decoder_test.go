@@ -359,6 +359,44 @@ func TestDecoder_UnrecognizedFields_Truncated(t *testing.T) {
 	assert.Error(t, err)
 }
 
+// appendField appends a varint field to data.
+func appendField(data []byte, field picobuf.FieldNumber, x uint64) []byte {
+	data = protowire.AppendTag(data, protowire.Number(field), protowire.VarintType)
+	return protowire.AppendVarint(data, x)
+}
+
+func TestDecoder_UnrecognizedFields_HighFieldNumbers(t *testing.T) {
+	// Field 64 arrives after field 100000. Decode offers its fields in
+	// ascending order, so by the time UnrecognizedFields runs, field 64 is
+	// pending and cannot be picked up until the next Loop pass. It must not be
+	// mistaken for an unrecognized field.
+	var decoded picotest.HighUnknown
+	data := appendField(nil, 100000, 3)
+	data = appendField(data, 64, 2)
+	assert.NoError(t, picobuf.Unmarshal(data, &decoded))
+	assert.DeepEqual(t, decoded, picotest.HighUnknown{Low: 0, High: 2, Higher: 3})
+
+	// Unrecognized fields at or above 64 are still captured, and survive a
+	// roundtrip.
+	var captured picotest.HighUnknown
+	data = appendField(nil, 1, 1)
+	data = appendField(data, 64, 2)
+	unknown := appendField(nil, 65, 7)
+	unknown = appendField(unknown, 200000, 8)
+	assert.NoError(t, picobuf.Unmarshal(append(data, unknown...), &captured))
+	assert.DeepEqual(t, captured, picotest.HighUnknown{
+		Low:              1,
+		High:             2,
+		XXX_unrecognized: unknown,
+	})
+
+	reencoded, err := picobuf.Marshal(&captured)
+	assert.NoError(t, err)
+	var roundtripped picotest.HighUnknown
+	assert.NoError(t, picobuf.Unmarshal(reencoded, &roundtripped))
+	assert.DeepEqual(t, roundtripped, captured)
+}
+
 func TestCodec_UnrecognizedFields(t *testing.T) {
 	initialKnown := picotest.KnownMessage{
 		First:  0x11,

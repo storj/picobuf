@@ -2,8 +2,8 @@
 // source: test.proto
 //
 // versions:
-//     protoc-gen-pico: (devel)
-//     protoc:          v5.27.3
+//     protoc-gen-pico: v0.0.5-0.20260818114458-cdee8cf8013f+dirty
+//     protoc:          v7.35.1
 
 package picotest
 
@@ -1412,3 +1412,52 @@ func (*Tag_Bytes) isTag_Value()      {}
 func (*Tag_Bool) isTag_Value()       {}
 func (*Tag_DurationNs) isTag_Value() {}
 func (*Tag_Timestamp) isTag_Value()  {}
+
+type HighUnknown struct {
+	Low              int64 `json:"low,omitempty"`
+	High             int64 `json:"high,omitempty"`
+	Higher           int64 `json:"higher,omitempty"`
+	XXX_unrecognized []byte
+}
+
+func (m *HighUnknown) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.Int64(1, &m.Low)
+	c.Int64(64, &m.High)
+	c.Int64(100000, &m.Higher)
+	c.UnrecognizedFields(m.XXX_unrecognized)
+	return true
+}
+
+func (m *HighUnknown) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Int64(1, &m.Low)
+	c.Int64(64, &m.High)
+	c.Int64(100000, &m.Higher)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized, 64, 100000)
+}
+
+func (m *HighUnknown) GetLow() (v int64) {
+	if m != nil {
+		return m.Low
+	}
+	return 0
+}
+
+func (m *HighUnknown) GetHigh() (v int64) {
+	if m != nil {
+		return m.High
+	}
+	return 0
+}
+
+func (m *HighUnknown) GetHigher() (v int64) {
+	if m != nil {
+		return m.Higher
+	}
+	return 0
+}

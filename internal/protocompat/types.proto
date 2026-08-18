@@ -151,3 +151,11 @@ message OptionalMessage {
 	optional int32 optional_int32 = 1;
 }
 */
+
+message HighFields {
+  int64 low = 1;
+  int64 boundary = 63;
+  int64 first_high = 64;
+  int64 large = 100000;
+  int64 max = 536870911;
+}

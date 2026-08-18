@@ -156,8 +156,19 @@ func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Decoder)) {
 }
 
 // UnrecognizedFields decodes fields that are not in the provided set.
-func (dec *Decoder) UnrecognizedFields(exclude uint64, out *[]byte) {
-	for dec.pendingField >= 0 && (dec.pendingField >= 64 || exclude&(1<<uint64(dec.pendingField)) == 0) {
+//
+// Fields below 64 are excluded via the exclude bitmask, higher field numbers
+// are listed in excludeHigh.
+func (dec *Decoder) UnrecognizedFields(exclude uint64, out *[]byte, excludeHigh ...FieldNumber) {
+	for dec.pendingField >= 0 {
+		if field := dec.pendingField; field < 64 {
+			if exclude&(1<<uint64(field)) != 0 {
+				return
+			}
+		} else if containsField(excludeHigh, field) {
+			return
+		}
+
 		n := protowire.ConsumeFieldValue(protowire.Number(dec.pendingField), dec.pendingWire, dec.buffer)
 		if n < 0 {
 			dec.fail(dec.pendingField, "unable to parse unrecognized field")
@@ -167,6 +178,19 @@ func (dec *Decoder) UnrecognizedFields(exclude uint64, out *[]byte) {
 		*out = append(*out, dec.buffer[:n]...)
 		dec.nextField(n)
 	}
+}
+
+// containsField reports whether fields contains field.
+//
+// It does a linear scan, because a message that captures unrecognized fields has
+// few fields numbered 64 or above. Sort and binary search if that changes.
+func containsField(fields []FieldNumber, field FieldNumber) bool {
+	for _, f := range fields {
+		if f == field {
+			return true
+		}
+	}
+	return false
 }
 
 // Loop loops fields until all messages have been processed.

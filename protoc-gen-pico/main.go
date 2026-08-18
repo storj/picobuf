@@ -338,19 +338,27 @@ func genMessageDecode(gf *generator, m *protogen.Message) {
 		genFieldDecode(gf, field)
 	}
 	if getMessageOpts(m).CaptureUnrecognizedFields {
-		gf.P("c.UnrecognizedFields(", fieldsBitSet(m), ", &m.XXX_unrecognized)")
+		low, high := fieldsBitSet(m)
+		args := []interface{}{"c.UnrecognizedFields(", low, ", &m.XXX_unrecognized"}
+		for _, num := range high {
+			args = append(args, ", ", uint64(num))
+		}
+		gf.P(append(args, ")")...)
 	}
 }
 
-func fieldsBitSet(m *protogen.Message) (z uint64) {
+// fieldsBitSet returns the message's field numbers below 64 as a bitmask, and
+// the rest as a list, matching Decoder.UnrecognizedFields.
+func fieldsBitSet(m *protogen.Message) (low uint64, high []protoreflect.FieldNumber) {
 	for _, f := range m.Fields {
 		num := f.Desc.Number()
 		if num >= 64 {
-			panic("oh no, too many fields")
+			high = append(high, num)
+			continue
 		}
-		z |= 1 << num
+		low |= 1 << num
 	}
-	return z
+	return low, high
 }
 
 func genFieldDecode(gf *generator, field *protogen.Field) {

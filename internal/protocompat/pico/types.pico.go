@@ -2,8 +2,8 @@
 // source: types.proto
 //
 // versions:
-//     protoc-gen-pico: (devel)
-//     protoc:          v5.27.3
+//     protoc-gen-pico: v0.0.5-0.20260818114458-cdee8cf8013f+dirty
+//     protoc:          v7.35.1
 
 package pico
 
@@ -494,3 +494,34 @@ type CommandMessage_Count struct {
 func (*CommandMessage_Name) isCommandMessage_Command()    {}
 func (*CommandMessage_Message) isCommandMessage_Command() {}
 func (*CommandMessage_Count) isCommandMessage_Command()   {}
+
+type HighFields struct {
+	Low       int64 `json:"low,omitempty"`
+	Boundary  int64 `json:"boundary,omitempty"`
+	FirstHigh int64 `json:"first_high,omitempty"`
+	Large     int64 `json:"large,omitempty"`
+	Max       int64 `json:"max,omitempty"`
+}
+
+func (m *HighFields) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.Int64(1, &m.Low)
+	c.Int64(63, &m.Boundary)
+	c.Int64(64, &m.FirstHigh)
+	c.Int64(100000, &m.Large)
+	c.Int64(536870911, &m.Max)
+	return true
+}
+
+func (m *HighFields) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Int64(1, &m.Low)
+	c.Int64(63, &m.Boundary)
+	c.Int64(64, &m.FirstHigh)
+	c.Int64(100000, &m.Large)
+	c.Int64(536870911, &m.Max)
+}
