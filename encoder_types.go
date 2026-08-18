@@ -415,7 +415,7 @@ func (enc *Encoder) Sfixed32(field FieldNumber, v *int32) {
 		return
 	}
 	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed32Type)
-	enc.buffer = protowire.AppendFixed32(enc.buffer, encodeZigZag32(*v))
+	enc.buffer = protowire.AppendFixed32(enc.buffer, uint32(*v))
 }
 
 // RepeatedSfixed32 encodes non-empty repeated sfixed32 protobuf type.
@@ -428,7 +428,7 @@ func (enc *Encoder) RepeatedSfixed32(field FieldNumber, v *[]int32) {
 	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*4))
 	for _, x := range *v {
-		enc.buffer = protowire.AppendFixed32(enc.buffer, encodeZigZag32(x))
+		enc.buffer = protowire.AppendFixed32(enc.buffer, uint32(x))
 	}
 }
 
@@ -437,7 +437,7 @@ func (enc *Encoder) RepeatedSfixed32(field FieldNumber, v *[]int32) {
 //go:noinline
 func (enc *Encoder) AlwaysSfixed32(field FieldNumber, v *int32) {
 	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed32Type)
-	enc.buffer = protowire.AppendFixed32(enc.buffer, encodeZigZag32(*v))
+	enc.buffer = protowire.AppendFixed32(enc.buffer, uint32(*v))
 }
 
 // AlwaysRepeatedSfixed32 encodes all repeated sfixed32 protobuf type.
@@ -447,7 +447,7 @@ func (enc *Encoder) AlwaysRepeatedSfixed32(field FieldNumber, v *[]int32) {
 	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*4))
 	for _, x := range *v {
-		enc.buffer = protowire.AppendFixed32(enc.buffer, encodeZigZag32(x))
+		enc.buffer = protowire.AppendFixed32(enc.buffer, uint32(x))
 	}
 }
 
@@ -459,7 +459,7 @@ func (enc *Encoder) Sfixed64(field FieldNumber, v *int64) {
 		return
 	}
 	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed64Type)
-	enc.buffer = protowire.AppendFixed64(enc.buffer, protowire.EncodeZigZag(*v))
+	enc.buffer = protowire.AppendFixed64(enc.buffer, uint64(*v))
 }
 
 // RepeatedSfixed64 encodes non-empty repeated sfixed64 protobuf type.
@@ -472,7 +472,7 @@ func (enc *Encoder) RepeatedSfixed64(field FieldNumber, v *[]int64) {
 	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*8))
 	for _, x := range *v {
-		enc.buffer = protowire.AppendFixed64(enc.buffer, protowire.EncodeZigZag(x))
+		enc.buffer = protowire.AppendFixed64(enc.buffer, uint64(x))
 	}
 }
 
@@ -481,7 +481,7 @@ func (enc *Encoder) RepeatedSfixed64(field FieldNumber, v *[]int64) {
 //go:noinline
 func (enc *Encoder) AlwaysSfixed64(field FieldNumber, v *int64) {
 	enc.buffer = appendTag(enc.buffer, field, protowire.Fixed64Type)
-	enc.buffer = protowire.AppendFixed64(enc.buffer, protowire.EncodeZigZag(*v))
+	enc.buffer = protowire.AppendFixed64(enc.buffer, uint64(*v))
 }
 
 // AlwaysRepeatedSfixed64 encodes all repeated sfixed64 protobuf type.
@@ -491,7 +491,7 @@ func (enc *Encoder) AlwaysRepeatedSfixed64(field FieldNumber, v *[]int64) {
 	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 	enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*8))
 	for _, x := range *v {
-		enc.buffer = protowire.AppendFixed64(enc.buffer, protowire.EncodeZigZag(x))
+		enc.buffer = protowire.AppendFixed64(enc.buffer, uint64(x))
 	}
 }
 

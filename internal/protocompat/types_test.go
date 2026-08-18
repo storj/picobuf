@@ -4,6 +4,7 @@
 package protocompat
 
 import (
+	"math"
 	"testing"
 
 	"github.com/zeebo/assert"
@@ -51,6 +52,14 @@ func TestTypes(t *testing.T) {
 			Language: pico.Language_ENGLISH,
 		},
 		{
+			Int32:    -2,
+			Int64:    -2,
+			Sfixed32: -2,
+			Sfixed64: -2,
+			Float:    -2,
+			Double:   -2,
+		},
+		{
 			OptionalMessage: &pico.OptionalMessage{},
 		},
 	}
@@ -73,6 +82,40 @@ func TestTypes(t *testing.T) {
 		err = picobuf.Unmarshal(canonical, &got)
 		assert.NoError(t, err)
 		assert.DeepEqual(t, got, test)
+	}
+}
+
+// TestTypesSignedWire checks the signed types against protobuf-go in both
+// directions. TestTypes derives its reference message from picobuf's own
+// output, so it cannot catch picobuf and the reference agreeing on a wrong
+// interpretation of the wire bytes.
+func TestTypesSignedWire(t *testing.T) {
+	for _, v := range []int64{-2, -1, 0, 1, 2, math.MinInt32, math.MaxInt32, math.MinInt64, math.MaxInt64} {
+		p := pico.Types{
+			Int32: int32(v), Int64: v,
+			Sfixed32: int32(v), Sfixed64: v,
+		}
+		r := prot.Types{
+			Int32: int32(v), Int64: v,
+			Sfixed32: int32(v), Sfixed64: v,
+		}
+
+		// picobuf encodes what protobuf-go reads
+		data, err := picobuf.Marshal(&p)
+		assert.NoError(t, err)
+		var gotProt prot.Types
+		assert.NoError(t, proto.Unmarshal(data, &gotProt))
+		assert.Equal(t, gotProt.Int32, r.Int32)
+		assert.Equal(t, gotProt.Int64, r.Int64)
+		assert.Equal(t, gotProt.Sfixed32, r.Sfixed32)
+		assert.Equal(t, gotProt.Sfixed64, r.Sfixed64)
+
+		// picobuf reads what protobuf-go encodes
+		refData, err := proto.Marshal(&r)
+		assert.NoError(t, err)
+		var gotPico pico.Types
+		assert.NoError(t, picobuf.Unmarshal(refData, &gotPico))
+		assert.DeepEqual(t, gotPico, p)
 	}
 }
 

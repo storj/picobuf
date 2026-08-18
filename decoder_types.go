@@ -504,7 +504,7 @@ func (dec *Decoder) Sfixed32(field FieldNumber, v *int32) {
 		dec.fail(field, "unable to parse Fixed32")
 		return
 	}
-	*v = decodeZigZag32(x)
+	*v = int32(x)
 	dec.nextField(n)
 }
 
@@ -522,7 +522,7 @@ func (dec *Decoder) RepeatedSfixed32(field FieldNumber, v *[]int32) {
 					dec.fail(field, "unable to parse Fixed32")
 					return
 				}
-				*v = append(*v, decodeZigZag32(x))
+				*v = append(*v, int32(x))
 				packed = packed[xn:]
 			}
 			dec.nextField(n)
@@ -532,7 +532,7 @@ func (dec *Decoder) RepeatedSfixed32(field FieldNumber, v *[]int32) {
 				dec.fail(field, "unable to parse Fixed32")
 				return
 			}
-			*v = append(*v, decodeZigZag32(x))
+			*v = append(*v, int32(x))
 			dec.nextField(n)
 		default:
 			dec.fail(field, "expected wire type Fixed32")
@@ -557,7 +557,7 @@ func (dec *Decoder) Sfixed64(field FieldNumber, v *int64) {
 		dec.fail(field, "unable to parse Fixed64")
 		return
 	}
-	*v = protowire.DecodeZigZag(x)
+	*v = int64(x)
 	dec.nextField(n)
 }
 
@@ -575,7 +575,7 @@ func (dec *Decoder) RepeatedSfixed64(field FieldNumber, v *[]int64) {
 					dec.fail(field, "unable to parse Fixed64")
 					return
 				}
-				*v = append(*v, protowire.DecodeZigZag(x))
+				*v = append(*v, int64(x))
 				packed = packed[xn:]
 			}
 			dec.nextField(n)
@@ -585,7 +585,7 @@ func (dec *Decoder) RepeatedSfixed64(field FieldNumber, v *[]int64) {
 				dec.fail(field, "unable to parse Fixed64")
 				return
 			}
-			*v = append(*v, protowire.DecodeZigZag(x))
+			*v = append(*v, int64(x))
 			dec.nextField(n)
 		default:
 			dec.fail(field, "expected wire type Fixed64")
