@@ -88,3 +88,44 @@ func TestSupportedFeatures(t *testing.T) {
 		t.Fatalf("supported editions = %v..%v, want 2023..2023", plugin.SupportedEditionsMinimum, plugin.SupportedEditionsMaximum)
 	}
 }
+
+func TestGenerateExplicitScalarPresence(t *testing.T) {
+	file := &descriptorpb.FileDescriptorProto{
+		Name:    proto.String("test.proto"),
+		Package: proto.String("test"),
+		Syntax:  proto.String("proto3"),
+		Options: &descriptorpb.FileOptions{GoPackage: proto.String("example.com/test;test")},
+		MessageType: []*descriptorpb.DescriptorProto{{
+			Name:      proto.String("Message"),
+			OneofDecl: []*descriptorpb.OneofDescriptorProto{{Name: proto.String("_explicit")}},
+			Field: []*descriptorpb.FieldDescriptorProto{
+				{
+					Name: proto.String("implicit"), Number: proto.Int32(1),
+					Label: descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+					Type:  descriptorpb.FieldDescriptorProto_TYPE_INT32.Enum(),
+				},
+				{
+					Name: proto.String("explicit"), Number: proto.Int32(2),
+					Label:          descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+					Type:           descriptorpb.FieldDescriptorProto_TYPE_INT32.Enum(),
+					Proto3Optional: proto.Bool(true), OneofIndex: proto.Int32(0),
+				},
+			},
+		}},
+	}
+	plugin, err := (protogen.Options{}).New(&pluginpb.CodeGeneratorRequest{
+		ProtoFile: []*descriptorpb.FileDescriptorProto{file}, FileToGenerate: []string{"test.proto"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	genFile(plugin, plugin.Files[0], config{})
+	content := plugin.Response().File[0].GetContent()
+
+	if !strings.Contains(content, "c.Int32(1, &m.Implicit)") {
+		t.Fatalf("implicit scalar does not use zero-eliding encoder:\n%s", content)
+	}
+	if !strings.Contains(content, "c.AlwaysInt32(2, m.Explicit)") {
+		t.Fatalf("explicit scalar does not use presence-preserving encoder:\n%s", content)
+	}
+}

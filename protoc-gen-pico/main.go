@@ -270,7 +270,7 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 		if info.repeated {
 			method = "Repeated" + method
 		}
-		if always {
+		if always || info.pointer {
 			method = "Always" + method
 		}
 
