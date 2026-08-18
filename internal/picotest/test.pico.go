@@ -2,7 +2,7 @@
 // source: test.proto
 //
 // versions:
-//     protoc-gen-pico: v0.0.5-0.20260818140818-34684aac4c25+dirty
+//     protoc-gen-pico: v0.0.5-0.20260818151457-457df939b0d3
 //     protoc:          v7.35.1
 
 package picotest
@@ -629,14 +629,14 @@ func (m *VariationsScalar) Encode(c *picobuf.Encoder) bool {
 	}
 	c.String(1, &m.Value)
 	if m.Opt != nil {
-		c.String(2, m.Opt)
+		c.AlwaysString(2, m.Opt)
 	}
 	c.RepeatedString(3, &m.Rep)
 	c.String(4, &m.PresentBasic)
 	c.String(5, &m.PresentOpt)
 	c.RepeatedString(6, &m.PresentRep)
 	if m.OptBytes != nil {
-		c.Bytes(7, m.OptBytes)
+		c.AlwaysBytes(7, m.OptBytes)
 	}
 	return true
 }

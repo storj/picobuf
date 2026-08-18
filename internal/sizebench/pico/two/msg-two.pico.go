@@ -2,7 +2,7 @@
 // source: msg-two.proto
 //
 // versions:
-//     protoc-gen-pico: v0.0.5-0.20260818140818-34684aac4c25+dirty
+//     protoc-gen-pico: v0.0.5-0.20260818151457-457df939b0d3
 //     protoc:          v7.35.1
 
 package two
