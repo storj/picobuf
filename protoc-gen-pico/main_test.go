@@ -186,3 +186,57 @@ func TestGenerateEnumPresence(t *testing.T) {
 		}
 	}
 }
+
+func TestGenerateEditionsStringBytesPresence(t *testing.T) {
+	file := &descriptorpb.FileDescriptorProto{
+		Name:    proto.String("test.proto"),
+		Package: proto.String("test"),
+		Syntax:  proto.String("editions"),
+		Edition: descriptorpb.Edition_EDITION_2023.Enum(),
+		Options: &descriptorpb.FileOptions{GoPackage: proto.String("example.com/test;test")},
+		MessageType: []*descriptorpb.DescriptorProto{{
+			Name: proto.String("Message"),
+			Field: []*descriptorpb.FieldDescriptorProto{
+				{
+					Name: proto.String("explicit_string"), Number: proto.Int32(1),
+					Label: descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+					Type:  descriptorpb.FieldDescriptorProto_TYPE_STRING.Enum(),
+				},
+				{
+					Name: proto.String("explicit_bytes"), Number: proto.Int32(2),
+					Label: descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+					Type:  descriptorpb.FieldDescriptorProto_TYPE_BYTES.Enum(),
+				},
+				{
+					Name: proto.String("implicit_string"), Number: proto.Int32(3),
+					Label: descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+					Type:  descriptorpb.FieldDescriptorProto_TYPE_STRING.Enum(),
+					Options: &descriptorpb.FieldOptions{Features: &descriptorpb.FeatureSet{
+						FieldPresence: descriptorpb.FeatureSet_IMPLICIT.Enum(),
+					}},
+				},
+			},
+		}},
+	}
+	plugin, err := (protogen.Options{}).New(&pluginpb.CodeGeneratorRequest{
+		ProtoFile: []*descriptorpb.FileDescriptorProto{file}, FileToGenerate: []string{"test.proto"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	genFile(plugin, plugin.Files[0], config{})
+	content := plugin.Response().File[0].GetContent()
+
+	for _, want := range []string{
+		"ExplicitString *string",
+		"ExplicitBytes  *[]byte",
+		"ImplicitString string",
+		"c.AlwaysString(1, m.ExplicitString)",
+		"c.AlwaysBytes(2, m.ExplicitBytes)",
+		"c.String(3, &m.ImplicitString)",
+	} {
+		if !strings.Contains(content, want) {
+			t.Fatalf("generated editions presence code does not contain %q:\n%s", want, content)
+		}
+	}
+}

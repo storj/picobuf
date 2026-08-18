@@ -616,10 +616,8 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 		info.baseType = "float64"
 	case protoreflect.StringKind:
 		info.baseType = "string"
-		info.pointer = desc.HasOptionalKeyword()
 	case protoreflect.BytesKind:
 		info.baseType = "[]byte"
-		info.pointer = desc.HasOptionalKeyword()
 	case protoreflect.MessageKind:
 		if field.Desc.IsMap() {
 			info.kind = kindMap
