@@ -70,3 +70,21 @@ func TestGenerateUTF8ValidationFeatures(t *testing.T) {
 		})
 	}
 }
+
+func TestSupportedFeatures(t *testing.T) {
+	plugin, err := (protogen.Options{}).New(&pluginpb.CodeGeneratorRequest{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	setSupportedFeatures(plugin)
+
+	wantFeatures := uint64(pluginpb.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL) |
+		uint64(pluginpb.CodeGeneratorResponse_FEATURE_SUPPORTS_EDITIONS)
+	if plugin.SupportedFeatures != wantFeatures {
+		t.Fatalf("supported features = %d, want %d", plugin.SupportedFeatures, wantFeatures)
+	}
+	if plugin.SupportedEditionsMinimum != descriptorpb.Edition_EDITION_2023 ||
+		plugin.SupportedEditionsMaximum != descriptorpb.Edition_EDITION_2023 {
+		t.Fatalf("supported editions = %v..%v, want 2023..2023", plugin.SupportedEditionsMinimum, plugin.SupportedEditionsMaximum)
+	}
+}

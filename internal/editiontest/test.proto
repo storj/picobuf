@@ -8,4 +8,6 @@ option features.utf8_validation = NONE;
 message Message {
   string unvalidated = 1;
   string validated = 2 [features.utf8_validation = VERIFY];
+  map<string, string> unvalidated_map = 3;
+  map<string, string> validated_map = 4 [features.utf8_validation = VERIFY];
 }

@@ -2,18 +2,21 @@
 // source: internal/editiontest/test.proto
 //
 // versions:
-//     protoc-gen-pico: v0.0.5-0.20260818121237-1f2775a3dc52+dirty
+//     protoc-gen-pico: v0.0.5-0.20260818122039-f13310837730+dirty
 //     protoc:          v7.35.1
 
 package editiontest
 
 import (
 	picobuf "storj.io/picobuf"
+	picowire "storj.io/picobuf/picowire"
 )
 
 type Message struct {
-	Unvalidated string `json:"unvalidated,omitempty"`
-	Validated   string `json:"validated,omitempty"`
+	Unvalidated    string            `json:"unvalidated,omitempty"`
+	Validated      string            `json:"validated,omitempty"`
+	UnvalidatedMap map[string]string `json:"unvalidated_map,omitempty"`
+	ValidatedMap   map[string]string `json:"validated_map,omitempty"`
 }
 
 func (m *Message) Encode(c *picobuf.Encoder) bool {
@@ -24,6 +27,10 @@ func (m *Message) Encode(c *picobuf.Encoder) bool {
 		c.String(1, &m.Unvalidated)
 	})
 	c.String(2, &m.Validated)
+	c.WithoutUTF8Validation(func() {
+		(*picowire.MapStringString)(&m.UnvalidatedMap).PicoEncode(c, 3)
+	})
+	(*picowire.MapStringString)(&m.ValidatedMap).PicoEncode(c, 4)
 	return true
 }
 
@@ -35,4 +42,8 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 		c.String(1, &m.Unvalidated)
 	})
 	c.String(2, &m.Validated)
+	c.WithoutUTF8Validation(func() {
+		(*picowire.MapStringString)(&m.UnvalidatedMap).PicoDecode(c, 3)
+	})
+	(*picowire.MapStringString)(&m.ValidatedMap).PicoDecode(c, 4)
 }

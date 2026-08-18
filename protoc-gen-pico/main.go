@@ -44,12 +44,16 @@ func main() {
 				genFile(plugin, f, conf)
 			}
 		}
-		plugin.SupportedFeatures = uint64(pluginpb.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL) |
-			uint64(pluginpb.CodeGeneratorResponse_FEATURE_SUPPORTS_EDITIONS)
-		plugin.SupportedEditionsMinimum = descriptorpb.Edition_EDITION_2023
-		plugin.SupportedEditionsMaximum = descriptorpb.Edition_EDITION_2023
+		setSupportedFeatures(plugin)
 		return nil
 	})
+}
+
+func setSupportedFeatures(plugin *protogen.Plugin) {
+	plugin.SupportedFeatures = uint64(pluginpb.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL) |
+		uint64(pluginpb.CodeGeneratorResponse_FEATURE_SUPPORTS_EDITIONS)
+	plugin.SupportedEditionsMinimum = descriptorpb.Edition_EDITION_2023
+	plugin.SupportedEditionsMaximum = descriptorpb.Edition_EDITION_2023
 }
 
 type generator struct {
