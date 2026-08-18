@@ -5,6 +5,7 @@ package presencecompat
 
 import (
 	"bytes"
+	"slices"
 	"testing"
 
 	"google.golang.org/protobuf/proto"
@@ -212,6 +213,45 @@ func TestEditionsPresenceMatchesProtobuf(t *testing.T) {
 	}
 	if decodedPico.ExplicitNumber == nil || decodedPico.ExplicitText == nil || decodedPico.ExplicitData == nil {
 		t.Fatalf("picobuf Editions explicit field lost presence: %+v", decodedPico)
+	}
+}
+
+func TestEditionsRepeatedEncodingMatchesProtobuf(t *testing.T) {
+	picoMessage := &editionpico.Message{
+		PackedNumbers:   []int32{0, 1, 150},
+		ExpandedNumbers: []int32{0, 1, 150},
+	}
+	protoMessage := &editionprot.Message{
+		PackedNumbers:   []int32{0, 1, 150},
+		ExpandedNumbers: []int32{0, 1, 150},
+	}
+
+	picoData, err := picobuf.Marshal(picoMessage)
+	if err != nil {
+		t.Fatal(err)
+	}
+	protoData, err := proto.Marshal(protoMessage)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(picoData, protoData) {
+		t.Fatalf("encoded Editions repeated fields differ: pico %x, protobuf %x", picoData, protoData)
+	}
+
+	var decodedProto editionprot.Message
+	if err := proto.Unmarshal(picoData, &decodedProto); err != nil {
+		t.Fatal(err)
+	}
+	if !proto.Equal(&decodedProto, protoMessage) {
+		t.Fatalf("protobuf decoded repeated fields as %v", &decodedProto)
+	}
+	var decodedPico editionpico.Message
+	if err := picobuf.Unmarshal(protoData, &decodedPico); err != nil {
+		t.Fatal(err)
+	}
+	if !slices.Equal(decodedPico.PackedNumbers, picoMessage.PackedNumbers) ||
+		!slices.Equal(decodedPico.ExpandedNumbers, picoMessage.ExpandedNumbers) {
+		t.Fatalf("picobuf decoded repeated fields as %+v", decodedPico)
 	}
 }
 

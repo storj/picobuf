@@ -12,12 +12,14 @@ import (
 )
 
 type Message struct {
-	ExplicitNumber *int32  `json:"explicit_number,omitzero"`
-	ExplicitText   *string `json:"explicit_text,omitzero"`
-	ExplicitData   *[]byte `json:"explicit_data,omitzero"`
-	ImplicitNumber int32   `json:"implicit_number,omitzero"`
-	ImplicitText   string  `json:"implicit_text,omitzero"`
-	ImplicitData   []byte  `json:"implicit_data,omitzero"`
+	ExplicitNumber  *int32  `json:"explicit_number,omitzero"`
+	ExplicitText    *string `json:"explicit_text,omitzero"`
+	ExplicitData    *[]byte `json:"explicit_data,omitzero"`
+	ImplicitNumber  int32   `json:"implicit_number,omitzero"`
+	ImplicitText    string  `json:"implicit_text,omitzero"`
+	ImplicitData    []byte  `json:"implicit_data,omitzero"`
+	PackedNumbers   []int32 `json:"packed_numbers,omitzero"`
+	ExpandedNumbers []int32 `json:"expanded_numbers,omitzero"`
 }
 
 func (m *Message) Encode(c *picobuf.Encoder) bool {
@@ -36,6 +38,10 @@ func (m *Message) Encode(c *picobuf.Encoder) bool {
 	c.Int32(4, &m.ImplicitNumber)
 	c.String(5, &m.ImplicitText)
 	c.Bytes(6, &m.ImplicitData)
+	c.RepeatedInt32(7, &m.PackedNumbers)
+	for i := range m.ExpandedNumbers {
+		c.AlwaysInt32(8, &m.ExpandedNumbers[i])
+	}
 	return true
 }
 
@@ -58,4 +64,6 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 	c.Int32(4, &m.ImplicitNumber)
 	c.String(5, &m.ImplicitText)
 	c.Bytes(6, &m.ImplicitData)
+	c.RepeatedInt32(7, &m.PackedNumbers)
+	c.RepeatedInt32(8, &m.ExpandedNumbers)
 }

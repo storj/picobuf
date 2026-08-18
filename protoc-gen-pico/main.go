@@ -267,6 +267,13 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 		if !ok {
 			panic("unsupported type " + field.Desc.Kind().GoString())
 		}
+		if info.repeated && !field.Desc.IsPacked() &&
+			field.Desc.Kind() != protoreflect.StringKind && field.Desc.Kind() != protoreflect.BytesKind {
+			gf.P("for i := range m.", field.GoName, " {")
+			gf.P("  c.Always", method, "(", field.Desc.Number(), ", &m.", field.GoName, "[i])")
+			gf.P("}")
+			break
+		}
 		if info.repeated {
 			method = "Repeated" + method
 		}
@@ -317,12 +324,18 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 			}
 			gf.P("c.", method, "(", field.Desc.Number(), ", (*int32)(&m.", field.GoName, "))")
 		case !info.pointer && info.repeated:
-			gf.P("c.RepeatedEnum(", field.Desc.Number(), ", len(m.", field.GoName, ")", ", func(index uint) int32 {")
-			gf.P("  if index < uint(len(m.", field.GoName, ")) {")
-			gf.P("     return (int32)(m.", field.GoName, "[index])")
-			gf.P("  }")
-			gf.P("  return 0")
-			gf.P("})")
+			if field.Desc.IsPacked() {
+				gf.P("c.RepeatedEnum(", field.Desc.Number(), ", len(m.", field.GoName, ")", ", func(index uint) int32 {")
+				gf.P("  if index < uint(len(m.", field.GoName, ")) {")
+				gf.P("     return (int32)(m.", field.GoName, "[index])")
+				gf.P("  }")
+				gf.P("  return 0")
+				gf.P("})")
+			} else {
+				gf.P("for i := range m.", field.GoName, " {")
+				gf.P("  c.AlwaysInt32(", field.Desc.Number(), ", (*int32)(&m.", field.GoName, "[i]))")
+				gf.P("}")
+			}
 		}
 
 	case info.kind == kindMap:

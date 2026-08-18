@@ -25,15 +25,17 @@ const (
 )
 
 type Message struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	ExplicitNumber *int32                 `protobuf:"varint,1,opt,name=explicit_number,json=explicitNumber" json:"explicit_number,omitempty"`
-	ExplicitText   *string                `protobuf:"bytes,2,opt,name=explicit_text,json=explicitText" json:"explicit_text,omitempty"`
-	ExplicitData   []byte                 `protobuf:"bytes,3,opt,name=explicit_data,json=explicitData" json:"explicit_data,omitempty"`
-	ImplicitNumber int32                  `protobuf:"varint,4,opt,name=implicit_number,json=implicitNumber" json:"implicit_number,omitempty"`
-	ImplicitText   string                 `protobuf:"bytes,5,opt,name=implicit_text,json=implicitText" json:"implicit_text,omitempty"`
-	ImplicitData   []byte                 `protobuf:"bytes,6,opt,name=implicit_data,json=implicitData" json:"implicit_data,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	ExplicitNumber  *int32                 `protobuf:"varint,1,opt,name=explicit_number,json=explicitNumber" json:"explicit_number,omitempty"`
+	ExplicitText    *string                `protobuf:"bytes,2,opt,name=explicit_text,json=explicitText" json:"explicit_text,omitempty"`
+	ExplicitData    []byte                 `protobuf:"bytes,3,opt,name=explicit_data,json=explicitData" json:"explicit_data,omitempty"`
+	ImplicitNumber  int32                  `protobuf:"varint,4,opt,name=implicit_number,json=implicitNumber" json:"implicit_number,omitempty"`
+	ImplicitText    string                 `protobuf:"bytes,5,opt,name=implicit_text,json=implicitText" json:"implicit_text,omitempty"`
+	ImplicitData    []byte                 `protobuf:"bytes,6,opt,name=implicit_data,json=implicitData" json:"implicit_data,omitempty"`
+	PackedNumbers   []int32                `protobuf:"varint,7,rep,packed,name=packed_numbers,json=packedNumbers" json:"packed_numbers,omitempty"`
+	ExpandedNumbers []int32                `protobuf:"varint,8,rep,name=expanded_numbers,json=expandedNumbers" json:"expanded_numbers,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *Message) Reset() {
@@ -108,18 +110,34 @@ func (x *Message) GetImplicitData() []byte {
 	return nil
 }
 
+func (x *Message) GetPackedNumbers() []int32 {
+	if x != nil {
+		return x.PackedNumbers
+	}
+	return nil
+}
+
+func (x *Message) GetExpandedNumbers() []int32 {
+	if x != nil {
+		return x.ExpandedNumbers
+	}
+	return nil
+}
+
 var File_editions_proto protoreflect.FileDescriptor
 
 const file_editions_proto_rawDesc = "" +
 	"\n" +
-	"\x0eeditions.proto\x12\x17presencecompat.editions\"\x84\x02\n" +
+	"\x0eeditions.proto\x12\x17presencecompat.editions\"\xdd\x02\n" +
 	"\aMessage\x12'\n" +
 	"\x0fexplicit_number\x18\x01 \x01(\x05R\x0eexplicitNumber\x12#\n" +
 	"\rexplicit_text\x18\x02 \x01(\tR\fexplicitText\x12#\n" +
 	"\rexplicit_data\x18\x03 \x01(\fR\fexplicitData\x12.\n" +
 	"\x0fimplicit_number\x18\x04 \x01(\x05B\x05\xaa\x01\x02\b\x02R\x0eimplicitNumber\x12*\n" +
 	"\rimplicit_text\x18\x05 \x01(\tB\x05\xaa\x01\x02\b\x02R\fimplicitText\x12*\n" +
-	"\rimplicit_data\x18\x06 \x01(\fB\x05\xaa\x01\x02\b\x02R\fimplicitDatab\beditionsp\xe8\a"
+	"\rimplicit_data\x18\x06 \x01(\fB\x05\xaa\x01\x02\b\x02R\fimplicitData\x12%\n" +
+	"\x0epacked_numbers\x18\a \x03(\x05R\rpackedNumbers\x120\n" +
+	"\x10expanded_numbers\x18\b \x03(\x05B\x05\xaa\x01\x02\x18\x02R\x0fexpandedNumbersb\beditionsp\xe8\a"
 
 var (
 	file_editions_proto_rawDescOnce sync.Once

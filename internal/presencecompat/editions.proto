@@ -12,4 +12,6 @@ message Message {
   int32 implicit_number = 4 [features.field_presence = IMPLICIT];
   string implicit_text = 5 [features.field_presence = IMPLICIT];
   bytes implicit_data = 6 [features.field_presence = IMPLICIT];
+  repeated int32 packed_numbers = 7;
+  repeated int32 expanded_numbers = 8 [features.repeated_field_encoding = EXPANDED];
 }
