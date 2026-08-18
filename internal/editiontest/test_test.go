@@ -14,8 +14,8 @@ func TestUTF8ValidationFeatures(t *testing.T) {
 	if err := picobuf.Unmarshal([]byte{0x0a, 0x01, 0xff}, &message); err != nil {
 		t.Fatalf("file-level NONE rejected invalid UTF-8: %v", err)
 	}
-	if message.Unvalidated != string([]byte{0xff}) {
-		t.Fatalf("decoded %q", message.Unvalidated)
+	if message.Unvalidated == nil || *message.Unvalidated != string([]byte{0xff}) {
+		t.Fatalf("decoded %v", message.Unvalidated)
 	}
 
 	if err := picobuf.Unmarshal([]byte{0x12, 0x01, 0xff}, &message); err == nil {
@@ -33,10 +33,10 @@ func TestUTF8ValidationFeatures(t *testing.T) {
 	}
 
 	invalid := string([]byte{0xff})
-	if _, err := picobuf.Marshal(&Message{Unvalidated: invalid}); err != nil {
+	if _, err := picobuf.Marshal(&Message{Unvalidated: &invalid}); err != nil {
 		t.Fatalf("file-level NONE rejected encoding invalid UTF-8: %v", err)
 	}
-	if _, err := picobuf.Marshal(&Message{Validated: invalid}); err == nil {
+	if _, err := picobuf.Marshal(&Message{Validated: &invalid}); err == nil {
 		t.Fatal("field-level VERIFY encoded invalid UTF-8")
 	}
 	if _, err := picobuf.Marshal(&Message{UnvalidatedMap: map[string]string{invalid: ""}}); err != nil {

@@ -788,6 +788,10 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 			info.kind = kindCast
 		}
 	}
+	if field == nil {
+		// Synthetic map-entry key and value fields never track presence.
+		info.pointer = false
+	}
 
 	info.goType = info.baseType
 	if info.pointer {
