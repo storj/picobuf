@@ -59,9 +59,14 @@ type messageDecodeState struct {
 
 // NewDecoder returns a new Decoder.
 func NewDecoder(data []byte) *Decoder {
-	dec := new(Decoder)
-	dec.buffer = data
-	return dec
+	return newDecoder(data)
+}
+
+func newDecoder(data []byte) *Decoder {
+	return &Decoder{
+		messageDecodeState: messageDecodeState{buffer: data},
+		maxRecursionDepth:  protowire.DefaultRecursionLimit,
+	}
 }
 
 // PendingField returns the next field number in the stream.
@@ -76,11 +81,7 @@ func (dec *Decoder) pushState(message []byte) {
 	// Nesting is bounded by the input for a self-referential message, so
 	// refuse to descend further rather than exhausting the stack. Still push,
 	// so that the caller's matching popState stays balanced.
-	limit := dec.maxRecursionDepth
-	if limit <= 0 {
-		limit = protowire.DefaultRecursionLimit
-	}
-	tooDeep := len(dec.stack) >= limit
+	tooDeep := len(dec.stack) >= dec.maxRecursionDepth
 	if tooDeep {
 		message = nil
 	}

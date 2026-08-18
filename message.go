@@ -101,13 +101,13 @@ func (opts UnmarshalOptions) Unmarshal(data []byte, msg Message) error {
 	if opts.MaxInputSize > 0 && len(data) > opts.MaxInputSize {
 		return parseError{message: "input exceeds maximum size"}
 	}
-	dec := &Decoder{
-		aliasInput:          opts.AliasInput,
-		allowInvalidUTF8:    opts.AllowInvalidUTF8,
-		maxRecursionDepth:   opts.MaxRecursionDepth,
-		maxRepeatedElements: opts.MaxRepeatedElements,
+	dec := newDecoder(data)
+	dec.aliasInput = opts.AliasInput
+	dec.allowInvalidUTF8 = opts.AllowInvalidUTF8
+	if opts.MaxRecursionDepth > 0 {
+		dec.maxRecursionDepth = opts.MaxRecursionDepth
 	}
-	dec.buffer = data
+	dec.maxRepeatedElements = opts.MaxRepeatedElements
 	dec.Loop(msg.Decode)
 	return dec.err
 }
