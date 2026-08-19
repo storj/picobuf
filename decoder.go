@@ -178,6 +178,17 @@ func (dec *Decoder) takeRepeated(field FieldNumber) bool {
 	return true
 }
 
+func (dec *Decoder) repeatedReservation(count int) int {
+	if dec.maxRepeatedElements <= 0 {
+		return count
+	}
+	remaining := dec.maxRepeatedElements - dec.repeatedElements
+	if remaining < count {
+		return max(remaining, 0)
+	}
+	return count
+}
+
 // Message decodes a message.
 func (dec *Decoder) Message(field FieldNumber, fn func(*Decoder)) {
 	if field != dec.pendingField {

@@ -15,6 +15,38 @@ import (
 	"storj.io/picobuf/internal/protowire"
 )
 
+type packedScalars struct {
+	Unsigned []uint64
+	Signed   []int64
+}
+
+type packedFixed struct {
+	Fixed32 []uint32
+	Fixed64 []uint64
+}
+
+func (m *packedFixed) Encode(c *picobuf.Encoder) bool {
+	c.RepeatedFixed32(1, &m.Fixed32)
+	c.RepeatedFixed64(2, &m.Fixed64)
+	return true
+}
+
+func (m *packedFixed) Decode(c *picobuf.Decoder) {
+	c.RepeatedFixed32(1, &m.Fixed32)
+	c.RepeatedFixed64(2, &m.Fixed64)
+}
+
+func (m *packedScalars) Encode(c *picobuf.Encoder) bool {
+	c.RepeatedUint64(1, &m.Unsigned)
+	c.RepeatedInt64(2, &m.Signed)
+	return true
+}
+
+func (m *packedScalars) Decode(c *picobuf.Decoder) {
+	c.RepeatedUint64(1, &m.Unsigned)
+	c.RepeatedInt64(2, &m.Signed)
+}
+
 func TestDecoder_Types(t *testing.T) {
 	dec := picobuf.NewDecoder([]byte{0x10, 0x1, 0x18, 0x64, 0x20, 0xff, 0x1, 0x32, 0x5, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x3a, 0x1, 0x0, 0x42, 0x4, 0x1, 0x2, 0x3, 0x4})
 
@@ -124,6 +156,71 @@ func TestDecoder_Repeated(t *testing.T) {
 	xs = []int32{}
 	dec.Loop(func(c *picobuf.Decoder) { c.RepeatedInt32(4, &xs) })
 	assert.Equal(t, xs, []int32{3, 270, 86942, 3, 270, 86942})
+}
+
+func TestDecoder_PackedScalarsPreallocate(t *testing.T) {
+	data := []byte{
+		0x0a, 0x10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+		0x12, 0x10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+	}
+
+	got := packedScalars{Unsigned: []uint64{100}, Signed: []int64{-100}}
+	assert.NoError(t, picobuf.Unmarshal(data, &got))
+	assert.DeepEqual(t, got.Unsigned, []uint64{100, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15})
+	assert.DeepEqual(t, got.Signed, []int64{-100, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15})
+
+	if raceEnabled {
+		t.Skip("allocation counts differ under the race detector")
+	}
+	allocs := testing.AllocsPerRun(100, func() {
+		var decoded packedScalars
+		if err := picobuf.Unmarshal(data, &decoded); err != nil {
+			panic(err)
+		}
+	})
+	if allocs > 4 {
+		t.Fatalf("packed scalar decode allocated %.0f times, want at most 4", allocs)
+	}
+}
+
+func TestDecoder_PackedFixedPreallocate(t *testing.T) {
+	data := []byte{
+		0x0a, 0x08, 1, 0, 0, 0, 2, 0, 0, 0,
+		0x12, 0x10, 3, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0,
+	}
+	got := packedFixed{
+		Fixed32: make([]uint32, 1, 4),
+		Fixed64: make([]uint64, 1, 4),
+	}
+	got.Fixed32[0] = 100
+	got.Fixed64[0] = 200
+
+	assert.NoError(t, picobuf.Unmarshal(data, &got))
+	assert.DeepEqual(t, got.Fixed32, []uint32{100, 1, 2})
+	assert.DeepEqual(t, got.Fixed64, []uint64{200, 3, 4})
+	assert.Equal(t, cap(got.Fixed32), 4)
+	assert.Equal(t, cap(got.Fixed64), 4)
+}
+
+func TestDecoder_PackedPreallocationRespectsLimit(t *testing.T) {
+	data := []byte{0x0a, 0x10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
+	var got packedScalars
+	err := (picobuf.UnmarshalOptions{MaxRepeatedElements: 2}).Unmarshal(data, &got)
+	assert.Error(t, err)
+	assert.DeepEqual(t, got.Unsigned, []uint64{0, 1})
+	assert.Equal(t, cap(got.Unsigned), 2)
+}
+
+func TestDecoder_PackedFixedRejectsMalformedPayload(t *testing.T) {
+	var got packedFixed
+	err := picobuf.Unmarshal([]byte{0x0a, 0x05, 1, 0, 0, 0, 2}, &got)
+	assert.Error(t, err)
+}
+
+func TestDecoder_PackedVarintRejectsMalformedPayload(t *testing.T) {
+	var got packedScalars
+	err := picobuf.Unmarshal([]byte{0x0a, 0x01, 0x80}, &got)
+	assert.Error(t, err)
 }
 
 func TestDecoder_Map(t *testing.T) {

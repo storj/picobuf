@@ -7,6 +7,7 @@ package picobuf
 
 import (
 	"math"
+	"slices"
 	"unicode/utf8"
 
 	"storj.io/picobuf/internal/protowire"
@@ -40,6 +41,13 @@ func (dec *Decoder) RepeatedBool(field FieldNumber, v *[]bool) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
+			count := 0
+			for _, x := range packed {
+				if x < 0x80 {
+					count++
+				}
+			}
+			*v = slices.Grow(*v, dec.repeatedReservation(count))
 			for len(packed) > 0 {
 				if !dec.takeRepeated(field) {
 					return
@@ -99,6 +107,13 @@ func (dec *Decoder) RepeatedInt32(field FieldNumber, v *[]int32) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
+			count := 0
+			for _, x := range packed {
+				if x < 0x80 {
+					count++
+				}
+			}
+			*v = slices.Grow(*v, dec.repeatedReservation(count))
 			for len(packed) > 0 {
 				if !dec.takeRepeated(field) {
 					return
@@ -158,6 +173,13 @@ func (dec *Decoder) RepeatedInt64(field FieldNumber, v *[]int64) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
+			count := 0
+			for _, x := range packed {
+				if x < 0x80 {
+					count++
+				}
+			}
+			*v = slices.Grow(*v, dec.repeatedReservation(count))
 			for len(packed) > 0 {
 				if !dec.takeRepeated(field) {
 					return
@@ -217,6 +239,13 @@ func (dec *Decoder) RepeatedUint32(field FieldNumber, v *[]uint32) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
+			count := 0
+			for _, x := range packed {
+				if x < 0x80 {
+					count++
+				}
+			}
+			*v = slices.Grow(*v, dec.repeatedReservation(count))
 			for len(packed) > 0 {
 				if !dec.takeRepeated(field) {
 					return
@@ -276,6 +305,13 @@ func (dec *Decoder) RepeatedUint64(field FieldNumber, v *[]uint64) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
+			count := 0
+			for _, x := range packed {
+				if x < 0x80 {
+					count++
+				}
+			}
+			*v = slices.Grow(*v, dec.repeatedReservation(count))
 			for len(packed) > 0 {
 				if !dec.takeRepeated(field) {
 					return
@@ -335,6 +371,13 @@ func (dec *Decoder) RepeatedSint32(field FieldNumber, v *[]int32) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
+			count := 0
+			for _, x := range packed {
+				if x < 0x80 {
+					count++
+				}
+			}
+			*v = slices.Grow(*v, dec.repeatedReservation(count))
 			for len(packed) > 0 {
 				if !dec.takeRepeated(field) {
 					return
@@ -394,6 +437,13 @@ func (dec *Decoder) RepeatedSint64(field FieldNumber, v *[]int64) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
+			count := 0
+			for _, x := range packed {
+				if x < 0x80 {
+					count++
+				}
+			}
+			*v = slices.Grow(*v, dec.repeatedReservation(count))
 			for len(packed) > 0 {
 				if !dec.takeRepeated(field) {
 					return
@@ -453,6 +503,8 @@ func (dec *Decoder) RepeatedFixed32(field FieldNumber, v *[]uint32) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
+			count := len(packed) / protowire.SizeFixed32()
+			*v = slices.Grow(*v, dec.repeatedReservation(count))
 			for len(packed) > 0 {
 				if !dec.takeRepeated(field) {
 					return
@@ -512,6 +564,8 @@ func (dec *Decoder) RepeatedFixed64(field FieldNumber, v *[]uint64) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
+			count := len(packed) / protowire.SizeFixed64()
+			*v = slices.Grow(*v, dec.repeatedReservation(count))
 			for len(packed) > 0 {
 				if !dec.takeRepeated(field) {
 					return
@@ -571,6 +625,8 @@ func (dec *Decoder) RepeatedSfixed32(field FieldNumber, v *[]int32) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
+			count := len(packed) / protowire.SizeFixed32()
+			*v = slices.Grow(*v, dec.repeatedReservation(count))
 			for len(packed) > 0 {
 				if !dec.takeRepeated(field) {
 					return
@@ -630,6 +686,8 @@ func (dec *Decoder) RepeatedSfixed64(field FieldNumber, v *[]int64) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
+			count := len(packed) / protowire.SizeFixed64()
+			*v = slices.Grow(*v, dec.repeatedReservation(count))
 			for len(packed) > 0 {
 				if !dec.takeRepeated(field) {
 					return
@@ -689,6 +747,8 @@ func (dec *Decoder) RepeatedFloat(field FieldNumber, v *[]float32) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
+			count := len(packed) / protowire.SizeFixed32()
+			*v = slices.Grow(*v, dec.repeatedReservation(count))
 			for len(packed) > 0 {
 				if !dec.takeRepeated(field) {
 					return
@@ -748,6 +808,8 @@ func (dec *Decoder) RepeatedDouble(field FieldNumber, v *[]float64) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
+			count := len(packed) / protowire.SizeFixed64()
+			*v = slices.Grow(*v, dec.repeatedReservation(count))
 			for len(packed) > 0 {
 				if !dec.takeRepeated(field) {
 					return
