@@ -148,10 +148,11 @@ func (opts UnmarshalOptions) Unmarshal(data []byte, msg Message) error {
 	}
 	dec.maxRepeatedElements = opts.MaxRepeatedElements
 	dec.Loop(msg.Decode)
-	if dec.err == nil {
-		dec.err = ValidateRequired(msg)
+	err := dec.Err()
+	if err == nil {
+		err = ValidateRequired(msg)
 	}
-	return dec.err
+	return err
 }
 
 // Unmarshal decodes msg as bytes.

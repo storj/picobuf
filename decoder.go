@@ -27,7 +27,7 @@ type Decoder struct {
 	maxRecursionDepth   int
 	maxRepeatedElements int
 	repeatedElements    int
-	err                 error
+	err                 *parseError
 }
 
 // WithoutUTF8Validation runs fn without validating decoded string fields.
@@ -74,6 +74,9 @@ func (dec *Decoder) PendingField() FieldNumber { return dec.pendingField }
 
 // Err returns error that occurred during decoding.
 func (dec *Decoder) Err() error {
+	if dec.err == nil {
+		return nil
+	}
 	return dec.err
 }
 
@@ -337,7 +340,7 @@ func (dec *Decoder) Fail(field FieldNumber, msg string) {
 func (dec *Decoder) fail(field FieldNumber, msg string) {
 	// TODO: use static error types
 	dec.pendingField = fieldDecodingErrored
-	dec.err = parseError{field: field, message: msg}
+	dec.err = &parseError{field: field, message: msg}
 }
 
 type parseError struct {
