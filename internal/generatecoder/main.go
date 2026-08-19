@@ -345,14 +345,19 @@ func generateMaps() []byte {
 		pf("// %s encodes and decodes %s map entries.\n", codec, strings.ToLower(t.Name))
 		pf("type %s struct{}\n\n", codec)
 
-		pf("// PicoEncode encodes a map entry key or value.\n")
+		pf("// PicoEncode encodes a map entry key or value, which is always emitted.\n")
 		pf("func(%s) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *%s) {\n", codec, t.TypeName())
-		pf("   enc.%s(field, value)\n", t.Name)
+		pf("   enc.Always%s(field, value)\n", t.Name)
 		pf("}\n\n")
 
 		pf("// PicoDecode decodes a map entry key or value.\n")
 		pf("func(%s) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *%s) {\n", codec, t.TypeName())
 		pf("   dec.%s(field, value)\n", t.Name)
+		pf("}\n\n")
+
+		pf("// PicoDefault resets a map entry key or value to the default.\n")
+		pf("func(%s) PicoDefault(value *%s) {\n", codec, t.TypeName())
+		pf("   *value = %s\n", t.ZeroValue())
 		pf("}\n\n")
 	}
 
@@ -371,8 +376,9 @@ func generateMaps() []byte {
 			pf("func(m *%s) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {\n", mapType)
 			pf("   for key, val := range *m {\n")
 			pf("       enc.AlwaysAnyBytes(field, func() {\n")
-			pf("           enc.%s(1, &key)\n", key.Name)
-			pf("           enc.%s(2, &val)\n", val.Name)
+			// reference implementations never omit the key or the value.
+			pf("           enc.Always%s(1, &key)\n", key.Name)
+			pf("           enc.Always%s(2, &val)\n", val.Name)
 			pf("       })\n")
 			pf("   }\n")
 			pf("}\n\n")

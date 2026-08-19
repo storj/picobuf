@@ -8,9 +8,9 @@ import "storj.io/picobuf"
 // BoolCodec encodes and decodes bool map entries.
 type BoolCodec struct{}
 
-// PicoEncode encodes a map entry key or value.
+// PicoEncode encodes a map entry key or value, which is always emitted.
 func (BoolCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *bool) {
-	enc.Bool(field, value)
+	enc.AlwaysBool(field, value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -18,12 +18,17 @@ func (BoolCodec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, val
 	dec.Bool(field, value)
 }
 
+// PicoDefault resets a map entry key or value to the default.
+func (BoolCodec) PicoDefault(value *bool) {
+	*value = false
+}
+
 // Int32Codec encodes and decodes int32 map entries.
 type Int32Codec struct{}
 
-// PicoEncode encodes a map entry key or value.
+// PicoEncode encodes a map entry key or value, which is always emitted.
 func (Int32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int32) {
-	enc.Int32(field, value)
+	enc.AlwaysInt32(field, value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -31,12 +36,17 @@ func (Int32Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, va
 	dec.Int32(field, value)
 }
 
+// PicoDefault resets a map entry key or value to the default.
+func (Int32Codec) PicoDefault(value *int32) {
+	*value = 0
+}
+
 // Int64Codec encodes and decodes int64 map entries.
 type Int64Codec struct{}
 
-// PicoEncode encodes a map entry key or value.
+// PicoEncode encodes a map entry key or value, which is always emitted.
 func (Int64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int64) {
-	enc.Int64(field, value)
+	enc.AlwaysInt64(field, value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -44,12 +54,17 @@ func (Int64Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, va
 	dec.Int64(field, value)
 }
 
+// PicoDefault resets a map entry key or value to the default.
+func (Int64Codec) PicoDefault(value *int64) {
+	*value = 0
+}
+
 // Uint32Codec encodes and decodes uint32 map entries.
 type Uint32Codec struct{}
 
-// PicoEncode encodes a map entry key or value.
+// PicoEncode encodes a map entry key or value, which is always emitted.
 func (Uint32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *uint32) {
-	enc.Uint32(field, value)
+	enc.AlwaysUint32(field, value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -57,12 +72,17 @@ func (Uint32Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, v
 	dec.Uint32(field, value)
 }
 
+// PicoDefault resets a map entry key or value to the default.
+func (Uint32Codec) PicoDefault(value *uint32) {
+	*value = 0x0
+}
+
 // Uint64Codec encodes and decodes uint64 map entries.
 type Uint64Codec struct{}
 
-// PicoEncode encodes a map entry key or value.
+// PicoEncode encodes a map entry key or value, which is always emitted.
 func (Uint64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *uint64) {
-	enc.Uint64(field, value)
+	enc.AlwaysUint64(field, value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -70,12 +90,17 @@ func (Uint64Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, v
 	dec.Uint64(field, value)
 }
 
+// PicoDefault resets a map entry key or value to the default.
+func (Uint64Codec) PicoDefault(value *uint64) {
+	*value = 0x0
+}
+
 // Sint32Codec encodes and decodes sint32 map entries.
 type Sint32Codec struct{}
 
-// PicoEncode encodes a map entry key or value.
+// PicoEncode encodes a map entry key or value, which is always emitted.
 func (Sint32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int32) {
-	enc.Sint32(field, value)
+	enc.AlwaysSint32(field, value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -83,12 +108,17 @@ func (Sint32Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, v
 	dec.Sint32(field, value)
 }
 
+// PicoDefault resets a map entry key or value to the default.
+func (Sint32Codec) PicoDefault(value *int32) {
+	*value = 0
+}
+
 // Sint64Codec encodes and decodes sint64 map entries.
 type Sint64Codec struct{}
 
-// PicoEncode encodes a map entry key or value.
+// PicoEncode encodes a map entry key or value, which is always emitted.
 func (Sint64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int64) {
-	enc.Sint64(field, value)
+	enc.AlwaysSint64(field, value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -96,12 +126,17 @@ func (Sint64Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, v
 	dec.Sint64(field, value)
 }
 
+// PicoDefault resets a map entry key or value to the default.
+func (Sint64Codec) PicoDefault(value *int64) {
+	*value = 0
+}
+
 // Fixed32Codec encodes and decodes fixed32 map entries.
 type Fixed32Codec struct{}
 
-// PicoEncode encodes a map entry key or value.
+// PicoEncode encodes a map entry key or value, which is always emitted.
 func (Fixed32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *uint32) {
-	enc.Fixed32(field, value)
+	enc.AlwaysFixed32(field, value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -109,12 +144,17 @@ func (Fixed32Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, 
 	dec.Fixed32(field, value)
 }
 
+// PicoDefault resets a map entry key or value to the default.
+func (Fixed32Codec) PicoDefault(value *uint32) {
+	*value = 0x0
+}
+
 // Fixed64Codec encodes and decodes fixed64 map entries.
 type Fixed64Codec struct{}
 
-// PicoEncode encodes a map entry key or value.
+// PicoEncode encodes a map entry key or value, which is always emitted.
 func (Fixed64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *uint64) {
-	enc.Fixed64(field, value)
+	enc.AlwaysFixed64(field, value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -122,12 +162,17 @@ func (Fixed64Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, 
 	dec.Fixed64(field, value)
 }
 
+// PicoDefault resets a map entry key or value to the default.
+func (Fixed64Codec) PicoDefault(value *uint64) {
+	*value = 0x0
+}
+
 // Sfixed32Codec encodes and decodes sfixed32 map entries.
 type Sfixed32Codec struct{}
 
-// PicoEncode encodes a map entry key or value.
+// PicoEncode encodes a map entry key or value, which is always emitted.
 func (Sfixed32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int32) {
-	enc.Sfixed32(field, value)
+	enc.AlwaysSfixed32(field, value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -135,12 +180,17 @@ func (Sfixed32Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber,
 	dec.Sfixed32(field, value)
 }
 
+// PicoDefault resets a map entry key or value to the default.
+func (Sfixed32Codec) PicoDefault(value *int32) {
+	*value = 0
+}
+
 // Sfixed64Codec encodes and decodes sfixed64 map entries.
 type Sfixed64Codec struct{}
 
-// PicoEncode encodes a map entry key or value.
+// PicoEncode encodes a map entry key or value, which is always emitted.
 func (Sfixed64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int64) {
-	enc.Sfixed64(field, value)
+	enc.AlwaysSfixed64(field, value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -148,12 +198,17 @@ func (Sfixed64Codec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber,
 	dec.Sfixed64(field, value)
 }
 
+// PicoDefault resets a map entry key or value to the default.
+func (Sfixed64Codec) PicoDefault(value *int64) {
+	*value = 0
+}
+
 // FloatCodec encodes and decodes float map entries.
 type FloatCodec struct{}
 
-// PicoEncode encodes a map entry key or value.
+// PicoEncode encodes a map entry key or value, which is always emitted.
 func (FloatCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *float32) {
-	enc.Float(field, value)
+	enc.AlwaysFloat(field, value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -161,12 +216,17 @@ func (FloatCodec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, va
 	dec.Float(field, value)
 }
 
+// PicoDefault resets a map entry key or value to the default.
+func (FloatCodec) PicoDefault(value *float32) {
+	*value = 0
+}
+
 // DoubleCodec encodes and decodes double map entries.
 type DoubleCodec struct{}
 
-// PicoEncode encodes a map entry key or value.
+// PicoEncode encodes a map entry key or value, which is always emitted.
 func (DoubleCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *float64) {
-	enc.Double(field, value)
+	enc.AlwaysDouble(field, value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -174,12 +234,17 @@ func (DoubleCodec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, v
 	dec.Double(field, value)
 }
 
+// PicoDefault resets a map entry key or value to the default.
+func (DoubleCodec) PicoDefault(value *float64) {
+	*value = 0
+}
+
 // StringCodec encodes and decodes string map entries.
 type StringCodec struct{}
 
-// PicoEncode encodes a map entry key or value.
+// PicoEncode encodes a map entry key or value, which is always emitted.
 func (StringCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *string) {
-	enc.String(field, value)
+	enc.AlwaysString(field, value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -187,17 +252,27 @@ func (StringCodec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, v
 	dec.String(field, value)
 }
 
+// PicoDefault resets a map entry key or value to the default.
+func (StringCodec) PicoDefault(value *string) {
+	*value = ""
+}
+
 // BytesCodec encodes and decodes bytes map entries.
 type BytesCodec struct{}
 
-// PicoEncode encodes a map entry key or value.
+// PicoEncode encodes a map entry key or value, which is always emitted.
 func (BytesCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *[]byte) {
-	enc.Bytes(field, value)
+	enc.AlwaysBytes(field, value)
 }
 
 // PicoDecode decodes a map entry key or value.
 func (BytesCodec) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *[]byte) {
 	dec.Bytes(field, value)
+}
+
+// PicoDefault resets a map entry key or value to the default.
+func (BytesCodec) PicoDefault(value *[]byte) {
+	*value = nil
 }
 
 // MapBoolBool implements map<bool,bool>.
@@ -209,8 +284,8 @@ type MapBoolBool map[bool]bool
 func (m *MapBoolBool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Bool(1, &key)
-			enc.Bool(2, &val)
+			enc.AlwaysBool(1, &key)
+			enc.AlwaysBool(2, &val)
 		})
 	}
 }
@@ -242,8 +317,8 @@ type MapBoolInt32 map[bool]int32
 func (m *MapBoolInt32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Bool(1, &key)
-			enc.Int32(2, &val)
+			enc.AlwaysBool(1, &key)
+			enc.AlwaysInt32(2, &val)
 		})
 	}
 }
@@ -275,8 +350,8 @@ type MapBoolInt64 map[bool]int64
 func (m *MapBoolInt64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Bool(1, &key)
-			enc.Int64(2, &val)
+			enc.AlwaysBool(1, &key)
+			enc.AlwaysInt64(2, &val)
 		})
 	}
 }
@@ -308,8 +383,8 @@ type MapBoolUint32 map[bool]uint32
 func (m *MapBoolUint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Bool(1, &key)
-			enc.Uint32(2, &val)
+			enc.AlwaysBool(1, &key)
+			enc.AlwaysUint32(2, &val)
 		})
 	}
 }
@@ -341,8 +416,8 @@ type MapBoolUint64 map[bool]uint64
 func (m *MapBoolUint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Bool(1, &key)
-			enc.Uint64(2, &val)
+			enc.AlwaysBool(1, &key)
+			enc.AlwaysUint64(2, &val)
 		})
 	}
 }
@@ -374,8 +449,8 @@ type MapBoolSint32 map[bool]int32
 func (m *MapBoolSint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Bool(1, &key)
-			enc.Sint32(2, &val)
+			enc.AlwaysBool(1, &key)
+			enc.AlwaysSint32(2, &val)
 		})
 	}
 }
@@ -407,8 +482,8 @@ type MapBoolSint64 map[bool]int64
 func (m *MapBoolSint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Bool(1, &key)
-			enc.Sint64(2, &val)
+			enc.AlwaysBool(1, &key)
+			enc.AlwaysSint64(2, &val)
 		})
 	}
 }
@@ -440,8 +515,8 @@ type MapBoolFixed32 map[bool]uint32
 func (m *MapBoolFixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Bool(1, &key)
-			enc.Fixed32(2, &val)
+			enc.AlwaysBool(1, &key)
+			enc.AlwaysFixed32(2, &val)
 		})
 	}
 }
@@ -473,8 +548,8 @@ type MapBoolFixed64 map[bool]uint64
 func (m *MapBoolFixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Bool(1, &key)
-			enc.Fixed64(2, &val)
+			enc.AlwaysBool(1, &key)
+			enc.AlwaysFixed64(2, &val)
 		})
 	}
 }
@@ -506,8 +581,8 @@ type MapBoolSfixed32 map[bool]int32
 func (m *MapBoolSfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Bool(1, &key)
-			enc.Sfixed32(2, &val)
+			enc.AlwaysBool(1, &key)
+			enc.AlwaysSfixed32(2, &val)
 		})
 	}
 }
@@ -539,8 +614,8 @@ type MapBoolSfixed64 map[bool]int64
 func (m *MapBoolSfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Bool(1, &key)
-			enc.Sfixed64(2, &val)
+			enc.AlwaysBool(1, &key)
+			enc.AlwaysSfixed64(2, &val)
 		})
 	}
 }
@@ -572,8 +647,8 @@ type MapBoolFloat map[bool]float32
 func (m *MapBoolFloat) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Bool(1, &key)
-			enc.Float(2, &val)
+			enc.AlwaysBool(1, &key)
+			enc.AlwaysFloat(2, &val)
 		})
 	}
 }
@@ -605,8 +680,8 @@ type MapBoolDouble map[bool]float64
 func (m *MapBoolDouble) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Bool(1, &key)
-			enc.Double(2, &val)
+			enc.AlwaysBool(1, &key)
+			enc.AlwaysDouble(2, &val)
 		})
 	}
 }
@@ -638,8 +713,8 @@ type MapBoolString map[bool]string
 func (m *MapBoolString) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Bool(1, &key)
-			enc.String(2, &val)
+			enc.AlwaysBool(1, &key)
+			enc.AlwaysString(2, &val)
 		})
 	}
 }
@@ -671,8 +746,8 @@ type MapBoolBytes map[bool][]byte
 func (m *MapBoolBytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Bool(1, &key)
-			enc.Bytes(2, &val)
+			enc.AlwaysBool(1, &key)
+			enc.AlwaysBytes(2, &val)
 		})
 	}
 }
@@ -704,8 +779,8 @@ type MapInt32Bool map[int32]bool
 func (m *MapInt32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int32(1, &key)
-			enc.Bool(2, &val)
+			enc.AlwaysInt32(1, &key)
+			enc.AlwaysBool(2, &val)
 		})
 	}
 }
@@ -737,8 +812,8 @@ type MapInt32Int32 map[int32]int32
 func (m *MapInt32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int32(1, &key)
-			enc.Int32(2, &val)
+			enc.AlwaysInt32(1, &key)
+			enc.AlwaysInt32(2, &val)
 		})
 	}
 }
@@ -770,8 +845,8 @@ type MapInt32Int64 map[int32]int64
 func (m *MapInt32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int32(1, &key)
-			enc.Int64(2, &val)
+			enc.AlwaysInt32(1, &key)
+			enc.AlwaysInt64(2, &val)
 		})
 	}
 }
@@ -803,8 +878,8 @@ type MapInt32Uint32 map[int32]uint32
 func (m *MapInt32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int32(1, &key)
-			enc.Uint32(2, &val)
+			enc.AlwaysInt32(1, &key)
+			enc.AlwaysUint32(2, &val)
 		})
 	}
 }
@@ -836,8 +911,8 @@ type MapInt32Uint64 map[int32]uint64
 func (m *MapInt32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int32(1, &key)
-			enc.Uint64(2, &val)
+			enc.AlwaysInt32(1, &key)
+			enc.AlwaysUint64(2, &val)
 		})
 	}
 }
@@ -869,8 +944,8 @@ type MapInt32Sint32 map[int32]int32
 func (m *MapInt32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int32(1, &key)
-			enc.Sint32(2, &val)
+			enc.AlwaysInt32(1, &key)
+			enc.AlwaysSint32(2, &val)
 		})
 	}
 }
@@ -902,8 +977,8 @@ type MapInt32Sint64 map[int32]int64
 func (m *MapInt32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int32(1, &key)
-			enc.Sint64(2, &val)
+			enc.AlwaysInt32(1, &key)
+			enc.AlwaysSint64(2, &val)
 		})
 	}
 }
@@ -935,8 +1010,8 @@ type MapInt32Fixed32 map[int32]uint32
 func (m *MapInt32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int32(1, &key)
-			enc.Fixed32(2, &val)
+			enc.AlwaysInt32(1, &key)
+			enc.AlwaysFixed32(2, &val)
 		})
 	}
 }
@@ -968,8 +1043,8 @@ type MapInt32Fixed64 map[int32]uint64
 func (m *MapInt32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int32(1, &key)
-			enc.Fixed64(2, &val)
+			enc.AlwaysInt32(1, &key)
+			enc.AlwaysFixed64(2, &val)
 		})
 	}
 }
@@ -1001,8 +1076,8 @@ type MapInt32Sfixed32 map[int32]int32
 func (m *MapInt32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int32(1, &key)
-			enc.Sfixed32(2, &val)
+			enc.AlwaysInt32(1, &key)
+			enc.AlwaysSfixed32(2, &val)
 		})
 	}
 }
@@ -1034,8 +1109,8 @@ type MapInt32Sfixed64 map[int32]int64
 func (m *MapInt32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int32(1, &key)
-			enc.Sfixed64(2, &val)
+			enc.AlwaysInt32(1, &key)
+			enc.AlwaysSfixed64(2, &val)
 		})
 	}
 }
@@ -1067,8 +1142,8 @@ type MapInt32Float map[int32]float32
 func (m *MapInt32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int32(1, &key)
-			enc.Float(2, &val)
+			enc.AlwaysInt32(1, &key)
+			enc.AlwaysFloat(2, &val)
 		})
 	}
 }
@@ -1100,8 +1175,8 @@ type MapInt32Double map[int32]float64
 func (m *MapInt32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int32(1, &key)
-			enc.Double(2, &val)
+			enc.AlwaysInt32(1, &key)
+			enc.AlwaysDouble(2, &val)
 		})
 	}
 }
@@ -1133,8 +1208,8 @@ type MapInt32String map[int32]string
 func (m *MapInt32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int32(1, &key)
-			enc.String(2, &val)
+			enc.AlwaysInt32(1, &key)
+			enc.AlwaysString(2, &val)
 		})
 	}
 }
@@ -1166,8 +1241,8 @@ type MapInt32Bytes map[int32][]byte
 func (m *MapInt32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int32(1, &key)
-			enc.Bytes(2, &val)
+			enc.AlwaysInt32(1, &key)
+			enc.AlwaysBytes(2, &val)
 		})
 	}
 }
@@ -1199,8 +1274,8 @@ type MapInt64Bool map[int64]bool
 func (m *MapInt64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int64(1, &key)
-			enc.Bool(2, &val)
+			enc.AlwaysInt64(1, &key)
+			enc.AlwaysBool(2, &val)
 		})
 	}
 }
@@ -1232,8 +1307,8 @@ type MapInt64Int32 map[int64]int32
 func (m *MapInt64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int64(1, &key)
-			enc.Int32(2, &val)
+			enc.AlwaysInt64(1, &key)
+			enc.AlwaysInt32(2, &val)
 		})
 	}
 }
@@ -1265,8 +1340,8 @@ type MapInt64Int64 map[int64]int64
 func (m *MapInt64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int64(1, &key)
-			enc.Int64(2, &val)
+			enc.AlwaysInt64(1, &key)
+			enc.AlwaysInt64(2, &val)
 		})
 	}
 }
@@ -1298,8 +1373,8 @@ type MapInt64Uint32 map[int64]uint32
 func (m *MapInt64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int64(1, &key)
-			enc.Uint32(2, &val)
+			enc.AlwaysInt64(1, &key)
+			enc.AlwaysUint32(2, &val)
 		})
 	}
 }
@@ -1331,8 +1406,8 @@ type MapInt64Uint64 map[int64]uint64
 func (m *MapInt64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int64(1, &key)
-			enc.Uint64(2, &val)
+			enc.AlwaysInt64(1, &key)
+			enc.AlwaysUint64(2, &val)
 		})
 	}
 }
@@ -1364,8 +1439,8 @@ type MapInt64Sint32 map[int64]int32
 func (m *MapInt64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int64(1, &key)
-			enc.Sint32(2, &val)
+			enc.AlwaysInt64(1, &key)
+			enc.AlwaysSint32(2, &val)
 		})
 	}
 }
@@ -1397,8 +1472,8 @@ type MapInt64Sint64 map[int64]int64
 func (m *MapInt64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int64(1, &key)
-			enc.Sint64(2, &val)
+			enc.AlwaysInt64(1, &key)
+			enc.AlwaysSint64(2, &val)
 		})
 	}
 }
@@ -1430,8 +1505,8 @@ type MapInt64Fixed32 map[int64]uint32
 func (m *MapInt64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int64(1, &key)
-			enc.Fixed32(2, &val)
+			enc.AlwaysInt64(1, &key)
+			enc.AlwaysFixed32(2, &val)
 		})
 	}
 }
@@ -1463,8 +1538,8 @@ type MapInt64Fixed64 map[int64]uint64
 func (m *MapInt64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int64(1, &key)
-			enc.Fixed64(2, &val)
+			enc.AlwaysInt64(1, &key)
+			enc.AlwaysFixed64(2, &val)
 		})
 	}
 }
@@ -1496,8 +1571,8 @@ type MapInt64Sfixed32 map[int64]int32
 func (m *MapInt64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int64(1, &key)
-			enc.Sfixed32(2, &val)
+			enc.AlwaysInt64(1, &key)
+			enc.AlwaysSfixed32(2, &val)
 		})
 	}
 }
@@ -1529,8 +1604,8 @@ type MapInt64Sfixed64 map[int64]int64
 func (m *MapInt64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int64(1, &key)
-			enc.Sfixed64(2, &val)
+			enc.AlwaysInt64(1, &key)
+			enc.AlwaysSfixed64(2, &val)
 		})
 	}
 }
@@ -1562,8 +1637,8 @@ type MapInt64Float map[int64]float32
 func (m *MapInt64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int64(1, &key)
-			enc.Float(2, &val)
+			enc.AlwaysInt64(1, &key)
+			enc.AlwaysFloat(2, &val)
 		})
 	}
 }
@@ -1595,8 +1670,8 @@ type MapInt64Double map[int64]float64
 func (m *MapInt64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int64(1, &key)
-			enc.Double(2, &val)
+			enc.AlwaysInt64(1, &key)
+			enc.AlwaysDouble(2, &val)
 		})
 	}
 }
@@ -1628,8 +1703,8 @@ type MapInt64String map[int64]string
 func (m *MapInt64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int64(1, &key)
-			enc.String(2, &val)
+			enc.AlwaysInt64(1, &key)
+			enc.AlwaysString(2, &val)
 		})
 	}
 }
@@ -1661,8 +1736,8 @@ type MapInt64Bytes map[int64][]byte
 func (m *MapInt64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Int64(1, &key)
-			enc.Bytes(2, &val)
+			enc.AlwaysInt64(1, &key)
+			enc.AlwaysBytes(2, &val)
 		})
 	}
 }
@@ -1694,8 +1769,8 @@ type MapUint32Bool map[uint32]bool
 func (m *MapUint32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint32(1, &key)
-			enc.Bool(2, &val)
+			enc.AlwaysUint32(1, &key)
+			enc.AlwaysBool(2, &val)
 		})
 	}
 }
@@ -1727,8 +1802,8 @@ type MapUint32Int32 map[uint32]int32
 func (m *MapUint32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint32(1, &key)
-			enc.Int32(2, &val)
+			enc.AlwaysUint32(1, &key)
+			enc.AlwaysInt32(2, &val)
 		})
 	}
 }
@@ -1760,8 +1835,8 @@ type MapUint32Int64 map[uint32]int64
 func (m *MapUint32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint32(1, &key)
-			enc.Int64(2, &val)
+			enc.AlwaysUint32(1, &key)
+			enc.AlwaysInt64(2, &val)
 		})
 	}
 }
@@ -1793,8 +1868,8 @@ type MapUint32Uint32 map[uint32]uint32
 func (m *MapUint32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint32(1, &key)
-			enc.Uint32(2, &val)
+			enc.AlwaysUint32(1, &key)
+			enc.AlwaysUint32(2, &val)
 		})
 	}
 }
@@ -1826,8 +1901,8 @@ type MapUint32Uint64 map[uint32]uint64
 func (m *MapUint32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint32(1, &key)
-			enc.Uint64(2, &val)
+			enc.AlwaysUint32(1, &key)
+			enc.AlwaysUint64(2, &val)
 		})
 	}
 }
@@ -1859,8 +1934,8 @@ type MapUint32Sint32 map[uint32]int32
 func (m *MapUint32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint32(1, &key)
-			enc.Sint32(2, &val)
+			enc.AlwaysUint32(1, &key)
+			enc.AlwaysSint32(2, &val)
 		})
 	}
 }
@@ -1892,8 +1967,8 @@ type MapUint32Sint64 map[uint32]int64
 func (m *MapUint32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint32(1, &key)
-			enc.Sint64(2, &val)
+			enc.AlwaysUint32(1, &key)
+			enc.AlwaysSint64(2, &val)
 		})
 	}
 }
@@ -1925,8 +2000,8 @@ type MapUint32Fixed32 map[uint32]uint32
 func (m *MapUint32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint32(1, &key)
-			enc.Fixed32(2, &val)
+			enc.AlwaysUint32(1, &key)
+			enc.AlwaysFixed32(2, &val)
 		})
 	}
 }
@@ -1958,8 +2033,8 @@ type MapUint32Fixed64 map[uint32]uint64
 func (m *MapUint32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint32(1, &key)
-			enc.Fixed64(2, &val)
+			enc.AlwaysUint32(1, &key)
+			enc.AlwaysFixed64(2, &val)
 		})
 	}
 }
@@ -1991,8 +2066,8 @@ type MapUint32Sfixed32 map[uint32]int32
 func (m *MapUint32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint32(1, &key)
-			enc.Sfixed32(2, &val)
+			enc.AlwaysUint32(1, &key)
+			enc.AlwaysSfixed32(2, &val)
 		})
 	}
 }
@@ -2024,8 +2099,8 @@ type MapUint32Sfixed64 map[uint32]int64
 func (m *MapUint32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint32(1, &key)
-			enc.Sfixed64(2, &val)
+			enc.AlwaysUint32(1, &key)
+			enc.AlwaysSfixed64(2, &val)
 		})
 	}
 }
@@ -2057,8 +2132,8 @@ type MapUint32Float map[uint32]float32
 func (m *MapUint32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint32(1, &key)
-			enc.Float(2, &val)
+			enc.AlwaysUint32(1, &key)
+			enc.AlwaysFloat(2, &val)
 		})
 	}
 }
@@ -2090,8 +2165,8 @@ type MapUint32Double map[uint32]float64
 func (m *MapUint32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint32(1, &key)
-			enc.Double(2, &val)
+			enc.AlwaysUint32(1, &key)
+			enc.AlwaysDouble(2, &val)
 		})
 	}
 }
@@ -2123,8 +2198,8 @@ type MapUint32String map[uint32]string
 func (m *MapUint32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint32(1, &key)
-			enc.String(2, &val)
+			enc.AlwaysUint32(1, &key)
+			enc.AlwaysString(2, &val)
 		})
 	}
 }
@@ -2156,8 +2231,8 @@ type MapUint32Bytes map[uint32][]byte
 func (m *MapUint32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint32(1, &key)
-			enc.Bytes(2, &val)
+			enc.AlwaysUint32(1, &key)
+			enc.AlwaysBytes(2, &val)
 		})
 	}
 }
@@ -2189,8 +2264,8 @@ type MapUint64Bool map[uint64]bool
 func (m *MapUint64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint64(1, &key)
-			enc.Bool(2, &val)
+			enc.AlwaysUint64(1, &key)
+			enc.AlwaysBool(2, &val)
 		})
 	}
 }
@@ -2222,8 +2297,8 @@ type MapUint64Int32 map[uint64]int32
 func (m *MapUint64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint64(1, &key)
-			enc.Int32(2, &val)
+			enc.AlwaysUint64(1, &key)
+			enc.AlwaysInt32(2, &val)
 		})
 	}
 }
@@ -2255,8 +2330,8 @@ type MapUint64Int64 map[uint64]int64
 func (m *MapUint64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint64(1, &key)
-			enc.Int64(2, &val)
+			enc.AlwaysUint64(1, &key)
+			enc.AlwaysInt64(2, &val)
 		})
 	}
 }
@@ -2288,8 +2363,8 @@ type MapUint64Uint32 map[uint64]uint32
 func (m *MapUint64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint64(1, &key)
-			enc.Uint32(2, &val)
+			enc.AlwaysUint64(1, &key)
+			enc.AlwaysUint32(2, &val)
 		})
 	}
 }
@@ -2321,8 +2396,8 @@ type MapUint64Uint64 map[uint64]uint64
 func (m *MapUint64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint64(1, &key)
-			enc.Uint64(2, &val)
+			enc.AlwaysUint64(1, &key)
+			enc.AlwaysUint64(2, &val)
 		})
 	}
 }
@@ -2354,8 +2429,8 @@ type MapUint64Sint32 map[uint64]int32
 func (m *MapUint64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint64(1, &key)
-			enc.Sint32(2, &val)
+			enc.AlwaysUint64(1, &key)
+			enc.AlwaysSint32(2, &val)
 		})
 	}
 }
@@ -2387,8 +2462,8 @@ type MapUint64Sint64 map[uint64]int64
 func (m *MapUint64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint64(1, &key)
-			enc.Sint64(2, &val)
+			enc.AlwaysUint64(1, &key)
+			enc.AlwaysSint64(2, &val)
 		})
 	}
 }
@@ -2420,8 +2495,8 @@ type MapUint64Fixed32 map[uint64]uint32
 func (m *MapUint64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint64(1, &key)
-			enc.Fixed32(2, &val)
+			enc.AlwaysUint64(1, &key)
+			enc.AlwaysFixed32(2, &val)
 		})
 	}
 }
@@ -2453,8 +2528,8 @@ type MapUint64Fixed64 map[uint64]uint64
 func (m *MapUint64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint64(1, &key)
-			enc.Fixed64(2, &val)
+			enc.AlwaysUint64(1, &key)
+			enc.AlwaysFixed64(2, &val)
 		})
 	}
 }
@@ -2486,8 +2561,8 @@ type MapUint64Sfixed32 map[uint64]int32
 func (m *MapUint64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint64(1, &key)
-			enc.Sfixed32(2, &val)
+			enc.AlwaysUint64(1, &key)
+			enc.AlwaysSfixed32(2, &val)
 		})
 	}
 }
@@ -2519,8 +2594,8 @@ type MapUint64Sfixed64 map[uint64]int64
 func (m *MapUint64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint64(1, &key)
-			enc.Sfixed64(2, &val)
+			enc.AlwaysUint64(1, &key)
+			enc.AlwaysSfixed64(2, &val)
 		})
 	}
 }
@@ -2552,8 +2627,8 @@ type MapUint64Float map[uint64]float32
 func (m *MapUint64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint64(1, &key)
-			enc.Float(2, &val)
+			enc.AlwaysUint64(1, &key)
+			enc.AlwaysFloat(2, &val)
 		})
 	}
 }
@@ -2585,8 +2660,8 @@ type MapUint64Double map[uint64]float64
 func (m *MapUint64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint64(1, &key)
-			enc.Double(2, &val)
+			enc.AlwaysUint64(1, &key)
+			enc.AlwaysDouble(2, &val)
 		})
 	}
 }
@@ -2618,8 +2693,8 @@ type MapUint64String map[uint64]string
 func (m *MapUint64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint64(1, &key)
-			enc.String(2, &val)
+			enc.AlwaysUint64(1, &key)
+			enc.AlwaysString(2, &val)
 		})
 	}
 }
@@ -2651,8 +2726,8 @@ type MapUint64Bytes map[uint64][]byte
 func (m *MapUint64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Uint64(1, &key)
-			enc.Bytes(2, &val)
+			enc.AlwaysUint64(1, &key)
+			enc.AlwaysBytes(2, &val)
 		})
 	}
 }
@@ -2684,8 +2759,8 @@ type MapSint32Bool map[int32]bool
 func (m *MapSint32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint32(1, &key)
-			enc.Bool(2, &val)
+			enc.AlwaysSint32(1, &key)
+			enc.AlwaysBool(2, &val)
 		})
 	}
 }
@@ -2717,8 +2792,8 @@ type MapSint32Int32 map[int32]int32
 func (m *MapSint32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint32(1, &key)
-			enc.Int32(2, &val)
+			enc.AlwaysSint32(1, &key)
+			enc.AlwaysInt32(2, &val)
 		})
 	}
 }
@@ -2750,8 +2825,8 @@ type MapSint32Int64 map[int32]int64
 func (m *MapSint32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint32(1, &key)
-			enc.Int64(2, &val)
+			enc.AlwaysSint32(1, &key)
+			enc.AlwaysInt64(2, &val)
 		})
 	}
 }
@@ -2783,8 +2858,8 @@ type MapSint32Uint32 map[int32]uint32
 func (m *MapSint32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint32(1, &key)
-			enc.Uint32(2, &val)
+			enc.AlwaysSint32(1, &key)
+			enc.AlwaysUint32(2, &val)
 		})
 	}
 }
@@ -2816,8 +2891,8 @@ type MapSint32Uint64 map[int32]uint64
 func (m *MapSint32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint32(1, &key)
-			enc.Uint64(2, &val)
+			enc.AlwaysSint32(1, &key)
+			enc.AlwaysUint64(2, &val)
 		})
 	}
 }
@@ -2849,8 +2924,8 @@ type MapSint32Sint32 map[int32]int32
 func (m *MapSint32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint32(1, &key)
-			enc.Sint32(2, &val)
+			enc.AlwaysSint32(1, &key)
+			enc.AlwaysSint32(2, &val)
 		})
 	}
 }
@@ -2882,8 +2957,8 @@ type MapSint32Sint64 map[int32]int64
 func (m *MapSint32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint32(1, &key)
-			enc.Sint64(2, &val)
+			enc.AlwaysSint32(1, &key)
+			enc.AlwaysSint64(2, &val)
 		})
 	}
 }
@@ -2915,8 +2990,8 @@ type MapSint32Fixed32 map[int32]uint32
 func (m *MapSint32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint32(1, &key)
-			enc.Fixed32(2, &val)
+			enc.AlwaysSint32(1, &key)
+			enc.AlwaysFixed32(2, &val)
 		})
 	}
 }
@@ -2948,8 +3023,8 @@ type MapSint32Fixed64 map[int32]uint64
 func (m *MapSint32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint32(1, &key)
-			enc.Fixed64(2, &val)
+			enc.AlwaysSint32(1, &key)
+			enc.AlwaysFixed64(2, &val)
 		})
 	}
 }
@@ -2981,8 +3056,8 @@ type MapSint32Sfixed32 map[int32]int32
 func (m *MapSint32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint32(1, &key)
-			enc.Sfixed32(2, &val)
+			enc.AlwaysSint32(1, &key)
+			enc.AlwaysSfixed32(2, &val)
 		})
 	}
 }
@@ -3014,8 +3089,8 @@ type MapSint32Sfixed64 map[int32]int64
 func (m *MapSint32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint32(1, &key)
-			enc.Sfixed64(2, &val)
+			enc.AlwaysSint32(1, &key)
+			enc.AlwaysSfixed64(2, &val)
 		})
 	}
 }
@@ -3047,8 +3122,8 @@ type MapSint32Float map[int32]float32
 func (m *MapSint32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint32(1, &key)
-			enc.Float(2, &val)
+			enc.AlwaysSint32(1, &key)
+			enc.AlwaysFloat(2, &val)
 		})
 	}
 }
@@ -3080,8 +3155,8 @@ type MapSint32Double map[int32]float64
 func (m *MapSint32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint32(1, &key)
-			enc.Double(2, &val)
+			enc.AlwaysSint32(1, &key)
+			enc.AlwaysDouble(2, &val)
 		})
 	}
 }
@@ -3113,8 +3188,8 @@ type MapSint32String map[int32]string
 func (m *MapSint32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint32(1, &key)
-			enc.String(2, &val)
+			enc.AlwaysSint32(1, &key)
+			enc.AlwaysString(2, &val)
 		})
 	}
 }
@@ -3146,8 +3221,8 @@ type MapSint32Bytes map[int32][]byte
 func (m *MapSint32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint32(1, &key)
-			enc.Bytes(2, &val)
+			enc.AlwaysSint32(1, &key)
+			enc.AlwaysBytes(2, &val)
 		})
 	}
 }
@@ -3179,8 +3254,8 @@ type MapSint64Bool map[int64]bool
 func (m *MapSint64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint64(1, &key)
-			enc.Bool(2, &val)
+			enc.AlwaysSint64(1, &key)
+			enc.AlwaysBool(2, &val)
 		})
 	}
 }
@@ -3212,8 +3287,8 @@ type MapSint64Int32 map[int64]int32
 func (m *MapSint64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint64(1, &key)
-			enc.Int32(2, &val)
+			enc.AlwaysSint64(1, &key)
+			enc.AlwaysInt32(2, &val)
 		})
 	}
 }
@@ -3245,8 +3320,8 @@ type MapSint64Int64 map[int64]int64
 func (m *MapSint64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint64(1, &key)
-			enc.Int64(2, &val)
+			enc.AlwaysSint64(1, &key)
+			enc.AlwaysInt64(2, &val)
 		})
 	}
 }
@@ -3278,8 +3353,8 @@ type MapSint64Uint32 map[int64]uint32
 func (m *MapSint64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint64(1, &key)
-			enc.Uint32(2, &val)
+			enc.AlwaysSint64(1, &key)
+			enc.AlwaysUint32(2, &val)
 		})
 	}
 }
@@ -3311,8 +3386,8 @@ type MapSint64Uint64 map[int64]uint64
 func (m *MapSint64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint64(1, &key)
-			enc.Uint64(2, &val)
+			enc.AlwaysSint64(1, &key)
+			enc.AlwaysUint64(2, &val)
 		})
 	}
 }
@@ -3344,8 +3419,8 @@ type MapSint64Sint32 map[int64]int32
 func (m *MapSint64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint64(1, &key)
-			enc.Sint32(2, &val)
+			enc.AlwaysSint64(1, &key)
+			enc.AlwaysSint32(2, &val)
 		})
 	}
 }
@@ -3377,8 +3452,8 @@ type MapSint64Sint64 map[int64]int64
 func (m *MapSint64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint64(1, &key)
-			enc.Sint64(2, &val)
+			enc.AlwaysSint64(1, &key)
+			enc.AlwaysSint64(2, &val)
 		})
 	}
 }
@@ -3410,8 +3485,8 @@ type MapSint64Fixed32 map[int64]uint32
 func (m *MapSint64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint64(1, &key)
-			enc.Fixed32(2, &val)
+			enc.AlwaysSint64(1, &key)
+			enc.AlwaysFixed32(2, &val)
 		})
 	}
 }
@@ -3443,8 +3518,8 @@ type MapSint64Fixed64 map[int64]uint64
 func (m *MapSint64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint64(1, &key)
-			enc.Fixed64(2, &val)
+			enc.AlwaysSint64(1, &key)
+			enc.AlwaysFixed64(2, &val)
 		})
 	}
 }
@@ -3476,8 +3551,8 @@ type MapSint64Sfixed32 map[int64]int32
 func (m *MapSint64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint64(1, &key)
-			enc.Sfixed32(2, &val)
+			enc.AlwaysSint64(1, &key)
+			enc.AlwaysSfixed32(2, &val)
 		})
 	}
 }
@@ -3509,8 +3584,8 @@ type MapSint64Sfixed64 map[int64]int64
 func (m *MapSint64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint64(1, &key)
-			enc.Sfixed64(2, &val)
+			enc.AlwaysSint64(1, &key)
+			enc.AlwaysSfixed64(2, &val)
 		})
 	}
 }
@@ -3542,8 +3617,8 @@ type MapSint64Float map[int64]float32
 func (m *MapSint64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint64(1, &key)
-			enc.Float(2, &val)
+			enc.AlwaysSint64(1, &key)
+			enc.AlwaysFloat(2, &val)
 		})
 	}
 }
@@ -3575,8 +3650,8 @@ type MapSint64Double map[int64]float64
 func (m *MapSint64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint64(1, &key)
-			enc.Double(2, &val)
+			enc.AlwaysSint64(1, &key)
+			enc.AlwaysDouble(2, &val)
 		})
 	}
 }
@@ -3608,8 +3683,8 @@ type MapSint64String map[int64]string
 func (m *MapSint64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint64(1, &key)
-			enc.String(2, &val)
+			enc.AlwaysSint64(1, &key)
+			enc.AlwaysString(2, &val)
 		})
 	}
 }
@@ -3641,8 +3716,8 @@ type MapSint64Bytes map[int64][]byte
 func (m *MapSint64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sint64(1, &key)
-			enc.Bytes(2, &val)
+			enc.AlwaysSint64(1, &key)
+			enc.AlwaysBytes(2, &val)
 		})
 	}
 }
@@ -3674,8 +3749,8 @@ type MapFixed32Bool map[uint32]bool
 func (m *MapFixed32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed32(1, &key)
-			enc.Bool(2, &val)
+			enc.AlwaysFixed32(1, &key)
+			enc.AlwaysBool(2, &val)
 		})
 	}
 }
@@ -3707,8 +3782,8 @@ type MapFixed32Int32 map[uint32]int32
 func (m *MapFixed32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed32(1, &key)
-			enc.Int32(2, &val)
+			enc.AlwaysFixed32(1, &key)
+			enc.AlwaysInt32(2, &val)
 		})
 	}
 }
@@ -3740,8 +3815,8 @@ type MapFixed32Int64 map[uint32]int64
 func (m *MapFixed32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed32(1, &key)
-			enc.Int64(2, &val)
+			enc.AlwaysFixed32(1, &key)
+			enc.AlwaysInt64(2, &val)
 		})
 	}
 }
@@ -3773,8 +3848,8 @@ type MapFixed32Uint32 map[uint32]uint32
 func (m *MapFixed32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed32(1, &key)
-			enc.Uint32(2, &val)
+			enc.AlwaysFixed32(1, &key)
+			enc.AlwaysUint32(2, &val)
 		})
 	}
 }
@@ -3806,8 +3881,8 @@ type MapFixed32Uint64 map[uint32]uint64
 func (m *MapFixed32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed32(1, &key)
-			enc.Uint64(2, &val)
+			enc.AlwaysFixed32(1, &key)
+			enc.AlwaysUint64(2, &val)
 		})
 	}
 }
@@ -3839,8 +3914,8 @@ type MapFixed32Sint32 map[uint32]int32
 func (m *MapFixed32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed32(1, &key)
-			enc.Sint32(2, &val)
+			enc.AlwaysFixed32(1, &key)
+			enc.AlwaysSint32(2, &val)
 		})
 	}
 }
@@ -3872,8 +3947,8 @@ type MapFixed32Sint64 map[uint32]int64
 func (m *MapFixed32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed32(1, &key)
-			enc.Sint64(2, &val)
+			enc.AlwaysFixed32(1, &key)
+			enc.AlwaysSint64(2, &val)
 		})
 	}
 }
@@ -3905,8 +3980,8 @@ type MapFixed32Fixed32 map[uint32]uint32
 func (m *MapFixed32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed32(1, &key)
-			enc.Fixed32(2, &val)
+			enc.AlwaysFixed32(1, &key)
+			enc.AlwaysFixed32(2, &val)
 		})
 	}
 }
@@ -3938,8 +4013,8 @@ type MapFixed32Fixed64 map[uint32]uint64
 func (m *MapFixed32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed32(1, &key)
-			enc.Fixed64(2, &val)
+			enc.AlwaysFixed32(1, &key)
+			enc.AlwaysFixed64(2, &val)
 		})
 	}
 }
@@ -3971,8 +4046,8 @@ type MapFixed32Sfixed32 map[uint32]int32
 func (m *MapFixed32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed32(1, &key)
-			enc.Sfixed32(2, &val)
+			enc.AlwaysFixed32(1, &key)
+			enc.AlwaysSfixed32(2, &val)
 		})
 	}
 }
@@ -4004,8 +4079,8 @@ type MapFixed32Sfixed64 map[uint32]int64
 func (m *MapFixed32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed32(1, &key)
-			enc.Sfixed64(2, &val)
+			enc.AlwaysFixed32(1, &key)
+			enc.AlwaysSfixed64(2, &val)
 		})
 	}
 }
@@ -4037,8 +4112,8 @@ type MapFixed32Float map[uint32]float32
 func (m *MapFixed32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed32(1, &key)
-			enc.Float(2, &val)
+			enc.AlwaysFixed32(1, &key)
+			enc.AlwaysFloat(2, &val)
 		})
 	}
 }
@@ -4070,8 +4145,8 @@ type MapFixed32Double map[uint32]float64
 func (m *MapFixed32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed32(1, &key)
-			enc.Double(2, &val)
+			enc.AlwaysFixed32(1, &key)
+			enc.AlwaysDouble(2, &val)
 		})
 	}
 }
@@ -4103,8 +4178,8 @@ type MapFixed32String map[uint32]string
 func (m *MapFixed32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed32(1, &key)
-			enc.String(2, &val)
+			enc.AlwaysFixed32(1, &key)
+			enc.AlwaysString(2, &val)
 		})
 	}
 }
@@ -4136,8 +4211,8 @@ type MapFixed32Bytes map[uint32][]byte
 func (m *MapFixed32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed32(1, &key)
-			enc.Bytes(2, &val)
+			enc.AlwaysFixed32(1, &key)
+			enc.AlwaysBytes(2, &val)
 		})
 	}
 }
@@ -4169,8 +4244,8 @@ type MapFixed64Bool map[uint64]bool
 func (m *MapFixed64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed64(1, &key)
-			enc.Bool(2, &val)
+			enc.AlwaysFixed64(1, &key)
+			enc.AlwaysBool(2, &val)
 		})
 	}
 }
@@ -4202,8 +4277,8 @@ type MapFixed64Int32 map[uint64]int32
 func (m *MapFixed64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed64(1, &key)
-			enc.Int32(2, &val)
+			enc.AlwaysFixed64(1, &key)
+			enc.AlwaysInt32(2, &val)
 		})
 	}
 }
@@ -4235,8 +4310,8 @@ type MapFixed64Int64 map[uint64]int64
 func (m *MapFixed64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed64(1, &key)
-			enc.Int64(2, &val)
+			enc.AlwaysFixed64(1, &key)
+			enc.AlwaysInt64(2, &val)
 		})
 	}
 }
@@ -4268,8 +4343,8 @@ type MapFixed64Uint32 map[uint64]uint32
 func (m *MapFixed64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed64(1, &key)
-			enc.Uint32(2, &val)
+			enc.AlwaysFixed64(1, &key)
+			enc.AlwaysUint32(2, &val)
 		})
 	}
 }
@@ -4301,8 +4376,8 @@ type MapFixed64Uint64 map[uint64]uint64
 func (m *MapFixed64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed64(1, &key)
-			enc.Uint64(2, &val)
+			enc.AlwaysFixed64(1, &key)
+			enc.AlwaysUint64(2, &val)
 		})
 	}
 }
@@ -4334,8 +4409,8 @@ type MapFixed64Sint32 map[uint64]int32
 func (m *MapFixed64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed64(1, &key)
-			enc.Sint32(2, &val)
+			enc.AlwaysFixed64(1, &key)
+			enc.AlwaysSint32(2, &val)
 		})
 	}
 }
@@ -4367,8 +4442,8 @@ type MapFixed64Sint64 map[uint64]int64
 func (m *MapFixed64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed64(1, &key)
-			enc.Sint64(2, &val)
+			enc.AlwaysFixed64(1, &key)
+			enc.AlwaysSint64(2, &val)
 		})
 	}
 }
@@ -4400,8 +4475,8 @@ type MapFixed64Fixed32 map[uint64]uint32
 func (m *MapFixed64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed64(1, &key)
-			enc.Fixed32(2, &val)
+			enc.AlwaysFixed64(1, &key)
+			enc.AlwaysFixed32(2, &val)
 		})
 	}
 }
@@ -4433,8 +4508,8 @@ type MapFixed64Fixed64 map[uint64]uint64
 func (m *MapFixed64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed64(1, &key)
-			enc.Fixed64(2, &val)
+			enc.AlwaysFixed64(1, &key)
+			enc.AlwaysFixed64(2, &val)
 		})
 	}
 }
@@ -4466,8 +4541,8 @@ type MapFixed64Sfixed32 map[uint64]int32
 func (m *MapFixed64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed64(1, &key)
-			enc.Sfixed32(2, &val)
+			enc.AlwaysFixed64(1, &key)
+			enc.AlwaysSfixed32(2, &val)
 		})
 	}
 }
@@ -4499,8 +4574,8 @@ type MapFixed64Sfixed64 map[uint64]int64
 func (m *MapFixed64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed64(1, &key)
-			enc.Sfixed64(2, &val)
+			enc.AlwaysFixed64(1, &key)
+			enc.AlwaysSfixed64(2, &val)
 		})
 	}
 }
@@ -4532,8 +4607,8 @@ type MapFixed64Float map[uint64]float32
 func (m *MapFixed64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed64(1, &key)
-			enc.Float(2, &val)
+			enc.AlwaysFixed64(1, &key)
+			enc.AlwaysFloat(2, &val)
 		})
 	}
 }
@@ -4565,8 +4640,8 @@ type MapFixed64Double map[uint64]float64
 func (m *MapFixed64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed64(1, &key)
-			enc.Double(2, &val)
+			enc.AlwaysFixed64(1, &key)
+			enc.AlwaysDouble(2, &val)
 		})
 	}
 }
@@ -4598,8 +4673,8 @@ type MapFixed64String map[uint64]string
 func (m *MapFixed64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed64(1, &key)
-			enc.String(2, &val)
+			enc.AlwaysFixed64(1, &key)
+			enc.AlwaysString(2, &val)
 		})
 	}
 }
@@ -4631,8 +4706,8 @@ type MapFixed64Bytes map[uint64][]byte
 func (m *MapFixed64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Fixed64(1, &key)
-			enc.Bytes(2, &val)
+			enc.AlwaysFixed64(1, &key)
+			enc.AlwaysBytes(2, &val)
 		})
 	}
 }
@@ -4664,8 +4739,8 @@ type MapSfixed32Bool map[int32]bool
 func (m *MapSfixed32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed32(1, &key)
-			enc.Bool(2, &val)
+			enc.AlwaysSfixed32(1, &key)
+			enc.AlwaysBool(2, &val)
 		})
 	}
 }
@@ -4697,8 +4772,8 @@ type MapSfixed32Int32 map[int32]int32
 func (m *MapSfixed32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed32(1, &key)
-			enc.Int32(2, &val)
+			enc.AlwaysSfixed32(1, &key)
+			enc.AlwaysInt32(2, &val)
 		})
 	}
 }
@@ -4730,8 +4805,8 @@ type MapSfixed32Int64 map[int32]int64
 func (m *MapSfixed32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed32(1, &key)
-			enc.Int64(2, &val)
+			enc.AlwaysSfixed32(1, &key)
+			enc.AlwaysInt64(2, &val)
 		})
 	}
 }
@@ -4763,8 +4838,8 @@ type MapSfixed32Uint32 map[int32]uint32
 func (m *MapSfixed32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed32(1, &key)
-			enc.Uint32(2, &val)
+			enc.AlwaysSfixed32(1, &key)
+			enc.AlwaysUint32(2, &val)
 		})
 	}
 }
@@ -4796,8 +4871,8 @@ type MapSfixed32Uint64 map[int32]uint64
 func (m *MapSfixed32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed32(1, &key)
-			enc.Uint64(2, &val)
+			enc.AlwaysSfixed32(1, &key)
+			enc.AlwaysUint64(2, &val)
 		})
 	}
 }
@@ -4829,8 +4904,8 @@ type MapSfixed32Sint32 map[int32]int32
 func (m *MapSfixed32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed32(1, &key)
-			enc.Sint32(2, &val)
+			enc.AlwaysSfixed32(1, &key)
+			enc.AlwaysSint32(2, &val)
 		})
 	}
 }
@@ -4862,8 +4937,8 @@ type MapSfixed32Sint64 map[int32]int64
 func (m *MapSfixed32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed32(1, &key)
-			enc.Sint64(2, &val)
+			enc.AlwaysSfixed32(1, &key)
+			enc.AlwaysSint64(2, &val)
 		})
 	}
 }
@@ -4895,8 +4970,8 @@ type MapSfixed32Fixed32 map[int32]uint32
 func (m *MapSfixed32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed32(1, &key)
-			enc.Fixed32(2, &val)
+			enc.AlwaysSfixed32(1, &key)
+			enc.AlwaysFixed32(2, &val)
 		})
 	}
 }
@@ -4928,8 +5003,8 @@ type MapSfixed32Fixed64 map[int32]uint64
 func (m *MapSfixed32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed32(1, &key)
-			enc.Fixed64(2, &val)
+			enc.AlwaysSfixed32(1, &key)
+			enc.AlwaysFixed64(2, &val)
 		})
 	}
 }
@@ -4961,8 +5036,8 @@ type MapSfixed32Sfixed32 map[int32]int32
 func (m *MapSfixed32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed32(1, &key)
-			enc.Sfixed32(2, &val)
+			enc.AlwaysSfixed32(1, &key)
+			enc.AlwaysSfixed32(2, &val)
 		})
 	}
 }
@@ -4994,8 +5069,8 @@ type MapSfixed32Sfixed64 map[int32]int64
 func (m *MapSfixed32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed32(1, &key)
-			enc.Sfixed64(2, &val)
+			enc.AlwaysSfixed32(1, &key)
+			enc.AlwaysSfixed64(2, &val)
 		})
 	}
 }
@@ -5027,8 +5102,8 @@ type MapSfixed32Float map[int32]float32
 func (m *MapSfixed32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed32(1, &key)
-			enc.Float(2, &val)
+			enc.AlwaysSfixed32(1, &key)
+			enc.AlwaysFloat(2, &val)
 		})
 	}
 }
@@ -5060,8 +5135,8 @@ type MapSfixed32Double map[int32]float64
 func (m *MapSfixed32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed32(1, &key)
-			enc.Double(2, &val)
+			enc.AlwaysSfixed32(1, &key)
+			enc.AlwaysDouble(2, &val)
 		})
 	}
 }
@@ -5093,8 +5168,8 @@ type MapSfixed32String map[int32]string
 func (m *MapSfixed32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed32(1, &key)
-			enc.String(2, &val)
+			enc.AlwaysSfixed32(1, &key)
+			enc.AlwaysString(2, &val)
 		})
 	}
 }
@@ -5126,8 +5201,8 @@ type MapSfixed32Bytes map[int32][]byte
 func (m *MapSfixed32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed32(1, &key)
-			enc.Bytes(2, &val)
+			enc.AlwaysSfixed32(1, &key)
+			enc.AlwaysBytes(2, &val)
 		})
 	}
 }
@@ -5159,8 +5234,8 @@ type MapSfixed64Bool map[int64]bool
 func (m *MapSfixed64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed64(1, &key)
-			enc.Bool(2, &val)
+			enc.AlwaysSfixed64(1, &key)
+			enc.AlwaysBool(2, &val)
 		})
 	}
 }
@@ -5192,8 +5267,8 @@ type MapSfixed64Int32 map[int64]int32
 func (m *MapSfixed64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed64(1, &key)
-			enc.Int32(2, &val)
+			enc.AlwaysSfixed64(1, &key)
+			enc.AlwaysInt32(2, &val)
 		})
 	}
 }
@@ -5225,8 +5300,8 @@ type MapSfixed64Int64 map[int64]int64
 func (m *MapSfixed64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed64(1, &key)
-			enc.Int64(2, &val)
+			enc.AlwaysSfixed64(1, &key)
+			enc.AlwaysInt64(2, &val)
 		})
 	}
 }
@@ -5258,8 +5333,8 @@ type MapSfixed64Uint32 map[int64]uint32
 func (m *MapSfixed64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed64(1, &key)
-			enc.Uint32(2, &val)
+			enc.AlwaysSfixed64(1, &key)
+			enc.AlwaysUint32(2, &val)
 		})
 	}
 }
@@ -5291,8 +5366,8 @@ type MapSfixed64Uint64 map[int64]uint64
 func (m *MapSfixed64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed64(1, &key)
-			enc.Uint64(2, &val)
+			enc.AlwaysSfixed64(1, &key)
+			enc.AlwaysUint64(2, &val)
 		})
 	}
 }
@@ -5324,8 +5399,8 @@ type MapSfixed64Sint32 map[int64]int32
 func (m *MapSfixed64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed64(1, &key)
-			enc.Sint32(2, &val)
+			enc.AlwaysSfixed64(1, &key)
+			enc.AlwaysSint32(2, &val)
 		})
 	}
 }
@@ -5357,8 +5432,8 @@ type MapSfixed64Sint64 map[int64]int64
 func (m *MapSfixed64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed64(1, &key)
-			enc.Sint64(2, &val)
+			enc.AlwaysSfixed64(1, &key)
+			enc.AlwaysSint64(2, &val)
 		})
 	}
 }
@@ -5390,8 +5465,8 @@ type MapSfixed64Fixed32 map[int64]uint32
 func (m *MapSfixed64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed64(1, &key)
-			enc.Fixed32(2, &val)
+			enc.AlwaysSfixed64(1, &key)
+			enc.AlwaysFixed32(2, &val)
 		})
 	}
 }
@@ -5423,8 +5498,8 @@ type MapSfixed64Fixed64 map[int64]uint64
 func (m *MapSfixed64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed64(1, &key)
-			enc.Fixed64(2, &val)
+			enc.AlwaysSfixed64(1, &key)
+			enc.AlwaysFixed64(2, &val)
 		})
 	}
 }
@@ -5456,8 +5531,8 @@ type MapSfixed64Sfixed32 map[int64]int32
 func (m *MapSfixed64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed64(1, &key)
-			enc.Sfixed32(2, &val)
+			enc.AlwaysSfixed64(1, &key)
+			enc.AlwaysSfixed32(2, &val)
 		})
 	}
 }
@@ -5489,8 +5564,8 @@ type MapSfixed64Sfixed64 map[int64]int64
 func (m *MapSfixed64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed64(1, &key)
-			enc.Sfixed64(2, &val)
+			enc.AlwaysSfixed64(1, &key)
+			enc.AlwaysSfixed64(2, &val)
 		})
 	}
 }
@@ -5522,8 +5597,8 @@ type MapSfixed64Float map[int64]float32
 func (m *MapSfixed64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed64(1, &key)
-			enc.Float(2, &val)
+			enc.AlwaysSfixed64(1, &key)
+			enc.AlwaysFloat(2, &val)
 		})
 	}
 }
@@ -5555,8 +5630,8 @@ type MapSfixed64Double map[int64]float64
 func (m *MapSfixed64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed64(1, &key)
-			enc.Double(2, &val)
+			enc.AlwaysSfixed64(1, &key)
+			enc.AlwaysDouble(2, &val)
 		})
 	}
 }
@@ -5588,8 +5663,8 @@ type MapSfixed64String map[int64]string
 func (m *MapSfixed64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed64(1, &key)
-			enc.String(2, &val)
+			enc.AlwaysSfixed64(1, &key)
+			enc.AlwaysString(2, &val)
 		})
 	}
 }
@@ -5621,8 +5696,8 @@ type MapSfixed64Bytes map[int64][]byte
 func (m *MapSfixed64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.Sfixed64(1, &key)
-			enc.Bytes(2, &val)
+			enc.AlwaysSfixed64(1, &key)
+			enc.AlwaysBytes(2, &val)
 		})
 	}
 }
@@ -5654,8 +5729,8 @@ type MapStringBool map[string]bool
 func (m *MapStringBool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.String(1, &key)
-			enc.Bool(2, &val)
+			enc.AlwaysString(1, &key)
+			enc.AlwaysBool(2, &val)
 		})
 	}
 }
@@ -5687,8 +5762,8 @@ type MapStringInt32 map[string]int32
 func (m *MapStringInt32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.String(1, &key)
-			enc.Int32(2, &val)
+			enc.AlwaysString(1, &key)
+			enc.AlwaysInt32(2, &val)
 		})
 	}
 }
@@ -5720,8 +5795,8 @@ type MapStringInt64 map[string]int64
 func (m *MapStringInt64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.String(1, &key)
-			enc.Int64(2, &val)
+			enc.AlwaysString(1, &key)
+			enc.AlwaysInt64(2, &val)
 		})
 	}
 }
@@ -5753,8 +5828,8 @@ type MapStringUint32 map[string]uint32
 func (m *MapStringUint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.String(1, &key)
-			enc.Uint32(2, &val)
+			enc.AlwaysString(1, &key)
+			enc.AlwaysUint32(2, &val)
 		})
 	}
 }
@@ -5786,8 +5861,8 @@ type MapStringUint64 map[string]uint64
 func (m *MapStringUint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.String(1, &key)
-			enc.Uint64(2, &val)
+			enc.AlwaysString(1, &key)
+			enc.AlwaysUint64(2, &val)
 		})
 	}
 }
@@ -5819,8 +5894,8 @@ type MapStringSint32 map[string]int32
 func (m *MapStringSint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.String(1, &key)
-			enc.Sint32(2, &val)
+			enc.AlwaysString(1, &key)
+			enc.AlwaysSint32(2, &val)
 		})
 	}
 }
@@ -5852,8 +5927,8 @@ type MapStringSint64 map[string]int64
 func (m *MapStringSint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.String(1, &key)
-			enc.Sint64(2, &val)
+			enc.AlwaysString(1, &key)
+			enc.AlwaysSint64(2, &val)
 		})
 	}
 }
@@ -5885,8 +5960,8 @@ type MapStringFixed32 map[string]uint32
 func (m *MapStringFixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.String(1, &key)
-			enc.Fixed32(2, &val)
+			enc.AlwaysString(1, &key)
+			enc.AlwaysFixed32(2, &val)
 		})
 	}
 }
@@ -5918,8 +5993,8 @@ type MapStringFixed64 map[string]uint64
 func (m *MapStringFixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.String(1, &key)
-			enc.Fixed64(2, &val)
+			enc.AlwaysString(1, &key)
+			enc.AlwaysFixed64(2, &val)
 		})
 	}
 }
@@ -5951,8 +6026,8 @@ type MapStringSfixed32 map[string]int32
 func (m *MapStringSfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.String(1, &key)
-			enc.Sfixed32(2, &val)
+			enc.AlwaysString(1, &key)
+			enc.AlwaysSfixed32(2, &val)
 		})
 	}
 }
@@ -5984,8 +6059,8 @@ type MapStringSfixed64 map[string]int64
 func (m *MapStringSfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.String(1, &key)
-			enc.Sfixed64(2, &val)
+			enc.AlwaysString(1, &key)
+			enc.AlwaysSfixed64(2, &val)
 		})
 	}
 }
@@ -6017,8 +6092,8 @@ type MapStringFloat map[string]float32
 func (m *MapStringFloat) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.String(1, &key)
-			enc.Float(2, &val)
+			enc.AlwaysString(1, &key)
+			enc.AlwaysFloat(2, &val)
 		})
 	}
 }
@@ -6050,8 +6125,8 @@ type MapStringDouble map[string]float64
 func (m *MapStringDouble) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.String(1, &key)
-			enc.Double(2, &val)
+			enc.AlwaysString(1, &key)
+			enc.AlwaysDouble(2, &val)
 		})
 	}
 }
@@ -6083,8 +6158,8 @@ type MapStringString map[string]string
 func (m *MapStringString) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.String(1, &key)
-			enc.String(2, &val)
+			enc.AlwaysString(1, &key)
+			enc.AlwaysString(2, &val)
 		})
 	}
 }
@@ -6116,8 +6191,8 @@ type MapStringBytes map[string][]byte
 func (m *MapStringBytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			enc.String(1, &key)
-			enc.Bytes(2, &val)
+			enc.AlwaysString(1, &key)
+			enc.AlwaysBytes(2, &val)
 		})
 	}
 }

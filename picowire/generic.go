@@ -11,11 +11,10 @@ type MapKey interface {
 }
 
 // MapCodec encodes and decodes a map key or value.
-// A value codec may also implement PicoInit(*T) to initialize the protobuf
-// default for each entry, including entries that omit the value field.
 type MapCodec[T any] interface {
 	PicoEncode(*picobuf.Encoder, picobuf.FieldNumber, *T)
 	PicoDecode(*picobuf.Decoder, picobuf.FieldNumber, *T)
+	PicoDefault(*T)
 }
 
 // MessagePointer is a pointer to a protobuf message implementation.
@@ -27,7 +26,7 @@ type MessagePointer[M any] interface {
 // MessageCodec encodes and decodes message-valued map entries.
 type MessageCodec[M any, P MessagePointer[M]] struct{}
 
-// PicoEncode encodes a message-valued map entry.
+// PicoEncode encodes a message-valued map entry, which is always emitted.
 func (MessageCodec[M, P]) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *P) {
 	v := *value
 	if v == nil {
@@ -42,29 +41,27 @@ func (MessageCodec[M, P]) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 	enc.AlwaysMessage(field, v.Encode)
 }
 
-// PicoInit initializes an absent map value to an empty message.
-func (MessageCodec[M, P]) PicoInit(value *P) {
-	if *value == nil {
-		*value = P(new(M))
-	}
-}
-
 // PicoDecode decodes a message-valued map entry.
-func (codec MessageCodec[M, P]) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *P) {
+func (MessageCodec[M, P]) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *P) {
 	dec.Message(field, func(dec *picobuf.Decoder) {
-		codec.PicoInit(value)
 		dec.Loop((*value).Decode)
 	})
+}
+
+// PicoDefault resets a message-valued map entry to an empty message, which is
+// what an omitted value means.
+func (MessageCodec[M, P]) PicoDefault(value *P) {
+	*value = P(new(M))
 }
 
 // EnumCodec encodes and decodes enum-valued map entries.
 type EnumCodec[E ~int32] struct{}
 
-// PicoEncode encodes an enum-valued map entry.
+// PicoEncode encodes an enum-valued map entry, which is always emitted.
 func (EnumCodec[E]) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *E) {
 	// *E cannot be converted to *int32, when E is a type parameter.
 	v := int32(*value)
-	enc.Int32(field, &v)
+	enc.AlwaysInt32(field, &v)
 }
 
 // PicoDecode decodes an enum-valued map entry.
@@ -72,6 +69,11 @@ func (EnumCodec[E]) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, 
 	v := int32(*value)
 	dec.Int32(field, &v)
 	*value = E(v)
+}
+
+// PicoDefault resets an enum-valued map entry to the default.
+func (EnumCodec[E]) PicoDefault(value *E) {
+	*value = 0
 }
 
 // MapOf implements a protobuf map using custom key and value wire codecs.
@@ -103,20 +105,17 @@ func (m *MapOf[K, V, KC, VC]) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 func (m *MapOf[K, V, KC, VC]) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var keyCodec KC
 	var valueCodec VC
-	initializer, hasInitializer := any(valueCodec).(interface{ PicoInit(*V) })
 	// key and val are hoisted, see PicoEncode.
 	var key K
 	var val V
-	var zeroK K
-	var zeroV V
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[K]V{}
 		}
-		key, val = zeroK, zeroV
-		if hasInitializer {
-			initializer.PicoInit(&val)
-		}
+		// Each entry starts from the default, because the key or the value may
+		// be omitted from the entry.
+		keyCodec.PicoDefault(&key)
+		valueCodec.PicoDefault(&val)
 		c.Loop(func(c *picobuf.Decoder) {
 			keyCodec.PicoDecode(c, 1, &key)
 			valueCodec.PicoDecode(c, 2, &val)

@@ -295,6 +295,12 @@ func TestMaps(t *testing.T) {
 		{
 			StringMessage: map[string]*pico.OptionalMessage{"empty": {}},
 		},
+		{
+			StringEnum: map[string]pico.Language{"zero": pico.Language_UNKNOWN},
+		},
+		{
+			StringInt32: map[string]int32{"": 0},
+		},
 	}
 
 	for _, test := range tests {
@@ -311,11 +317,7 @@ func TestMaps(t *testing.T) {
 
 		// encoding of maps is not deterministic
 		if len(test.StringString) <= 1 {
-			_, hasEmptyKey := test.StringString[""]
-			_, hasEmptyVal := test.StringString["empty"]
-			if !hasEmptyKey && !hasEmptyVal {
-				assert.Equal(t, canonical, data)
-			}
+			assert.Equal(t, canonical, data)
 		}
 
 		var got pico.Map
@@ -326,8 +328,8 @@ func TestMaps(t *testing.T) {
 }
 
 func TestMapZeroEntries(t *testing.T) {
-	// Zero keys and values are omitted on the wire, so each map entry must
-	// start from the zero value rather than inheriting the previous entry's.
+	// Entries with a zero key or value are always emitted, so that the encoding
+	// matches the reference implementations.
 	test := pico.Map{
 		StringInt64: map[string]int64{"a": 1, "b": 0, "": 0},
 		BoolString:  map[bool]string{true: "a", false: ""},
@@ -350,6 +352,33 @@ func TestMapZeroEntries(t *testing.T) {
 	for key, value := range test.StringEnum {
 		assert.Equal(t, int32(p.StringEnum[key]), int32(value))
 	}
+}
+
+func TestMapOmittedEntryFields(t *testing.T) {
+	// Other implementations may omit a zero key or value, so each entry must
+	// start from the zero value rather than inheriting the previous entry's.
+	data := []byte{
+		0x1a, 0x05, 0x0a, 0x01, 'a', 0x10, 0x01, // string_int64: {"a": 1}
+		0x1a, 0x03, 0x0a, 0x01, 'b', // string_int64: {"b": 0}
+		0x1a, 0x02, 0x10, 0x01, // string_int64: {"": 1}
+		0xe2, 0x01, 0x06, 0x0a, 0x04, 'z', 'e', 'r', 'o', // string_enum: {"zero": UNKNOWN}
+		0xea, 0x01, 0x03, 0x0a, 0x01, 'm', // string_message: {"m": {}}
+	}
+
+	var got pico.Map
+	err := picobuf.Unmarshal(data, &got)
+	assert.NoError(t, err)
+
+	var p prot.Map
+	err = proto.Unmarshal(data, &p)
+	assert.NoError(t, err)
+
+	assert.DeepEqual(t, got.StringInt64, map[string]int64{"a": 1, "b": 0, "": 1})
+	assert.DeepEqual(t, got.StringInt64, p.StringInt64)
+	assert.DeepEqual(t, got.StringEnum, map[string]pico.Language{"zero": pico.Language_UNKNOWN})
+	assert.Equal(t, int32(p.StringEnum["zero"]), int32(pico.Language_UNKNOWN))
+	assert.DeepEqual(t, got.StringMessage, map[string]*pico.OptionalMessage{"m": {}})
+	assert.Equal(t, p.StringMessage["m"] != nil, true)
 }
 
 func TestEnum(t *testing.T) {

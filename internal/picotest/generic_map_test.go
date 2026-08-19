@@ -52,6 +52,8 @@ func TestGeneratedGenericMapEntries(t *testing.T) {
 	if err := picobuf.Unmarshal(data, &decoded); err != nil {
 		t.Fatal(err)
 	}
+	// A nil value encodes as an empty message, matching the reference
+	// implementations, so it decodes back as an empty message.
 	want := map[int32]*GenericMapValue{
 		1: {Name: "one"},
 		2: {Name: "two"},
@@ -83,7 +85,7 @@ func TestGeneratedEnumMap(t *testing.T) {
 		t.Fatalf("encoded %x, want %x", data, wantData)
 	}
 
-	// The zero enum is omitted from the entry, but the key still decodes.
+	// Entries omitting the zero value must still decode.
 	data = append(data, 0x0a, 0x02, 0x08, 0x02)
 
 	var decoded EnumMap
