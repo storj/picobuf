@@ -8,6 +8,7 @@
 package picotest
 
 import (
+	slices "slices"
 	picobuf "storj.io/picobuf"
 	pic "storj.io/picobuf/internal/picotest/pic"
 	picoconv "storj.io/picobuf/picoconv"
@@ -316,6 +317,7 @@ func (m *AllTypes) Decode(c *picobuf.Decoder) {
 	c.RepeatedBool(29, &m.Bools)
 	c.RepeatedString(30, &m.Strings)
 	c.RepeatedBytes(31, &m.Bytess)
+	m.Messages = slices.Grow(m.Messages, c.RepeatedMessageCount(32))
 	c.RepeatedMessage(32, func(c *picobuf.Decoder) {
 		x := new(Message)
 		c.Loop(x.Decode)
@@ -866,6 +868,7 @@ func (m *VariationsMessage) Decode(c *picobuf.Decoder) {
 		}
 		m.Opt.Decode(c)
 	})
+	m.Rep = slices.Grow(m.Rep, c.RepeatedMessageCount(3))
 	c.RepeatedMessage(3, func(c *picobuf.Decoder) {
 		x := new(Message)
 		c.Loop(x.Decode)
@@ -873,6 +876,7 @@ func (m *VariationsMessage) Decode(c *picobuf.Decoder) {
 	})
 	c.PresentMessage(4, m.PresentBasic.Decode)
 	c.PresentMessage(5, m.PresentOpt.Decode)
+	m.PresentRep = slices.Grow(m.PresentRep, c.RepeatedMessageCount(6))
 	c.RepeatedMessage(6, func(c *picobuf.Decoder) {
 		m.PresentRep = append(m.PresentRep, Message{})
 		c.Loop(m.PresentRep[len(m.PresentRep)-1].Decode)

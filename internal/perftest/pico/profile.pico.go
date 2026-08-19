@@ -8,6 +8,7 @@
 package perftest
 
 import (
+	slices "slices"
 	picobuf "storj.io/picobuf"
 )
 
@@ -63,26 +64,31 @@ func (m *Profile) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
+	m.SampleType = slices.Grow(m.SampleType, c.RepeatedMessageCount(1))
 	c.RepeatedMessage(1, func(c *picobuf.Decoder) {
 		x := new(ValueType)
 		c.Loop(x.Decode)
 		m.SampleType = append(m.SampleType, x)
 	})
+	m.Sample = slices.Grow(m.Sample, c.RepeatedMessageCount(2))
 	c.RepeatedMessage(2, func(c *picobuf.Decoder) {
 		x := new(Sample)
 		c.Loop(x.Decode)
 		m.Sample = append(m.Sample, x)
 	})
+	m.Mapping = slices.Grow(m.Mapping, c.RepeatedMessageCount(3))
 	c.RepeatedMessage(3, func(c *picobuf.Decoder) {
 		x := new(Mapping)
 		c.Loop(x.Decode)
 		m.Mapping = append(m.Mapping, x)
 	})
+	m.Location = slices.Grow(m.Location, c.RepeatedMessageCount(4))
 	c.RepeatedMessage(4, func(c *picobuf.Decoder) {
 		x := new(Location)
 		c.Loop(x.Decode)
 		m.Location = append(m.Location, x)
 	})
+	m.Function = slices.Grow(m.Function, c.RepeatedMessageCount(5))
 	c.RepeatedMessage(5, func(c *picobuf.Decoder) {
 		x := new(Function)
 		c.Loop(x.Decode)
@@ -150,6 +156,7 @@ func (m *Sample) Decode(c *picobuf.Decoder) {
 	}
 	c.RepeatedUint64(1, &m.LocationId)
 	c.RepeatedInt64(2, &m.Value)
+	m.Label = slices.Grow(m.Label, c.RepeatedMessageCount(3))
 	c.RepeatedMessage(3, func(c *picobuf.Decoder) {
 		x := new(Label)
 		c.Loop(x.Decode)
@@ -260,6 +267,7 @@ func (m *Location) Decode(c *picobuf.Decoder) {
 	c.Uint64(1, &m.Id)
 	c.Uint64(2, &m.MappingId)
 	c.Uint64(3, &m.Address)
+	m.Line = slices.Grow(m.Line, c.RepeatedMessageCount(4))
 	c.RepeatedMessage(4, func(c *picobuf.Decoder) {
 		x := new(Line)
 		c.Loop(x.Decode)

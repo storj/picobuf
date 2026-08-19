@@ -129,6 +129,12 @@ func (dec *Decoder) RepeatedMessage(field FieldNumber, fn func(c *Decoder)) {
 	}
 }
 
+// RepeatedMessageCount returns the number of consecutive message values for
+// field, capped by the remaining repeated element limit.
+func (dec *Decoder) RepeatedMessageCount(field FieldNumber) int {
+	return dec.repeatedFieldCount(field, protowire.BytesType)
+}
+
 // RepeatedEnum decodes a repeated enumeration.
 func (dec *Decoder) RepeatedEnum(field FieldNumber, add func(x int32)) {
 	for field == dec.pendingField {
@@ -272,6 +278,38 @@ func (dec *Decoder) RepeatedGroup(field FieldNumber, fn func(*Decoder)) {
 		dec.popState()
 		dec.nextField(n)
 	}
+}
+
+// RepeatedGroupCount returns the number of consecutive group values for field,
+// capped by the remaining repeated element limit.
+func (dec *Decoder) RepeatedGroupCount(field FieldNumber) int {
+	return dec.repeatedFieldCount(field, protowire.StartGroupType)
+}
+
+func (dec *Decoder) repeatedFieldCount(field FieldNumber, wire protowire.Type) int {
+	if dec.pendingField != field || dec.pendingWire != wire {
+		return 0
+	}
+
+	buffer := dec.buffer
+	count := 0
+	for {
+		n := protowire.ConsumeFieldValue(protowire.Number(field), wire, buffer)
+		if n < 0 {
+			break
+		}
+		count++
+		buffer = buffer[n:]
+		if len(buffer) == 0 {
+			break
+		}
+		nextField, nextWire, n := protowire.ConsumeTag(buffer)
+		if n < 0 || FieldNumber(nextField) != field || nextWire != wire {
+			break
+		}
+		buffer = buffer[n:]
+	}
+	return dec.repeatedReservation(count)
 }
 
 // UnrecognizedFields decodes fields that are not in the provided set.

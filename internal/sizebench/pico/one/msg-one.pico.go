@@ -8,6 +8,7 @@
 package one
 
 import (
+	slices "slices"
 	picobuf "storj.io/picobuf"
 	picowire "storj.io/picobuf/picowire"
 	strconv "strconv"
@@ -184,6 +185,7 @@ func (m *Types) Decode(c *picobuf.Decoder) {
 	c.RepeatedBool(30, &m.Bools)
 	c.RepeatedString(31, &m.Strings)
 	c.RepeatedBytes(32, &m.Bytess)
+	m.Messages = slices.Grow(m.Messages, c.RepeatedMessageCount(33))
 	c.RepeatedMessage(33, func(c *picobuf.Decoder) {
 		x := new(Message)
 		c.Loop(x.Decode)

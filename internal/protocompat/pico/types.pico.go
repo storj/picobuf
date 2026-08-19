@@ -8,6 +8,7 @@
 package pico
 
 import (
+	slices "slices"
 	picobuf "storj.io/picobuf"
 	picowire "storj.io/picobuf/picowire"
 	strconv "strconv"
@@ -185,6 +186,7 @@ func (m *RepeatedTypes) Decode(c *picobuf.Decoder) {
 	c.RepeatedBool(13, &m.Bool)
 	c.RepeatedString(14, &m.String_)
 	c.RepeatedBytes(15, &m.Bytes)
+	m.Message = slices.Grow(m.Message, c.RepeatedMessageCount(16))
 	c.RepeatedMessage(16, func(c *picobuf.Decoder) {
 		x := new(Message)
 		c.Loop(x.Decode)
@@ -216,6 +218,7 @@ func (m *RepeatedMixed) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.Int32(1, &m.Int32)
+	m.Message = slices.Grow(m.Message, c.RepeatedMessageCount(16))
 	c.RepeatedMessage(16, func(c *picobuf.Decoder) {
 		x := new(Message)
 		c.Loop(x.Decode)

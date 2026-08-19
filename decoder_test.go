@@ -223,6 +223,94 @@ func TestDecoder_PackedVarintRejectsMalformedPayload(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestDecoder_RepeatedMessagesPreallocate(t *testing.T) {
+	var data []byte
+	for range 16 {
+		data = append(data, 0x1a, 0x00)
+	}
+	for range 16 {
+		data = append(data, 0x32, 0x00)
+	}
+
+	got := picotest.VariationsMessage{
+		Rep:        make([]*picotest.Message, 1, 32),
+		PresentRep: make([]picotest.Message, 1, 32),
+	}
+	got.Rep[0] = &picotest.Message{Int32: 100}
+	got.PresentRep[0] = picotest.Message{Int32: 200}
+	assert.NoError(t, picobuf.Unmarshal(data, &got))
+	assert.Equal(t, len(got.Rep), 17)
+	assert.Equal(t, got.Rep[0].Int32, int32(100))
+	assert.Equal(t, len(got.PresentRep), 17)
+	assert.Equal(t, got.PresentRep[0].Int32, int32(200))
+	assert.Equal(t, cap(got.Rep), 32)
+	assert.Equal(t, cap(got.PresentRep), 32)
+
+	if raceEnabled {
+		t.Skip("allocation counts differ under the race detector")
+	}
+	allocs := testing.AllocsPerRun(100, func() {
+		var decoded picotest.VariationsMessage
+		if err := picobuf.Unmarshal(data, &decoded); err != nil {
+			panic(err)
+		}
+	})
+	if allocs > 21 {
+		t.Fatalf("repeated message decode allocated %.0f times, want at most 21", allocs)
+	}
+}
+
+func TestDecoder_RepeatedMessagePreallocationRespectsLimit(t *testing.T) {
+	var data []byte
+	for range 16 {
+		data = append(data, 0x1a, 0x00)
+	}
+
+	var got picotest.VariationsMessage
+	err := (picobuf.UnmarshalOptions{MaxRepeatedElements: 2}).Unmarshal(data, &got)
+	assert.Error(t, err)
+	assert.Equal(t, len(got.Rep), 2)
+	assert.Equal(t, cap(got.Rep), 2)
+}
+
+type groupCounter struct {
+	counted bool
+	count   int
+}
+
+func (m *groupCounter) Encode(c *picobuf.Encoder) bool { return true }
+
+func (m *groupCounter) Decode(c *picobuf.Decoder) {
+	if !m.counted {
+		m.counted = true
+		m.count = c.RepeatedGroupCount(1)
+	}
+}
+
+func TestDecoder_RepeatedGroupCount(t *testing.T) {
+	data := []byte{
+		0x0b, 0x0c, // empty group
+		0x0b, 0x08, 0x01, 0x0c, // group with a varint
+		0x0b, 0x0c, // empty group
+		0x10, 0x01, // a different field ends the run
+		0x0b, 0x0c,
+	}
+
+	var got groupCounter
+	assert.NoError(t, picobuf.Unmarshal(data, &got))
+	assert.Equal(t, got.count, 3)
+
+	var limited groupCounter
+	assert.NoError(t, (picobuf.UnmarshalOptions{MaxRepeatedElements: 2}).Unmarshal(data, &limited))
+	assert.Equal(t, limited.count, 2)
+}
+
+func TestDecoder_RepeatedMessageRejectsMalformedPayload(t *testing.T) {
+	var got picotest.VariationsMessage
+	err := picobuf.Unmarshal([]byte{0x1a, 0x02, 0x08}, &got)
+	assert.Error(t, err)
+}
+
 func TestDecoder_Map(t *testing.T) {
 	// two map entries
 	var m1 picotest.Map
