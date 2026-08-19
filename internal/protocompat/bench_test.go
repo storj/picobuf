@@ -57,6 +57,14 @@ func BenchmarkPicobuf(b *testing.B) {
 		}
 
 	})
+	b.Run("Size", func(b *testing.B) {
+		b.ReportAllocs()
+		for k := 0; k < b.N; k++ {
+			for i := range data {
+				_, _ = picobuf.Size(&data[i])
+			}
+		}
+	})
 	b.Run("Decode", func(b *testing.B) {
 		b.ReportAllocs()
 		for k := 0; k < b.N; k++ {

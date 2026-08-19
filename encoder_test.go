@@ -4,16 +4,20 @@
 package picobuf_test
 
 import (
+	"strings"
 	"testing"
 	"time"
 
 	"github.com/zeebo/assert"
+	"google.golang.org/protobuf/encoding/protowire"
 
 	"storj.io/picobuf"
 	"storj.io/picobuf/internal/picotest"
 	"storj.io/picobuf/internal/picotest/pic"
+	"storj.io/picobuf/internal/presencecompat/editionpico"
 )
 
+func pint32(v int32) *int32    { return &v }
 func puint32(v uint32) *uint32 { return &v }
 func pstring(v string) *string { return &v }
 func pbytes(v []byte) *[]byte  { return &v }
@@ -46,6 +50,103 @@ func TestEncoder_RecursionLimit(t *testing.T) {
 	cyclic.Inner = cyclic
 	_, err = picobuf.Marshal(cyclic)
 	assert.Error(t, err)
+}
+
+func TestSizeMatchesMarshal(t *testing.T) {
+	tests := []picobuf.Message{
+		&picotest.Person{},
+		&picotest.Person{
+			Name: strings.Repeat("x", 256),
+			Address: &picotest.Address{
+				Street: "Home",
+			},
+		},
+		&picotest.AllTypes{
+			Int32:   -123,
+			Uint64:  1 << 48,
+			Double:  3.5,
+			String_: "hello",
+			Bytes:   []byte{1, 2, 3},
+			Int32S:  []int32{3, 270, 86942},
+		},
+		&picotest.UnknownMessage{
+			Second:           0x22,
+			XXX_unrecognized: []byte{0x08, 0x13},
+		},
+		&picotest.Map{Values: map[int32]int32{1: 2, 3: 4}},
+		&picotest.Piece{
+			Id:  &pic.ID{1, 2, 3},
+			Alt: pstring("custom"),
+		},
+		&editionpico.Message{
+			Nested:          &editionpico.Nested{Value: pint32(123)},
+			PackedNumbers:   []int32{1, 200},
+			ExpandedNumbers: []int32{1, 200},
+		},
+	}
+
+	for _, msg := range tests {
+		data, err := picobuf.Marshal(msg)
+		assert.NoError(t, err)
+		size, err := picobuf.Size(msg)
+		assert.NoError(t, err)
+		assert.Equal(t, size, len(data))
+	}
+}
+
+func TestSizeReportsEncoderErrors(t *testing.T) {
+	cyclic := new(nested)
+	cyclic.Inner = cyclic
+	n, err := picobuf.Size(cyclic)
+	assert.Error(t, err)
+	assert.Equal(t, n, 0)
+}
+
+type nestedPacked struct {
+	Inner  *nestedPacked
+	Values []int32
+}
+
+func (m *nestedPacked) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	if m.Inner != nil {
+		c.Message(1, m.Inner.Encode)
+	}
+	c.RepeatedInt32(2, &m.Values)
+	return true
+}
+
+func (m *nestedPacked) Decode(c *picobuf.Decoder) {}
+
+func TestSizeMatchesMarshalAtRecursionLimit(t *testing.T) {
+	for depth := protowire.DefaultRecursionLimit - 2; depth <= protowire.DefaultRecursionLimit+1; depth++ {
+		msg := &nestedPacked{Values: []int32{1}}
+		for range depth {
+			msg = &nestedPacked{Inner: msg}
+		}
+		data, marshalErr := picobuf.Marshal(msg)
+		n, sizeErr := picobuf.Size(msg)
+		assert.Equal(t, sizeErr != nil, marshalErr != nil)
+		assert.Equal(t, n, len(data))
+	}
+}
+
+func TestSizeReportsInvalidUTF8(t *testing.T) {
+	bad := "\xff\xfe"
+	for _, msg := range []picobuf.Message{
+		&picotest.AllTypes{String_: bad},
+		&picotest.AllTypes{Strings: []string{bad}},
+		&editionpico.Message{ExplicitText: pstring(bad)},
+	} {
+		_, marshalErr := picobuf.Marshal(msg)
+		assert.Error(t, marshalErr)
+
+		n, err := picobuf.Size(msg)
+		assert.Error(t, err)
+		assert.Equal(t, n, 0)
+	}
 }
 
 func TestEncoder_Types(t *testing.T) {

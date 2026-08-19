@@ -48,6 +48,22 @@ func (t *PrimitiveType) IsScalar() bool {
 	return t.Wire == protowire.VarintType || t.Wire == protowire.Fixed32Type || t.Wire == protowire.Fixed64Type
 }
 
+// SizeFmt returns an expression for the encoded value size.
+func (t *PrimitiveType) SizeFmt(value string) string {
+	switch t.Wire {
+	case protowire.VarintType:
+		return fmt.Sprintf("protowire.SizeVarint("+t.EncodeFmt+")", value)
+	case protowire.Fixed32Type:
+		return "protowire.SizeFixed32()"
+	case protowire.Fixed64Type:
+		return "protowire.SizeFixed64()"
+	case protowire.BytesType:
+		return "protowire.SizeBytes(len(" + value + "))"
+	default:
+		panic("unhandled wire type")
+	}
+}
+
 // WireName returns the tag wire type for the type.
 func (t *PrimitiveType) WireName() string {
 	switch t.Wire {
@@ -167,6 +183,10 @@ func generateEncoder() []byte {
 				if t.Name == "String" {
 					pf("if !enc.skipUTF8() && !utf8.ValidString(*v) { enc.fail(field, \"invalid UTF-8\"); return }\n")
 				}
+				pf("if enc.sizing {\n")
+				pf("enc.size += protowire.SizeTag(protowire.Number(field)) + %s\n", t.SizeFmt("*v"))
+				pf("return\n")
+				pf("}\n")
 				pf("enc.buffer = appendTag(enc.buffer, field, %s)\n", t.WireName())
 				pf("enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "*v")
 				pf("}\n")
@@ -190,12 +210,25 @@ func generateEncoder() []byte {
 					switch t.Wire {
 					case protowire.VarintType:
 						if t.Name == "Bool" {
+							pf("if enc.sizing {\n")
+							pf("enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(*v))\n")
+							pf("return\n")
+							pf("}\n")
 							pf("enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)\n")
 							pf("enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)))\n")
 							pf("for _, x := range *v {\n")
 							pf("    enc.buffer = append(enc.buffer, encodeBool8(x))\n")
 							pf("}\n")
 						} else {
+							pf("if enc.sizing {\n")
+							// mirror the depth accounting of alwaysAnyBytes when marshaling
+							pf("if !enc.enterMessage() { return }\n")
+							pf("enc.depth--\n")
+							pf("payloadSize := 0\n")
+							pf("for _, x := range *v { payloadSize += %s }\n", t.SizeFmt("x"))
+							pf("enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(payloadSize)\n")
+							pf("return\n")
+							pf("}\n")
 							pf("enc.alwaysAnyBytes(field, func() {\n")
 							pf("    for _, x := range *v {\n")
 							pf("         enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "x")
@@ -203,12 +236,20 @@ func generateEncoder() []byte {
 							pf("})\n")
 						}
 					case protowire.Fixed32Type:
+						pf("if enc.sizing {\n")
+						pf("enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(*v)*4)\n")
+						pf("return\n")
+						pf("}\n")
 						pf("enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)\n")
 						pf("enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*4))\n")
 						pf("for _, x := range *v {\n")
 						pf("    enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "x")
 						pf("}\n")
 					case protowire.Fixed64Type:
+						pf("if enc.sizing {\n")
+						pf("enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(*v)*8)\n")
+						pf("return\n")
+						pf("}\n")
 						pf("enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)\n")
 						pf("enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*8))\n")
 						pf("for _, x := range *v {\n")
@@ -219,6 +260,15 @@ func generateEncoder() []byte {
 					}
 
 				} else {
+					pf("if enc.sizing {\n")
+					pf("for _, x := range *v {\n")
+					if t.Name == "String" {
+						pf("    if !enc.skipUTF8() && !utf8.ValidString(x) { enc.fail(field, \"invalid UTF-8\"); return }\n")
+					}
+					pf("enc.size += protowire.SizeTag(protowire.Number(field)) + %s\n", t.SizeFmt("x"))
+					pf("}\n")
+					pf("return\n")
+					pf("}\n")
 					pf("for _, x := range *v {\n")
 					if t.Name == "String" {
 						pf("    if !enc.skipUTF8() && !utf8.ValidString(x) { enc.fail(field, \"invalid UTF-8\"); return }\n")

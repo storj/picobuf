@@ -12,7 +12,9 @@ import (
 // Encoder implements encoding of protobuf format.
 type Encoder struct {
 	buffer             []byte
+	size               int
 	depth              int
+	sizing             bool
 	err                error
 	skipUTF8Validation bool
 	skipUTF8Depth      int
@@ -42,6 +44,42 @@ func (enc *Encoder) skipUTF8() bool {
 
 // Err returns the error that occurred during encoding.
 func (enc *Encoder) Err() error { return enc.err }
+
+// IsSizing reports whether the encoder is counting bytes for Size rather than
+// producing an encoded buffer. Custom encoders may use this to avoid work that
+// only contributes to the encoded contents.
+func (enc *Encoder) IsSizing() bool { return enc.sizing }
+
+func (enc *Encoder) offset() int {
+	if enc.sizing {
+		return enc.size
+	}
+	return len(enc.buffer)
+}
+
+func (enc *Encoder) truncate(offset int) {
+	if enc.sizing {
+		enc.size = offset
+	} else {
+		enc.buffer = enc.buffer[:offset]
+	}
+}
+
+func (enc *Encoder) appendTag(field FieldNumber, typ protowire.Type) {
+	if enc.sizing {
+		enc.size += protowire.SizeTag(protowire.Number(field))
+	} else {
+		enc.buffer = appendTag(enc.buffer, field, typ)
+	}
+}
+
+func (enc *Encoder) appendVarint(v uint64) {
+	if enc.sizing {
+		enc.size += protowire.SizeVarint(v)
+	} else {
+		enc.buffer = protowire.AppendVarint(enc.buffer, v)
+	}
+}
 
 // Fail fails the encoding process.
 func (enc *Encoder) Fail(field FieldNumber, msg string) {
@@ -110,9 +148,9 @@ func (enc *Encoder) AlwaysMessage(field FieldNumber, fn func(enc *Encoder) bool)
 //go:noinline
 func (enc *Encoder) PresentMessage(field FieldNumber, fn func(enc *Encoder) bool) {
 	enc.anyBytes(field, func() bool {
-		lengthStart := len(enc.buffer)
+		lengthStart := enc.offset()
 		fn(enc)
-		return len(enc.buffer) > lengthStart
+		return enc.offset() > lengthStart
 	})
 }
 
@@ -135,36 +173,36 @@ func (enc *Encoder) AlwaysGroup(field FieldNumber, fn func(enc *Encoder) bool) {
 //go:noinline
 func (enc *Encoder) PresentGroup(field FieldNumber, fn func(enc *Encoder) bool) {
 	enc.anyGroup(field, func(enc *Encoder) bool {
-		start := len(enc.buffer)
+		start := enc.offset()
 		fn(enc)
-		return len(enc.buffer) > start
+		return enc.offset() > start
 	})
 }
 
 func (enc *Encoder) anyGroup(field FieldNumber, fn func(enc *Encoder) bool) bool {
-	start := len(enc.buffer)
-	enc.buffer = appendTag(enc.buffer, field, protowire.StartGroupType)
+	start := enc.offset()
+	enc.appendTag(field, protowire.StartGroupType)
 	if !enc.enterMessage() {
-		enc.buffer = enc.buffer[:start]
+		enc.truncate(start)
 		return false
 	}
 	ok := fn(enc)
 	enc.depth--
 	if !ok {
-		enc.buffer = enc.buffer[:start]
+		enc.truncate(start)
 		return false
 	}
-	enc.buffer = appendTag(enc.buffer, field, protowire.EndGroupType)
+	enc.appendTag(field, protowire.EndGroupType)
 	return true
 }
 
 func (enc *Encoder) alwaysGroup(field FieldNumber, fn func()) {
-	enc.buffer = appendTag(enc.buffer, field, protowire.StartGroupType)
+	enc.appendTag(field, protowire.StartGroupType)
 	if enc.enterMessage() {
 		fn()
 		enc.depth--
 	}
-	enc.buffer = appendTag(enc.buffer, field, protowire.EndGroupType)
+	enc.appendTag(field, protowire.EndGroupType)
 }
 
 // RepeatedEnum encodes a repeated enumeration.
@@ -176,13 +214,28 @@ func (enc *Encoder) RepeatedEnum(field FieldNumber, n int, fn func(index uint) i
 	}
 	enc.alwaysAnyBytes(field, func() {
 		for i := range n {
-			enc.buffer = protowire.AppendVarint(enc.buffer, uint64(fn(uint(i))))
+			enc.appendVarint(uint64(fn(uint(i))))
 		}
 	})
 }
 
 // anyBytes encodes field as Bytes and handles encoding the length.
 func (enc *Encoder) anyBytes(field FieldNumber, fn func() bool) bool {
+	if enc.sizing {
+		start := enc.size
+		if !enc.enterMessage() {
+			return false
+		}
+		ok := fn()
+		enc.depth--
+		if !ok {
+			enc.size = start
+			return false
+		}
+		messageLength := enc.size - start
+		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeVarint(uint64(messageLength))
+		return true
+	}
 	tagStart := len(enc.buffer)
 	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 	lengthStart := len(enc.buffer)
@@ -225,6 +278,16 @@ func (enc *Encoder) AlwaysAnyBytes(field FieldNumber, fn func()) bool {
 
 // alwaysAnyBytes encodes field as Bytes and handles encoding the length.
 func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
+	if enc.sizing {
+		start := enc.size
+		if enc.enterMessage() {
+			fn()
+			enc.depth--
+		}
+		messageLength := enc.size - start
+		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeVarint(uint64(messageLength))
+		return true
+	}
 	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 	lengthStart := len(enc.buffer)
 	// We'll guess that we need 2 bytes for length.
@@ -255,5 +318,9 @@ func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
 
 // UnrecognizedFields encodes fields that are not in the provided set.
 func (enc *Encoder) UnrecognizedFields(out []byte) {
-	enc.buffer = append(enc.buffer, out...)
+	if enc.sizing {
+		enc.size += len(out)
+	} else {
+		enc.buffer = append(enc.buffer, out...)
+	}
 }

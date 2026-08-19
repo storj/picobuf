@@ -100,6 +100,19 @@ func MarshalBuffer(msg Message, buffer []byte) ([]byte, error) {
 	return enc.Buffer(), nil
 }
 
+// Size returns the encoded size of msg without constructing its wire data.
+func Size(msg Message) (int, error) {
+	if err := ValidateRequired(msg); err != nil {
+		return 0, err
+	}
+	enc := &Encoder{sizing: true}
+	msg.Encode(enc)
+	if enc.err != nil {
+		return 0, enc.err
+	}
+	return enc.size, nil
+}
+
 // UnmarshalOptions configures decoding.
 type UnmarshalOptions struct {
 	// AliasInput allows decoded bytes fields to point into data rather than
