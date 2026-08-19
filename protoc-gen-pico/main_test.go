@@ -157,6 +157,81 @@ func TestGenerateExplicitScalarPresence(t *testing.T) {
 	}
 }
 
+func TestGenerateCustomBytesPresence(t *testing.T) {
+	custom := func(alwaysPresent bool, serialize string) *descriptorpb.FieldOptions {
+		opts := &descriptorpb.FieldOptions{}
+		proto.SetExtension(opts, E_Field, &FieldOptions{
+			AlwaysPresent:   alwaysPresent,
+			CustomType:      "example.com/custom.Value",
+			CustomSerialize: serialize,
+		})
+		return opts
+	}
+
+	file := &descriptorpb.FileDescriptorProto{
+		Name:    proto.String("test.proto"),
+		Package: proto.String("test"),
+		Syntax:  proto.String("proto3"),
+		Options: &descriptorpb.FileOptions{GoPackage: proto.String("example.com/test;test")},
+		MessageType: []*descriptorpb.DescriptorProto{{
+			Name: proto.String("Message"),
+			Field: []*descriptorpb.FieldDescriptorProto{
+				{
+					Name: proto.String("custom"), Number: proto.Int32(1),
+					Label:   descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+					Type:    descriptorpb.FieldDescriptorProto_TYPE_BYTES.Enum(),
+					Options: custom(false, ""),
+				},
+				{
+					Name: proto.String("serialized"), Number: proto.Int32(2),
+					Label:   descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+					Type:    descriptorpb.FieldDescriptorProto_TYPE_BYTES.Enum(),
+					Options: custom(false, "example.com/custom.Codec"),
+				},
+				{
+					Name: proto.String("present"), Number: proto.Int32(3),
+					Label:   descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+					Type:    descriptorpb.FieldDescriptorProto_TYPE_BYTES.Enum(),
+					Options: custom(true, ""),
+				},
+				{
+					Name: proto.String("raw"), Number: proto.Int32(4),
+					Label: descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+					Type:  descriptorpb.FieldDescriptorProto_TYPE_BYTES.Enum(),
+					Options: func() *descriptorpb.FieldOptions {
+						opts := &descriptorpb.FieldOptions{}
+						proto.SetExtension(opts, E_Field, &FieldOptions{CustomSerialize: "example.com/custom.Codec"})
+						return opts
+					}(),
+				},
+			},
+		}},
+	}
+	plugin, err := (protogen.Options{}).New(&pluginpb.CodeGeneratorRequest{
+		ProtoFile: []*descriptorpb.FileDescriptorProto{file}, FileToGenerate: []string{"test.proto"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	genFile(plugin, plugin.Files[0], config{})
+	content := plugin.Response().File[0].GetContent()
+
+	for _, want := range []string{
+		"Custom     *custom.Value",
+		"Serialized *custom.Value",
+		"Present    custom.Value",
+		"if m.Custom != nil",
+		"if m.Serialized != nil",
+		"m.Custom = new(custom.Value)",
+		"m.Serialized = new(custom.Value)",
+		"(*custom.Codec)(&m.Raw).PicoEncode(c, 4)",
+	} {
+		if !strings.Contains(content, want) {
+			t.Fatalf("generated custom bytes code does not contain %q:\n%s", want, content)
+		}
+	}
+}
+
 func TestGenerateEnumPresence(t *testing.T) {
 	file := &descriptorpb.FileDescriptorProto{
 		Name:    proto.String("test.proto"),

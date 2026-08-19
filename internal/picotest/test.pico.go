@@ -574,16 +574,20 @@ func (m *Message) GetInt32() (v int32) {
 }
 
 type Piece struct {
-	Id  pic.ID `json:"id,omitzero"`
-	Alt string `json:"alt,omitzero"`
+	Id  *pic.ID `json:"id,omitzero"`
+	Alt *string `json:"alt,omitzero"`
 }
 
 func (m *Piece) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
-	m.Id.PicoEncode(c, 1)
-	(*pic.RawString)(&m.Alt).PicoEncode(c, 2)
+	if m.Id != nil {
+		m.Id.PicoEncode(c, 1)
+	}
+	if m.Alt != nil {
+		(*pic.RawString)(m.Alt).PicoEncode(c, 2)
+	}
 	return true
 }
 
@@ -591,22 +595,32 @@ func (m *Piece) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	m.Id.PicoDecode(c, 1)
-	(*pic.RawString)(&m.Alt).PicoDecode(c, 2)
+	if c.PendingField() == 1 {
+		if m.Id == nil {
+			m.Id = new(pic.ID)
+		}
+		m.Id.PicoDecode(c, 1)
+	}
+	if c.PendingField() == 2 {
+		if m.Alt == nil {
+			m.Alt = new(string)
+		}
+		(*pic.RawString)(m.Alt).PicoDecode(c, 2)
+	}
 }
 
-func (m *Piece) GetId() (v pic.ID) {
+func (m *Piece) GetId() (v *pic.ID) {
 	if m != nil {
 		return m.Id
 	}
-	return // zero
+	return nil
 }
 
-func (m *Piece) GetAlt() (v string) {
+func (m *Piece) GetAlt() (v *string) {
 	if m != nil {
 		return m.Alt
 	}
-	return ""
+	return nil
 }
 
 type Map struct {
@@ -908,7 +922,7 @@ func (m *VariationsMessage) GetPresentRep() (v []Message) {
 }
 
 type CustomBytes struct {
-	Value        pic.ID   `json:"value,omitzero"`
+	Value        *pic.ID  `json:"value,omitzero"`
 	Opt          *pic.ID  `json:"opt,omitzero"`
 	Rep          []pic.ID `json:"rep,omitzero"`
 	PresentBasic pic.ID   `json:"present_basic,omitzero"`
@@ -920,8 +934,12 @@ func (m *CustomBytes) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
-	m.Value.PicoEncode(c, 1)
-	m.Opt.PicoEncode(c, 2)
+	if m.Value != nil {
+		m.Value.PicoEncode(c, 1)
+	}
+	if m.Opt != nil {
+		m.Opt.PicoEncode(c, 2)
+	}
 	for i := range m.Rep {
 		x := &m.Rep[i]
 		x.PicoEncode(c, 3)
@@ -939,7 +957,12 @@ func (m *CustomBytes) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	m.Value.PicoDecode(c, 1)
+	if c.PendingField() == 1 {
+		if m.Value == nil {
+			m.Value = new(pic.ID)
+		}
+		m.Value.PicoDecode(c, 1)
+	}
 	if c.PendingField() == 2 {
 		if m.Opt == nil {
 			m.Opt = new(pic.ID)
@@ -958,11 +981,11 @@ func (m *CustomBytes) Decode(c *picobuf.Decoder) {
 	}
 }
 
-func (m *CustomBytes) GetValue() (v pic.ID) {
+func (m *CustomBytes) GetValue() (v *pic.ID) {
 	if m != nil {
 		return m.Value
 	}
-	return // zero
+	return nil
 }
 
 func (m *CustomBytes) GetOpt() (v *pic.ID) {
@@ -1053,9 +1076,13 @@ func (m *CustomMessageTypes) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.Message(1, m.Normal.Encode)
-	m.CustomType.PicoEncode(c, 2)
+	if m.CustomType != nil {
+		m.CustomType.PicoEncode(c, 2)
+	}
 	m.PresentCustomType.PicoEncode(c, 3)
-	(*picoconv.Timestamp)(m.CustomTypeCast).PicoEncode(c, 4)
+	if m.CustomTypeCast != nil {
+		(*picoconv.Timestamp)(m.CustomTypeCast).PicoEncode(c, 4)
+	}
 	(*picoconv.Timestamp)(&m.PresentCustomTypeCast).PicoEncode(c, 5)
 	for _, x := range m.RepeatedCustomType {
 		x.PicoEncode(c, 6)

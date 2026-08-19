@@ -15,14 +15,11 @@ func (id ID) IsZero() bool {
 	return id == ID{}
 }
 
-// PicoEncode implements picobuf field encoding.
+// PicoEncode implements picobuf field encoding. Like gogoproto custom
+// types, it always writes the full length, including for the zero ID.
 func (id *ID) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
-	if id.IsZero() {
-		return false
-	}
-
 	p := id[:]
-	c.Bytes(field, &p)
+	c.AlwaysBytes(field, &p)
 	return true
 }
 
@@ -44,15 +41,11 @@ func (id *ID) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 // RawString implements custom encoding for strings.
 type RawString string
 
-// PicoEncode implements custom encoding function.
+// PicoEncode implements custom encoding function. It always writes the
+// value, including the empty string.
 func (id *RawString) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
-	if *id == "" {
-		return false
-	}
-
 	xs := []byte(*id)
-	c.Bytes(field, &xs)
-
+	c.AlwaysBytes(field, &xs)
 	return true
 }
 

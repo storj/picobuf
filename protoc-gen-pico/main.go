@@ -316,7 +316,9 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 	case info.kind == kindCast:
 		switch {
 		case !info.repeated && info.pointer:
-			gf.P("(*", info.castType, ")(m.", field.GoName, ").PicoEncode(c, ", field.Desc.Number(), ")")
+			gf.P("if m.", field.GoName, " != nil {")
+			gf.P("  (*", info.castType, ")(m.", field.GoName, ").PicoEncode(c, ", field.Desc.Number(), ")")
+			gf.P("}")
 		case info.repeated && info.pointer:
 			gf.P("for _, x := range m.", field.GoName, " {")
 			gf.P("  (*", info.castType, ")(x).PicoEncode(c, ", field.Desc.Number(), ")")
@@ -332,7 +334,11 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 
 	case info.kind == kindCustom:
 		switch {
-		case !info.repeated:
+		case !info.repeated && info.pointer:
+			gf.P("if m.", field.GoName, " != nil {")
+			gf.P("  m.", field.GoName, ".PicoEncode(c, ", field.Desc.Number(), ")")
+			gf.P("}")
+		case !info.repeated && !info.pointer:
 			gf.P("m.", field.GoName, ".PicoEncode(c, ", field.Desc.Number(), ")")
 		case info.pointer && info.repeated:
 			gf.P("for _, x := range m.", field.GoName, " {")
@@ -780,6 +786,10 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 		if opts.CustomSerialize != "" {
 			info.castType = qualifiedIdent(gf, opts.CustomSerialize)
 			info.kind = kindCast
+		}
+		if desc.Kind() == protoreflect.BytesKind && !info.repeated && !info.oneof &&
+			!opts.AlwaysPresent && opts.CustomType != "" {
+			info.pointer = true
 		}
 	}
 	if field == nil {
