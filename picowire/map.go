@@ -9,8 +9,8 @@ import "storj.io/picobuf"
 type BoolCodec struct{}
 
 // PicoEncode encodes a map entry key or value, which is always emitted.
-func (BoolCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *bool) {
-	enc.AlwaysBool(field, value)
+func (BoolCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value bool) {
+	enc.AlwaysBool(field, &value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -27,8 +27,8 @@ func (BoolCodec) PicoDefault(value *bool) {
 type Int32Codec struct{}
 
 // PicoEncode encodes a map entry key or value, which is always emitted.
-func (Int32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int32) {
-	enc.AlwaysInt32(field, value)
+func (Int32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value int32) {
+	enc.AlwaysInt32(field, &value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -45,8 +45,8 @@ func (Int32Codec) PicoDefault(value *int32) {
 type Int64Codec struct{}
 
 // PicoEncode encodes a map entry key or value, which is always emitted.
-func (Int64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int64) {
-	enc.AlwaysInt64(field, value)
+func (Int64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value int64) {
+	enc.AlwaysInt64(field, &value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -63,8 +63,8 @@ func (Int64Codec) PicoDefault(value *int64) {
 type Uint32Codec struct{}
 
 // PicoEncode encodes a map entry key or value, which is always emitted.
-func (Uint32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *uint32) {
-	enc.AlwaysUint32(field, value)
+func (Uint32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value uint32) {
+	enc.AlwaysUint32(field, &value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -81,8 +81,8 @@ func (Uint32Codec) PicoDefault(value *uint32) {
 type Uint64Codec struct{}
 
 // PicoEncode encodes a map entry key or value, which is always emitted.
-func (Uint64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *uint64) {
-	enc.AlwaysUint64(field, value)
+func (Uint64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value uint64) {
+	enc.AlwaysUint64(field, &value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -99,8 +99,8 @@ func (Uint64Codec) PicoDefault(value *uint64) {
 type Sint32Codec struct{}
 
 // PicoEncode encodes a map entry key or value, which is always emitted.
-func (Sint32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int32) {
-	enc.AlwaysSint32(field, value)
+func (Sint32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value int32) {
+	enc.AlwaysSint32(field, &value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -117,8 +117,8 @@ func (Sint32Codec) PicoDefault(value *int32) {
 type Sint64Codec struct{}
 
 // PicoEncode encodes a map entry key or value, which is always emitted.
-func (Sint64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int64) {
-	enc.AlwaysSint64(field, value)
+func (Sint64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value int64) {
+	enc.AlwaysSint64(field, &value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -135,8 +135,8 @@ func (Sint64Codec) PicoDefault(value *int64) {
 type Fixed32Codec struct{}
 
 // PicoEncode encodes a map entry key or value, which is always emitted.
-func (Fixed32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *uint32) {
-	enc.AlwaysFixed32(field, value)
+func (Fixed32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value uint32) {
+	enc.AlwaysFixed32(field, &value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -153,8 +153,8 @@ func (Fixed32Codec) PicoDefault(value *uint32) {
 type Fixed64Codec struct{}
 
 // PicoEncode encodes a map entry key or value, which is always emitted.
-func (Fixed64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *uint64) {
-	enc.AlwaysFixed64(field, value)
+func (Fixed64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value uint64) {
+	enc.AlwaysFixed64(field, &value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -171,8 +171,8 @@ func (Fixed64Codec) PicoDefault(value *uint64) {
 type Sfixed32Codec struct{}
 
 // PicoEncode encodes a map entry key or value, which is always emitted.
-func (Sfixed32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int32) {
-	enc.AlwaysSfixed32(field, value)
+func (Sfixed32Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value int32) {
+	enc.AlwaysSfixed32(field, &value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -189,8 +189,8 @@ func (Sfixed32Codec) PicoDefault(value *int32) {
 type Sfixed64Codec struct{}
 
 // PicoEncode encodes a map entry key or value, which is always emitted.
-func (Sfixed64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *int64) {
-	enc.AlwaysSfixed64(field, value)
+func (Sfixed64Codec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value int64) {
+	enc.AlwaysSfixed64(field, &value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -207,8 +207,8 @@ func (Sfixed64Codec) PicoDefault(value *int64) {
 type FloatCodec struct{}
 
 // PicoEncode encodes a map entry key or value, which is always emitted.
-func (FloatCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *float32) {
-	enc.AlwaysFloat(field, value)
+func (FloatCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value float32) {
+	enc.AlwaysFloat(field, &value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -225,8 +225,8 @@ func (FloatCodec) PicoDefault(value *float32) {
 type DoubleCodec struct{}
 
 // PicoEncode encodes a map entry key or value, which is always emitted.
-func (DoubleCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *float64) {
-	enc.AlwaysDouble(field, value)
+func (DoubleCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value float64) {
+	enc.AlwaysDouble(field, &value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -243,8 +243,8 @@ func (DoubleCodec) PicoDefault(value *float64) {
 type StringCodec struct{}
 
 // PicoEncode encodes a map entry key or value, which is always emitted.
-func (StringCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *string) {
-	enc.AlwaysString(field, value)
+func (StringCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value string) {
+	enc.AlwaysString(field, &value)
 }
 
 // PicoDecode decodes a map entry key or value.
@@ -261,8 +261,8 @@ func (StringCodec) PicoDefault(value *string) {
 type BytesCodec struct{}
 
 // PicoEncode encodes a map entry key or value, which is always emitted.
-func (BytesCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *[]byte) {
-	enc.AlwaysBytes(field, value)
+func (BytesCodec) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value []byte) {
+	enc.AlwaysBytes(field, &value)
 }
 
 // PicoDecode decodes a map entry key or value.

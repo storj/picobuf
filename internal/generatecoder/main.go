@@ -396,8 +396,8 @@ func generateMaps() []byte {
 		pf("type %s struct{}\n\n", codec)
 
 		pf("// PicoEncode encodes a map entry key or value, which is always emitted.\n")
-		pf("func(%s) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *%s) {\n", codec, t.TypeName())
-		pf("   enc.Always%s(field, value)\n", t.Name)
+		pf("func(%s) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value %s) {\n", codec, t.TypeName())
+		pf("   enc.Always%s(field, &value)\n", t.Name)
 		pf("}\n\n")
 
 		pf("// PicoDecode decodes a map entry key or value.\n")

@@ -12,7 +12,7 @@ type MapKey interface {
 
 // MapCodec encodes and decodes a map key or value.
 type MapCodec[T any] interface {
-	PicoEncode(*picobuf.Encoder, picobuf.FieldNumber, *T)
+	PicoEncode(*picobuf.Encoder, picobuf.FieldNumber, T)
 	PicoDecode(*picobuf.Decoder, picobuf.FieldNumber, *T)
 	PicoDefault(*T)
 }
@@ -27,8 +27,8 @@ type MessagePointer[M any] interface {
 type MessageCodec[M any, P MessagePointer[M]] struct{}
 
 // PicoEncode encodes a message-valued map entry, which is always emitted.
-func (MessageCodec[M, P]) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *P) {
-	v := *value
+func (MessageCodec[M, P]) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value P) {
+	v := value
 	if v == nil {
 		v = P(new(M))
 		// A nil map value represents an empty message, whose required fields
@@ -58,9 +58,8 @@ func (MessageCodec[M, P]) PicoDefault(value *P) {
 type EnumCodec[E ~int32] struct{}
 
 // PicoEncode encodes an enum-valued map entry, which is always emitted.
-func (EnumCodec[E]) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value *E) {
-	// *E cannot be converted to *int32, when E is a type parameter.
-	v := int32(*value)
+func (EnumCodec[E]) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber, value E) {
+	v := int32(value)
 	enc.AlwaysInt32(field, &v)
 }
 
@@ -85,16 +84,12 @@ type MapOf[K MapKey, V any, KC MapCodec[K], VC MapCodec[V]] map[K]V
 func (m *MapOf[K, V, KC, VC]) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	var keyCodec KC
 	var valueCodec VC
-	// key and val are hoisted out of the loop, because the codec calls are
-	// dictionary dispatched, so &key and &val always escape; this costs one
-	// allocation per map field instead of one per entry.
-	var key K
-	var val V
-	for k, v := range *m {
-		key, val = k, v
+	// key and val are passed by value, so that they do not escape through the
+	// dictionary dispatched codec calls.
+	for key, val := range *m {
 		enc.AlwaysAnyBytes(field, func() {
-			keyCodec.PicoEncode(enc, 1, &key)
-			valueCodec.PicoEncode(enc, 2, &val)
+			keyCodec.PicoEncode(enc, 1, key)
+			valueCodec.PicoEncode(enc, 2, val)
 		})
 	}
 }
@@ -105,7 +100,9 @@ func (m *MapOf[K, V, KC, VC]) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 func (m *MapOf[K, V, KC, VC]) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var keyCodec KC
 	var valueCodec VC
-	// key and val are hoisted, see PicoEncode.
+	// key and val are hoisted out of the entry, because the codec calls are
+	// dictionary dispatched, so &key and &val always escape; this costs one
+	// allocation per map field instead of one per entry.
 	var key K
 	var val V
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
