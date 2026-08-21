@@ -9,8 +9,31 @@ import (
 
 // Encoder implements encoding of protobuf format.
 type Encoder struct {
-	buffer []byte
-	err    error
+	buffer             []byte
+	depth              int
+	err                error
+	skipUTF8Validation bool
+	skipUTF8Depth      int
+}
+
+// WithoutUTF8Validation runs fn without validating encoded string fields.
+// It is intended for generated code implementing protobuf schema features.
+//
+// The exemption covers strings encoded directly within the current message,
+// including map entry keys and values, but not strings inside nested
+// messages, which carry their own UTF-8 validation features. fn cannot
+// panic, so the state is restored with a plain call rather than a defer.
+func (enc *Encoder) WithoutUTF8Validation(fn func()) {
+	prevSkip, prevDepth := enc.skipUTF8Validation, enc.skipUTF8Depth
+	enc.skipUTF8Validation, enc.skipUTF8Depth = true, enc.depth
+	fn()
+	enc.skipUTF8Validation, enc.skipUTF8Depth = prevSkip, prevDepth
+}
+
+// skipUTF8 reports whether string validation is currently disabled, per the
+// scoping rules of WithoutUTF8Validation.
+func (enc *Encoder) skipUTF8() bool {
+	return enc.skipUTF8Validation && enc.depth <= enc.skipUTF8Depth+1
 }
 
 // Err returns the error that occurred during encoding.
@@ -100,7 +123,9 @@ func (enc *Encoder) anyBytes(field FieldNumber, fn func() bool) bool {
 	enc.buffer = append(enc.buffer, lengthBufferPrediction[:]...)
 	messageStart := len(enc.buffer)
 	// encode the submessage
+	enc.depth++
 	ok := fn()
+	enc.depth--
 	if !ok {
 		// The message was nil, we can remove the tag.
 		enc.buffer = enc.buffer[:tagStart]
@@ -137,7 +162,9 @@ func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
 	enc.buffer = append(enc.buffer, lengthBufferPrediction[:]...)
 	messageStart := len(enc.buffer)
 	// encode the submessage
+	enc.depth++
 	fn()
+	enc.depth--
 	messageLength := len(enc.buffer) - messageStart
 	bytesForSize := protowire.SizeVarint(uint64(messageLength))
 	if bytesForSize == len(lengthBufferPrediction) {

@@ -1,0 +1,11 @@
+edition = "2023";
+
+package editiontest;
+
+option go_package = "storj.io/picobuf/internal/editiontest";
+option features.utf8_validation = NONE;
+
+message Message {
+  string unvalidated = 1;
+  string validated = 2 [features.utf8_validation = VERIFY];
+}

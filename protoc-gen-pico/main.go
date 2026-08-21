@@ -14,6 +14,7 @@ import (
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
+	"google.golang.org/protobuf/types/descriptorpb"
 	"google.golang.org/protobuf/types/pluginpb"
 )
 
@@ -43,7 +44,10 @@ func main() {
 				genFile(plugin, f, conf)
 			}
 		}
-		plugin.SupportedFeatures = uint64(pluginpb.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL)
+		plugin.SupportedFeatures = uint64(pluginpb.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL) |
+			uint64(pluginpb.CodeGeneratorResponse_FEATURE_SUPPORTS_EDITIONS)
+		plugin.SupportedEditionsMinimum = descriptorpb.Edition_EDITION_2023
+		plugin.SupportedEditionsMaximum = descriptorpb.Edition_EDITION_2023
 		return nil
 	})
 }
@@ -145,9 +149,6 @@ func genMessage(gf *generator, m *protogen.Message) {
 }
 
 func genMessageField(gf *generator, m *protogen.Message, field *protogen.Field) {
-	if field.Desc.IsWeak() {
-		panic("unhandled: weak field")
-	}
 	if field.Desc.HasDefault() {
 		panic("unsupported: default values")
 	}
@@ -212,6 +213,10 @@ func genMessageEncode(gf *generator, m *protogen.Message) {
 
 func genFieldEncode(gf *generator, field *protogen.Field) {
 	info := fieldInfo(gf, field, field.Desc)
+	if fieldContainsString(field.Desc) && !fieldValidatesUTF8(field.Desc) {
+		gf.P("c.WithoutUTF8Validation(func() {")
+		defer gf.P("})")
+	}
 	always := false
 
 	if info.oneof {
@@ -363,6 +368,10 @@ func fieldsBitSet(m *protogen.Message) (low uint64, high []protoreflect.FieldNum
 
 func genFieldDecode(gf *generator, field *protogen.Field) {
 	info := fieldInfo(gf, field, field.Desc)
+	if fieldContainsString(field.Desc) && !fieldValidatesUTF8(field.Desc) {
+		gf.P("c.WithoutUTF8Validation(func() {")
+		defer gf.P("})")
+	}
 
 	if info.oneof {
 		gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
@@ -496,6 +505,33 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 	}
 }
 
+func fieldContainsString(field protoreflect.FieldDescriptor) bool {
+	if field.Kind() == protoreflect.StringKind {
+		return true
+	}
+	return field.IsMap() && (field.MapKey().Kind() == protoreflect.StringKind || field.MapValue().Kind() == protoreflect.StringKind)
+}
+
+// fieldValidatesUTF8 resolves the utf8_validation feature for a field.
+// Checking explicitly-set field options and then explicitly-set file options
+// is exhaustive: protoc restricts utf8_validation to FILE and FIELD targets,
+// so the feature cannot be set anywhere else (unlike features that also
+// target messages). Anything unset falls back on the syntax default.
+func fieldValidatesUTF8(field protoreflect.FieldDescriptor) bool {
+	if opts, ok := field.Options().(*descriptorpb.FieldOptions); ok {
+		if features := opts.GetFeatures(); features != nil && features.Utf8Validation != nil {
+			return features.GetUtf8Validation() != descriptorpb.FeatureSet_NONE
+		}
+	}
+	file := field.ParentFile()
+	if opts, ok := file.Options().(*descriptorpb.FileOptions); ok {
+		if features := opts.GetFeatures(); features != nil && features.Utf8Validation != nil {
+			return features.GetUtf8Validation() != descriptorpb.FeatureSet_NONE
+		}
+	}
+	return file.Syntax() != protoreflect.Proto2
+}
+
 var codecMethodName = map[protoreflect.Kind]string{
 	protoreflect.BoolKind:     "Bool",
 	protoreflect.Int32Kind:    "Int32",
@@ -539,10 +575,6 @@ type fieldInformation struct {
 }
 
 func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDescriptor) (info fieldInformation) {
-	if desc.IsWeak() {
-		panic("unhandled: weak field")
-	}
-
 	info.kind = kindInternal
 	info.pointer = desc.HasPresence() || desc.HasOptionalKeyword()
 	info.repeated = desc.IsList()

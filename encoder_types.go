@@ -591,7 +591,7 @@ func (enc *Encoder) String(field FieldNumber, v *string) {
 	if len(*v) == 0 {
 		return
 	}
-	if !utf8.ValidString(*v) {
+	if !enc.skipUTF8() && !utf8.ValidString(*v) {
 		enc.fail(field, "invalid UTF-8")
 		return
 	}
@@ -607,7 +607,7 @@ func (enc *Encoder) RepeatedString(field FieldNumber, v *[]string) {
 		return
 	}
 	for _, x := range *v {
-		if !utf8.ValidString(x) {
+		if !enc.skipUTF8() && !utf8.ValidString(x) {
 			enc.fail(field, "invalid UTF-8")
 			return
 		}
@@ -620,7 +620,7 @@ func (enc *Encoder) RepeatedString(field FieldNumber, v *[]string) {
 //
 //go:noinline
 func (enc *Encoder) AlwaysString(field FieldNumber, v *string) {
-	if !utf8.ValidString(*v) {
+	if !enc.skipUTF8() && !utf8.ValidString(*v) {
 		enc.fail(field, "invalid UTF-8")
 		return
 	}
@@ -633,7 +633,7 @@ func (enc *Encoder) AlwaysString(field FieldNumber, v *string) {
 //go:noinline
 func (enc *Encoder) AlwaysRepeatedString(field FieldNumber, v *[]string) {
 	for _, x := range *v {
-		if !utf8.ValidString(x) {
+		if !enc.skipUTF8() && !utf8.ValidString(x) {
 			enc.fail(field, "invalid UTF-8")
 			return
 		}

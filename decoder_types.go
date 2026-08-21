@@ -795,7 +795,7 @@ func (dec *Decoder) String(field FieldNumber, v *string) {
 		dec.fail(field, "unable to parse String")
 		return
 	}
-	if !dec.allowInvalidUTF8 && !utf8.ValidString(x) {
+	if !dec.allowInvalidUTF8 && !dec.skipUTF8() && !utf8.ValidString(x) {
 		dec.fail(field, "invalid UTF-8")
 		return
 	}
@@ -818,7 +818,7 @@ func (dec *Decoder) RepeatedString(field FieldNumber, v *[]string) {
 				dec.fail(field, "unable to parse String")
 				return
 			}
-			if !dec.allowInvalidUTF8 && !utf8.ValidString(x) {
+			if !dec.allowInvalidUTF8 && !dec.skipUTF8() && !utf8.ValidString(x) {
 				dec.fail(field, "invalid UTF-8")
 				return
 			}

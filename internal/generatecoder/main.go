@@ -165,7 +165,7 @@ func generateEncoder() []byte {
 				}
 
 				if t.Name == "String" {
-					pf("if !utf8.ValidString(*v) { enc.fail(field, \"invalid UTF-8\"); return }\n")
+					pf("if !enc.skipUTF8() && !utf8.ValidString(*v) { enc.fail(field, \"invalid UTF-8\"); return }\n")
 				}
 				pf("enc.buffer = appendTag(enc.buffer, field, %s)\n", t.WireName())
 				pf("enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "*v")
@@ -221,7 +221,7 @@ func generateEncoder() []byte {
 				} else {
 					pf("for _, x := range *v {\n")
 					if t.Name == "String" {
-						pf("    if !utf8.ValidString(x) { enc.fail(field, \"invalid UTF-8\"); return }\n")
+						pf("    if !enc.skipUTF8() && !utf8.ValidString(x) { enc.fail(field, \"invalid UTF-8\"); return }\n")
 					}
 					pf("    enc.buffer = appendTag(enc.buffer, field, %s)\n", t.WireName())
 					pf("    enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "x")
@@ -273,7 +273,7 @@ func generateDecoder() []byte {
 			pf("x, n := protowire.Consume%v(dec.buffer)\n", t.Suffix)
 			pf("if n < 0 { dec.fail(field, \"unable to parse %v\"); return }\n", t.Suffix)
 			if t.Name == "String" {
-				pf("if !dec.allowInvalidUTF8 && !utf8.ValidString(x) { dec.fail(field, \"invalid UTF-8\"); return }\n")
+				pf("if !dec.allowInvalidUTF8 && !dec.skipUTF8() && !utf8.ValidString(x) { dec.fail(field, \"invalid UTF-8\"); return }\n")
 			}
 			pf("*v = "+t.DecodeFmt+"\n", "x")
 			pf("dec.nextField(n)\n")
@@ -304,7 +304,7 @@ func generateDecoder() []byte {
 			pf("    x, n := protowire.Consume%v(dec.buffer)\n", t.Suffix)
 			pf("    if n < 0 { dec.fail(field, \"unable to parse %v\"); return }\n", t.Suffix)
 			if t.Name == "String" {
-				pf("    if !dec.allowInvalidUTF8 && !utf8.ValidString(x) { dec.fail(field, \"invalid UTF-8\"); return }\n")
+				pf("    if !dec.allowInvalidUTF8 && !dec.skipUTF8() && !utf8.ValidString(x) { dec.fail(field, \"invalid UTF-8\"); return }\n")
 			}
 			pf("    *v = append(*v, "+t.DecodeFmt+")\n", "x")
 			pf("    dec.nextField(n)\n")

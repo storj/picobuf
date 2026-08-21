@@ -17,15 +17,37 @@ const (
 // Decoder implements decoding of protobuf messages.
 type Decoder struct {
 	messageDecodeState
-	stack            []messageDecodeState
-	init             bool
-	aliasInput       bool
-	allowInvalidUTF8 bool
+	stack              []messageDecodeState
+	init               bool
+	aliasInput         bool
+	allowInvalidUTF8   bool
+	skipUTF8Validation bool
+	skipUTF8Depth      int
 
 	maxRecursionDepth   int
 	maxRepeatedElements int
 	repeatedElements    int
 	err                 error
+}
+
+// WithoutUTF8Validation runs fn without validating decoded string fields.
+// It is intended for generated code implementing protobuf schema features.
+//
+// The exemption covers strings decoded directly within the current message,
+// including map entry keys and values, but not strings inside nested
+// messages, which carry their own UTF-8 validation features. fn cannot
+// panic, so the state is restored with a plain call rather than a defer.
+func (dec *Decoder) WithoutUTF8Validation(fn func()) {
+	prevSkip, prevDepth := dec.skipUTF8Validation, dec.skipUTF8Depth
+	dec.skipUTF8Validation, dec.skipUTF8Depth = true, len(dec.stack)
+	fn()
+	dec.skipUTF8Validation, dec.skipUTF8Depth = prevSkip, prevDepth
+}
+
+// skipUTF8 reports whether string validation is currently disabled, per the
+// scoping rules of WithoutUTF8Validation.
+func (dec *Decoder) skipUTF8() bool {
+	return dec.skipUTF8Validation && len(dec.stack) <= dec.skipUTF8Depth+1
 }
 
 type messageDecodeState struct {
