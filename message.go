@@ -75,11 +75,16 @@ func (field FieldNumber) String() string {
 }
 
 // Marshal encodes msg as bytes.
+//
+// It sizes the message first and encodes into an exactly sized buffer, so
+// msg.Encode runs twice and must behave deterministically. Custom encoders
+// can use Encoder.IsSizing to distinguish the passes.
 func Marshal(msg Message) ([]byte, error) {
-	if err := ValidateRequired(msg); err != nil {
+	size, err := Size(msg)
+	if err != nil || size == 0 {
 		return nil, err
 	}
-	enc := &Encoder{}
+	enc := &Encoder{buffer: make([]byte, 0, size)}
 	msg.Encode(enc)
 	if enc.err != nil {
 		return nil, enc.err

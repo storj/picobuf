@@ -133,6 +133,12 @@ func TestSizeMatchesMarshalAtRecursionLimit(t *testing.T) {
 	}
 }
 
+func TestMarshalEmptyReturnsNil(t *testing.T) {
+	data, err := picobuf.Marshal(&picotest.Basic{})
+	assert.NoError(t, err)
+	assert.That(t, data == nil)
+}
+
 func TestSizeReportsInvalidUTF8(t *testing.T) {
 	bad := "\xff\xfe"
 	for _, msg := range []picobuf.Message{
