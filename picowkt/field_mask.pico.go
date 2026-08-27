@@ -12,7 +12,8 @@ import (
 )
 
 type FieldMask struct {
-	Paths []string `json:"paths,omitzero"`
+	Paths            []string `json:"paths,omitzero"`
+	XXX_unrecognized []byte   `json:"-"`
 }
 
 func (m *FieldMask) Encode(c *picobuf.Encoder) bool {
@@ -20,6 +21,7 @@ func (m *FieldMask) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.RepeatedString(1, &m.Paths)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -28,4 +30,5 @@ func (m *FieldMask) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.RepeatedString(1, &m.Paths)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }

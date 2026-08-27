@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: dev
-//     protoc:          v7.35.1
+//     protoc:          v7.36.0
 
 package editionpico
 
@@ -46,7 +46,8 @@ type Message struct {
 	// Types that are assignable to ClosedSelection:
 	//
 	//	*Message_SelectedClosedState
-	ClosedSelection isMessage_ClosedSelection
+	ClosedSelection  isMessage_ClosedSelection
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Message) Encode(c *picobuf.Encoder) bool {
@@ -82,6 +83,7 @@ func (m *Message) Encode(c *picobuf.Encoder) bool {
 	if m, ok := m.ClosedSelection.(*Message_SelectedClosedState); ok {
 		c.AlwaysInt32(12, (*int32)(&m.SelectedClosedState))
 	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -130,6 +132,7 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 		m := x
 		c.Int32(12, (*int32)(&m.SelectedClosedState))
 	}
+	c.UnrecognizedFields(8190, &m.XXX_unrecognized)
 }
 
 type isMessage_ClosedSelection interface{ isMessage_ClosedSelection() }
@@ -141,7 +144,8 @@ type Message_SelectedClosedState struct {
 func (*Message_SelectedClosedState) isMessage_ClosedSelection() {}
 
 type Nested struct {
-	Value *int32 `json:"value,omitzero"`
+	Value            *int32 `json:"value,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Nested) Encode(c *picobuf.Encoder) bool {
@@ -151,6 +155,7 @@ func (m *Nested) Encode(c *picobuf.Encoder) bool {
 	if m.Value != nil {
 		c.AlwaysInt32(1, m.Value)
 	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -162,10 +167,12 @@ func (m *Nested) Decode(c *picobuf.Decoder) {
 		m.Value = new(int32)
 		c.Int32(1, m.Value)
 	}
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 type RequiredMessage struct {
-	RequiredNumber *int32 `json:"required_number,omitzero"`
+	RequiredNumber   *int32 `json:"required_number,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *RequiredMessage) PicoValidateRequired() error {
@@ -185,6 +192,7 @@ func (m *RequiredMessage) Encode(c *picobuf.Encoder) bool {
 	if m.RequiredNumber != nil {
 		c.AlwaysInt32(1, m.RequiredNumber)
 	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -196,10 +204,12 @@ func (m *RequiredMessage) Decode(c *picobuf.Decoder) {
 		m.RequiredNumber = new(int32)
 		c.Int32(1, m.RequiredNumber)
 	}
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 type RequiredParent struct {
-	Child *RequiredMessage `json:"child,omitzero"`
+	Child            *RequiredMessage `json:"child,omitzero"`
+	XXX_unrecognized []byte           `json:"-"`
 }
 
 func (m *RequiredParent) PicoValidateRequired() error {
@@ -217,6 +227,7 @@ func (m *RequiredParent) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.Message(1, m.Child.Encode)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -230,10 +241,12 @@ func (m *RequiredParent) Decode(c *picobuf.Decoder) {
 		}
 		m.Child.Decode(c)
 	})
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 type RequiredMapParent struct {
-	Children map[string]*RequiredMessage `json:"children,omitzero"`
+	Children         map[string]*RequiredMessage `json:"children,omitzero"`
+	XXX_unrecognized []byte                      `json:"-"`
 }
 
 func (m *RequiredMapParent) PicoValidateRequired() error {
@@ -253,6 +266,7 @@ func (m *RequiredMapParent) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	(*picowire.MapOf[string, *RequiredMessage, picowire.StringCodec, picowire.MessageCodec[RequiredMessage, *RequiredMessage]])(&m.Children).PicoEncode(c, 1)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -261,4 +275,5 @@ func (m *RequiredMapParent) Decode(c *picobuf.Decoder) {
 		return
 	}
 	(*picowire.MapOf[string, *RequiredMessage, picowire.StringCodec, picowire.MessageCodec[RequiredMessage, *RequiredMessage]])(&m.Children).PicoDecode(c, 1)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }

@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: dev
-//     protoc:          v7.35.1
+//     protoc:          v7.36.0
 
 package present
 
@@ -27,6 +27,7 @@ type Profile struct {
 	Period            int64       `json:"period,omitzero"`
 	Comment           []int64     `json:"comment,omitzero"`
 	DefaultSampleType int64       `json:"default_sample_type,omitzero"`
+	XXX_unrecognized  []byte      `json:"-"`
 }
 
 func (m *Profile) Encode(c *picobuf.Encoder) bool {
@@ -62,6 +63,7 @@ func (m *Profile) Encode(c *picobuf.Encoder) bool {
 	c.Int64(12, &m.Period)
 	c.RepeatedInt64(13, &m.Comment)
 	c.Int64(14, &m.DefaultSampleType)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -103,11 +105,13 @@ func (m *Profile) Decode(c *picobuf.Decoder) {
 	c.Int64(12, &m.Period)
 	c.RepeatedInt64(13, &m.Comment)
 	c.Int64(14, &m.DefaultSampleType)
+	c.UnrecognizedFields(32766, &m.XXX_unrecognized)
 }
 
 type ValueType struct {
-	Type int64 `json:"type,omitzero"`
-	Unit int64 `json:"unit,omitzero"`
+	Type             int64  `json:"type,omitzero"`
+	Unit             int64  `json:"unit,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *ValueType) Encode(c *picobuf.Encoder) bool {
@@ -116,6 +120,7 @@ func (m *ValueType) Encode(c *picobuf.Encoder) bool {
 	}
 	c.Int64(1, &m.Type)
 	c.Int64(2, &m.Unit)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -125,12 +130,14 @@ func (m *ValueType) Decode(c *picobuf.Decoder) {
 	}
 	c.Int64(1, &m.Type)
 	c.Int64(2, &m.Unit)
+	c.UnrecognizedFields(6, &m.XXX_unrecognized)
 }
 
 type Sample struct {
-	LocationId []uint64 `json:"location_id,omitzero"`
-	Value      []int64  `json:"value,omitzero"`
-	Label      []Label  `json:"label,omitzero"`
+	LocationId       []uint64 `json:"location_id,omitzero"`
+	Value            []int64  `json:"value,omitzero"`
+	Label            []Label  `json:"label,omitzero"`
+	XXX_unrecognized []byte   `json:"-"`
 }
 
 func (m *Sample) Encode(c *picobuf.Encoder) bool {
@@ -143,6 +150,7 @@ func (m *Sample) Encode(c *picobuf.Encoder) bool {
 		x := &m.Label[i]
 		c.AlwaysMessage(3, x.Encode)
 	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -157,13 +165,15 @@ func (m *Sample) Decode(c *picobuf.Decoder) {
 		m.Label = append(m.Label, Label{})
 		c.Loop(m.Label[len(m.Label)-1].Decode)
 	})
+	c.UnrecognizedFields(14, &m.XXX_unrecognized)
 }
 
 type Label struct {
-	Key     int64 `json:"key,omitzero"`
-	Str     int64 `json:"str,omitzero"`
-	Num     int64 `json:"num,omitzero"`
-	NumUnit int64 `json:"num_unit,omitzero"`
+	Key              int64  `json:"key,omitzero"`
+	Str              int64  `json:"str,omitzero"`
+	Num              int64  `json:"num,omitzero"`
+	NumUnit          int64  `json:"num_unit,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Label) Encode(c *picobuf.Encoder) bool {
@@ -174,6 +184,7 @@ func (m *Label) Encode(c *picobuf.Encoder) bool {
 	c.Int64(2, &m.Str)
 	c.Int64(3, &m.Num)
 	c.Int64(4, &m.NumUnit)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -185,19 +196,21 @@ func (m *Label) Decode(c *picobuf.Decoder) {
 	c.Int64(2, &m.Str)
 	c.Int64(3, &m.Num)
 	c.Int64(4, &m.NumUnit)
+	c.UnrecognizedFields(30, &m.XXX_unrecognized)
 }
 
 type Mapping struct {
-	Id              uint64 `json:"id,omitzero"`
-	MemoryStart     uint64 `json:"memory_start,omitzero"`
-	MemoryLimit     uint64 `json:"memory_limit,omitzero"`
-	FileOffset      uint64 `json:"file_offset,omitzero"`
-	Filename        int64  `json:"filename,omitzero"`
-	BuildId         int64  `json:"build_id,omitzero"`
-	HasFunctions    bool   `json:"has_functions,omitzero"`
-	HasFilenames    bool   `json:"has_filenames,omitzero"`
-	HasLineNumbers  bool   `json:"has_line_numbers,omitzero"`
-	HasInlineFrames bool   `json:"has_inline_frames,omitzero"`
+	Id               uint64 `json:"id,omitzero"`
+	MemoryStart      uint64 `json:"memory_start,omitzero"`
+	MemoryLimit      uint64 `json:"memory_limit,omitzero"`
+	FileOffset       uint64 `json:"file_offset,omitzero"`
+	Filename         int64  `json:"filename,omitzero"`
+	BuildId          int64  `json:"build_id,omitzero"`
+	HasFunctions     bool   `json:"has_functions,omitzero"`
+	HasFilenames     bool   `json:"has_filenames,omitzero"`
+	HasLineNumbers   bool   `json:"has_line_numbers,omitzero"`
+	HasInlineFrames  bool   `json:"has_inline_frames,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Mapping) Encode(c *picobuf.Encoder) bool {
@@ -214,6 +227,7 @@ func (m *Mapping) Encode(c *picobuf.Encoder) bool {
 	c.Bool(8, &m.HasFilenames)
 	c.Bool(9, &m.HasLineNumbers)
 	c.Bool(10, &m.HasInlineFrames)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -231,14 +245,16 @@ func (m *Mapping) Decode(c *picobuf.Decoder) {
 	c.Bool(8, &m.HasFilenames)
 	c.Bool(9, &m.HasLineNumbers)
 	c.Bool(10, &m.HasInlineFrames)
+	c.UnrecognizedFields(2046, &m.XXX_unrecognized)
 }
 
 type Location struct {
-	Id        uint64 `json:"id,omitzero"`
-	MappingId uint64 `json:"mapping_id,omitzero"`
-	Address   uint64 `json:"address,omitzero"`
-	Line      []Line `json:"line,omitzero"`
-	IsFolded  bool   `json:"is_folded,omitzero"`
+	Id               uint64 `json:"id,omitzero"`
+	MappingId        uint64 `json:"mapping_id,omitzero"`
+	Address          uint64 `json:"address,omitzero"`
+	Line             []Line `json:"line,omitzero"`
+	IsFolded         bool   `json:"is_folded,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Location) Encode(c *picobuf.Encoder) bool {
@@ -253,6 +269,7 @@ func (m *Location) Encode(c *picobuf.Encoder) bool {
 		c.AlwaysMessage(4, x.Encode)
 	}
 	c.Bool(5, &m.IsFolded)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -269,12 +286,14 @@ func (m *Location) Decode(c *picobuf.Decoder) {
 		c.Loop(m.Line[len(m.Line)-1].Decode)
 	})
 	c.Bool(5, &m.IsFolded)
+	c.UnrecognizedFields(62, &m.XXX_unrecognized)
 }
 
 type Line struct {
-	FunctionId uint64 `json:"function_id,omitzero"`
-	Line       int64  `json:"line,omitzero"`
-	Column     int64  `json:"column,omitzero"`
+	FunctionId       uint64 `json:"function_id,omitzero"`
+	Line             int64  `json:"line,omitzero"`
+	Column           int64  `json:"column,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Line) Encode(c *picobuf.Encoder) bool {
@@ -284,6 +303,7 @@ func (m *Line) Encode(c *picobuf.Encoder) bool {
 	c.Uint64(1, &m.FunctionId)
 	c.Int64(2, &m.Line)
 	c.Int64(3, &m.Column)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -294,14 +314,16 @@ func (m *Line) Decode(c *picobuf.Decoder) {
 	c.Uint64(1, &m.FunctionId)
 	c.Int64(2, &m.Line)
 	c.Int64(3, &m.Column)
+	c.UnrecognizedFields(14, &m.XXX_unrecognized)
 }
 
 type Function struct {
-	Id         uint64 `json:"id,omitzero"`
-	Name       int64  `json:"name,omitzero"`
-	SystemName int64  `json:"system_name,omitzero"`
-	Filename   int64  `json:"filename,omitzero"`
-	StartLine  int64  `json:"start_line,omitzero"`
+	Id               uint64 `json:"id,omitzero"`
+	Name             int64  `json:"name,omitzero"`
+	SystemName       int64  `json:"system_name,omitzero"`
+	Filename         int64  `json:"filename,omitzero"`
+	StartLine        int64  `json:"start_line,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Function) Encode(c *picobuf.Encoder) bool {
@@ -313,6 +335,7 @@ func (m *Function) Encode(c *picobuf.Encoder) bool {
 	c.Int64(3, &m.SystemName)
 	c.Int64(4, &m.Filename)
 	c.Int64(5, &m.StartLine)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -325,4 +348,5 @@ func (m *Function) Decode(c *picobuf.Decoder) {
 	c.Int64(3, &m.SystemName)
 	c.Int64(4, &m.Filename)
 	c.Int64(5, &m.StartLine)
+	c.UnrecognizedFields(62, &m.XXX_unrecognized)
 }

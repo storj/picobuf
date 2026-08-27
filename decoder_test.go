@@ -648,6 +648,38 @@ func TestDecoder_Bool_NonOne(t *testing.T) {
 	assert.That(t, decoded.Bool)
 }
 
+func TestDecoder_UnrecognizedFields_Ignore(t *testing.T) {
+	var decoded picotest.IgnoreUnknownMessage
+	err := picobuf.Unmarshal([]byte{
+		0x8, 0x13,
+		0x10, 0x22,
+		0x18, 0x25,
+		0x20, 0x44,
+	}, &decoded)
+	assert.NoError(t, err)
+	assert.DeepEqual(t, decoded, picotest.IgnoreUnknownMessage{
+		Second: 0x22,
+		Fourth: 0x44,
+	})
+
+	data, err := picobuf.Marshal(&decoded)
+	assert.NoError(t, err)
+	assert.Equal(t, data, []byte{0x10, 0x22, 0x20, 0x44})
+}
+
+func TestDecoder_UnrecognizedFields_Reject(t *testing.T) {
+	var decoded picotest.RejectUnknownMessage
+	err := picobuf.Unmarshal([]byte{0x10, 0x22, 0x20, 0x44}, &decoded)
+	assert.NoError(t, err)
+	assert.DeepEqual(t, decoded, picotest.RejectUnknownMessage{
+		Second: 0x22,
+		Fourth: 0x44,
+	})
+
+	err = picobuf.Unmarshal([]byte{0x10, 0x22, 0x8, 0x13}, &decoded)
+	assert.Error(t, err)
+}
+
 func TestDecoder_UnrecognizedFields_Empty(t *testing.T) {
 	var decoded picotest.UnknownMessage
 	err := picobuf.Unmarshal([]byte{}, &decoded)

@@ -146,8 +146,8 @@ func genMessage(gf *generator, m *protogen.Message) {
 	for _, field := range m.Fields {
 		genMessageField(gf, m, field)
 	}
-	if getMessageOpts(m).CaptureUnrecognizedFields {
-		gf.P("XXX_unrecognized", " ", "[]byte")
+	if getMessageOpts(m).UnrecognizedFields == UnrecognizedFields_UNRECOGNIZED_CAPTURE {
+		gf.P("XXX_unrecognized", " ", "[]byte `json:\"-\"`")
 	}
 	gf.P("}")
 
@@ -294,7 +294,7 @@ func genMessageEncode(gf *generator, m *protogen.Message) {
 	for _, field := range fields {
 		genFieldEncode(gf, field)
 	}
-	if getMessageOpts(m).CaptureUnrecognizedFields {
+	if getMessageOpts(m).UnrecognizedFields == UnrecognizedFields_UNRECOGNIZED_CAPTURE {
 		gf.P("c.UnrecognizedFields(m.XXX_unrecognized)")
 	}
 }
@@ -463,13 +463,22 @@ func genMessageDecode(gf *generator, m *protogen.Message) {
 	for _, field := range fields {
 		genFieldDecode(gf, field)
 	}
-	if getMessageOpts(m).CaptureUnrecognizedFields {
+	switch getMessageOpts(m).UnrecognizedFields {
+	case UnrecognizedFields_UNRECOGNIZED_CAPTURE:
 		low, high := fieldsBitSet(m)
 		args := []any{"c.UnrecognizedFields(", low, ", &m.XXX_unrecognized"}
 		for _, num := range high {
 			args = append(args, ", ", uint64(num))
 		}
 		gf.P(append(args, ")")...)
+	case UnrecognizedFields_UNRECOGNIZED_REJECT:
+		low, high := fieldsBitSet(m)
+		args := []any{"c.RejectUnrecognizedFields(", low}
+		for _, num := range high {
+			args = append(args, ", ", uint64(num))
+		}
+		gf.P(append(args, ")")...)
+	case UnrecognizedFields_UNRECOGNIZED_IGNORE:
 	}
 }
 

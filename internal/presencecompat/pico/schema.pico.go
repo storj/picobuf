@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: dev
-//     protoc:          v7.35.1
+//     protoc:          v7.36.0
 
 package pico
 
@@ -52,10 +52,11 @@ type Message struct {
 	//
 	//	*Message_SelectedState
 	//	*Message_SelectedText
-	Selection  isMessage_Selection
-	Numbers    []int32           `json:"numbers,omitzero"`
-	Names      map[string]string `json:"names,omitzero"`
-	AlwaysText string            `json:"always_text,omitzero"`
+	Selection        isMessage_Selection
+	Numbers          []int32           `json:"numbers,omitzero"`
+	Names            map[string]string `json:"names,omitzero"`
+	AlwaysText       string            `json:"always_text,omitzero"`
+	XXX_unrecognized []byte            `json:"-"`
 }
 
 func (m *Message) Encode(c *picobuf.Encoder) bool {
@@ -119,6 +120,7 @@ func (m *Message) Encode(c *picobuf.Encoder) bool {
 	c.RepeatedInt32(19, &m.Numbers)
 	(*picowire.MapStringString)(&m.Names).PicoEncode(c, 20)
 	c.String(21, &m.AlwaysText)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -215,6 +217,7 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 	c.RepeatedInt32(19, &m.Numbers)
 	(*picowire.MapStringString)(&m.Names).PicoDecode(c, 20)
 	c.String(21, &m.AlwaysText)
+	c.UnrecognizedFields(4194302, &m.XXX_unrecognized)
 }
 
 type isMessage_Selection interface{ isMessage_Selection() }

@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: dev
-//     protoc:          v7.35.1
+//     protoc:          v7.36.0
 
 package pico2
 
@@ -31,10 +31,11 @@ func (m State) String() string {
 }
 
 type Message struct {
-	Number *int32  `json:"number,omitzero"`
-	Text   *string `json:"text,omitzero"`
-	Data   *[]byte `json:"data,omitzero"`
-	State  *State  `json:"state,omitzero"`
+	Number           *int32  `json:"number,omitzero"`
+	Text             *string `json:"text,omitzero"`
+	Data             *[]byte `json:"data,omitzero"`
+	State            *State  `json:"state,omitzero"`
+	XXX_unrecognized []byte  `json:"-"`
 }
 
 func (m *Message) Encode(c *picobuf.Encoder) bool {
@@ -55,6 +56,7 @@ func (m *Message) Encode(c *picobuf.Encoder) bool {
 	if m.State != nil {
 		c.AlwaysInt32(4, (*int32)(m.State))
 	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -80,4 +82,5 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 		m.State = new(State)
 		c.Int32(4, (*int32)(m.State))
 	}
+	c.UnrecognizedFields(30, &m.XXX_unrecognized)
 }

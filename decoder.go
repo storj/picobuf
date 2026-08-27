@@ -385,6 +385,24 @@ func (dec *Decoder) UnrecognizedFields(exclude uint64, out *[]byte, excludeHigh 
 	}
 }
 
+// RejectUnrecognizedFields fails decoding when a pending field is not in the
+// provided set.
+//
+// Fields below 64 are excluded via the exclude bitmask, higher field numbers
+// are listed in excludeHigh.
+func (dec *Decoder) RejectUnrecognizedFields(exclude uint64, excludeHigh ...FieldNumber) {
+	if field := dec.pendingField; field >= 0 {
+		if field < 64 {
+			if exclude&(1<<uint64(field)) != 0 {
+				return
+			}
+		} else if containsField(excludeHigh, field) {
+			return
+		}
+		dec.fail(field, "unrecognized field")
+	}
+}
+
 // containsField reports whether fields contains field.
 //
 // It does a linear scan, because a message that captures unrecognized fields has

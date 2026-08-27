@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: dev
-//     protoc:          v7.35.1
+//     protoc:          v7.36.0
 
 package picotest
 
@@ -39,14 +39,15 @@ func (m MapEnum) String() string {
 }
 
 type Basic struct {
-	Byte0        int32  `json:"byte0,omitzero"`
-	Byte1        int32  `json:"byte1,omitzero"`
-	Byte100      int32  `json:"byte100,omitzero"`
-	Byte255      int32  `json:"byte255,omitzero"`
-	StringEmpty  string `json:"string_empty,omitzero"`
-	StringHello  string `json:"string_hello,omitzero"`
-	BytesZero    []byte `json:"bytes_zero,omitzero"`
-	BytesNumbers []byte `json:"bytes_numbers,omitzero"`
+	Byte0            int32  `json:"byte0,omitzero"`
+	Byte1            int32  `json:"byte1,omitzero"`
+	Byte100          int32  `json:"byte100,omitzero"`
+	Byte255          int32  `json:"byte255,omitzero"`
+	StringEmpty      string `json:"string_empty,omitzero"`
+	StringHello      string `json:"string_hello,omitzero"`
+	BytesZero        []byte `json:"bytes_zero,omitzero"`
+	BytesNumbers     []byte `json:"bytes_numbers,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Basic) Encode(c *picobuf.Encoder) bool {
@@ -61,6 +62,7 @@ func (m *Basic) Encode(c *picobuf.Encoder) bool {
 	c.String(6, &m.StringHello)
 	c.Bytes(7, &m.BytesZero)
 	c.Bytes(8, &m.BytesNumbers)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -76,6 +78,7 @@ func (m *Basic) Decode(c *picobuf.Decoder) {
 	c.String(6, &m.StringHello)
 	c.Bytes(7, &m.BytesZero)
 	c.Bytes(8, &m.BytesNumbers)
+	c.UnrecognizedFields(510, &m.XXX_unrecognized)
 }
 
 func (m *Basic) GetByte0() (v int32) {
@@ -135,8 +138,9 @@ func (m *Basic) GetBytesNumbers() (v []byte) {
 }
 
 type Person struct {
-	Name    string   `json:"name,omitzero"`
-	Address *Address `json:"address,omitzero"`
+	Name             string   `json:"name,omitzero"`
+	Address          *Address `json:"address,omitzero"`
+	XXX_unrecognized []byte   `json:"-"`
 }
 
 func (m *Person) Encode(c *picobuf.Encoder) bool {
@@ -145,6 +149,7 @@ func (m *Person) Encode(c *picobuf.Encoder) bool {
 	}
 	c.String(1, &m.Name)
 	c.Message(2, m.Address.Encode)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -159,6 +164,7 @@ func (m *Person) Decode(c *picobuf.Decoder) {
 		}
 		m.Address.Decode(c)
 	})
+	c.UnrecognizedFields(6, &m.XXX_unrecognized)
 }
 
 func (m *Person) GetName() (v string) {
@@ -176,7 +182,8 @@ func (m *Person) GetAddress() (v *Address) {
 }
 
 type Address struct {
-	Street string `json:"street,omitzero"`
+	Street           string `json:"street,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Address) Encode(c *picobuf.Encoder) bool {
@@ -184,6 +191,7 @@ func (m *Address) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.String(1, &m.Street)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -192,6 +200,7 @@ func (m *Address) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.String(1, &m.Street)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 func (m *Address) GetStreet() (v string) {
@@ -202,38 +211,39 @@ func (m *Address) GetStreet() (v string) {
 }
 
 type AllTypes struct {
-	Int32     int32      `json:"int32,omitzero"`
-	Int64     int64      `json:"int64,omitzero"`
-	Uint32    uint32     `json:"uint32,omitzero"`
-	Uint64    uint64     `json:"uint64,omitzero"`
-	Sint32    int32      `json:"sint32,omitzero"`
-	Sint64    int64      `json:"sint64,omitzero"`
-	Fixed32   uint32     `json:"fixed32,omitzero"`
-	Fixed64   uint64     `json:"fixed64,omitzero"`
-	Sfixed32  int32      `json:"sfixed32,omitzero"`
-	Sfixed64  int64      `json:"sfixed64,omitzero"`
-	Float     float32    `json:"float,omitzero"`
-	Double    float64    `json:"double,omitzero"`
-	Bool      bool       `json:"bool,omitzero"`
-	String_   string     `json:"string,omitzero"`
-	Bytes     []byte     `json:"bytes,omitzero"`
-	Message   *Message   `json:"message,omitzero"`
-	Int32S    []int32    `json:"int32s,omitzero"`
-	Int64S    []int64    `json:"int64s,omitzero"`
-	Uint32S   []uint32   `json:"uint32s,omitzero"`
-	Uint64S   []uint64   `json:"uint64s,omitzero"`
-	Sint32S   []int32    `json:"sint32s,omitzero"`
-	Sint64S   []int64    `json:"sint64s,omitzero"`
-	Fixed32S  []uint32   `json:"fixed32s,omitzero"`
-	Fixed64S  []uint64   `json:"fixed64s,omitzero"`
-	Sfixed32S []int32    `json:"sfixed32s,omitzero"`
-	Sfixed64S []int64    `json:"sfixed64s,omitzero"`
-	Floats    []float32  `json:"floats,omitzero"`
-	Doubles   []float64  `json:"doubles,omitzero"`
-	Bools     []bool     `json:"bools,omitzero"`
-	Strings   []string   `json:"strings,omitzero"`
-	Bytess    [][]byte   `json:"bytess,omitzero"`
-	Messages  []*Message `json:"messages,omitzero"`
+	Int32            int32      `json:"int32,omitzero"`
+	Int64            int64      `json:"int64,omitzero"`
+	Uint32           uint32     `json:"uint32,omitzero"`
+	Uint64           uint64     `json:"uint64,omitzero"`
+	Sint32           int32      `json:"sint32,omitzero"`
+	Sint64           int64      `json:"sint64,omitzero"`
+	Fixed32          uint32     `json:"fixed32,omitzero"`
+	Fixed64          uint64     `json:"fixed64,omitzero"`
+	Sfixed32         int32      `json:"sfixed32,omitzero"`
+	Sfixed64         int64      `json:"sfixed64,omitzero"`
+	Float            float32    `json:"float,omitzero"`
+	Double           float64    `json:"double,omitzero"`
+	Bool             bool       `json:"bool,omitzero"`
+	String_          string     `json:"string,omitzero"`
+	Bytes            []byte     `json:"bytes,omitzero"`
+	Message          *Message   `json:"message,omitzero"`
+	Int32S           []int32    `json:"int32s,omitzero"`
+	Int64S           []int64    `json:"int64s,omitzero"`
+	Uint32S          []uint32   `json:"uint32s,omitzero"`
+	Uint64S          []uint64   `json:"uint64s,omitzero"`
+	Sint32S          []int32    `json:"sint32s,omitzero"`
+	Sint64S          []int64    `json:"sint64s,omitzero"`
+	Fixed32S         []uint32   `json:"fixed32s,omitzero"`
+	Fixed64S         []uint64   `json:"fixed64s,omitzero"`
+	Sfixed32S        []int32    `json:"sfixed32s,omitzero"`
+	Sfixed64S        []int64    `json:"sfixed64s,omitzero"`
+	Floats           []float32  `json:"floats,omitzero"`
+	Doubles          []float64  `json:"doubles,omitzero"`
+	Bools            []bool     `json:"bools,omitzero"`
+	Strings          []string   `json:"strings,omitzero"`
+	Bytess           [][]byte   `json:"bytess,omitzero"`
+	Messages         []*Message `json:"messages,omitzero"`
+	XXX_unrecognized []byte     `json:"-"`
 }
 
 func (m *AllTypes) Encode(c *picobuf.Encoder) bool {
@@ -274,6 +284,7 @@ func (m *AllTypes) Encode(c *picobuf.Encoder) bool {
 	for _, x := range m.Messages {
 		c.AlwaysMessage(32, x.Encode)
 	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -318,6 +329,7 @@ func (m *AllTypes) Decode(c *picobuf.Decoder) {
 	c.RepeatedString(30, &m.Strings)
 	c.RepeatedBytes(31, &m.Bytess)
 	picobuf.DecodeRepeatedMessages(c, 32, &m.Messages, (*Message).Decode)
+	c.UnrecognizedFields(8589934590, &m.XXX_unrecognized)
 }
 
 func (m *AllTypes) GetInt32() (v int32) {
@@ -545,7 +557,8 @@ func (m *AllTypes) GetMessages() (v []*Message) {
 }
 
 type Message struct {
-	Int32 int32 `json:"int32,omitzero"`
+	Int32            int32  `json:"int32,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Message) Encode(c *picobuf.Encoder) bool {
@@ -553,6 +566,7 @@ func (m *Message) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.Int32(1, &m.Int32)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -561,6 +575,7 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.Int32(1, &m.Int32)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 func (m *Message) GetInt32() (v int32) {
@@ -571,8 +586,9 @@ func (m *Message) GetInt32() (v int32) {
 }
 
 type Piece struct {
-	Id  *pic.ID `json:"id,omitzero"`
-	Alt *string `json:"alt,omitzero"`
+	Id               *pic.ID `json:"id,omitzero"`
+	Alt              *string `json:"alt,omitzero"`
+	XXX_unrecognized []byte  `json:"-"`
 }
 
 func (m *Piece) Encode(c *picobuf.Encoder) bool {
@@ -585,6 +601,7 @@ func (m *Piece) Encode(c *picobuf.Encoder) bool {
 	if m.Alt != nil {
 		(*pic.RawString)(m.Alt).PicoEncode(c, 2)
 	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -604,6 +621,7 @@ func (m *Piece) Decode(c *picobuf.Decoder) {
 		}
 		(*pic.RawString)(m.Alt).PicoDecode(c, 2)
 	}
+	c.UnrecognizedFields(6, &m.XXX_unrecognized)
 }
 
 func (m *Piece) GetId() (v *pic.ID) {
@@ -621,7 +639,8 @@ func (m *Piece) GetAlt() (v *string) {
 }
 
 type Map struct {
-	Values map[int32]int32 `json:"values,omitzero"`
+	Values           map[int32]int32 `json:"values,omitzero"`
+	XXX_unrecognized []byte          `json:"-"`
 }
 
 func (m *Map) Encode(c *picobuf.Encoder) bool {
@@ -629,6 +648,7 @@ func (m *Map) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	(*picowire.MapInt32Int32)(&m.Values).PicoEncode(c, 1)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -637,6 +657,7 @@ func (m *Map) Decode(c *picobuf.Decoder) {
 		return
 	}
 	(*picowire.MapInt32Int32)(&m.Values).PicoDecode(c, 1)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 func (m *Map) GetValues() (v map[int32]int32) {
@@ -647,7 +668,8 @@ func (m *Map) GetValues() (v map[int32]int32) {
 }
 
 type GenericMap struct {
-	Values map[int32]*GenericMapValue `json:"values,omitzero"`
+	Values           map[int32]*GenericMapValue `json:"values,omitzero"`
+	XXX_unrecognized []byte                     `json:"-"`
 }
 
 func (m *GenericMap) Encode(c *picobuf.Encoder) bool {
@@ -655,6 +677,7 @@ func (m *GenericMap) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	(*picowire.MapOf[int32, *GenericMapValue, picowire.Int32Codec, picowire.MessageCodec[GenericMapValue, *GenericMapValue]])(&m.Values).PicoEncode(c, 1)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -663,6 +686,7 @@ func (m *GenericMap) Decode(c *picobuf.Decoder) {
 		return
 	}
 	(*picowire.MapOf[int32, *GenericMapValue, picowire.Int32Codec, picowire.MessageCodec[GenericMapValue, *GenericMapValue]])(&m.Values).PicoDecode(c, 1)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 func (m *GenericMap) GetValues() (v map[int32]*GenericMapValue) {
@@ -673,7 +697,8 @@ func (m *GenericMap) GetValues() (v map[int32]*GenericMapValue) {
 }
 
 type GenericMapValue struct {
-	Name string `json:"name,omitzero"`
+	Name             string `json:"name,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *GenericMapValue) Encode(c *picobuf.Encoder) bool {
@@ -681,6 +706,7 @@ func (m *GenericMapValue) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.String(1, &m.Name)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -689,6 +715,7 @@ func (m *GenericMapValue) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.String(1, &m.Name)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 func (m *GenericMapValue) GetName() (v string) {
@@ -699,7 +726,8 @@ func (m *GenericMapValue) GetName() (v string) {
 }
 
 type EnumMap struct {
-	Values map[int32]MapEnum `json:"values,omitzero"`
+	Values           map[int32]MapEnum `json:"values,omitzero"`
+	XXX_unrecognized []byte            `json:"-"`
 }
 
 func (m *EnumMap) Encode(c *picobuf.Encoder) bool {
@@ -707,6 +735,7 @@ func (m *EnumMap) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	(*picowire.MapOf[int32, MapEnum, picowire.Int32Codec, picowire.EnumCodec[MapEnum]])(&m.Values).PicoEncode(c, 1)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -715,6 +744,7 @@ func (m *EnumMap) Decode(c *picobuf.Decoder) {
 		return
 	}
 	(*picowire.MapOf[int32, MapEnum, picowire.Int32Codec, picowire.EnumCodec[MapEnum]])(&m.Values).PicoDecode(c, 1)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 func (m *EnumMap) GetValues() (v map[int32]MapEnum) {
@@ -725,13 +755,14 @@ func (m *EnumMap) GetValues() (v map[int32]MapEnum) {
 }
 
 type VariationsScalar struct {
-	Value        string   `json:"value,omitzero"`
-	Opt          *string  `json:"opt,omitzero"`
-	Rep          []string `json:"rep,omitzero"`
-	PresentBasic string   `json:"present_basic,omitzero"`
-	PresentOpt   string   `json:"present_opt,omitzero"`
-	PresentRep   []string `json:"present_rep,omitzero"`
-	OptBytes     *[]byte  `json:"opt_bytes,omitzero"`
+	Value            string   `json:"value,omitzero"`
+	Opt              *string  `json:"opt,omitzero"`
+	Rep              []string `json:"rep,omitzero"`
+	PresentBasic     string   `json:"present_basic,omitzero"`
+	PresentOpt       string   `json:"present_opt,omitzero"`
+	PresentRep       []string `json:"present_rep,omitzero"`
+	OptBytes         *[]byte  `json:"opt_bytes,omitzero"`
+	XXX_unrecognized []byte   `json:"-"`
 }
 
 func (m *VariationsScalar) Encode(c *picobuf.Encoder) bool {
@@ -749,6 +780,7 @@ func (m *VariationsScalar) Encode(c *picobuf.Encoder) bool {
 	if m.OptBytes != nil {
 		c.AlwaysBytes(7, m.OptBytes)
 	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -769,6 +801,7 @@ func (m *VariationsScalar) Decode(c *picobuf.Decoder) {
 		m.OptBytes = new([]byte)
 		c.Bytes(7, m.OptBytes)
 	}
+	c.UnrecognizedFields(254, &m.XXX_unrecognized)
 }
 
 func (m *VariationsScalar) GetValue() (v string) {
@@ -821,12 +854,13 @@ func (m *VariationsScalar) GetOptBytes() (v *[]byte) {
 }
 
 type VariationsMessage struct {
-	Value        *Message   `json:"value,omitzero"`
-	Opt          *Message   `json:"opt,omitzero"`
-	Rep          []*Message `json:"rep,omitzero"`
-	PresentBasic Message    `json:"present_basic,omitzero"`
-	PresentOpt   Message    `json:"present_opt,omitzero"`
-	PresentRep   []Message  `json:"present_rep,omitzero"`
+	Value            *Message   `json:"value,omitzero"`
+	Opt              *Message   `json:"opt,omitzero"`
+	Rep              []*Message `json:"rep,omitzero"`
+	PresentBasic     Message    `json:"present_basic,omitzero"`
+	PresentOpt       Message    `json:"present_opt,omitzero"`
+	PresentRep       []Message  `json:"present_rep,omitzero"`
+	XXX_unrecognized []byte     `json:"-"`
 }
 
 func (m *VariationsMessage) Encode(c *picobuf.Encoder) bool {
@@ -844,6 +878,7 @@ func (m *VariationsMessage) Encode(c *picobuf.Encoder) bool {
 		x := &m.PresentRep[i]
 		c.AlwaysMessage(6, x.Encode)
 	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -871,6 +906,7 @@ func (m *VariationsMessage) Decode(c *picobuf.Decoder) {
 		m.PresentRep = append(m.PresentRep, Message{})
 		c.Loop(m.PresentRep[len(m.PresentRep)-1].Decode)
 	})
+	c.UnrecognizedFields(126, &m.XXX_unrecognized)
 }
 
 func (m *VariationsMessage) GetValue() (v *Message) {
@@ -916,12 +952,13 @@ func (m *VariationsMessage) GetPresentRep() (v []Message) {
 }
 
 type CustomBytes struct {
-	Value        *pic.ID  `json:"value,omitzero"`
-	Opt          *pic.ID  `json:"opt,omitzero"`
-	Rep          []pic.ID `json:"rep,omitzero"`
-	PresentBasic pic.ID   `json:"present_basic,omitzero"`
-	PresentOpt   pic.ID   `json:"present_opt,omitzero"`
-	PresentRep   []pic.ID `json:"present_rep,omitzero"`
+	Value            *pic.ID  `json:"value,omitzero"`
+	Opt              *pic.ID  `json:"opt,omitzero"`
+	Rep              []pic.ID `json:"rep,omitzero"`
+	PresentBasic     pic.ID   `json:"present_basic,omitzero"`
+	PresentOpt       pic.ID   `json:"present_opt,omitzero"`
+	PresentRep       []pic.ID `json:"present_rep,omitzero"`
+	XXX_unrecognized []byte   `json:"-"`
 }
 
 func (m *CustomBytes) Encode(c *picobuf.Encoder) bool {
@@ -944,6 +981,7 @@ func (m *CustomBytes) Encode(c *picobuf.Encoder) bool {
 		x := &m.PresentRep[i]
 		x.PicoEncode(c, 6)
 	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -973,6 +1011,7 @@ func (m *CustomBytes) Decode(c *picobuf.Decoder) {
 		m.PresentRep = append(m.PresentRep, pic.ID{})
 		m.PresentRep[len(m.PresentRep)-1].PicoDecode(c, 6)
 	}
+	c.UnrecognizedFields(126, &m.XXX_unrecognized)
 }
 
 func (m *CustomBytes) GetValue() (v *pic.ID) {
@@ -1018,8 +1057,9 @@ func (m *CustomBytes) GetPresentRep() (v []pic.ID) {
 }
 
 type Timestamp struct {
-	Seconds int64 `json:"seconds,omitzero"`
-	Nanos   int32 `json:"nanos,omitzero"`
+	Seconds          int64  `json:"seconds,omitzero"`
+	Nanos            int32  `json:"nanos,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Timestamp) Encode(c *picobuf.Encoder) bool {
@@ -1028,6 +1068,7 @@ func (m *Timestamp) Encode(c *picobuf.Encoder) bool {
 	}
 	c.Int64(1, &m.Seconds)
 	c.Int32(2, &m.Nanos)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -1037,6 +1078,7 @@ func (m *Timestamp) Decode(c *picobuf.Decoder) {
 	}
 	c.Int64(1, &m.Seconds)
 	c.Int32(2, &m.Nanos)
+	c.UnrecognizedFields(6, &m.XXX_unrecognized)
 }
 
 func (m *Timestamp) GetSeconds() (v int64) {
@@ -1063,6 +1105,7 @@ type CustomMessageTypes struct {
 	RepeatedPresentCustomType     []pic.Timestamp  `json:"repeated_present_custom_type,omitzero"`
 	RepeatedCustomTypeCast        []*time.Time     `json:"repeated_custom_type_cast,omitzero"`
 	RepeatedPresentCustomTypeCast []time.Time      `json:"repeated_present_custom_type_cast,omitzero"`
+	XXX_unrecognized              []byte           `json:"-"`
 }
 
 func (m *CustomMessageTypes) Encode(c *picobuf.Encoder) bool {
@@ -1092,6 +1135,7 @@ func (m *CustomMessageTypes) Encode(c *picobuf.Encoder) bool {
 		x := &m.RepeatedPresentCustomTypeCast[i]
 		(*picoconv.Timestamp)(x).PicoEncode(c, 9)
 	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -1138,6 +1182,7 @@ func (m *CustomMessageTypes) Decode(c *picobuf.Decoder) {
 		x := &m.RepeatedPresentCustomTypeCast[len(m.RepeatedPresentCustomTypeCast)-1]
 		(*picoconv.Timestamp)(x).PicoDecode(c, 9)
 	}
+	c.UnrecognizedFields(1022, &m.XXX_unrecognized)
 }
 
 func (m *CustomMessageTypes) GetNormal() (v *Timestamp) {
@@ -1204,9 +1249,9 @@ func (m *CustomMessageTypes) GetRepeatedPresentCustomTypeCast() (v []time.Time) 
 }
 
 type UnknownMessage struct {
-	Second           int64 `json:"second,omitzero"`
-	Fourth           int64 `json:"fourth,omitzero"`
-	XXX_unrecognized []byte
+	Second           int64  `json:"second,omitzero"`
+	Fourth           int64  `json:"fourth,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *UnknownMessage) Encode(c *picobuf.Encoder) bool {
@@ -1242,12 +1287,85 @@ func (m *UnknownMessage) GetFourth() (v int64) {
 	return 0
 }
 
+type IgnoreUnknownMessage struct {
+	Second int64 `json:"second,omitzero"`
+	Fourth int64 `json:"fourth,omitzero"`
+}
+
+func (m *IgnoreUnknownMessage) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.Int64(2, &m.Second)
+	c.Int64(4, &m.Fourth)
+	return true
+}
+
+func (m *IgnoreUnknownMessage) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Int64(2, &m.Second)
+	c.Int64(4, &m.Fourth)
+}
+
+func (m *IgnoreUnknownMessage) GetSecond() (v int64) {
+	if m != nil {
+		return m.Second
+	}
+	return 0
+}
+
+func (m *IgnoreUnknownMessage) GetFourth() (v int64) {
+	if m != nil {
+		return m.Fourth
+	}
+	return 0
+}
+
+type RejectUnknownMessage struct {
+	Second int64 `json:"second,omitzero"`
+	Fourth int64 `json:"fourth,omitzero"`
+}
+
+func (m *RejectUnknownMessage) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.Int64(2, &m.Second)
+	c.Int64(4, &m.Fourth)
+	return true
+}
+
+func (m *RejectUnknownMessage) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Int64(2, &m.Second)
+	c.Int64(4, &m.Fourth)
+	c.RejectUnrecognizedFields(20)
+}
+
+func (m *RejectUnknownMessage) GetSecond() (v int64) {
+	if m != nil {
+		return m.Second
+	}
+	return 0
+}
+
+func (m *RejectUnknownMessage) GetFourth() (v int64) {
+	if m != nil {
+		return m.Fourth
+	}
+	return 0
+}
+
 type KnownMessage struct {
-	First            int64 `json:"first,omitzero"`
-	Second           int64 `json:"second,omitzero"`
-	Third            int64 `json:"third,omitzero"`
-	Fourth           int64 `json:"fourth,omitzero"`
-	XXX_unrecognized []byte
+	First            int64  `json:"first,omitzero"`
+	Second           int64  `json:"second,omitzero"`
+	Third            int64  `json:"third,omitzero"`
+	Fourth           int64  `json:"fourth,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *KnownMessage) Encode(c *picobuf.Encoder) bool {
@@ -1312,7 +1430,8 @@ type Tag struct {
 	//	*Tag_Bool
 	//	*Tag_DurationNs
 	//	*Tag_Timestamp
-	Value isTag_Value
+	Value            isTag_Value
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Tag) Encode(c *picobuf.Encoder) bool {
@@ -1341,6 +1460,7 @@ func (m *Tag) Encode(c *picobuf.Encoder) bool {
 	if m, ok := m.Value.(*Tag_Timestamp); ok {
 		c.Message(8, m.Timestamp.Encode)
 	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -1431,6 +1551,7 @@ func (m *Tag) Decode(c *picobuf.Decoder) {
 			m.Timestamp.Decode(c)
 		})
 	}
+	c.UnrecognizedFields(510, &m.XXX_unrecognized)
 }
 
 func (m *Tag) GetKey() (v string) {
@@ -1535,10 +1656,10 @@ func (*Tag_DurationNs) isTag_Value() {}
 func (*Tag_Timestamp) isTag_Value()  {}
 
 type HighUnknown struct {
-	Low              int64 `json:"low,omitzero"`
-	High             int64 `json:"high,omitzero"`
-	Higher           int64 `json:"higher,omitzero"`
-	XXX_unrecognized []byte
+	Low              int64  `json:"low,omitzero"`
+	High             int64  `json:"high,omitzero"`
+	Higher           int64  `json:"higher,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *HighUnknown) Encode(c *picobuf.Encoder) bool {

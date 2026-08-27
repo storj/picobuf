@@ -189,13 +189,23 @@ message CustomMessageTypes {
 }
 
 message UnknownMessage {
-  option (pico.message).capture_unrecognized_fields = true;
+  int64 second = 2;
+  int64 fourth = 4;
+}
+
+message IgnoreUnknownMessage {
+  option (pico.message).unrecognized_fields = UNRECOGNIZED_IGNORE;
+  int64 second = 2;
+  int64 fourth = 4;
+}
+
+message RejectUnknownMessage {
+  option (pico.message).unrecognized_fields = UNRECOGNIZED_REJECT;
   int64 second = 2;
   int64 fourth = 4;
 }
 
 message KnownMessage {
-  option (pico.message).capture_unrecognized_fields = true;
   int64 first = 1;
   int64 second = 2;
   int64 third = 3;
@@ -216,7 +226,6 @@ message Tag {
 }
 
 message HighUnknown {
-  option (pico.message).capture_unrecognized_fields = true;
   int64 low = 1;
   int64 high = 64;
   int64 higher = 100000;

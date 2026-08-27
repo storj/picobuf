@@ -217,9 +217,9 @@ func TestGenerateCustomBytesPresence(t *testing.T) {
 	content := plugin.Response().File[0].GetContent()
 
 	for _, want := range []string{
-		"Custom     *custom.Value",
-		"Serialized *custom.Value",
-		"Present    custom.Value",
+		"Custom           *custom.Value",
+		"Serialized       *custom.Value",
+		"Present          custom.Value",
 		"if m.Custom != nil",
 		"if m.Serialized != nil",
 		"m.Custom = new(custom.Value)",
@@ -330,9 +330,9 @@ func TestGenerateEditionsStringBytesPresence(t *testing.T) {
 	content := plugin.Response().File[0].GetContent()
 
 	for _, want := range []string{
-		"ExplicitString *string",
-		"ExplicitBytes  *[]byte",
-		"ImplicitString string",
+		"ExplicitString   *string",
+		"ExplicitBytes    *[]byte",
+		"ImplicitString   string",
 		"c.AlwaysString(1, m.ExplicitString)",
 		"c.AlwaysBytes(2, m.ExplicitBytes)",
 		"c.String(3, &m.ImplicitString)",

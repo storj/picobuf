@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: dev
-//     protoc:          v7.35.1
+//     protoc:          v7.36.0
 
 package pico
 
@@ -41,24 +41,25 @@ func (m Language) String() string {
 }
 
 type Types struct {
-	Int32           int32            `json:"int32,omitzero"`
-	Int64           int64            `json:"int64,omitzero"`
-	Uint32          uint32           `json:"uint32,omitzero"`
-	Uint64          uint64           `json:"uint64,omitzero"`
-	Sint32          int32            `json:"sint32,omitzero"`
-	Sint64          int64            `json:"sint64,omitzero"`
-	Fixed32         uint32           `json:"fixed32,omitzero"`
-	Fixed64         uint64           `json:"fixed64,omitzero"`
-	Sfixed32        int32            `json:"sfixed32,omitzero"`
-	Sfixed64        int64            `json:"sfixed64,omitzero"`
-	Float           float32          `json:"float,omitzero"`
-	Double          float64          `json:"double,omitzero"`
-	Bool            bool             `json:"bool,omitzero"`
-	String_         string           `json:"string,omitzero"`
-	Bytes           []byte           `json:"bytes,omitzero"`
-	Message         Message          `json:"message,omitzero"`
-	OptionalMessage *OptionalMessage `json:"optional_message,omitzero"`
-	Language        Language         `json:"language,omitzero"`
+	Int32            int32            `json:"int32,omitzero"`
+	Int64            int64            `json:"int64,omitzero"`
+	Uint32           uint32           `json:"uint32,omitzero"`
+	Uint64           uint64           `json:"uint64,omitzero"`
+	Sint32           int32            `json:"sint32,omitzero"`
+	Sint64           int64            `json:"sint64,omitzero"`
+	Fixed32          uint32           `json:"fixed32,omitzero"`
+	Fixed64          uint64           `json:"fixed64,omitzero"`
+	Sfixed32         int32            `json:"sfixed32,omitzero"`
+	Sfixed64         int64            `json:"sfixed64,omitzero"`
+	Float            float32          `json:"float,omitzero"`
+	Double           float64          `json:"double,omitzero"`
+	Bool             bool             `json:"bool,omitzero"`
+	String_          string           `json:"string,omitzero"`
+	Bytes            []byte           `json:"bytes,omitzero"`
+	Message          Message          `json:"message,omitzero"`
+	OptionalMessage  *OptionalMessage `json:"optional_message,omitzero"`
+	Language         Language         `json:"language,omitzero"`
+	XXX_unrecognized []byte           `json:"-"`
 }
 
 func (m *Types) Encode(c *picobuf.Encoder) bool {
@@ -83,6 +84,7 @@ func (m *Types) Encode(c *picobuf.Encoder) bool {
 	c.PresentMessage(16, m.Message.Encode)
 	c.Message(17, m.OptionalMessage.Encode)
 	c.Int32(18, (*int32)(&m.Language))
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -113,26 +115,28 @@ func (m *Types) Decode(c *picobuf.Decoder) {
 		m.OptionalMessage.Decode(c)
 	})
 	c.Int32(18, (*int32)(&m.Language))
+	c.UnrecognizedFields(524286, &m.XXX_unrecognized)
 }
 
 type RepeatedTypes struct {
-	Int32    []int32    `json:"int32,omitzero"`
-	Int64    []int64    `json:"int64,omitzero"`
-	Uint32   []uint32   `json:"uint32,omitzero"`
-	Uint64   []uint64   `json:"uint64,omitzero"`
-	Sint32   []int32    `json:"sint32,omitzero"`
-	Sint64   []int64    `json:"sint64,omitzero"`
-	Fixed32  []uint32   `json:"fixed32,omitzero"`
-	Fixed64  []uint64   `json:"fixed64,omitzero"`
-	Sfixed32 []int32    `json:"sfixed32,omitzero"`
-	Sfixed64 []int64    `json:"sfixed64,omitzero"`
-	Float    []float32  `json:"float,omitzero"`
-	Double   []float64  `json:"double,omitzero"`
-	Bool     []bool     `json:"bool,omitzero"`
-	String_  []string   `json:"string,omitzero"`
-	Bytes    [][]byte   `json:"bytes,omitzero"`
-	Message  []*Message `json:"message,omitzero"`
-	Language []Language `json:"language,omitzero"`
+	Int32            []int32    `json:"int32,omitzero"`
+	Int64            []int64    `json:"int64,omitzero"`
+	Uint32           []uint32   `json:"uint32,omitzero"`
+	Uint64           []uint64   `json:"uint64,omitzero"`
+	Sint32           []int32    `json:"sint32,omitzero"`
+	Sint64           []int64    `json:"sint64,omitzero"`
+	Fixed32          []uint32   `json:"fixed32,omitzero"`
+	Fixed64          []uint64   `json:"fixed64,omitzero"`
+	Sfixed32         []int32    `json:"sfixed32,omitzero"`
+	Sfixed64         []int64    `json:"sfixed64,omitzero"`
+	Float            []float32  `json:"float,omitzero"`
+	Double           []float64  `json:"double,omitzero"`
+	Bool             []bool     `json:"bool,omitzero"`
+	String_          []string   `json:"string,omitzero"`
+	Bytes            [][]byte   `json:"bytes,omitzero"`
+	Message          []*Message `json:"message,omitzero"`
+	Language         []Language `json:"language,omitzero"`
+	XXX_unrecognized []byte     `json:"-"`
 }
 
 func (m *RepeatedTypes) Encode(c *picobuf.Encoder) bool {
@@ -163,6 +167,7 @@ func (m *RepeatedTypes) Encode(c *picobuf.Encoder) bool {
 		}
 		return 0
 	})
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -189,11 +194,13 @@ func (m *RepeatedTypes) Decode(c *picobuf.Decoder) {
 	c.RepeatedEnum(17, func(x int32) {
 		m.Language = append(m.Language, (Language)(x))
 	})
+	c.UnrecognizedFields(262142, &m.XXX_unrecognized)
 }
 
 type RepeatedMixed struct {
-	Int32   int32      `json:"int32,omitzero"`
-	Message []*Message `json:"message,omitzero"`
+	Int32            int32      `json:"int32,omitzero"`
+	Message          []*Message `json:"message,omitzero"`
+	XXX_unrecognized []byte     `json:"-"`
 }
 
 func (m *RepeatedMixed) Encode(c *picobuf.Encoder) bool {
@@ -204,6 +211,7 @@ func (m *RepeatedMixed) Encode(c *picobuf.Encoder) bool {
 	for _, x := range m.Message {
 		c.AlwaysMessage(16, x.Encode)
 	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -213,11 +221,13 @@ func (m *RepeatedMixed) Decode(c *picobuf.Decoder) {
 	}
 	c.Int32(1, &m.Int32)
 	picobuf.DecodeRepeatedMessages(c, 16, &m.Message, (*Message).Decode)
+	c.UnrecognizedFields(65538, &m.XXX_unrecognized)
 }
 
 type Message struct {
-	Int32 int32 `json:"int32,omitzero"`
-	Int64 int64 `json:"int64,omitzero"`
+	Int32            int32  `json:"int32,omitzero"`
+	Int64            int64  `json:"int64,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Message) Encode(c *picobuf.Encoder) bool {
@@ -226,6 +236,7 @@ func (m *Message) Encode(c *picobuf.Encoder) bool {
 	}
 	c.Int32(1, &m.Int32)
 	c.Int64(2, &m.Int64)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -235,17 +246,19 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 	}
 	c.Int32(1, &m.Int32)
 	c.Int64(2, &m.Int64)
+	c.UnrecognizedFields(6, &m.XXX_unrecognized)
 }
 
 type Person struct {
-	Name     string     `json:"name,omitzero"`
-	Birthday int64      `json:"birthday,omitzero"`
-	Phone    string     `json:"phone,omitzero"`
-	Siblings int32      `json:"siblings,omitzero"`
-	Spouse   bool       `json:"spouse,omitzero"`
-	Money    float64    `json:"money,omitzero"`
-	Primary  Language   `json:"primary,omitzero"`
-	Spoken   []Language `json:"spoken,omitzero"`
+	Name             string     `json:"name,omitzero"`
+	Birthday         int64      `json:"birthday,omitzero"`
+	Phone            string     `json:"phone,omitzero"`
+	Siblings         int32      `json:"siblings,omitzero"`
+	Spouse           bool       `json:"spouse,omitzero"`
+	Money            float64    `json:"money,omitzero"`
+	Primary          Language   `json:"primary,omitzero"`
+	Spoken           []Language `json:"spoken,omitzero"`
+	XXX_unrecognized []byte     `json:"-"`
 }
 
 func (m *Person) Encode(c *picobuf.Encoder) bool {
@@ -265,6 +278,7 @@ func (m *Person) Encode(c *picobuf.Encoder) bool {
 		}
 		return 0
 	})
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -282,37 +296,39 @@ func (m *Person) Decode(c *picobuf.Decoder) {
 	c.RepeatedEnum(8, func(x int32) {
 		m.Spoken = append(m.Spoken, (Language)(x))
 	})
+	c.UnrecognizedFields(510, &m.XXX_unrecognized)
 }
 
 type Map struct {
-	StringString   map[string]string           `json:"string_string,omitzero"`
-	StringInt32    map[string]int32            `json:"string_int32,omitzero"`
-	StringInt64    map[string]int64            `json:"string_int64,omitzero"`
-	StringUint32   map[string]uint32           `json:"string_uint32,omitzero"`
-	StringUint64   map[string]uint64           `json:"string_uint64,omitzero"`
-	StringSint32   map[string]int32            `json:"string_sint32,omitzero"`
-	StringSint64   map[string]int64            `json:"string_sint64,omitzero"`
-	StringFixed32  map[string]uint32           `json:"string_fixed32,omitzero"`
-	StringFixed64  map[string]uint64           `json:"string_fixed64,omitzero"`
-	StringSfixed32 map[string]int32            `json:"string_sfixed32,omitzero"`
-	StringSfixed64 map[string]int64            `json:"string_sfixed64,omitzero"`
-	StringFloat    map[string]float32          `json:"string_float,omitzero"`
-	StringDouble   map[string]float64          `json:"string_double,omitzero"`
-	StringBool     map[string]bool             `json:"string_bool,omitzero"`
-	StringBytes    map[string][]byte           `json:"string_bytes,omitzero"`
-	Int32String    map[int32]string            `json:"int32_string,omitzero"`
-	Int64String    map[int64]string            `json:"int64_string,omitzero"`
-	Uint32String   map[uint32]string           `json:"uint32_string,omitzero"`
-	Uint64String   map[uint64]string           `json:"uint64_string,omitzero"`
-	Sint32String   map[int32]string            `json:"sint32_string,omitzero"`
-	Sint64String   map[int64]string            `json:"sint64_string,omitzero"`
-	Fixed32String  map[uint32]string           `json:"fixed32_string,omitzero"`
-	Fixed64String  map[uint64]string           `json:"fixed64_string,omitzero"`
-	Sfixed32String map[int32]string            `json:"sfixed32_string,omitzero"`
-	Sfixed64String map[int64]string            `json:"sfixed64_string,omitzero"`
-	BoolString     map[bool]string             `json:"bool_string,omitzero"`
-	StringEnum     map[string]Language         `json:"string_enum,omitzero"`
-	StringMessage  map[string]*OptionalMessage `json:"string_message,omitzero"`
+	StringString     map[string]string           `json:"string_string,omitzero"`
+	StringInt32      map[string]int32            `json:"string_int32,omitzero"`
+	StringInt64      map[string]int64            `json:"string_int64,omitzero"`
+	StringUint32     map[string]uint32           `json:"string_uint32,omitzero"`
+	StringUint64     map[string]uint64           `json:"string_uint64,omitzero"`
+	StringSint32     map[string]int32            `json:"string_sint32,omitzero"`
+	StringSint64     map[string]int64            `json:"string_sint64,omitzero"`
+	StringFixed32    map[string]uint32           `json:"string_fixed32,omitzero"`
+	StringFixed64    map[string]uint64           `json:"string_fixed64,omitzero"`
+	StringSfixed32   map[string]int32            `json:"string_sfixed32,omitzero"`
+	StringSfixed64   map[string]int64            `json:"string_sfixed64,omitzero"`
+	StringFloat      map[string]float32          `json:"string_float,omitzero"`
+	StringDouble     map[string]float64          `json:"string_double,omitzero"`
+	StringBool       map[string]bool             `json:"string_bool,omitzero"`
+	StringBytes      map[string][]byte           `json:"string_bytes,omitzero"`
+	Int32String      map[int32]string            `json:"int32_string,omitzero"`
+	Int64String      map[int64]string            `json:"int64_string,omitzero"`
+	Uint32String     map[uint32]string           `json:"uint32_string,omitzero"`
+	Uint64String     map[uint64]string           `json:"uint64_string,omitzero"`
+	Sint32String     map[int32]string            `json:"sint32_string,omitzero"`
+	Sint64String     map[int64]string            `json:"sint64_string,omitzero"`
+	Fixed32String    map[uint32]string           `json:"fixed32_string,omitzero"`
+	Fixed64String    map[uint64]string           `json:"fixed64_string,omitzero"`
+	Sfixed32String   map[int32]string            `json:"sfixed32_string,omitzero"`
+	Sfixed64String   map[int64]string            `json:"sfixed64_string,omitzero"`
+	BoolString       map[bool]string             `json:"bool_string,omitzero"`
+	StringEnum       map[string]Language         `json:"string_enum,omitzero"`
+	StringMessage    map[string]*OptionalMessage `json:"string_message,omitzero"`
+	XXX_unrecognized []byte                      `json:"-"`
 }
 
 func (m *Map) Encode(c *picobuf.Encoder) bool {
@@ -347,6 +363,7 @@ func (m *Map) Encode(c *picobuf.Encoder) bool {
 	(*picowire.MapBoolString)(&m.BoolString).PicoEncode(c, 27)
 	(*picowire.MapOf[string, Language, picowire.StringCodec, picowire.EnumCodec[Language]])(&m.StringEnum).PicoEncode(c, 28)
 	(*picowire.MapOf[string, *OptionalMessage, picowire.StringCodec, picowire.MessageCodec[OptionalMessage, *OptionalMessage]])(&m.StringMessage).PicoEncode(c, 29)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -382,10 +399,12 @@ func (m *Map) Decode(c *picobuf.Decoder) {
 	(*picowire.MapBoolString)(&m.BoolString).PicoDecode(c, 27)
 	(*picowire.MapOf[string, Language, picowire.StringCodec, picowire.EnumCodec[Language]])(&m.StringEnum).PicoDecode(c, 28)
 	(*picowire.MapOf[string, *OptionalMessage, picowire.StringCodec, picowire.MessageCodec[OptionalMessage, *OptionalMessage]])(&m.StringMessage).PicoDecode(c, 29)
+	c.UnrecognizedFields(1073709054, &m.XXX_unrecognized)
 }
 
 type OptionalMessage struct {
-	Int32 int32 `json:"int32,omitzero"`
+	Int32            int32  `json:"int32,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *OptionalMessage) Encode(c *picobuf.Encoder) bool {
@@ -393,6 +412,7 @@ func (m *OptionalMessage) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.Int32(1, &m.Int32)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -401,6 +421,7 @@ func (m *OptionalMessage) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.Int32(1, &m.Int32)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 type CommandMessage struct {
@@ -410,7 +431,8 @@ type CommandMessage struct {
 	//	*CommandMessage_Name
 	//	*CommandMessage_Message
 	//	*CommandMessage_Count
-	Command isCommandMessage_Command
+	Command          isCommandMessage_Command
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *CommandMessage) Encode(c *picobuf.Encoder) bool {
@@ -427,6 +449,7 @@ func (m *CommandMessage) Encode(c *picobuf.Encoder) bool {
 	if m, ok := m.Command.(*CommandMessage_Count); ok {
 		c.AlwaysInt32(4, &m.Count)
 	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -473,6 +496,7 @@ func (m *CommandMessage) Decode(c *picobuf.Decoder) {
 		m := x
 		c.Int32(4, &m.Count)
 	}
+	c.UnrecognizedFields(30, &m.XXX_unrecognized)
 }
 
 type isCommandMessage_Command interface{ isCommandMessage_Command() }
@@ -494,11 +518,12 @@ func (*CommandMessage_Message) isCommandMessage_Command() {}
 func (*CommandMessage_Count) isCommandMessage_Command()   {}
 
 type HighFields struct {
-	Low       int64 `json:"low,omitzero"`
-	Boundary  int64 `json:"boundary,omitzero"`
-	FirstHigh int64 `json:"first_high,omitzero"`
-	Large     int64 `json:"large,omitzero"`
-	Max       int64 `json:"max,omitzero"`
+	Low              int64  `json:"low,omitzero"`
+	Boundary         int64  `json:"boundary,omitzero"`
+	FirstHigh        int64  `json:"first_high,omitzero"`
+	Large            int64  `json:"large,omitzero"`
+	Max              int64  `json:"max,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *HighFields) Encode(c *picobuf.Encoder) bool {
@@ -510,6 +535,7 @@ func (m *HighFields) Encode(c *picobuf.Encoder) bool {
 	c.Int64(64, &m.FirstHigh)
 	c.Int64(100000, &m.Large)
 	c.Int64(536870911, &m.Max)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -522,4 +548,5 @@ func (m *HighFields) Decode(c *picobuf.Decoder) {
 	c.Int64(64, &m.FirstHigh)
 	c.Int64(100000, &m.Large)
 	c.Int64(536870911, &m.Max)
+	c.UnrecognizedFields(9223372036854775810, &m.XXX_unrecognized, 64, 100000, 536870911)
 }

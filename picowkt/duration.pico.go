@@ -12,8 +12,9 @@ import (
 )
 
 type Duration struct {
-	Seconds int64 `json:"seconds,omitzero"`
-	Nanos   int32 `json:"nanos,omitzero"`
+	Seconds          int64  `json:"seconds,omitzero"`
+	Nanos            int32  `json:"nanos,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Duration) Encode(c *picobuf.Encoder) bool {
@@ -22,6 +23,7 @@ func (m *Duration) Encode(c *picobuf.Encoder) bool {
 	}
 	c.Int64(1, &m.Seconds)
 	c.Int32(2, &m.Nanos)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -31,4 +33,5 @@ func (m *Duration) Decode(c *picobuf.Decoder) {
 	}
 	c.Int64(1, &m.Seconds)
 	c.Int32(2, &m.Nanos)
+	c.UnrecognizedFields(6, &m.XXX_unrecognized)
 }

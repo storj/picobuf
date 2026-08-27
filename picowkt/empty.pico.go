@@ -12,12 +12,14 @@ import (
 )
 
 type Empty struct {
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Empty) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -25,4 +27,5 @@ func (m *Empty) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
+	c.UnrecognizedFields(0, &m.XXX_unrecognized)
 }

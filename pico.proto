@@ -8,9 +8,25 @@ package pico;
 
 import "google/protobuf/descriptor.proto";
 
+// UnrecognizedFields selects how a message handles fields that are not in
+// its schema when decoding.
+enum UnrecognizedFields {
+  // UNRECOGNIZED_CAPTURE keeps unrecognized fields and re-emits them when
+  // encoding, so that re-marshalling preserves the original bytes. This is
+  // the default.
+  UNRECOGNIZED_CAPTURE = 0;
+  // UNRECOGNIZED_IGNORE drops unrecognized fields.
+  UNRECOGNIZED_IGNORE = 1;
+  // UNRECOGNIZED_REJECT fails decoding on an unrecognized field.
+  UNRECOGNIZED_REJECT = 2;
+}
+
 message MessageOptions {
   bool always_present = 1;
-  bool capture_unrecognized_fields = 2;
+  UnrecognizedFields unrecognized_fields = 3;
+
+  reserved 2;
+  reserved "capture_unrecognized_fields";
 }
 
 extend google.protobuf.MessageOptions {

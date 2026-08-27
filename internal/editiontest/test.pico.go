@@ -3,7 +3,7 @@
 //
 // versions:
 //     protoc-gen-pico: dev
-//     protoc:          v7.35.1
+//     protoc:          v7.36.0
 
 package editiontest
 
@@ -13,10 +13,11 @@ import (
 )
 
 type Message struct {
-	Unvalidated    *string           `json:"unvalidated,omitzero"`
-	Validated      *string           `json:"validated,omitzero"`
-	UnvalidatedMap map[string]string `json:"unvalidated_map,omitzero"`
-	ValidatedMap   map[string]string `json:"validated_map,omitzero"`
+	Unvalidated      *string           `json:"unvalidated,omitzero"`
+	Validated        *string           `json:"validated,omitzero"`
+	UnvalidatedMap   map[string]string `json:"unvalidated_map,omitzero"`
+	ValidatedMap     map[string]string `json:"validated_map,omitzero"`
+	XXX_unrecognized []byte            `json:"-"`
 }
 
 func (m *Message) Encode(c *picobuf.Encoder) bool {
@@ -35,6 +36,7 @@ func (m *Message) Encode(c *picobuf.Encoder) bool {
 		(*picowire.MapStringString)(&m.UnvalidatedMap).PicoEncode(c, 3)
 	})
 	(*picowire.MapStringString)(&m.ValidatedMap).PicoEncode(c, 4)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -56,4 +58,5 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 		(*picowire.MapStringString)(&m.UnvalidatedMap).PicoDecode(c, 3)
 	})
 	(*picowire.MapStringString)(&m.ValidatedMap).PicoDecode(c, 4)
+	c.UnrecognizedFields(30, &m.XXX_unrecognized)
 }

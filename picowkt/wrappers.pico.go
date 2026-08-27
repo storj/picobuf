@@ -12,7 +12,8 @@ import (
 )
 
 type DoubleValue struct {
-	Value float64 `json:"value,omitzero"`
+	Value            float64 `json:"value,omitzero"`
+	XXX_unrecognized []byte  `json:"-"`
 }
 
 func (m *DoubleValue) Encode(c *picobuf.Encoder) bool {
@@ -20,6 +21,7 @@ func (m *DoubleValue) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.Double(1, &m.Value)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -28,10 +30,12 @@ func (m *DoubleValue) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.Double(1, &m.Value)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 type FloatValue struct {
-	Value float32 `json:"value,omitzero"`
+	Value            float32 `json:"value,omitzero"`
+	XXX_unrecognized []byte  `json:"-"`
 }
 
 func (m *FloatValue) Encode(c *picobuf.Encoder) bool {
@@ -39,6 +43,7 @@ func (m *FloatValue) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.Float(1, &m.Value)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -47,10 +52,12 @@ func (m *FloatValue) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.Float(1, &m.Value)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 type Int64Value struct {
-	Value int64 `json:"value,omitzero"`
+	Value            int64  `json:"value,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Int64Value) Encode(c *picobuf.Encoder) bool {
@@ -58,6 +65,7 @@ func (m *Int64Value) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.Int64(1, &m.Value)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -66,10 +74,12 @@ func (m *Int64Value) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.Int64(1, &m.Value)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 type UInt64Value struct {
-	Value uint64 `json:"value,omitzero"`
+	Value            uint64 `json:"value,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *UInt64Value) Encode(c *picobuf.Encoder) bool {
@@ -77,6 +87,7 @@ func (m *UInt64Value) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.Uint64(1, &m.Value)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -85,10 +96,12 @@ func (m *UInt64Value) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.Uint64(1, &m.Value)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 type Int32Value struct {
-	Value int32 `json:"value,omitzero"`
+	Value            int32  `json:"value,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *Int32Value) Encode(c *picobuf.Encoder) bool {
@@ -96,6 +109,7 @@ func (m *Int32Value) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.Int32(1, &m.Value)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -104,10 +118,12 @@ func (m *Int32Value) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.Int32(1, &m.Value)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 type UInt32Value struct {
-	Value uint32 `json:"value,omitzero"`
+	Value            uint32 `json:"value,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *UInt32Value) Encode(c *picobuf.Encoder) bool {
@@ -115,6 +131,7 @@ func (m *UInt32Value) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.Uint32(1, &m.Value)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -123,10 +140,12 @@ func (m *UInt32Value) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.Uint32(1, &m.Value)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 type BoolValue struct {
-	Value bool `json:"value,omitzero"`
+	Value            bool   `json:"value,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *BoolValue) Encode(c *picobuf.Encoder) bool {
@@ -134,6 +153,7 @@ func (m *BoolValue) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.Bool(1, &m.Value)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -142,10 +162,12 @@ func (m *BoolValue) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.Bool(1, &m.Value)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 type StringValue struct {
-	Value string `json:"value,omitzero"`
+	Value            string `json:"value,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *StringValue) Encode(c *picobuf.Encoder) bool {
@@ -153,6 +175,7 @@ func (m *StringValue) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.String(1, &m.Value)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -161,10 +184,12 @@ func (m *StringValue) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.String(1, &m.Value)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
 
 type BytesValue struct {
-	Value []byte `json:"value,omitzero"`
+	Value            []byte `json:"value,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *BytesValue) Encode(c *picobuf.Encoder) bool {
@@ -172,6 +197,7 @@ func (m *BytesValue) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.Bytes(1, &m.Value)
+	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
 
@@ -180,4 +206,5 @@ func (m *BytesValue) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.Bytes(1, &m.Value)
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
 }
