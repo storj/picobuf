@@ -342,3 +342,62 @@ func TestGenerateEditionsStringBytesPresence(t *testing.T) {
 		}
 	}
 }
+
+func TestGenerateValuePresenceRejectsRepeatedAndOneof(t *testing.T) {
+	opts := &descriptorpb.FieldOptions{}
+	proto.SetExtension(opts, E_Field, &FieldOptions{
+		CustomType:    "example.com/custom.Value",
+		ValuePresence: true,
+	})
+	for _, tc := range []struct {
+		name  string
+		field *descriptorpb.FieldDescriptorProto
+	}{
+		{"repeated", &descriptorpb.FieldDescriptorProto{
+			Name: proto.String("values"), Number: proto.Int32(1),
+			Label:    descriptorpb.FieldDescriptorProto_LABEL_REPEATED.Enum(),
+			Type:     descriptorpb.FieldDescriptorProto_TYPE_MESSAGE.Enum(),
+			TypeName: proto.String(".test.Stamp"),
+			Options:  opts,
+		}},
+		{"oneof", &descriptorpb.FieldDescriptorProto{
+			Name: proto.String("value"), Number: proto.Int32(1),
+			Label:      descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+			Type:       descriptorpb.FieldDescriptorProto_TYPE_MESSAGE.Enum(),
+			TypeName:   proto.String(".test.Stamp"),
+			OneofIndex: proto.Int32(0),
+			Options:    opts,
+		}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			file := &descriptorpb.FileDescriptorProto{
+				Name:    proto.String("test.proto"),
+				Package: proto.String("test"),
+				Syntax:  proto.String("proto3"),
+				Options: &descriptorpb.FileOptions{GoPackage: proto.String("example.com/test;test")},
+				MessageType: []*descriptorpb.DescriptorProto{
+					{Name: proto.String("Stamp")},
+					{
+						Name:  proto.String("Message"),
+						Field: []*descriptorpb.FieldDescriptorProto{tc.field},
+					},
+				},
+			}
+			if tc.field.OneofIndex != nil {
+				file.MessageType[1].OneofDecl = []*descriptorpb.OneofDescriptorProto{{Name: proto.String("kind")}}
+			}
+			plugin, err := (protogen.Options{}).New(&pluginpb.CodeGeneratorRequest{
+				ProtoFile: []*descriptorpb.FileDescriptorProto{file}, FileToGenerate: []string{"test.proto"},
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer func() {
+				if recover() == nil {
+					t.Fatal("value_presence was accepted")
+				}
+			}()
+			genFile(plugin, plugin.Files[0], config{})
+		})
+	}
+}

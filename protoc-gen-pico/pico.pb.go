@@ -138,8 +138,17 @@ type FieldOptions struct {
 	AlwaysPresent   bool                   `protobuf:"varint,1,opt,name=always_present,json=alwaysPresent,proto3" json:"always_present,omitempty"`
 	CustomType      string                 `protobuf:"bytes,2,opt,name=custom_type,json=customType,proto3" json:"custom_type,omitempty"`
 	CustomSerialize string                 `protobuf:"bytes,3,opt,name=custom_serialize,json=customSerialize,proto3" json:"custom_serialize,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// value_presence generates an explicit-presence field as a
+	// picobuf.Optional[T] value instead of a *T pointer. Only valid on
+	// non-repeated optional fields outside of oneofs, excluding messages
+	// and maps.
+	//
+	// With custom_type or custom_serialize, the custom PicoEncode decides
+	// what is written, so a present zero value survives a round trip only
+	// if PicoEncode writes it.
+	ValuePresence bool `protobuf:"varint,4,opt,name=value_presence,json=valuePresence,proto3" json:"value_presence,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *FieldOptions) Reset() {
@@ -193,6 +202,13 @@ func (x *FieldOptions) GetCustomSerialize() string {
 	return ""
 }
 
+func (x *FieldOptions) GetValuePresence() bool {
+	if x != nil {
+		return x.ValuePresence
+	}
+	return false
+}
+
 var file_pico_proto_extTypes = []protoimpl.ExtensionInfo{
 	{
 		ExtendedType:  (*descriptorpb.MessageOptions)(nil),
@@ -232,12 +248,13 @@ const file_pico_proto_rawDesc = "" +
 	"pico.proto\x12\x04pico\x1a google/protobuf/descriptor.proto\"\xa5\x01\n" +
 	"\x0eMessageOptions\x12%\n" +
 	"\x0ealways_present\x18\x01 \x01(\bR\ralwaysPresent\x12I\n" +
-	"\x13unrecognized_fields\x18\x03 \x01(\x0e2\x18.pico.UnrecognizedFieldsR\x12unrecognizedFieldsJ\x04\b\x02\x10\x03R\x1bcapture_unrecognized_fields\"\x81\x01\n" +
+	"\x13unrecognized_fields\x18\x03 \x01(\x0e2\x18.pico.UnrecognizedFieldsR\x12unrecognizedFieldsJ\x04\b\x02\x10\x03R\x1bcapture_unrecognized_fields\"\xa8\x01\n" +
 	"\fFieldOptions\x12%\n" +
 	"\x0ealways_present\x18\x01 \x01(\bR\ralwaysPresent\x12\x1f\n" +
 	"\vcustom_type\x18\x02 \x01(\tR\n" +
 	"customType\x12)\n" +
-	"\x10custom_serialize\x18\x03 \x01(\tR\x0fcustomSerialize*`\n" +
+	"\x10custom_serialize\x18\x03 \x01(\tR\x0fcustomSerialize\x12%\n" +
+	"\x0evalue_presence\x18\x04 \x01(\bR\rvaluePresence*`\n" +
 	"\x12UnrecognizedFields\x12\x18\n" +
 	"\x14UNRECOGNIZED_CAPTURE\x10\x00\x12\x17\n" +
 	"\x13UNRECOGNIZED_IGNORE\x10\x01\x12\x17\n" +

@@ -205,6 +205,19 @@ message RejectUnknownMessage {
   int64 fourth = 4;
 }
 
+message OptionalValues {
+  optional int32   int32 = 1 [(pico.field).value_presence = true];
+  optional string  string = 2 [(pico.field).value_presence = true];
+  optional bytes   bytes = 3 [(pico.field).value_presence = true];
+  optional double  double = 4 [(pico.field).value_presence = true];
+  optional MapEnum enum = 5 [(pico.field).value_presence = true];
+  optional Timestamp time = 6 [
+    (pico.field).value_presence = true,
+    (pico.field).custom_type = "time.Time",
+    (pico.field).custom_serialize = "storj.io/picobuf/picoconv.Timestamp"
+  ];
+}
+
 message KnownMessage {
   int64 first = 1;
   int64 second = 2;

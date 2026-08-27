@@ -1360,6 +1360,109 @@ func (m *RejectUnknownMessage) GetFourth() (v int64) {
 	return 0
 }
 
+type OptionalValues struct {
+	Int32            picobuf.Optional[int32]     `json:"int32,omitzero"`
+	String_          picobuf.Optional[string]    `json:"string,omitzero"`
+	Bytes            picobuf.Optional[[]byte]    `json:"bytes,omitzero"`
+	Double           picobuf.Optional[float64]   `json:"double,omitzero"`
+	Enum             picobuf.Optional[MapEnum]   `json:"enum,omitzero"`
+	Time             picobuf.Optional[time.Time] `json:"time,omitzero"`
+	XXX_unrecognized []byte                      `json:"-"`
+}
+
+func (m *OptionalValues) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	if p := m.Int32.Ptr(); p != nil {
+		c.AlwaysInt32(1, p)
+	}
+	if p := m.String_.Ptr(); p != nil {
+		c.AlwaysString(2, p)
+	}
+	if p := m.Bytes.Ptr(); p != nil {
+		c.AlwaysBytes(3, p)
+	}
+	if p := m.Double.Ptr(); p != nil {
+		c.AlwaysDouble(4, p)
+	}
+	if p := m.Enum.Ptr(); p != nil {
+		c.AlwaysInt32(5, (*int32)(p))
+	}
+	if p := m.Time.Ptr(); p != nil {
+		(*picoconv.Timestamp)(p).PicoEncode(c, 6)
+	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
+	return true
+}
+
+func (m *OptionalValues) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	if c.PendingField() == 1 {
+		c.Int32(1, m.Int32.PicoSetPtr())
+	}
+	if c.PendingField() == 2 {
+		c.String(2, m.String_.PicoSetPtr())
+	}
+	if c.PendingField() == 3 {
+		c.Bytes(3, m.Bytes.PicoSetPtr())
+	}
+	if c.PendingField() == 4 {
+		c.Double(4, m.Double.PicoSetPtr())
+	}
+	if c.PendingField() == 5 {
+		c.Int32(5, (*int32)(m.Enum.PicoSetPtr()))
+	}
+	if c.PendingField() == 6 {
+		(*picoconv.Timestamp)(m.Time.PicoSetPtr()).PicoDecode(c, 6)
+	}
+	c.UnrecognizedFields(126, &m.XXX_unrecognized)
+}
+
+func (m *OptionalValues) GetInt32() (v picobuf.Optional[int32]) {
+	if m != nil {
+		return m.Int32
+	}
+	return v
+}
+
+func (m *OptionalValues) GetString_() (v picobuf.Optional[string]) {
+	if m != nil {
+		return m.String_
+	}
+	return v
+}
+
+func (m *OptionalValues) GetBytes() (v picobuf.Optional[[]byte]) {
+	if m != nil {
+		return m.Bytes
+	}
+	return v
+}
+
+func (m *OptionalValues) GetDouble() (v picobuf.Optional[float64]) {
+	if m != nil {
+		return m.Double
+	}
+	return v
+}
+
+func (m *OptionalValues) GetEnum() (v picobuf.Optional[MapEnum]) {
+	if m != nil {
+		return m.Enum
+	}
+	return v
+}
+
+func (m *OptionalValues) GetTime() (v picobuf.Optional[time.Time]) {
+	if m != nil {
+		return m.Time
+	}
+	return v
+}
+
 type KnownMessage struct {
 	First            int64  `json:"first,omitzero"`
 	Second           int64  `json:"second,omitzero"`

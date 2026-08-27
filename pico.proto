@@ -37,6 +37,15 @@ message FieldOptions {
   bool   always_present = 1;
   string custom_type = 2;
   string custom_serialize = 3;
+  // value_presence generates an explicit-presence field as a
+  // picobuf.Optional[T] value instead of a *T pointer. Only valid on
+  // non-repeated optional fields outside of oneofs, excluding messages
+  // and maps.
+  //
+  // With custom_type or custom_serialize, the custom PicoEncode decides
+  // what is written, so a present zero value survives a round trip only
+  // if PicoEncode writes it.
+  bool   value_presence = 4;
 }
 
 extend google.protobuf.FieldOptions {

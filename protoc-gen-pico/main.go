@@ -316,6 +316,10 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 	switch {
 	case info.kind == kindCast:
 		switch {
+		case info.optionalValue:
+			gf.P("if p := m.", field.GoName, ".Ptr(); p != nil {")
+			gf.P("  (*", info.castType, ")(p).PicoEncode(c, ", field.Desc.Number(), ")")
+			gf.P("}")
 		case !info.repeated && info.pointer:
 			gf.P("if m.", field.GoName, " != nil {")
 			gf.P("  (*", info.castType, ")(m.", field.GoName, ").PicoEncode(c, ", field.Desc.Number(), ")")
@@ -335,6 +339,10 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 
 	case info.kind == kindCustom:
 		switch {
+		case info.optionalValue:
+			gf.P("if p := m.", field.GoName, ".Ptr(); p != nil {")
+			gf.P("  p.PicoEncode(c, ", field.Desc.Number(), ")")
+			gf.P("}")
 		case !info.repeated && info.pointer:
 			gf.P("if m.", field.GoName, " != nil {")
 			gf.P("  m.", field.GoName, ".PicoEncode(c, ", field.Desc.Number(), ")")
@@ -361,6 +369,12 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 			field.Desc.Kind() != protoreflect.StringKind && field.Desc.Kind() != protoreflect.BytesKind {
 			gf.P("for i := range m.", field.GoName, " {")
 			gf.P("  c.Always", method, "(", field.Desc.Number(), ", &m.", field.GoName, "[i])")
+			gf.P("}")
+			break
+		}
+		if info.optionalValue {
+			gf.P("if p := m.", field.GoName, ".Ptr(); p != nil {")
+			gf.P("  c.Always", method, "(", field.Desc.Number(), ", p)")
 			gf.P("}")
 			break
 		}
@@ -409,6 +423,10 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 
 	case info.kind == kindEnum:
 		switch {
+		case info.optionalValue:
+			gf.P("if p := m.", field.GoName, ".Ptr(); p != nil {")
+			gf.P("  c.AlwaysInt32(", field.Desc.Number(), ", (*int32)(p))")
+			gf.P("}")
 		case info.pointer && !info.repeated:
 			gf.P("if m.", field.GoName, " != nil {")
 			gf.P("  c.AlwaysInt32(", field.Desc.Number(), ", (*int32)(m.", field.GoName, "))")
@@ -519,6 +537,10 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 	switch {
 	case info.kind == kindCast:
 		switch {
+		case info.optionalValue:
+			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("  (*", info.castType, ")(m.", field.GoName, ".PicoSetPtr()).PicoDecode(c, ", field.Desc.Number(), ")")
+			gf.P("}")
 		case !info.repeated && info.pointer:
 			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
 			gf.P("  if m.", field.GoName, " == nil {")
@@ -544,6 +566,10 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 
 	case info.kind == kindCustom:
 		switch {
+		case info.optionalValue:
+			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("  m.", field.GoName, ".PicoSetPtr().PicoDecode(c, ", field.Desc.Number(), ")")
+			gf.P("}")
 		case !info.repeated && info.pointer:
 			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
 			gf.P("  if m.", field.GoName, " == nil {")
@@ -570,6 +596,12 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 		method, ok := codecMethodName[field.Desc.Kind()]
 		if !ok {
 			panic("unsupported type " + field.Desc.Kind().GoString())
+		}
+		if info.optionalValue {
+			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("  c.", method, "(", field.Desc.Number(), ", m.", field.GoName, ".PicoSetPtr())")
+			gf.P("}")
+			break
 		}
 		if info.repeated {
 			method = "Repeated" + method
@@ -619,6 +651,10 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 
 	case info.kind == kindEnum:
 		switch {
+		case info.optionalValue:
+			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("  c.Int32(", field.Desc.Number(), ", (*int32)(m.", field.GoName, ".PicoSetPtr()))")
+			gf.P("}")
 		case info.pointer && !info.repeated:
 			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
 			gf.P("  m.", field.GoName, " = new(", info.baseType, ")")
@@ -702,14 +738,17 @@ const (
 )
 
 type fieldInformation struct {
-	baseType  string
-	goType    string
-	castType  string
-	kind      fieldKind
-	pointer   bool
-	repeated  bool
-	oneof     bool
-	delimited bool
+	baseType string
+	goType   string
+	castType string
+	kind     fieldKind
+	pointer  bool
+	// optionalValue tracks explicit presence in a picobuf.Optional[T]
+	// value instead of a pointer.
+	optionalValue bool
+	repeated      bool
+	oneof         bool
+	delimited     bool
 
 	key   *fieldInformation
 	value *fieldInformation
@@ -800,6 +839,17 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 			!opts.AlwaysPresent && opts.CustomType != "" {
 			info.pointer = true
 		}
+		if opts.ValuePresence {
+			// Check each restriction explicitly: custom_type and
+			// custom_serialize rewrite info.kind, so info.pointer alone does
+			// not rule out repeated fields and oneof members.
+			if !info.pointer || info.repeated || info.oneof || info.kind == kindMessage ||
+				desc.Cardinality() == protoreflect.Required {
+				panic("value_presence requires an optional non-repeated non-message field outside a oneof: " + string(desc.FullName()))
+			}
+			info.pointer = false
+			info.optionalValue = true
+		}
 	}
 	if field == nil {
 		// Synthetic map-entry key and value fields never track presence.
@@ -807,6 +857,9 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 	}
 
 	info.goType = info.baseType
+	if info.optionalValue {
+		info.goType = gf.QualifiedGoIdent(picobufPackage.Ident("Optional")) + "[" + info.baseType + "]"
+	}
 	if info.pointer {
 		info.goType = "*" + info.goType
 	}
@@ -971,6 +1024,11 @@ func genFieldAccess(gf *generator, m *protogen.Message, field *protogen.Field) {
 	gf.P("    return m.", field.GoName)
 	gf.P("}")
 
+	if info.optionalValue {
+		// The zero Optional[T] is absent.
+		gf.P("return v")
+		return
+	}
 	gf.P("return ", gf.defaultValue(&info, field))
 }
 
