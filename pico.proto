@@ -4,6 +4,20 @@
 syntax = "proto3";
 option go_package = "storj.io/picobuf;main";
 
+// Package pico defines the options that protoc-gen-pico understands. To
+// use them, import this file and set them on messages and fields:
+//
+//	import "pico.proto";
+//
+//	message Example {
+//	  option (pico.message).unrecognized_fields = UNRECOGNIZED_IGNORE;
+//	  Item item = 1 [(pico.field).always_present = true];
+//	}
+//
+// The options only affect the generated Go code, never the wire format,
+// with two exceptions called out below: always_present, on message-typed
+// fields and on scalar fields with explicit presence, and
+// UNRECOGNIZED_IGNORE, which both change what gets encoded.
 package pico;
 
 import "google/protobuf/descriptor.proto";
@@ -11,20 +25,33 @@ import "google/protobuf/descriptor.proto";
 // UnrecognizedFields selects how a message handles fields that are not in
 // its schema when decoding.
 enum UnrecognizedFields {
-  // UNRECOGNIZED_CAPTURE keeps unrecognized fields and re-emits them when
-  // encoding, so that re-marshalling preserves the original bytes. This is
-  // the default.
+  // UNRECOGNIZED_CAPTURE keeps unrecognized fields in an XXX_unrecognized
+  // byte slice and re-emits them when encoding, so that decoding and
+  // re-encoding a message from a newer schema preserves the original bytes.
+  // This is the default; signature verification across version skew
+  // depends on it.
   UNRECOGNIZED_CAPTURE = 0;
-  // UNRECOGNIZED_IGNORE drops unrecognized fields.
+  // UNRECOGNIZED_IGNORE drops unrecognized fields, so re-encoding a decoded
+  // message emits only the fields in the schema.
   UNRECOGNIZED_IGNORE = 1;
-  // UNRECOGNIZED_REJECT fails decoding on an unrecognized field.
+  // UNRECOGNIZED_REJECT fails decoding on the first unrecognized field.
   UNRECOGNIZED_REJECT = 2;
 }
 
+// MessageOptions are set on a message with (pico.message).
 message MessageOptions {
+  // always_present generates every field that has this message as its
+  // type, in any message, by value instead of by pointer, as if each such
+  // field had (pico.field).always_present = true. It does not affect the
+  // fields declared in this message. See FieldOptions.always_present.
   bool always_present = 1;
+
+  // unrecognized_fields selects how the message handles fields that are
+  // not in its schema when decoding. Defaults to UNRECOGNIZED_CAPTURE.
   UnrecognizedFields unrecognized_fields = 3;
 
+  // Field 2 was the bool capture_unrecognized_fields, replaced by
+  // unrecognized_fields.
   reserved 2;
   reserved "capture_unrecognized_fields";
 }
@@ -33,19 +60,59 @@ extend google.protobuf.MessageOptions {
   MessageOptions message = 28980;
 }
 
+// FieldOptions are set on a field with (pico.field).
 message FieldOptions {
-  bool   always_present = 1;
+  // always_present generates the field by value instead of by pointer.
+  //
+  // On a message-typed field this changes the Go type from *Message to
+  // Message; the field is encoded only when its encoding is non-empty, so
+  // an absent and an empty message become indistinguishable. Do not use it
+  // where absence is meaningful, and never on a signed message.
+  //
+  // On a scalar field with explicit presence (proto2, editions, or proto3
+  // optional) this drops the presence pointer, reverting the field to
+  // implicit presence: zero values are not encoded, so an explicitly set
+  // zero value does not round-trip. Do not use it where absence is
+  // meaningful, and never on a signed message.
+  //
+  // On a repeated message field this changes the element type from
+  // *Message to Message.
+  bool always_present = 1;
+
+  // custom_type replaces the generated Go type of the field with the named
+  // type, given as an import path followed by a dot and the type name,
+  // e.g. "storj.io/common/storj.NodeID". The type must implement
+  //
+  //	PicoEncode(*picobuf.Encoder, picobuf.FieldNumber) bool
+  //	PicoDecode(*picobuf.Decoder, picobuf.FieldNumber)
+  //
+  // unless custom_serialize provides them. The methods define the wire
+  // encoding, so they must match the declared protobuf type of the field.
   string custom_type = 2;
+
+  // custom_serialize names a converter type, in the same format as
+  // custom_type, that the field is cast to for encoding and decoding. The
+  // field keeps its Go type (custom_type if set, the default otherwise)
+  // and needs no methods of its own; the converter must have the same
+  // underlying type as the field and implement the PicoEncode/PicoDecode
+  // methods described in custom_type. For example a Timestamp field with
+  //
+  //	(pico.field).custom_type = "time.Time",
+  //	(pico.field).custom_serialize = "storj.io/picobuf/picoconv.Timestamp"
+  //
+  // generates a time.Time field encoded through picoconv.Timestamp.
   string custom_serialize = 3;
+
   // value_presence generates an explicit-presence field as a
-  // picobuf.Optional[T] value instead of a *T pointer. Only valid on
-  // non-repeated optional fields outside of oneofs, excluding messages
-  // and maps.
+  // picobuf.Optional[T] value instead of a *T pointer, keeping presence
+  // semantics without the per-field allocation. Only valid on optional
+  // non-repeated fields outside of oneofs, excluding messages and maps;
+  // composes with custom_type and custom_serialize.
   //
   // With custom_type or custom_serialize, the custom PicoEncode decides
   // what is written, so a present zero value survives a round trip only
   // if PicoEncode writes it.
-  bool   value_presence = 4;
+  bool value_presence = 4;
 }
 
 extend google.protobuf.FieldOptions {
