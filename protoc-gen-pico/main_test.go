@@ -289,6 +289,68 @@ func TestGenerateEnumPresence(t *testing.T) {
 	}
 }
 
+func TestGenerateCustomTypeSkipsMessageImport(t *testing.T) {
+	other := &descriptorpb.FileDescriptorProto{
+		Name:    proto.String("other.proto"),
+		Package: proto.String("other"),
+		Syntax:  proto.String("proto3"),
+		Options: &descriptorpb.FileOptions{GoPackage: proto.String("example.com/other;other")},
+		MessageType: []*descriptorpb.DescriptorProto{{
+			Name: proto.String("Stamp"),
+		}},
+		EnumType: []*descriptorpb.EnumDescriptorProto{{
+			Name: proto.String("Kind"),
+			Value: []*descriptorpb.EnumValueDescriptorProto{{
+				Name: proto.String("KIND_UNSPECIFIED"), Number: proto.Int32(0),
+			}},
+		}},
+	}
+
+	opts := &descriptorpb.FieldOptions{}
+	proto.SetExtension(opts, E_Field, &FieldOptions{
+		CustomType:      "example.com/custom.Value",
+		CustomSerialize: "example.com/custom.Codec",
+	})
+	file := &descriptorpb.FileDescriptorProto{
+		Name:       proto.String("test.proto"),
+		Package:    proto.String("test"),
+		Syntax:     proto.String("proto3"),
+		Options:    &descriptorpb.FileOptions{GoPackage: proto.String("example.com/test;test")},
+		Dependency: []string{"other.proto"},
+		MessageType: []*descriptorpb.DescriptorProto{{
+			Name: proto.String("Message"),
+			Field: []*descriptorpb.FieldDescriptorProto{{
+				Name: proto.String("custom"), Number: proto.Int32(1),
+				Label:    descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+				Type:     descriptorpb.FieldDescriptorProto_TYPE_MESSAGE.Enum(),
+				TypeName: proto.String(".other.Stamp"),
+				Options:  opts,
+			}, {
+				Name: proto.String("kind"), Number: proto.Int32(2),
+				Label:    descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+				Type:     descriptorpb.FieldDescriptorProto_TYPE_ENUM.Enum(),
+				TypeName: proto.String(".other.Kind"),
+				Options:  opts,
+			}},
+		}},
+	}
+	plugin, err := (protogen.Options{}).New(&pluginpb.CodeGeneratorRequest{
+		ProtoFile: []*descriptorpb.FileDescriptorProto{other, file}, FileToGenerate: []string{"test.proto"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	genFile(plugin, plugin.Files[1], config{})
+	content := plugin.Response().File[0].GetContent()
+
+	if strings.Contains(content, "example.com/other") {
+		t.Fatalf("custom typed fields import the unused package:\n%s", content)
+	}
+	if !strings.Contains(content, "custom.Value") {
+		t.Fatalf("custom typed field does not use the custom type:\n%s", content)
+	}
+}
+
 func TestGenerateEditionsStringBytesPresence(t *testing.T) {
 	file := &descriptorpb.FileDescriptorProto{
 		Name:    proto.String("test.proto"),

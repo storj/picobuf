@@ -767,7 +767,10 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 		if field == nil {
 			panic("unsupported enum")
 		}
-		info.baseType = gf.QualifiedGoIdent(field.Enum.GoIdent)
+		if getFieldOpts(field).CustomType == "" {
+			// See the message case below.
+			info.baseType = gf.QualifiedGoIdent(field.Enum.GoIdent)
+		}
 		info.kind = kindEnum
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
 		info.baseType = "int32"
@@ -807,7 +810,11 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 			info.kind = kindMessage
 			info.pointer = true
 			info.delimited = desc.Kind() == protoreflect.GroupKind
-			info.baseType = gf.QualifiedGoIdent(field.Message.GoIdent)
+			if getFieldOpts(field).CustomType == "" {
+				// Resolving the identifier adds the message's package to the
+				// generated imports, which a custom typed field never uses.
+				info.baseType = gf.QualifiedGoIdent(field.Message.GoIdent)
+			}
 		}
 	default:
 		panic(fmt.Sprintf("unhandled: invalid field kind: %v", field.Desc.Kind()))
