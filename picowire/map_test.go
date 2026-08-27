@@ -6,6 +6,7 @@ package picowire
 import (
 	"bytes"
 	"fmt"
+	"runtime"
 	"testing"
 
 	"storj.io/picobuf"
@@ -77,4 +78,63 @@ func TestMapOfEncodingIsSortedByKey(t *testing.T) {
 	if !bytes.Equal(data, want) {
 		t.Fatalf("encoded %x, want %x", data, want)
 	}
+}
+
+type boolMapMessage struct {
+	Values MapBoolBool
+}
+
+func (message *boolMapMessage) Encode(enc *picobuf.Encoder) bool {
+	message.Values.PicoEncode(enc, 1)
+	return true
+}
+
+func (message *boolMapMessage) Decode(dec *picobuf.Decoder) {
+	message.Values.PicoDecode(dec, 1)
+}
+
+func TestMapDecodeCapsSizeHint(t *testing.T) {
+	// 64 KiB empty entries, which all decode to the same zero key.
+	data := bytes.Repeat([]byte{0x0a, 0x00}, 1<<15)
+
+	allocated := func(decode func()) uint64 {
+		var before, after runtime.MemStats
+		runtime.ReadMemStats(&before)
+		decode()
+		runtime.ReadMemStats(&after)
+		return after.TotalAlloc - before.TotalAlloc
+	}
+
+	var generated boolMapMessage
+	generatedBytes := allocated(func() {
+		if err := picobuf.Unmarshal(data, &generated); err != nil {
+			t.Fatal(err)
+		}
+	})
+	var generic genericBoolMapMessage
+	genericBytes := allocated(func() {
+		if err := picobuf.Unmarshal(data, &generic); err != nil {
+			t.Fatal(err)
+		}
+	})
+	if len(generated.Values) != 1 || len(generic.Values) != 1 {
+		t.Fatalf("decoded %d and %d entries, want 1", len(generated.Values), len(generic.Values))
+	}
+	// An uncapped hint allocates a table for 32768 entries.
+	if generatedBytes > 64<<10 || genericBytes > 64<<10 {
+		t.Fatalf("allocated %d and %d bytes for a single entry map", generatedBytes, genericBytes)
+	}
+}
+
+type genericBoolMapMessage struct {
+	Values MapOf[bool, bool, BoolCodec, BoolCodec]
+}
+
+func (message *genericBoolMapMessage) Encode(enc *picobuf.Encoder) bool {
+	message.Values.PicoEncode(enc, 1)
+	return true
+}
+
+func (message *genericBoolMapMessage) Decode(dec *picobuf.Decoder) {
+	message.Values.PicoDecode(dec, 1)
 }

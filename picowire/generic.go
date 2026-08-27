@@ -181,6 +181,11 @@ func (m *MapOf[K, V, KC, VC]) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 	}
 }
 
+// maxMapSizeHint caps the presized map capacity. The hint counts wire
+// entries, which a peer controls and which may repeat the same key, so an
+// uncapped hint would let the input dictate the table size.
+const maxMapSizeHint = 1024
+
 // PicoDecode decodes as protobuf.
 //
 //go:noinline
@@ -192,6 +197,11 @@ func (m *MapOf[K, V, KC, VC]) PicoDecode(dec *picobuf.Decoder, field picobuf.Fie
 	// allocation per map field instead of one per entry.
 	var key K
 	var val V
+	if *m == nil {
+		if n := dec.RepeatedMessageCount(field); n > 0 {
+			*m = make(map[K]V, min(n, maxMapSizeHint))
+		}
+	}
 	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[K]V{}
