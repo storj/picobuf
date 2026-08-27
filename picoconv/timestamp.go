@@ -25,10 +25,11 @@ func (t *Timestamp) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bo
 		return false
 	}
 	z := time.Time(*t)
-	if z.IsZero() {
-		return false
-	}
 
+	// A zero time is encoded rather than skipped: gogo/protobuf and the
+	// official implementation both encode it as seconds=-62135596800, and a
+	// message that decodes and re-encodes a peer's bytes has to reproduce
+	// them, which signature verification depends on.
 	seconds := z.Unix()
 	nanos := int32(z.Nanosecond())
 	if seconds < minTimestampSeconds || seconds > maxTimestampSeconds {
@@ -70,3 +71,5 @@ func (t *Timestamp) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 
 	*t = Timestamp(time.Unix(seconds, int64(nanos)).UTC())
 }
+
+var _ picobuf.CustomType = (*Timestamp)(nil)

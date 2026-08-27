@@ -70,6 +70,18 @@ func TestOptional_RoundTrip(t *testing.T) {
 	assert.That(t, !decoded.String_.Present())
 }
 
+func TestOptional_ZeroTimePresent(t *testing.T) {
+	// picoconv.Timestamp writes the zero time, so its presence survives.
+	msg := picotest.OptionalValues{Time: picobuf.NewOptional(time.Time{})}
+	data, err := picobuf.Marshal(&msg)
+	assert.NoError(t, err)
+
+	var decoded picotest.OptionalValues
+	assert.NoError(t, picobuf.Unmarshal(data, &decoded))
+	value, ok := decoded.Time.Get()
+	assert.That(t, ok && value.IsZero())
+}
+
 func TestOptional_JSONNotSupported(t *testing.T) {
 	_, err := json.Marshal(&picotest.OptionalValues{Int32: picobuf.NewOptional[int32](0)})
 	assert.Error(t, err)

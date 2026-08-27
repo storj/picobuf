@@ -307,7 +307,13 @@ func TestEncoder_CustomMessageTypes_Empty(t *testing.T) {
 	msg := &picotest.CustomMessageTypes{}
 	data, err := picobuf.Marshal(msg)
 	assert.NoError(t, err)
-	assert.Equal(t, data, []byte{0x1a, 0x0})
+	assert.Equal(t, data, []byte{
+		// PresentCustomType, whose PicoEncode skips the zero value
+		0x1a, 0x0,
+		// PresentCustomTypeCast, a zero time.Time, which picoconv encodes as
+		// seconds=-62135596800 the way the other implementations do
+		0x2a, 0xb, 0x8, 0x80, 0x92, 0xb8, 0xc3, 0x98, 0xfe, 0xff, 0xff, 0xff, 0x1,
+	})
 }
 
 func TestEncoder_UnrecognizedFields(t *testing.T) {

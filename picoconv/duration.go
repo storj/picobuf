@@ -80,3 +80,5 @@ func (d *Duration) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 
 	*d = Duration(z)
 }
+
+var _ picobuf.CustomType = (*Duration)(nil)
