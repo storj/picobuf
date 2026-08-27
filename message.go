@@ -6,6 +6,7 @@ package picobuf
 import (
 	"fmt"
 	"math"
+	"slices"
 
 	"storj.io/picobuf/internal/protowire"
 )
@@ -88,6 +89,24 @@ func Marshal(msg Message) ([]byte, error) {
 	msg.Encode(enc)
 	if enc.err != nil {
 		return nil, enc.err
+	}
+	return enc.Buffer(), nil
+}
+
+// MarshalAppend appends the encoding of msg to buffer and returns the
+// extended buffer. On error it returns buffer with its original length.
+//
+// Like Marshal, it sizes the message first, so msg.Encode runs twice and
+// must behave deterministically.
+func MarshalAppend(buffer []byte, msg Message) ([]byte, error) {
+	size, err := Size(msg)
+	if err != nil {
+		return buffer, err
+	}
+	enc := &Encoder{buffer: slices.Grow(buffer, size)}
+	msg.Encode(enc)
+	if enc.err != nil {
+		return buffer, enc.err
 	}
 	return enc.Buffer(), nil
 }

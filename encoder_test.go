@@ -34,6 +34,28 @@ func TestMarshal_InvalidUTF8(t *testing.T) {
 	assert.Nil(t, data)
 }
 
+func TestMarshalAppend(t *testing.T) {
+	msg := picotest.Person{Name: "hello", Address: &picotest.Address{Street: "street"}}
+	single, err := picobuf.Marshal(&msg)
+	assert.NoError(t, err)
+
+	prefix := []byte{1, 2, 3}
+	appended, err := picobuf.MarshalAppend(prefix, &msg)
+	assert.NoError(t, err)
+	assert.Equal(t, appended, append([]byte{1, 2, 3}, single...))
+
+	appended, err = picobuf.MarshalAppend(nil, &msg)
+	assert.NoError(t, err)
+	assert.Equal(t, appended, single)
+}
+
+func TestMarshalAppendKeepsBufferOnError(t *testing.T) {
+	prefix := []byte{1, 2, 3}
+	appended, err := picobuf.MarshalAppend(prefix, &picotest.AllTypes{String_: "\xff"})
+	assert.Error(t, err)
+	assert.Equal(t, appended, []byte{1, 2, 3})
+}
+
 func TestEncoder_RecursionLimit(t *testing.T) {
 	// nested is the self-referential message from decoder_test.go.
 	shallow := new(nested)
