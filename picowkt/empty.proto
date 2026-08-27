@@ -1,0 +1,14 @@
+// Copyright (C) 2026 Storj Labs, Inc.
+// See LICENSE for copying information.
+
+// Wire-compatible copy of google/protobuf/empty.proto, so that protoc
+// can map the well-known type to a picobuf implementation with
+//
+//	Mgoogle/protobuf/empty.proto=storj.io/picobuf/picowkt
+
+syntax = "proto3";
+package google.protobuf;
+option go_package = "storj.io/picobuf/picowkt";
+
+// Empty is an empty message.
+message Empty {}

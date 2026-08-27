@@ -1,0 +1,65 @@
+// Copyright (C) 2026 Storj Labs, Inc.
+// See LICENSE for copying information.
+
+// Wire-compatible copy of google/protobuf/wrappers.proto, so that protoc
+// can map the well-known wrapper types to picobuf implementations with
+//
+//	Mgoogle/protobuf/wrappers.proto=storj.io/picobuf/picowkt
+
+syntax = "proto3";
+package google.protobuf;
+option go_package = "storj.io/picobuf/picowkt";
+
+// DoubleValue is a wrapper message for double.
+message DoubleValue {
+  // The double value.
+  double value = 1;
+}
+
+// FloatValue is a wrapper message for float.
+message FloatValue {
+  // The float value.
+  float value = 1;
+}
+
+// Int64Value is a wrapper message for int64.
+message Int64Value {
+  // The int64 value.
+  int64 value = 1;
+}
+
+// UInt64Value is a wrapper message for uint64.
+message UInt64Value {
+  // The uint64 value.
+  uint64 value = 1;
+}
+
+// Int32Value is a wrapper message for int32.
+message Int32Value {
+  // The int32 value.
+  int32 value = 1;
+}
+
+// UInt32Value is a wrapper message for uint32.
+message UInt32Value {
+  // The uint32 value.
+  uint32 value = 1;
+}
+
+// BoolValue is a wrapper message for bool.
+message BoolValue {
+  // The bool value.
+  bool value = 1;
+}
+
+// StringValue is a wrapper message for string.
+message StringValue {
+  // The string value.
+  string value = 1;
+}
+
+// BytesValue is a wrapper message for bytes.
+message BytesValue {
+  // The bytes value.
+  bytes value = 1;
+}

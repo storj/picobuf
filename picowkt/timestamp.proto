@@ -1,0 +1,19 @@
+// Copyright (C) 2026 Storj Labs, Inc.
+// See LICENSE for copying information.
+
+// Wire-compatible copy of google/protobuf/timestamp.proto, so that protoc
+// can map the well-known type to a picobuf implementation with
+//
+//	Mgoogle/protobuf/timestamp.proto=storj.io/picobuf/picowkt
+
+syntax = "proto3";
+package google.protobuf;
+option go_package = "storj.io/picobuf/picowkt";
+
+// Timestamp is a point in time independent of any time zone or calendar.
+message Timestamp {
+  // Seconds of UTC time since Unix epoch.
+  int64 seconds = 1;
+  // Non-negative fractions of a second at nanosecond resolution.
+  int32 nanos = 2;
+}

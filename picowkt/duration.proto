@@ -1,0 +1,19 @@
+// Copyright (C) 2026 Storj Labs, Inc.
+// See LICENSE for copying information.
+
+// Wire-compatible copy of google/protobuf/duration.proto, so that protoc
+// can map the well-known type to a picobuf implementation with
+//
+//	Mgoogle/protobuf/duration.proto=storj.io/picobuf/picowkt
+
+syntax = "proto3";
+package google.protobuf;
+option go_package = "storj.io/picobuf/picowkt";
+
+// Duration is a signed, fixed-length span of time.
+message Duration {
+  // Signed seconds of the span of time.
+  int64 seconds = 1;
+  // Signed fractions of a second at nanosecond resolution.
+  int32 nanos = 2;
+}

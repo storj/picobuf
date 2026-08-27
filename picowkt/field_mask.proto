@@ -1,0 +1,17 @@
+// Copyright (C) 2026 Storj Labs, Inc.
+// See LICENSE for copying information.
+
+// Wire-compatible copy of google/protobuf/field_mask.proto, so that protoc
+// can map the well-known type to a picobuf implementation with
+//
+//	Mgoogle/protobuf/field_mask.proto=storj.io/picobuf/picowkt
+
+syntax = "proto3";
+package google.protobuf;
+option go_package = "storj.io/picobuf/picowkt";
+
+// FieldMask represents a set of symbolic field paths.
+message FieldMask {
+  // The set of field mask paths.
+  repeated string paths = 1;
+}

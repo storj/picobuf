@@ -175,6 +175,9 @@ func generateEncoder() []byte {
 						pf("if len(*v) == 0 { return }\n")
 					} else if _, isBool := t.Zero.(bool); isBool {
 						pf("if !*v { return }\n")
+					} else if t.Name == "Float" || t.Name == "Double" {
+						// -0.0 is not the default, protobuf-go encodes it too.
+						pf("if *v == 0 && !math.Signbit(float64(*v)) { return }\n")
 					} else {
 						pf("if *v == %v { return }\n", t.Zero)
 					}

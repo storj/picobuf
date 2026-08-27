@@ -772,7 +772,7 @@ func (enc *Encoder) AlwaysRepeatedSfixed64(field FieldNumber, v *[]int64) {
 //
 //go:noinline
 func (enc *Encoder) Float(field FieldNumber, v *float32) {
-	if *v == 0 {
+	if *v == 0 && !math.Signbit(float64(*v)) {
 		return
 	}
 	if enc.sizing {
@@ -832,7 +832,7 @@ func (enc *Encoder) AlwaysRepeatedFloat(field FieldNumber, v *[]float32) {
 //
 //go:noinline
 func (enc *Encoder) Double(field FieldNumber, v *float64) {
-	if *v == 0 {
+	if *v == 0 && !math.Signbit(float64(*v)) {
 		return
 	}
 	if enc.sizing {
