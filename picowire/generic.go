@@ -3,7 +3,94 @@
 
 package picowire
 
-import "storj.io/picobuf"
+import (
+	"cmp"
+	"iter"
+	"reflect"
+	"slices"
+
+	"storj.io/picobuf"
+)
+
+// sortedMap iterates over map entries in key order, so that encoding is
+// deterministic. Single-entry maps are iterated directly to avoid the key
+// slice allocation.
+func sortedMap[K cmp.Ordered, V any](m map[K]V) iter.Seq2[K, V] {
+	return func(yield func(K, V) bool) {
+		if len(m) < 2 {
+			for key, val := range m {
+				if !yield(key, val) {
+					return
+				}
+			}
+			return
+		}
+		keys := make([]K, 0, len(m))
+		for key := range m {
+			keys = append(keys, key)
+		}
+		slices.Sort(keys)
+		for _, key := range keys {
+			if !yield(key, m[key]) {
+				return
+			}
+		}
+	}
+}
+
+// sortedMapFunc is sortedMap for key types that cmp.Ordered cannot express,
+// such as bool and named types.
+func sortedMapFunc[K MapKey, V any](m map[K]V, compare func(a, b K) int) iter.Seq2[K, V] {
+	return func(yield func(K, V) bool) {
+		if len(m) < 2 {
+			for key, val := range m {
+				if !yield(key, val) {
+					return
+				}
+			}
+			return
+		}
+		keys := make([]K, 0, len(m))
+		for key := range m {
+			keys = append(keys, key)
+		}
+		slices.SortFunc(keys, compare)
+		for _, key := range keys {
+			if !yield(key, m[key]) {
+				return
+			}
+		}
+	}
+}
+
+// compareBool orders false before true, matching numeric key order.
+func compareBool(a, b bool) int {
+	switch {
+	case a == b:
+		return 0
+	case b:
+		return -1
+	default:
+		return 1
+	}
+}
+
+// compareMapKeys orders map keys by value, so that map encoding is
+// deterministic. Named key types prevent a cmp.Ordered constraint, hence the
+// reflection.
+func compareMapKeys[K MapKey](a, b K) int {
+	av, bv := reflect.ValueOf(a), reflect.ValueOf(b)
+	switch av.Kind() {
+	case reflect.Bool:
+		return compareBool(av.Bool(), bv.Bool())
+	case reflect.Int32, reflect.Int64:
+		return cmp.Compare(av.Int(), bv.Int())
+	case reflect.Uint32, reflect.Uint64:
+		return cmp.Compare(av.Uint(), bv.Uint())
+	default:
+		return cmp.Compare(av.String(), bv.String())
+	}
+}
 
 // MapKey is a protobuf map key.
 type MapKey interface {
@@ -78,7 +165,7 @@ func (EnumCodec[E]) PicoDefault(value *E) {
 // MapOf implements a protobuf map using custom key and value wire codecs.
 type MapOf[K MapKey, V any, KC MapCodec[K], VC MapCodec[V]] map[K]V
 
-// PicoEncode encodes as protobuf.
+// PicoEncode encodes as protobuf, with entries sorted by key.
 //
 //go:noinline
 func (m *MapOf[K, V, KC, VC]) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
@@ -86,7 +173,7 @@ func (m *MapOf[K, V, KC, VC]) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 	var valueCodec VC
 	// key and val are passed by value, so that they do not escape through the
 	// dictionary dispatched codec calls.
-	for key, val := range *m {
+	for key, val := range sortedMapFunc(*m, compareMapKeys[K]) {
 		enc.AlwaysAnyBytes(field, func() {
 			keyCodec.PicoEncode(enc, 1, key)
 			valueCodec.PicoEncode(enc, 2, val)
