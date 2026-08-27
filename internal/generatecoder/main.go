@@ -334,6 +334,9 @@ func generateDecoder() []byte {
 			pf("// Repeated%s decodes repeated %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
 			pf("//go:noinline\n")
 			pf("func (dec *Decoder) Repeated%s(field FieldNumber, v *[]%s) {\n", t.Name, t.TypeName())
+			if !t.IsScalar() {
+				pf("*v = slices.Grow(*v, dec.repeatedFieldCount(field, protowire.BytesType))\n")
+			}
 			pf("for field == dec.pendingField {\n")
 
 			pf("switch dec.pendingWire {")

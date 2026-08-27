@@ -869,6 +869,7 @@ func (dec *Decoder) String(field FieldNumber, v *string) {
 //
 //go:noinline
 func (dec *Decoder) RepeatedString(field FieldNumber, v *[]string) {
+	*v = slices.Grow(*v, dec.repeatedFieldCount(field, protowire.BytesType))
 	for field == dec.pendingField {
 		switch dec.pendingWire {
 		case protowire.BytesType:
@@ -917,6 +918,7 @@ func (dec *Decoder) Bytes(field FieldNumber, v *[]byte) {
 //
 //go:noinline
 func (dec *Decoder) RepeatedBytes(field FieldNumber, v *[][]byte) {
+	*v = slices.Grow(*v, dec.repeatedFieldCount(field, protowire.BytesType))
 	for field == dec.pendingField {
 		switch dec.pendingWire {
 		case protowire.BytesType:

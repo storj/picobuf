@@ -305,6 +305,44 @@ func TestDecoder_RepeatedGroupCount(t *testing.T) {
 	assert.Equal(t, limited.count, 2)
 }
 
+type repeatedStrings struct {
+	Values []string
+}
+
+func (m *repeatedStrings) Encode(c *picobuf.Encoder) bool {
+	c.RepeatedString(1, &m.Values)
+	return true
+}
+
+func (m *repeatedStrings) Decode(c *picobuf.Decoder) {
+	c.RepeatedString(1, &m.Values)
+}
+
+func TestDecoder_RepeatedStringsPreallocate(t *testing.T) {
+	var data []byte
+	for range 16 {
+		data = append(data, 0x0a, 0x01, 'a')
+	}
+
+	var got repeatedStrings
+	assert.NoError(t, picobuf.Unmarshal(data, &got))
+	assert.Equal(t, len(got.Values), 16)
+
+	if raceEnabled {
+		t.Skip("allocation counts differ under the race detector")
+	}
+	allocs := testing.AllocsPerRun(100, func() {
+		var decoded repeatedStrings
+		if err := picobuf.Unmarshal(data, &decoded); err != nil {
+			panic(err)
+		}
+	})
+	// one slice allocation plus one per string
+	if allocs > 17 {
+		t.Fatalf("repeated string decode allocated %.0f times, want at most 17", allocs)
+	}
+}
+
 func TestDecoder_RepeatedMessageRejectsMalformedPayload(t *testing.T) {
 	var got picotest.VariationsMessage
 	err := picobuf.Unmarshal([]byte{0x1a, 0x02, 0x08}, &got)
