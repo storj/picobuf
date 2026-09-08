@@ -4,9 +4,6 @@
 package picobuf
 
 import (
-	"errors"
-	"math/bits"
-
 	"storj.io/picobuf/internal/protowire"
 )
 
@@ -14,21 +11,25 @@ import (
 type Encoder struct {
 	buffer []byte
 	size   int
-	err    error
+	err    *encodeError
 
 	// Marshal records prefix widths in preorder during sizing, then consumes
 	// them during encoding. They are hints: map traversal can change order.
-	inlineHints uint64
+	inlineHints [2]uint64
 	lengthHints *lengthHints
 
 	depth         int32
 	skipUTF8Depth int32
 
+	// hintCount is the number of inline hints plus one; zero disables hints.
+	hintCount uint8
+	hintRead  uint8
+
 	sizing             bool
 	skipUTF8Validation bool
 }
 
-var errEncodeRecursionDepth = errors.New("picobuf: exceeded maximum nesting depth while encoding")
+var errEncodeRecursionDepth = &encodeError{message: "picobuf: exceeded maximum nesting depth while encoding"}
 
 // WithoutUTF8Validation runs fn without validating encoded string fields.
 // It is intended for generated code implementing protobuf schema features.
@@ -51,7 +52,12 @@ func (enc *Encoder) skipUTF8() bool {
 }
 
 // Err returns the error that occurred during encoding.
-func (enc *Encoder) Err() error { return enc.err }
+func (enc *Encoder) Err() error {
+	if enc.err == nil {
+		return nil
+	}
+	return enc.err
+}
 
 // IsSizing reports whether the encoder is counting bytes for Size rather than
 // producing an encoded buffer. Custom encoders may use this to avoid work that
@@ -106,7 +112,10 @@ type encodeError struct {
 	message string
 }
 
-func (e encodeError) Error() string {
+func (e *encodeError) Error() string {
+	if e == errEncodeRecursionDepth {
+		return e.message
+	}
 	return "failed while encoding " + e.field.String() + ": " + e.message
 }
 
@@ -132,6 +141,27 @@ func NewEncoder() *Encoder {
 // NewEncoderBuffer creates a new encoder using a preallocated buffer.
 func NewEncoderBuffer(buffer []byte) *Encoder {
 	return &Encoder{buffer: buffer[:0]}
+}
+
+// MarshalAppend appends msg to buffer using reusable encoder storage. The zero
+// value is ready to use. Like MarshalAppend, this sizes first and then encodes;
+// msg.Encode must behave deterministically across the two passes.
+//
+// An Encoder must not be used concurrently or reentered from an encoding
+// callback. Callbacks must not retain it for use after MarshalAppend returns.
+// The method clears message state, including on error or panic, but retains
+// prefix-hint scratch space for reuse. It does not retain the output buffer;
+// the caller owns the returned bytes and controls buffer reuse.
+func (enc *Encoder) MarshalAppend(buffer []byte, msg Message) ([]byte, error) {
+	defer func() {
+		hints := enc.lengthHints
+		if hints != nil {
+			hints.widths = hints.widths[:0]
+			hints.read = 0
+		}
+		*enc = Encoder{lengthHints: hints}
+	}()
+	return enc.marshalAppend(buffer, msg)
 }
 
 // Buffer returns the encoded internal buffer.
@@ -303,23 +333,21 @@ func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
 	return true
 }
 
-// inlineLengthHints is the number of four-bit widths that fit below a sentinel
-// bit in inlineHints. Four bits cover every possible uint64 varint width.
-const inlineLengthHints = 15
+// inlineLengthHints is the number of four-bit widths in the two inline words.
+// Four bits cover every possible uint64 varint width.
+const inlineLengthHints = 32
 
 // reserveLengthHint reserves a preorder slot before visiting children. Zero
 // means omitted; keep its slot and any child slots even if the callback returns
 // false, since encoding will still visit those callbacks.
 func (enc *Encoder) reserveLengthHint() int {
-	if enc.inlineHints == 0 {
+	if enc.hintCount == 0 {
 		return -1
 	}
-	// The highest set bit marks the end, including slots whose width is zero.
-	shift := bits.Len64(enc.inlineHints) - 1
-	if shift < 4*inlineLengthHints {
-		enc.inlineHints ^= uint64(1) << shift
-		enc.inlineHints |= uint64(1) << (shift + 4)
-		return shift / 4
+	if enc.hintCount <= inlineLengthHints {
+		index := int(enc.hintCount) - 1
+		enc.hintCount++
+		return index
 	}
 	if enc.lengthHints == nil {
 		enc.lengthHints = new(lengthHints)
@@ -332,21 +360,21 @@ func (enc *Encoder) reserveLengthHint() int {
 
 func (enc *Encoder) setLengthHint(index, width int) {
 	if index < inlineLengthHints {
-		enc.inlineHints |= uint64(width) << (4 * index)
+		enc.inlineHints[index/16] |= uint64(width) << (4 * (index % 16))
 	} else {
 		enc.lengthHints.widths[index-inlineLengthHints] = byte(width)
 	}
 }
 
 func (enc *Encoder) nextLengthHint() int {
-	if enc.inlineHints > 1 {
-		width := int(enc.inlineHints & 15)
-		enc.inlineHints >>= 4
+	if index := int(enc.hintRead); index+1 < int(enc.hintCount) {
+		width := int(enc.inlineHints[index/16] >> (4 * (index % 16)) & 15)
+		enc.hintRead++
 		return width
 	}
-	if enc.lengthHints != nil && len(enc.lengthHints.widths) > 0 {
-		width := int(enc.lengthHints.widths[0])
-		enc.lengthHints.widths = enc.lengthHints.widths[1:]
+	if hints := enc.lengthHints; hints != nil && hints.read < len(hints.widths) {
+		width := int(hints.widths[hints.read])
+		hints.read++
 		return width
 	}
 	// Without hints, predict a two-byte length, which fits payloads up to

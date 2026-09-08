@@ -100,8 +100,11 @@ func Marshal(msg Message) ([]byte, error) {
 // Like Marshal, it sizes the message first to reserve output space, so
 // msg.Encode runs twice and must behave deterministically.
 func MarshalAppend(buffer []byte, msg Message) ([]byte, error) {
-	enc, err := sizeForMarshal(msg)
-	if err != nil {
+	return new(Encoder).marshalAppend(buffer, msg)
+}
+
+func (enc *Encoder) marshalAppend(buffer []byte, msg Message) ([]byte, error) {
+	if err := enc.sizeForMarshal(msg); err != nil {
 		return buffer, err
 	}
 	enc.buffer = slices.Grow(buffer, enc.size)
@@ -115,22 +118,36 @@ func MarshalAppend(buffer []byte, msg Message) ([]byte, error) {
 type lengthHints struct {
 	widths []byte
 	inline [64]byte
+	read   int
 }
 
 // sizeForMarshal retains prefix-width hints and reuses the sizing encoder for
 // the writing pass. Small messages pack their hints into the encoder itself;
 // larger messages allocate overflow storage lazily. Size does not collect hints.
 func sizeForMarshal(msg Message) (*Encoder, error) {
-	if err := ValidateRequired(msg); err != nil {
+	enc := new(Encoder)
+	if err := enc.sizeForMarshal(msg); err != nil {
 		return nil, err
 	}
-	enc := &Encoder{sizing: true, inlineHints: 1}
+	return enc, nil
+}
+
+func (enc *Encoder) sizeForMarshal(msg Message) error {
+	if err := ValidateRequired(msg); err != nil {
+		return err
+	}
+	hints := enc.lengthHints
+	if hints != nil {
+		hints.widths = hints.widths[:0]
+		hints.read = 0
+	}
+	*enc = Encoder{sizing: true, hintCount: 1, lengthHints: hints}
 	msg.Encode(enc)
 	if enc.err != nil {
-		return nil, enc.err
+		return enc.err
 	}
 	enc.sizing = false
-	return enc, nil
+	return nil
 }
 
 // MarshalBuffer encodes msg as bytes with buffer.

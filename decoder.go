@@ -515,6 +515,15 @@ func (dec *Decoder) nextField(advance int) {
 		return
 	}
 
+	// Fields 1-15 have a one-byte tag. Avoid the general varint parser for
+	// this common case; zero field numbers and longer tags use its checks.
+	if tag := dec.buffer[0]; tag >= 8 && tag < 0x80 {
+		dec.pendingField = FieldNumber(tag >> 3)
+		dec.pendingWire = protowire.Type(tag & 7)
+		dec.buffer = dec.buffer[1:]
+		return
+	}
+
 	field, wire, n := protowire.ConsumeTag(dec.buffer)
 	if n < 0 {
 		dec.fail(0, "failed to parse") // TODO: better error message

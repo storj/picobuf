@@ -322,14 +322,17 @@ func TestMarshalMessageEnvelopePresence(t *testing.T) {
 func TestMarshalLengthHintBoundaries(t *testing.T) {
 	// Cross both packed-word and overflow-buffer boundaries with omitted slots
 	// and different prefix widths, so zero-width hints cannot lose their place.
-	for _, count := range []int{14, 15, 16, 79, 80, 144} {
+	for _, count := range []int{14, 15, 16, 32, 33, 79, 80, 96, 97, 144} {
 		t.Run(fmt.Sprint(count), func(t *testing.T) {
 			payloads := [][]byte{nil, bytes.Repeat([]byte{8, 1}, 128), bytes.Repeat([]byte{8, 1}, 32<<10)}
 			msg := encodeFunc(func(enc *picobuf.Encoder) bool {
 				for i := range count {
 					enc.Message(1, func(enc *picobuf.Encoder) bool {
+						if i%4 == 0 {
+							return false
+						}
 						enc.UnrecognizedFields(payloads[i%len(payloads)])
-						return i%4 != 0
+						return true
 					})
 				}
 				return true
