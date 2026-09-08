@@ -437,6 +437,32 @@ func (dec *Decoder) Loop(fn func(*Decoder)) {
 	}
 }
 
+// BytesView decodes a bytes field without copying its contents, regardless of
+// UnmarshalOptions.AliasInput. The view aliases the input and must be treated as
+// read-only. Copy it if it must remain unchanged when the input is modified or
+// reused.
+// This is intended for custom decoders that immediately copy into their own
+// storage, avoiding the intermediate allocation made by Bytes.
+// Like Bytes, it leaves v unchanged when field is not pending or cannot be read.
+func (dec *Decoder) BytesView(field FieldNumber, v *[]byte) {
+	if field != dec.pendingField {
+		return
+	}
+	if dec.pendingWire != protowire.BytesType {
+		dec.fail(field, "expected wire type Bytes")
+		return
+	}
+	x, n := protowire.ConsumeBytes(dec.buffer)
+	if n < 0 {
+		dec.fail(field, "unable to parse Bytes")
+		return
+	}
+	// Limit the capacity, so that append on the view cannot overwrite the
+	// rest of the input.
+	*v = x[:len(x):len(x)]
+	dec.nextField(n)
+}
+
 // copyBytes returns x, copied out of the input unless the decoder was asked to
 // alias it. See UnmarshalOptions.AliasInput.
 func (dec *Decoder) copyBytes(x []byte) []byte {
