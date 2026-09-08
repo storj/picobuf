@@ -95,6 +95,7 @@ func (enc *Encoder) RepeatedInt32(field FieldNumber, v *[]int32) {
 		return
 	}
 	if enc.sizing {
+		hint := enc.reserveLengthHint()
 		if !enc.enterMessage() {
 			return
 		}
@@ -102,6 +103,9 @@ func (enc *Encoder) RepeatedInt32(field FieldNumber, v *[]int32) {
 		payloadSize := 0
 		for _, x := range *v {
 			payloadSize += protowire.SizeVarint(uint64(x))
+		}
+		if hint >= 0 {
+			enc.lengthHints.widths[hint] = byte(protowire.SizeVarint(uint64(payloadSize)))
 		}
 		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(payloadSize)
 		return
@@ -130,6 +134,7 @@ func (enc *Encoder) AlwaysInt32(field FieldNumber, v *int32) {
 //go:noinline
 func (enc *Encoder) AlwaysRepeatedInt32(field FieldNumber, v *[]int32) {
 	if enc.sizing {
+		hint := enc.reserveLengthHint()
 		if !enc.enterMessage() {
 			return
 		}
@@ -137,6 +142,9 @@ func (enc *Encoder) AlwaysRepeatedInt32(field FieldNumber, v *[]int32) {
 		payloadSize := 0
 		for _, x := range *v {
 			payloadSize += protowire.SizeVarint(uint64(x))
+		}
+		if hint >= 0 {
+			enc.lengthHints.widths[hint] = byte(protowire.SizeVarint(uint64(payloadSize)))
 		}
 		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(payloadSize)
 		return
@@ -171,6 +179,7 @@ func (enc *Encoder) RepeatedInt64(field FieldNumber, v *[]int64) {
 		return
 	}
 	if enc.sizing {
+		hint := enc.reserveLengthHint()
 		if !enc.enterMessage() {
 			return
 		}
@@ -178,6 +187,9 @@ func (enc *Encoder) RepeatedInt64(field FieldNumber, v *[]int64) {
 		payloadSize := 0
 		for _, x := range *v {
 			payloadSize += protowire.SizeVarint(uint64(x))
+		}
+		if hint >= 0 {
+			enc.lengthHints.widths[hint] = byte(protowire.SizeVarint(uint64(payloadSize)))
 		}
 		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(payloadSize)
 		return
@@ -206,6 +218,7 @@ func (enc *Encoder) AlwaysInt64(field FieldNumber, v *int64) {
 //go:noinline
 func (enc *Encoder) AlwaysRepeatedInt64(field FieldNumber, v *[]int64) {
 	if enc.sizing {
+		hint := enc.reserveLengthHint()
 		if !enc.enterMessage() {
 			return
 		}
@@ -213,6 +226,9 @@ func (enc *Encoder) AlwaysRepeatedInt64(field FieldNumber, v *[]int64) {
 		payloadSize := 0
 		for _, x := range *v {
 			payloadSize += protowire.SizeVarint(uint64(x))
+		}
+		if hint >= 0 {
+			enc.lengthHints.widths[hint] = byte(protowire.SizeVarint(uint64(payloadSize)))
 		}
 		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(payloadSize)
 		return
@@ -247,6 +263,7 @@ func (enc *Encoder) RepeatedUint32(field FieldNumber, v *[]uint32) {
 		return
 	}
 	if enc.sizing {
+		hint := enc.reserveLengthHint()
 		if !enc.enterMessage() {
 			return
 		}
@@ -254,6 +271,9 @@ func (enc *Encoder) RepeatedUint32(field FieldNumber, v *[]uint32) {
 		payloadSize := 0
 		for _, x := range *v {
 			payloadSize += protowire.SizeVarint(uint64(x))
+		}
+		if hint >= 0 {
+			enc.lengthHints.widths[hint] = byte(protowire.SizeVarint(uint64(payloadSize)))
 		}
 		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(payloadSize)
 		return
@@ -282,6 +302,7 @@ func (enc *Encoder) AlwaysUint32(field FieldNumber, v *uint32) {
 //go:noinline
 func (enc *Encoder) AlwaysRepeatedUint32(field FieldNumber, v *[]uint32) {
 	if enc.sizing {
+		hint := enc.reserveLengthHint()
 		if !enc.enterMessage() {
 			return
 		}
@@ -289,6 +310,9 @@ func (enc *Encoder) AlwaysRepeatedUint32(field FieldNumber, v *[]uint32) {
 		payloadSize := 0
 		for _, x := range *v {
 			payloadSize += protowire.SizeVarint(uint64(x))
+		}
+		if hint >= 0 {
+			enc.lengthHints.widths[hint] = byte(protowire.SizeVarint(uint64(payloadSize)))
 		}
 		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(payloadSize)
 		return
@@ -323,6 +347,7 @@ func (enc *Encoder) RepeatedUint64(field FieldNumber, v *[]uint64) {
 		return
 	}
 	if enc.sizing {
+		hint := enc.reserveLengthHint()
 		if !enc.enterMessage() {
 			return
 		}
@@ -330,6 +355,9 @@ func (enc *Encoder) RepeatedUint64(field FieldNumber, v *[]uint64) {
 		payloadSize := 0
 		for _, x := range *v {
 			payloadSize += protowire.SizeVarint(x)
+		}
+		if hint >= 0 {
+			enc.lengthHints.widths[hint] = byte(protowire.SizeVarint(uint64(payloadSize)))
 		}
 		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(payloadSize)
 		return
@@ -358,6 +386,7 @@ func (enc *Encoder) AlwaysUint64(field FieldNumber, v *uint64) {
 //go:noinline
 func (enc *Encoder) AlwaysRepeatedUint64(field FieldNumber, v *[]uint64) {
 	if enc.sizing {
+		hint := enc.reserveLengthHint()
 		if !enc.enterMessage() {
 			return
 		}
@@ -365,6 +394,9 @@ func (enc *Encoder) AlwaysRepeatedUint64(field FieldNumber, v *[]uint64) {
 		payloadSize := 0
 		for _, x := range *v {
 			payloadSize += protowire.SizeVarint(x)
+		}
+		if hint >= 0 {
+			enc.lengthHints.widths[hint] = byte(protowire.SizeVarint(uint64(payloadSize)))
 		}
 		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(payloadSize)
 		return
@@ -399,6 +431,7 @@ func (enc *Encoder) RepeatedSint32(field FieldNumber, v *[]int32) {
 		return
 	}
 	if enc.sizing {
+		hint := enc.reserveLengthHint()
 		if !enc.enterMessage() {
 			return
 		}
@@ -406,6 +439,9 @@ func (enc *Encoder) RepeatedSint32(field FieldNumber, v *[]int32) {
 		payloadSize := 0
 		for _, x := range *v {
 			payloadSize += protowire.SizeVarint(uint64(encodeZigZag32(x)))
+		}
+		if hint >= 0 {
+			enc.lengthHints.widths[hint] = byte(protowire.SizeVarint(uint64(payloadSize)))
 		}
 		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(payloadSize)
 		return
@@ -434,6 +470,7 @@ func (enc *Encoder) AlwaysSint32(field FieldNumber, v *int32) {
 //go:noinline
 func (enc *Encoder) AlwaysRepeatedSint32(field FieldNumber, v *[]int32) {
 	if enc.sizing {
+		hint := enc.reserveLengthHint()
 		if !enc.enterMessage() {
 			return
 		}
@@ -441,6 +478,9 @@ func (enc *Encoder) AlwaysRepeatedSint32(field FieldNumber, v *[]int32) {
 		payloadSize := 0
 		for _, x := range *v {
 			payloadSize += protowire.SizeVarint(uint64(encodeZigZag32(x)))
+		}
+		if hint >= 0 {
+			enc.lengthHints.widths[hint] = byte(protowire.SizeVarint(uint64(payloadSize)))
 		}
 		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(payloadSize)
 		return
@@ -475,6 +515,7 @@ func (enc *Encoder) RepeatedSint64(field FieldNumber, v *[]int64) {
 		return
 	}
 	if enc.sizing {
+		hint := enc.reserveLengthHint()
 		if !enc.enterMessage() {
 			return
 		}
@@ -482,6 +523,9 @@ func (enc *Encoder) RepeatedSint64(field FieldNumber, v *[]int64) {
 		payloadSize := 0
 		for _, x := range *v {
 			payloadSize += protowire.SizeVarint(protowire.EncodeZigZag(x))
+		}
+		if hint >= 0 {
+			enc.lengthHints.widths[hint] = byte(protowire.SizeVarint(uint64(payloadSize)))
 		}
 		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(payloadSize)
 		return
@@ -510,6 +554,7 @@ func (enc *Encoder) AlwaysSint64(field FieldNumber, v *int64) {
 //go:noinline
 func (enc *Encoder) AlwaysRepeatedSint64(field FieldNumber, v *[]int64) {
 	if enc.sizing {
+		hint := enc.reserveLengthHint()
 		if !enc.enterMessage() {
 			return
 		}
@@ -517,6 +562,9 @@ func (enc *Encoder) AlwaysRepeatedSint64(field FieldNumber, v *[]int64) {
 		payloadSize := 0
 		for _, x := range *v {
 			payloadSize += protowire.SizeVarint(protowire.EncodeZigZag(x))
+		}
+		if hint >= 0 {
+			enc.lengthHints.widths[hint] = byte(protowire.SizeVarint(uint64(payloadSize)))
 		}
 		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(payloadSize)
 		return

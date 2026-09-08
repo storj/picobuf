@@ -11,13 +11,18 @@ import (
 
 // Encoder implements encoding of protobuf format.
 type Encoder struct {
-	buffer             []byte
-	size               int
-	depth              int
+	buffer        []byte
+	size          int
+	depth         int
+	err           error
+	skipUTF8Depth int
+
+	// Marshal records prefix widths in preorder during sizing, then consumes
+	// them during encoding. They are hints: map traversal can change order.
+	lengthHints *lengthHints
+
 	sizing             bool
-	err                error
 	skipUTF8Validation bool
-	skipUTF8Depth      int
 }
 
 var errEncodeRecursionDepth = errors.New("picobuf: exceeded maximum nesting depth while encoding")
@@ -222,6 +227,7 @@ func (enc *Encoder) RepeatedEnum(field FieldNumber, n int, fn func(index uint) i
 // anyBytes encodes field as Bytes and handles encoding the length.
 func (enc *Encoder) anyBytes(field FieldNumber, fn func() bool) bool {
 	if enc.sizing {
+		hint := enc.reserveLengthHint()
 		start := enc.size
 		if !enc.enterMessage() {
 			return false
@@ -233,17 +239,18 @@ func (enc *Encoder) anyBytes(field FieldNumber, fn func() bool) bool {
 			return false
 		}
 		messageLength := enc.size - start
-		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeVarint(uint64(messageLength))
+		width := protowire.SizeVarint(uint64(messageLength))
+		if hint >= 0 {
+			enc.lengthHints.widths[hint] = byte(width)
+		}
+		enc.size += protowire.SizeTag(protowire.Number(field)) + width
 		return true
 	}
 	tagStart := len(enc.buffer)
-	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
-	lengthStart := len(enc.buffer)
-	// We'll guess that we need 2 bytes for length.
-	// If we need less, then the copy is fast, and needing more is unlikely.
-	var lengthBufferPrediction [2]byte
-	enc.buffer = append(enc.buffer, lengthBufferPrediction[:]...)
+	width := enc.nextLengthHint()
+	enc.startBytes(field, width)
 	messageStart := len(enc.buffer)
+	lengthStart := messageStart - width
 	// encode the submessage
 	ok := enc.enterMessage()
 	if ok {
@@ -255,19 +262,7 @@ func (enc *Encoder) anyBytes(field FieldNumber, fn func() bool) bool {
 		enc.buffer = enc.buffer[:tagStart]
 		return false
 	}
-	messageLength := len(enc.buffer) - messageStart
-	bytesForSize := protowire.SizeVarint(uint64(messageLength))
-	if bytesForSize == len(lengthBufferPrediction) {
-		protowire.PutUvarint(enc.buffer[lengthStart:messageStart], uint64(messageLength))
-		return true
-	}
-	if bytesForSize > len(lengthBufferPrediction) {
-		enc.buffer = append(enc.buffer, make([]byte, bytesForSize-len(lengthBufferPrediction))...)
-	}
-
-	copy(enc.buffer[lengthStart+bytesForSize:], enc.buffer[messageStart:])
-	protowire.PutUvarint(enc.buffer[lengthStart:lengthStart+bytesForSize], uint64(messageLength))
-	enc.buffer = enc.buffer[:lengthStart+bytesForSize+messageLength]
+	enc.finishBytes(field, tagStart, lengthStart, messageStart)
 	return true
 }
 
@@ -279,41 +274,84 @@ func (enc *Encoder) AlwaysAnyBytes(field FieldNumber, fn func()) bool {
 // alwaysAnyBytes encodes field as Bytes and handles encoding the length.
 func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
 	if enc.sizing {
+		hint := enc.reserveLengthHint()
 		start := enc.size
 		if enc.enterMessage() {
 			fn()
 			enc.depth--
 		}
 		messageLength := enc.size - start
-		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeVarint(uint64(messageLength))
+		width := protowire.SizeVarint(uint64(messageLength))
+		if hint >= 0 {
+			enc.lengthHints.widths[hint] = byte(width)
+		}
+		enc.size += protowire.SizeTag(protowire.Number(field)) + width
 		return true
 	}
-	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
-	lengthStart := len(enc.buffer)
-	// We'll guess that we need 2 bytes for length.
-	// If we need less, then the copy is fast, and needing more is unlikely.
-	var lengthBufferPrediction [2]byte
-	enc.buffer = append(enc.buffer, lengthBufferPrediction[:]...)
+	tagStart := len(enc.buffer)
+	width := enc.nextLengthHint()
+	enc.startBytes(field, width)
 	messageStart := len(enc.buffer)
+	lengthStart := messageStart - width
 	// encode the submessage
 	if enc.enterMessage() {
 		fn()
 		enc.depth--
 	}
-	messageLength := len(enc.buffer) - messageStart
-	bytesForSize := protowire.SizeVarint(uint64(messageLength))
-	if bytesForSize == len(lengthBufferPrediction) {
-		protowire.PutUvarint(enc.buffer[lengthStart:messageStart], uint64(messageLength))
-		return true
-	}
-	if bytesForSize > len(lengthBufferPrediction) {
-		enc.buffer = append(enc.buffer, make([]byte, bytesForSize-len(lengthBufferPrediction))...)
-	}
-
-	copy(enc.buffer[lengthStart+bytesForSize:], enc.buffer[messageStart:])
-	protowire.PutUvarint(enc.buffer[lengthStart:lengthStart+bytesForSize], uint64(messageLength))
-	enc.buffer = enc.buffer[:lengthStart+bytesForSize+messageLength]
+	enc.finishBytes(field, tagStart, lengthStart, messageStart)
 	return true
+}
+
+// reserveLengthHint reserves a preorder slot before visiting children. Zero
+// means omitted; keep its slot and any child slots even if the callback returns
+// false, since encoding will still visit those callbacks.
+func (enc *Encoder) reserveLengthHint() int {
+	if enc.lengthHints == nil {
+		return -1
+	}
+	index := len(enc.lengthHints.widths)
+	enc.lengthHints.widths = append(enc.lengthHints.widths, 0)
+	return index
+}
+
+func (enc *Encoder) nextLengthHint() int {
+	// Without hints, predict a two-byte length, which fits payloads up to
+	// 16 KiB.
+	width := 2
+	if enc.lengthHints != nil && len(enc.lengthHints.widths) > 0 {
+		width = int(enc.lengthHints.widths[0])
+		enc.lengthHints.widths = enc.lengthHints.widths[1:]
+	}
+	return width
+}
+
+func (enc *Encoder) startBytes(field FieldNumber, width int) {
+	// Avoid growing a full buffer for a message expected to be omitted.
+	if width != 0 {
+		enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+		enc.buffer = append(enc.buffer, make([]byte, width)...)
+	}
+}
+
+func (enc *Encoder) finishBytes(field FieldNumber, tagStart, lengthStart, messageStart int) {
+	messageLength := len(enc.buffer) - messageStart
+	width := protowire.SizeVarint(uint64(messageLength))
+	missingTag := lengthStart == tagStart
+	if missingTag {
+		lengthStart += protowire.SizeTag(protowire.Number(field))
+	}
+	shift := lengthStart + width - messageStart
+	if shift != 0 {
+		if shift > 0 {
+			enc.buffer = append(enc.buffer, make([]byte, shift)...)
+		}
+		copy(enc.buffer[lengthStart+width:], enc.buffer[messageStart:messageStart+messageLength])
+		enc.buffer = enc.buffer[:lengthStart+width+messageLength]
+	}
+	if missingTag {
+		_ = appendTag(enc.buffer[:tagStart], field, protowire.BytesType)
+	}
+	protowire.PutUvarint(enc.buffer[lengthStart:lengthStart+width], uint64(messageLength))
 }
 
 // UnrecognizedFields encodes fields that are not in the provided set.

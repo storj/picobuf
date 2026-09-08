@@ -82,11 +82,11 @@ func (field FieldNumber) String() string {
 // msg.Encode runs twice and must behave deterministically. Custom encoders
 // can use Encoder.IsSizing to distinguish the passes.
 func Marshal(msg Message) ([]byte, error) {
-	size, err := Size(msg)
-	if err != nil || size == 0 {
+	enc, err := sizeForMarshal(msg)
+	if err != nil || enc.size == 0 {
 		return nil, err
 	}
-	enc := &Encoder{buffer: make([]byte, 0, size)}
+	enc.buffer = make([]byte, 0, enc.size)
 	msg.Encode(enc)
 	if enc.err != nil {
 		return nil, enc.err
@@ -97,19 +97,47 @@ func Marshal(msg Message) ([]byte, error) {
 // MarshalAppend appends the encoding of msg to buffer and returns the
 // extended buffer. On error it returns buffer with its original length.
 //
-// Like Marshal, it sizes the message first, so msg.Encode runs twice and
-// must behave deterministically.
+// Like Marshal, it sizes the message first to reserve output space, so
+// msg.Encode runs twice and must behave deterministically.
 func MarshalAppend(buffer []byte, msg Message) ([]byte, error) {
-	size, err := Size(msg)
+	enc, err := sizeForMarshal(msg)
 	if err != nil {
 		return buffer, err
 	}
-	enc := &Encoder{buffer: slices.Grow(buffer, size)}
+	enc.buffer = slices.Grow(buffer, enc.size)
 	msg.Encode(enc)
 	if enc.err != nil {
 		return buffer, enc.err
 	}
 	return enc.Buffer(), nil
+}
+
+type lengthHints struct {
+	widths []byte
+	inline [32]byte
+}
+
+// sizeForMarshal retains prefix-width hints and reuses the sizing encoder for
+// the writing pass. The first 32 hints share its allocation; larger messages
+// spill into a separate slice. Size itself does not collect hints.
+func sizeForMarshal(msg Message) (*Encoder, error) {
+	if err := ValidateRequired(msg); err != nil {
+		return nil, err
+	}
+	state := &struct {
+		Encoder
+		hints lengthHints
+	}{}
+	enc := &state.Encoder
+	enc.sizing = true
+	enc.lengthHints = &state.hints
+	state.hints.widths = state.hints.inline[:0]
+	msg.Encode(enc)
+	if enc.err != nil {
+		return nil, enc.err
+	}
+	enc.sizing = false
+	return enc, nil
 }
 
 // MarshalBuffer encodes msg as bytes with buffer.

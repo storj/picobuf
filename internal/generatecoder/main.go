@@ -224,11 +224,14 @@ func generateEncoder() []byte {
 							pf("}\n")
 						} else {
 							pf("if enc.sizing {\n")
-							// mirror the depth accounting of alwaysAnyBytes when marshaling
+							// mirror the length hint and depth accounting of
+							// alwaysAnyBytes when marshaling
+							pf("hint := enc.reserveLengthHint()\n")
 							pf("if !enc.enterMessage() { return }\n")
 							pf("enc.depth--\n")
 							pf("payloadSize := 0\n")
 							pf("for _, x := range *v { payloadSize += %s }\n", t.SizeFmt("x"))
+							pf("if hint >= 0 { enc.lengthHints.widths[hint] = byte(protowire.SizeVarint(uint64(payloadSize))) }\n")
 							pf("enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(payloadSize)\n")
 							pf("return\n")
 							pf("}\n")
