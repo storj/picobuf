@@ -18,17 +18,19 @@ const (
 // Decoder implements decoding of protobuf messages.
 type Decoder struct {
 	messageDecodeState
-	stack              []messageDecodeState
+	err *parseError
+
+	// Serialized protobuf messages are smaller than 2 GiB, so int32 is
+	// sufficient for nesting and repeated-element limits and counters.
+	depthBudget         int32
+	skipUTF8Budget      int32
+	maxRepeatedElements int32
+	repeatedElements    int32
+
 	init               bool
 	aliasInput         bool
 	allowInvalidUTF8   bool
 	skipUTF8Validation bool
-	skipUTF8Depth      int
-
-	maxRecursionDepth   int
-	maxRepeatedElements int
-	repeatedElements    int
-	err                 *parseError
 }
 
 // WithoutUTF8Validation runs fn without validating decoded string fields.
@@ -39,16 +41,16 @@ type Decoder struct {
 // messages, which carry their own UTF-8 validation features. fn cannot
 // panic, so the state is restored with a plain call rather than a defer.
 func (dec *Decoder) WithoutUTF8Validation(fn func()) {
-	prevSkip, prevDepth := dec.skipUTF8Validation, dec.skipUTF8Depth
-	dec.skipUTF8Validation, dec.skipUTF8Depth = true, len(dec.stack)
+	prevSkip, prevBudget := dec.skipUTF8Validation, dec.skipUTF8Budget
+	dec.skipUTF8Validation, dec.skipUTF8Budget = true, dec.depthBudget
 	fn()
-	dec.skipUTF8Validation, dec.skipUTF8Depth = prevSkip, prevDepth
+	dec.skipUTF8Validation, dec.skipUTF8Budget = prevSkip, prevBudget
 }
 
 // skipUTF8 reports whether string validation is currently disabled, per the
 // scoping rules of WithoutUTF8Validation.
 func (dec *Decoder) skipUTF8() bool {
-	return dec.skipUTF8Validation && len(dec.stack) <= dec.skipUTF8Depth+1
+	return dec.skipUTF8Validation && dec.depthBudget >= dec.skipUTF8Budget-1
 }
 
 type messageDecodeState struct {
@@ -66,7 +68,7 @@ func NewDecoder(data []byte) *Decoder {
 func newDecoder(data []byte) *Decoder {
 	return &Decoder{
 		messageDecodeState: messageDecodeState{buffer: data},
-		maxRecursionDepth:  protowire.DefaultRecursionLimit,
+		depthBudget:        protowire.DefaultRecursionLimit,
 	}
 }
 
@@ -81,33 +83,26 @@ func (dec *Decoder) Err() error {
 	return dec.err
 }
 
-func (dec *Decoder) pushState(message []byte) {
-	// Nesting is bounded by the input for a self-referential message, so
-	// refuse to descend further rather than exhausting the stack. Still push,
-	// so that the caller's matching popState stays balanced.
-	tooDeep := len(dec.stack) >= dec.maxRecursionDepth
+// enterMessage saves the parent in the caller's stack frame rather than in a
+// growing slice. The depth budget counts how many more levels may be entered.
+func (dec *Decoder) enterMessage(message []byte) messageDecodeState {
+	parent := dec.messageDecodeState
+	tooDeep := dec.depthBudget <= 0
 	if tooDeep {
 		message = nil
 	}
-
-	dec.stack = append(dec.stack, dec.messageDecodeState)
-	dec.messageDecodeState = messageDecodeState{
-		buffer: message,
-	}
+	dec.depthBudget--
+	dec.messageDecodeState = messageDecodeState{buffer: message}
 	dec.nextField(0)
-
 	if tooDeep {
 		dec.fail(0, "exceeded maximum recursion depth")
 	}
+	return parent
 }
 
-func (dec *Decoder) popState() {
-	if len(dec.stack) == 0 {
-		dec.fail(0, "stack mangled")
-		return
-	}
-	dec.messageDecodeState = dec.stack[len(dec.stack)-1]
-	dec.stack = dec.stack[:len(dec.stack)-1]
+func (dec *Decoder) leaveMessage(parent messageDecodeState) {
+	dec.messageDecodeState = parent
+	dec.depthBudget++
 }
 
 // RepeatedMessage decodes a message.
@@ -122,9 +117,9 @@ func (dec *Decoder) RepeatedMessage(field FieldNumber, fn func(c *Decoder)) {
 		}
 
 		message, n := protowire.ConsumeBytes(dec.buffer)
-		dec.pushState(message)
+		parent := dec.enterMessage(message)
 		fn(dec)
-		dec.popState()
+		dec.leaveMessage(parent)
 
 		dec.nextField(n)
 	}
@@ -224,11 +219,11 @@ func (dec *Decoder) takeRepeated(field FieldNumber) bool {
 	if dec.maxRepeatedElements <= 0 {
 		return true
 	}
-	dec.repeatedElements++
-	if dec.repeatedElements > dec.maxRepeatedElements {
+	if dec.repeatedElements >= dec.maxRepeatedElements {
 		dec.fail(field, "exceeded maximum repeated elements")
 		return false
 	}
+	dec.repeatedElements++
 	return true
 }
 
@@ -236,7 +231,7 @@ func (dec *Decoder) repeatedReservation(count int) int {
 	if dec.maxRepeatedElements <= 0 {
 		return count
 	}
-	remaining := dec.maxRepeatedElements - dec.repeatedElements
+	remaining := int(dec.maxRepeatedElements - dec.repeatedElements)
 	if remaining < count {
 		return max(remaining, 0)
 	}
@@ -254,9 +249,9 @@ func (dec *Decoder) Message(field FieldNumber, fn func(*Decoder)) {
 	}
 
 	message, n := protowire.ConsumeBytes(dec.buffer)
-	dec.pushState(message)
+	parent := dec.enterMessage(message)
 	dec.Loop(fn)
-	dec.popState()
+	dec.leaveMessage(parent)
 
 	dec.nextField(n)
 }
@@ -272,9 +267,9 @@ func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Decoder)) {
 	}
 
 	message, n := protowire.ConsumeBytes(dec.buffer)
-	dec.pushState(message)
+	parent := dec.enterMessage(message)
 	dec.Loop(fn)
-	dec.popState()
+	dec.leaveMessage(parent)
 
 	dec.nextField(n)
 }
@@ -294,9 +289,9 @@ func (dec *Decoder) Group(field FieldNumber, fn func(*Decoder)) {
 		dec.fail(field, "unable to parse group")
 		return
 	}
-	dec.pushState(message)
+	parent := dec.enterMessage(message)
 	dec.Loop(fn)
-	dec.popState()
+	dec.leaveMessage(parent)
 	dec.nextField(n)
 }
 
@@ -321,9 +316,9 @@ func (dec *Decoder) RepeatedGroup(field FieldNumber, fn func(*Decoder)) {
 			dec.fail(field, "unable to parse group")
 			return
 		}
-		dec.pushState(message)
+		parent := dec.enterMessage(message)
 		fn(dec)
-		dec.popState()
+		dec.leaveMessage(parent)
 		dec.nextField(n)
 	}
 }

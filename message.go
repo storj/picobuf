@@ -166,7 +166,9 @@ func Size(msg Message) (int, error) {
 	return enc.size, nil
 }
 
-// UnmarshalOptions configures decoding.
+// UnmarshalOptions configures decoding. Positive recursion and repeated-element
+// limits are capped at math.MaxInt32, sufficient for serialized protobuf messages
+// smaller than 2 GiB.
 //
 // Elements of a repeated message field are allocated in one block per
 // field, so retaining a single decoded element keeps the whole block
@@ -201,9 +203,11 @@ func (opts UnmarshalOptions) Unmarshal(data []byte, msg Message) error {
 	dec.aliasInput = opts.AliasInput
 	dec.allowInvalidUTF8 = opts.AllowInvalidUTF8
 	if opts.MaxRecursionDepth > 0 {
-		dec.maxRecursionDepth = opts.MaxRecursionDepth
+		dec.depthBudget = int32(min(opts.MaxRecursionDepth, math.MaxInt32))
 	}
-	dec.maxRepeatedElements = opts.MaxRepeatedElements
+	if opts.MaxRepeatedElements > 0 {
+		dec.maxRepeatedElements = int32(min(opts.MaxRepeatedElements, math.MaxInt32))
+	}
 	dec.Loop(msg.Decode)
 	err := dec.Err()
 	if err == nil {
