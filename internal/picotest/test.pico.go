@@ -148,7 +148,9 @@ func (m *Person) Encode(c *picobuf.Encoder) bool {
 		return false
 	}
 	c.String(1, &m.Name)
-	c.Message(2, m.Address.Encode)
+	if m.Address != nil {
+		c.Message(2, m.Address.Encode)
+	}
 	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }
@@ -265,7 +267,9 @@ func (m *AllTypes) Encode(c *picobuf.Encoder) bool {
 	c.Bool(13, &m.Bool)
 	c.String(14, &m.String_)
 	c.Bytes(15, &m.Bytes)
-	c.Message(16, m.Message.Encode)
+	if m.Message != nil {
+		c.Message(16, m.Message.Encode)
+	}
 	c.RepeatedInt32(17, &m.Int32S)
 	c.RepeatedInt64(18, &m.Int64S)
 	c.RepeatedUint32(19, &m.Uint32S)
@@ -585,6 +589,76 @@ func (m *Message) GetInt32() (v int32) {
 	return 0
 }
 
+type MessageEnvelope struct {
+	First            *Message `json:"first,omitzero"`
+	Middle           *Message `json:"middle,omitzero"`
+	Last             *Message `json:"last,omitzero"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *MessageEnvelope) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	if m.First != nil {
+		c.Message(1, m.First.Encode)
+	}
+	if m.Middle != nil {
+		c.Message(2, m.Middle.Encode)
+	}
+	if m.Last != nil {
+		c.Message(3, m.Last.Encode)
+	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
+	return true
+}
+
+func (m *MessageEnvelope) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Message(1, func(c *picobuf.Decoder) {
+		if m.First == nil {
+			m.First = new(Message)
+		}
+		m.First.Decode(c)
+	})
+	c.Message(2, func(c *picobuf.Decoder) {
+		if m.Middle == nil {
+			m.Middle = new(Message)
+		}
+		m.Middle.Decode(c)
+	})
+	c.Message(3, func(c *picobuf.Decoder) {
+		if m.Last == nil {
+			m.Last = new(Message)
+		}
+		m.Last.Decode(c)
+	})
+	c.UnrecognizedFields(14, &m.XXX_unrecognized)
+}
+
+func (m *MessageEnvelope) GetFirst() (v *Message) {
+	if m != nil {
+		return m.First
+	}
+	return nil
+}
+
+func (m *MessageEnvelope) GetMiddle() (v *Message) {
+	if m != nil {
+		return m.Middle
+	}
+	return nil
+}
+
+func (m *MessageEnvelope) GetLast() (v *Message) {
+	if m != nil {
+		return m.Last
+	}
+	return nil
+}
+
 type Piece struct {
 	Id               *pic.ID `json:"id,omitzero"`
 	Alt              *string `json:"alt,omitzero"`
@@ -867,8 +941,12 @@ func (m *VariationsMessage) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
-	c.Message(1, m.Value.Encode)
-	c.Message(2, m.Opt.Encode)
+	if m.Value != nil {
+		c.Message(1, m.Value.Encode)
+	}
+	if m.Opt != nil {
+		c.Message(2, m.Opt.Encode)
+	}
 	for _, x := range m.Rep {
 		c.AlwaysMessage(3, x.Encode)
 	}
@@ -1112,7 +1190,9 @@ func (m *CustomMessageTypes) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
-	c.Message(1, m.Normal.Encode)
+	if m.Normal != nil {
+		c.Message(1, m.Normal.Encode)
+	}
 	if m.CustomType != nil {
 		m.CustomType.PicoEncode(c, 2)
 	}
@@ -1561,7 +1641,9 @@ func (m *Tag) Encode(c *picobuf.Encoder) bool {
 		c.AlwaysInt64(7, &m.DurationNs)
 	}
 	if m, ok := m.Value.(*Tag_Timestamp); ok {
-		c.Message(8, m.Timestamp.Encode)
+		if m.Timestamp != nil {
+			c.Message(8, m.Timestamp.Encode)
+		}
 	}
 	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true

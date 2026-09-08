@@ -53,7 +53,9 @@ func (m *Profile) Encode(c *picobuf.Encoder) bool {
 	c.Int64(8, &m.KeepFrames)
 	c.Int64(9, &m.TimeNanos)
 	c.Int64(10, &m.DurationNanos)
-	c.Message(11, m.PeriodType.Encode)
+	if m.PeriodType != nil {
+		c.Message(11, m.PeriodType.Encode)
+	}
 	c.Int64(12, &m.Period)
 	c.RepeatedInt64(13, &m.Comment)
 	c.Int64(14, &m.DefaultSampleType)

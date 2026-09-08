@@ -134,11 +134,49 @@ func NewEncoderBuffer(buffer []byte) *Encoder {
 // Buffer returns the encoded internal buffer.
 func (enc *Encoder) Buffer() []byte { return enc.buffer }
 
-// Message decodes a message.
+// Message encodes a message when its callback reports it is present.
 //
 //go:noinline
 func (enc *Encoder) Message(field FieldNumber, fn func(enc *Encoder) bool) {
-	enc.anyBytes(field, func() bool { return fn(enc) })
+	if enc.sizing {
+		hint := enc.reserveLengthHint()
+		start := enc.size
+		if !enc.enterMessage() {
+			return
+		}
+		ok := fn(enc)
+		enc.depth--
+		if !ok {
+			enc.size = start
+			return
+		}
+		messageLength := enc.size - start
+		width := protowire.SizeVarint(uint64(messageLength))
+		if hint >= 0 {
+			enc.lengthHints.widths[hint] = byte(width)
+		}
+		enc.size += protowire.SizeTag(protowire.Number(field)) + width
+		return
+	}
+	tagStart := len(enc.buffer)
+	width := enc.nextLengthHint()
+	enc.startBytes(field, width)
+	messageStart := len(enc.buffer)
+	lengthStart := messageStart - width
+	// encode the submessage
+	ok := enc.enterMessage()
+	if ok {
+		ok = fn(enc)
+		enc.depth--
+	}
+	if !ok {
+		// The message was nil or too deeply nested, we can remove the tag.
+		enc.buffer = enc.buffer[:tagStart]
+		return
+	}
+	if !enc.putLength(lengthStart, messageStart) {
+		enc.finishBytes(field, tagStart, lengthStart, messageStart)
+	}
 }
 
 // AlwaysMessage encodes an message always.
@@ -152,7 +190,7 @@ func (enc *Encoder) AlwaysMessage(field FieldNumber, fn func(enc *Encoder) bool)
 //
 //go:noinline
 func (enc *Encoder) PresentMessage(field FieldNumber, fn func(enc *Encoder) bool) {
-	enc.anyBytes(field, func() bool {
+	enc.Message(field, func(enc *Encoder) bool {
 		lengthStart := enc.offset()
 		fn(enc)
 		return enc.offset() > lengthStart
@@ -224,48 +262,6 @@ func (enc *Encoder) RepeatedEnum(field FieldNumber, n int, fn func(index uint) i
 	})
 }
 
-// anyBytes encodes field as Bytes and handles encoding the length.
-func (enc *Encoder) anyBytes(field FieldNumber, fn func() bool) bool {
-	if enc.sizing {
-		hint := enc.reserveLengthHint()
-		start := enc.size
-		if !enc.enterMessage() {
-			return false
-		}
-		ok := fn()
-		enc.depth--
-		if !ok {
-			enc.size = start
-			return false
-		}
-		messageLength := enc.size - start
-		width := protowire.SizeVarint(uint64(messageLength))
-		if hint >= 0 {
-			enc.lengthHints.widths[hint] = byte(width)
-		}
-		enc.size += protowire.SizeTag(protowire.Number(field)) + width
-		return true
-	}
-	tagStart := len(enc.buffer)
-	width := enc.nextLengthHint()
-	enc.startBytes(field, width)
-	messageStart := len(enc.buffer)
-	lengthStart := messageStart - width
-	// encode the submessage
-	ok := enc.enterMessage()
-	if ok {
-		ok = fn()
-		enc.depth--
-	}
-	if !ok {
-		// The message was nil or too deeply nested, we can remove the tag.
-		enc.buffer = enc.buffer[:tagStart]
-		return false
-	}
-	enc.finishBytes(field, tagStart, lengthStart, messageStart)
-	return true
-}
-
 // AlwaysAnyBytes encodes field as Bytes and handles encoding the length.
 func (enc *Encoder) AlwaysAnyBytes(field FieldNumber, fn func()) bool {
 	return enc.alwaysAnyBytes(field, fn)
@@ -298,7 +294,9 @@ func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
 		fn()
 		enc.depth--
 	}
-	enc.finishBytes(field, tagStart, lengthStart, messageStart)
+	if !enc.putLength(lengthStart, messageStart) {
+		enc.finishBytes(field, tagStart, lengthStart, messageStart)
+	}
 	return true
 }
 
@@ -331,6 +329,16 @@ func (enc *Encoder) startBytes(field FieldNumber, width int) {
 		enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 		enc.buffer = append(enc.buffer, make([]byte, width)...)
 	}
+}
+
+// putLength handles a matching prediction without entering the correction path.
+func (enc *Encoder) putLength(lengthStart, messageStart int) bool {
+	length := len(enc.buffer) - messageStart
+	if protowire.SizeVarint(uint64(length)) != messageStart-lengthStart {
+		return false
+	}
+	protowire.PutUvarint(enc.buffer[lengthStart:messageStart], uint64(length))
+	return true
 }
 
 func (enc *Encoder) finishBytes(field FieldNumber, tagStart, lengthStart, messageStart int) {

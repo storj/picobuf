@@ -11,6 +11,7 @@ import (
 	"google.golang.org/protobuf/encoding/protowire"
 
 	"storj.io/picobuf"
+	"storj.io/picobuf/internal/picotest"
 )
 
 type encodeFunc func(*picobuf.Encoder) bool
@@ -284,6 +285,32 @@ func TestMarshalPackedExactCapacity(t *testing.T) {
 				})
 				return true
 			})
+			checkMarshalEncoding(t, msg, true)
+		})
+	}
+}
+
+func BenchmarkMarshalMessageEnvelope(b *testing.B) {
+	msg := &picotest.MessageEnvelope{Middle: &picotest.Message{Int32: 123}}
+	benchmarkMarshal(b, msg)
+}
+
+func TestMarshalMessageEnvelopePresence(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		middle *picotest.Message
+		want   []byte
+	}{
+		{"absent", nil, nil},
+		{"empty", &picotest.Message{}, []byte{0x12, 0}},
+		{"populated", &picotest.Message{Int32: 123}, []byte{0x12, 2, 8, 123}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			msg := &picotest.MessageEnvelope{Middle: tc.middle}
+			got, err := picobuf.Marshal(msg)
+			if err != nil || !bytes.Equal(got, tc.want) {
+				t.Fatalf("Marshal = %x, %v; want %x", got, err, tc.want)
+			}
 			checkMarshalEncoding(t, msg, true)
 		})
 	}

@@ -117,7 +117,9 @@ func (m *Types) Encode(c *picobuf.Encoder) bool {
 	c.Bool(13, &m.Bool)
 	c.String(14, &m.String_)
 	c.Bytes(15, &m.Bytes)
-	c.Message(16, m.Message.Encode)
+	if m.Message != nil {
+		c.Message(16, m.Message.Encode)
+	}
 	c.Int32(17, (*int32)(&m.Language))
 	c.RepeatedInt32(18, &m.Int32S)
 	c.RepeatedInt64(19, &m.Int64S)

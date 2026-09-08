@@ -407,7 +407,11 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 		}
 		switch {
 		case info.pointer && !info.repeated:
-			gf.P("c.", messageMethod, "(", field.Desc.Number(), ", m.", field.GoName, ".Encode)")
+			// An absent generated message has nothing to encode. Skip the
+			// callback and its sizing/length-prefix bookkeeping altogether.
+			gf.P("if m.", field.GoName, " != nil {")
+			gf.P("  c.", messageMethod, "(", field.Desc.Number(), ", m.", field.GoName, ".Encode)")
+			gf.P("}")
 		case info.pointer && info.repeated:
 			gf.P("for _, x := range m.", field.GoName, " {")
 			gf.P("  c.", alwaysMethod, "(", field.Desc.Number(), ", x.Encode)")

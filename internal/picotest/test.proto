@@ -70,6 +70,13 @@ message Message {
   int32 int32 = 1;
 }
 
+// Models a request envelope with one present message between absent fields.
+message MessageEnvelope {
+  Message first = 1;
+  Message middle = 2;
+  Message last = 3;
+}
+
 message Piece {
   bytes id  = 1 [(pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"];
   bytes alt = 2 [

@@ -70,7 +70,9 @@ func (m *Message) Encode(c *picobuf.Encoder) bool {
 	for i := range m.ExpandedNumbers {
 		c.AlwaysInt32(8, &m.ExpandedNumbers[i])
 	}
-	c.Group(9, m.Nested.Encode)
+	if m.Nested != nil {
+		c.Group(9, m.Nested.Encode)
+	}
 	if m.ClosedState != nil {
 		c.AlwaysInt32(10, (*int32)(m.ClosedState))
 	}
@@ -226,7 +228,9 @@ func (m *RequiredParent) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
-	c.Message(1, m.Child.Encode)
+	if m.Child != nil {
+		c.Message(1, m.Child.Encode)
+	}
 	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
 }

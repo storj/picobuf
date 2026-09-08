@@ -82,7 +82,9 @@ func (m *Types) Encode(c *picobuf.Encoder) bool {
 	c.String(14, &m.String_)
 	c.Bytes(15, &m.Bytes)
 	c.PresentMessage(16, m.Message.Encode)
-	c.Message(17, m.OptionalMessage.Encode)
+	if m.OptionalMessage != nil {
+		c.Message(17, m.OptionalMessage.Encode)
+	}
 	c.Int32(18, (*int32)(&m.Language))
 	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
@@ -444,7 +446,9 @@ func (m *CommandMessage) Encode(c *picobuf.Encoder) bool {
 		c.AlwaysString(2, &m.Name)
 	}
 	if m, ok := m.Command.(*CommandMessage_Message); ok {
-		c.Message(3, m.Message.Encode)
+		if m.Message != nil {
+			c.Message(3, m.Message.Encode)
+		}
 	}
 	if m, ok := m.Command.(*CommandMessage_Count); ok {
 		c.AlwaysInt32(4, &m.Count)
