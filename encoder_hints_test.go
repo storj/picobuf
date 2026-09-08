@@ -34,7 +34,7 @@ func nestedPayload(depth int, payload []byte) encodeFunc {
 }
 
 func TestMarshalNestedExactCapacity(t *testing.T) {
-	for _, depth := range []int{1, 8, 40} {
+	for _, depth := range []int{1, 8, 15, 16, 40, 79, 80} {
 		for _, size := range []int{0, 127, 128, 16383, 16384, 1 << 21} {
 			t.Run(fmt.Sprintf("depth=%d/size=%d", depth, size), func(t *testing.T) {
 				payload := bytes.Repeat([]byte{0x08, 0x01}, size/2)
@@ -248,6 +248,9 @@ func BenchmarkMarshalLengthHints(b *testing.B) {
 		{"Chunk64KiB", 1, 64 << 10},
 		{"Chunk4MiB", 1, 4 << 20},
 		{"Nested", 8, 32},
+		{"InlineLimit", 15, 32},
+		{"FirstSpill", 16, 32},
+		{"OldInlineLimit", 32, 32},
 		{"Spill", 40, 32},
 	} {
 		b.Run(tc.name, func(b *testing.B) {
@@ -311,6 +314,26 @@ func TestMarshalMessageEnvelopePresence(t *testing.T) {
 			if err != nil || !bytes.Equal(got, tc.want) {
 				t.Fatalf("Marshal = %x, %v; want %x", got, err, tc.want)
 			}
+			checkMarshalEncoding(t, msg, true)
+		})
+	}
+}
+
+func TestMarshalLengthHintBoundaries(t *testing.T) {
+	// Cross both packed-word and overflow-buffer boundaries with omitted slots
+	// and different prefix widths, so zero-width hints cannot lose their place.
+	for _, count := range []int{14, 15, 16, 79, 80, 144} {
+		t.Run(fmt.Sprint(count), func(t *testing.T) {
+			payloads := [][]byte{nil, bytes.Repeat([]byte{8, 1}, 128), bytes.Repeat([]byte{8, 1}, 32<<10)}
+			msg := encodeFunc(func(enc *picobuf.Encoder) bool {
+				for i := range count {
+					enc.Message(1, func(enc *picobuf.Encoder) bool {
+						enc.UnrecognizedFields(payloads[i%len(payloads)])
+						return i%4 != 0
+					})
+				}
+				return true
+			})
 			checkMarshalEncoding(t, msg, true)
 		})
 	}

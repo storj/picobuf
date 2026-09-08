@@ -5,21 +5,24 @@ package picobuf
 
 import (
 	"errors"
+	"math/bits"
 
 	"storj.io/picobuf/internal/protowire"
 )
 
 // Encoder implements encoding of protobuf format.
 type Encoder struct {
-	buffer        []byte
-	size          int
-	depth         int
-	err           error
-	skipUTF8Depth int
+	buffer []byte
+	size   int
+	err    error
 
 	// Marshal records prefix widths in preorder during sizing, then consumes
 	// them during encoding. They are hints: map traversal can change order.
+	inlineHints uint64
 	lengthHints *lengthHints
+
+	depth         int32
+	skipUTF8Depth int32
 
 	sizing             bool
 	skipUTF8Validation bool
@@ -153,7 +156,7 @@ func (enc *Encoder) Message(field FieldNumber, fn func(enc *Encoder) bool) {
 		messageLength := enc.size - start
 		width := protowire.SizeVarint(uint64(messageLength))
 		if hint >= 0 {
-			enc.lengthHints.widths[hint] = byte(width)
+			enc.setLengthHint(hint, width)
 		}
 		enc.size += protowire.SizeTag(protowire.Number(field)) + width
 		return
@@ -279,7 +282,7 @@ func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
 		messageLength := enc.size - start
 		width := protowire.SizeVarint(uint64(messageLength))
 		if hint >= 0 {
-			enc.lengthHints.widths[hint] = byte(width)
+			enc.setLengthHint(hint, width)
 		}
 		enc.size += protowire.SizeTag(protowire.Number(field)) + width
 		return true
@@ -300,27 +303,55 @@ func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
 	return true
 }
 
+// inlineLengthHints is the number of four-bit widths that fit below a sentinel
+// bit in inlineHints. Four bits cover every possible uint64 varint width.
+const inlineLengthHints = 15
+
 // reserveLengthHint reserves a preorder slot before visiting children. Zero
 // means omitted; keep its slot and any child slots even if the callback returns
 // false, since encoding will still visit those callbacks.
 func (enc *Encoder) reserveLengthHint() int {
-	if enc.lengthHints == nil {
+	if enc.inlineHints == 0 {
 		return -1
+	}
+	// The highest set bit marks the end, including slots whose width is zero.
+	shift := bits.Len64(enc.inlineHints) - 1
+	if shift < 4*inlineLengthHints {
+		enc.inlineHints ^= uint64(1) << shift
+		enc.inlineHints |= uint64(1) << (shift + 4)
+		return shift / 4
+	}
+	if enc.lengthHints == nil {
+		enc.lengthHints = new(lengthHints)
+		enc.lengthHints.widths = enc.lengthHints.inline[:0]
 	}
 	index := len(enc.lengthHints.widths)
 	enc.lengthHints.widths = append(enc.lengthHints.widths, 0)
-	return index
+	return inlineLengthHints + index
+}
+
+func (enc *Encoder) setLengthHint(index, width int) {
+	if index < inlineLengthHints {
+		enc.inlineHints |= uint64(width) << (4 * index)
+	} else {
+		enc.lengthHints.widths[index-inlineLengthHints] = byte(width)
+	}
 }
 
 func (enc *Encoder) nextLengthHint() int {
+	if enc.inlineHints > 1 {
+		width := int(enc.inlineHints & 15)
+		enc.inlineHints >>= 4
+		return width
+	}
+	if enc.lengthHints != nil && len(enc.lengthHints.widths) > 0 {
+		width := int(enc.lengthHints.widths[0])
+		enc.lengthHints.widths = enc.lengthHints.widths[1:]
+		return width
+	}
 	// Without hints, predict a two-byte length, which fits payloads up to
 	// 16 KiB.
-	width := 2
-	if enc.lengthHints != nil && len(enc.lengthHints.widths) > 0 {
-		width = int(enc.lengthHints.widths[0])
-		enc.lengthHints.widths = enc.lengthHints.widths[1:]
-	}
-	return width
+	return 2
 }
 
 func (enc *Encoder) startBytes(field FieldNumber, width int) {

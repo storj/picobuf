@@ -125,3 +125,27 @@ func BenchmarkDecoderNesting(b *testing.B) {
 		})
 	}
 }
+
+func TestDecoderReuseNesting(t *testing.T) {
+	for _, mode := range []string{"Message", "PresentMessage", "RepeatedMessage", "Group", "RepeatedGroup"} {
+		t.Run(mode, func(t *testing.T) {
+			var dec picobuf.Decoder
+			msg := &stateMessage{mode: mode}
+			opts := picobuf.UnmarshalOptions{MaxRecursionDepth: 2}
+			if err := dec.Unmarshal(stateMessageData(mode, 3), msg, opts); err == nil {
+				t.Fatal("accepted nesting beyond limit")
+			}
+			data := stateMessageData(mode, 2)
+			if allocs := testing.AllocsPerRun(100, func() {
+				if err := dec.Unmarshal(data, msg, opts); err != nil {
+					t.Fatal(err)
+				}
+				if msg.value != 9 {
+					t.Fatalf("decoded value = %d; want 9", msg.value)
+				}
+			}); allocs != 0 {
+				t.Fatalf("decoder reuse allocated %.0f times", allocs)
+			}
+		})
+	}
+}

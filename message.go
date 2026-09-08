@@ -114,24 +114,17 @@ func MarshalAppend(buffer []byte, msg Message) ([]byte, error) {
 
 type lengthHints struct {
 	widths []byte
-	inline [32]byte
+	inline [64]byte
 }
 
 // sizeForMarshal retains prefix-width hints and reuses the sizing encoder for
-// the writing pass. The first 32 hints share its allocation; larger messages
-// spill into a separate slice. Size itself does not collect hints.
+// the writing pass. Small messages pack their hints into the encoder itself;
+// larger messages allocate overflow storage lazily. Size does not collect hints.
 func sizeForMarshal(msg Message) (*Encoder, error) {
 	if err := ValidateRequired(msg); err != nil {
 		return nil, err
 	}
-	state := &struct {
-		Encoder
-		hints lengthHints
-	}{}
-	enc := &state.Encoder
-	enc.sizing = true
-	enc.lengthHints = &state.hints
-	state.hints.widths = state.hints.inline[:0]
+	enc := &Encoder{sizing: true, inlineHints: 1}
 	msg.Encode(enc)
 	if enc.err != nil {
 		return nil, enc.err
@@ -199,7 +192,16 @@ func (opts UnmarshalOptions) Unmarshal(data []byte, msg Message) error {
 	if opts.MaxInputSize > 0 && len(data) > opts.MaxInputSize {
 		return parseError{message: "input exceeds maximum size"}
 	}
-	dec := newDecoder(data)
+	return opts.unmarshal(data, msg, new(Decoder))
+}
+
+// unmarshal initializes caller-provided storage. Ordinary Unmarshal leaves the
+// resulting state intact; Decoder.Unmarshal clears it before returning.
+func (opts UnmarshalOptions) unmarshal(data []byte, msg Message, dec *Decoder) error {
+	*dec = Decoder{
+		messageDecodeState: messageDecodeState{buffer: data},
+		depthBudget:        protowire.DefaultRecursionLimit,
+	}
 	dec.aliasInput = opts.AliasInput
 	dec.allowInvalidUTF8 = opts.AllowInvalidUTF8
 	if opts.MaxRecursionDepth > 0 {

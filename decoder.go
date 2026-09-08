@@ -72,6 +72,22 @@ func newDecoder(data []byte) *Decoder {
 	}
 }
 
+// Unmarshal decodes data into msg using reusable decoder storage. The zero value
+// is ready to use. Pass UnmarshalOptions{} for the default decoding options.
+// Like UnmarshalOptions.Unmarshal, this merges into msg rather than resetting it.
+//
+// A Decoder must not be used concurrently or reentered from a decoding callback.
+// Its state is cleared before this method returns, including on failure or panic;
+// callbacks must not retain it for use after Unmarshal returns. Decoded values
+// remain valid according to opts.AliasInput, independently of decoder reuse.
+func (dec *Decoder) Unmarshal(data []byte, msg Message, opts UnmarshalOptions) error {
+	defer func() { *dec = Decoder{} }()
+	if opts.MaxInputSize > 0 && len(data) > opts.MaxInputSize {
+		return parseError{message: "input exceeds maximum size"}
+	}
+	return opts.unmarshal(data, msg, dec)
+}
+
 // PendingField returns the next field number in the stream.
 func (dec *Decoder) PendingField() FieldNumber { return dec.pendingField }
 

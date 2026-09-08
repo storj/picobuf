@@ -231,7 +231,7 @@ func generateEncoder() []byte {
 							pf("enc.depth--\n")
 							pf("payloadSize := 0\n")
 							pf("for _, x := range *v { payloadSize += %s }\n", t.SizeFmt("x"))
-							pf("if hint >= 0 { enc.lengthHints.widths[hint] = byte(protowire.SizeVarint(uint64(payloadSize))) }\n")
+							pf("if hint >= 0 { enc.setLengthHint(hint, protowire.SizeVarint(uint64(payloadSize))) }\n")
 							pf("enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(payloadSize)\n")
 							pf("return\n")
 							pf("}\n")
