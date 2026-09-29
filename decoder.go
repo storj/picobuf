@@ -5,6 +5,7 @@ package picobuf
 
 import (
 	"bytes"
+	"slices"
 
 	"storj.io/picobuf/internal/protowire"
 )
@@ -133,6 +134,53 @@ func (dec *Decoder) RepeatedMessage(field FieldNumber, fn func(c *Decoder)) {
 // field, capped by the remaining repeated element limit.
 func (dec *Decoder) RepeatedMessageCount(field FieldNumber) int {
 	return dec.repeatedFieldCount(field, protowire.BytesType)
+}
+
+// DecodeRepeatedMessages decodes repeated message values for field into out.
+// The elements are allocated in one block instead of one allocation each, so
+// retaining a single element keeps the whole block alive.
+//
+// TODO: allocate in bounded chunks, so that retaining one element pins at
+// most a few kilobytes instead of the whole field.
+func DecodeRepeatedMessages[T any](dec *Decoder, field FieldNumber, out *[]*T, decode func(*T, *Decoder)) {
+	n := dec.RepeatedMessageCount(field)
+	*out = slices.Grow(*out, n)
+	// The count is a lower bound, so fall back on individual allocations if
+	// it is exceeded.
+	elems := make([]T, n)
+	i := 0
+	dec.RepeatedMessage(field, func(c *Decoder) {
+		var x *T
+		if i < len(elems) {
+			x = &elems[i]
+			i++
+		} else {
+			x = new(T)
+		}
+		c.Loop(func(c *Decoder) { decode(x, c) })
+		*out = append(*out, x)
+	})
+}
+
+// DecodeRepeatedGroups is DecodeRepeatedMessages for delimited messages.
+func DecodeRepeatedGroups[T any](dec *Decoder, field FieldNumber, out *[]*T, decode func(*T, *Decoder)) {
+	n := dec.RepeatedGroupCount(field)
+	*out = slices.Grow(*out, n)
+	// The count is a lower bound, so fall back on individual allocations if
+	// it is exceeded.
+	elems := make([]T, n)
+	i := 0
+	dec.RepeatedGroup(field, func(c *Decoder) {
+		var x *T
+		if i < len(elems) {
+			x = &elems[i]
+			i++
+		} else {
+			x = new(T)
+		}
+		c.Loop(func(c *Decoder) { decode(x, c) })
+		*out = append(*out, x)
+	})
 }
 
 // RepeatedEnum decodes a repeated enumeration.

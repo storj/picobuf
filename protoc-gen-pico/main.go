@@ -597,12 +597,7 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 			gf.P("  m.", field.GoName, ".Decode(c)")
 			gf.P("})")
 		case info.pointer && info.repeated:
-			gf.P("m.", field.GoName, " = ", slicesPackage.Ident("Grow"), "(m.", field.GoName, ", c.", repeatedCountMethod, "(", field.Desc.Number(), "))")
-			gf.P("c.", repeatedMethod, "(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Decoder"), ") {")
-			gf.P("  x := new(", info.baseType, ")")
-			gf.P("  c.Loop(x.Decode)")
-			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", x)")
-			gf.P("})")
+			gf.P(picobufPackage.Ident("Decode"+repeatedMethod+"s"), "(c, ", field.Desc.Number(), ", &m.", field.GoName, ", (*", info.baseType, ").Decode)")
 		case !info.pointer && !info.repeated:
 			gf.P("c.", presentMethod, "(", field.Desc.Number(), ", m.", field.GoName, ".Decode)")
 		case !info.pointer && info.repeated:

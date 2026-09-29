@@ -428,6 +428,39 @@ func TestDecoder_CustomMessageTypes_Empty(t *testing.T) {
 	})
 }
 
+type groupItem struct{ Value int32 }
+
+func (m *groupItem) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Int32(1, &m.Value)
+}
+
+type groupList struct{ Items []*groupItem }
+
+func (m *groupList) Encode(c *picobuf.Encoder) bool { return m != nil }
+
+func (m *groupList) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	picobuf.DecodeRepeatedGroups(c, 1, &m.Items, (*groupItem).Decode)
+}
+
+func TestDecodeRepeatedGroups(t *testing.T) {
+	// two groups for field 1, each containing int32 field 1
+	data := []byte{
+		0x0b, 0x08, 0x05, 0x0c,
+		0x0b, 0x08, 0x07, 0x0c,
+	}
+	var list groupList
+	assert.NoError(t, picobuf.Unmarshal(data, &list))
+	assert.Equal(t, len(list.Items), 2)
+	assert.Equal(t, list.Items[0].Value, int32(5))
+	assert.Equal(t, list.Items[1].Value, int32(7))
+}
+
 // nested is a self-referential message, which picotest does not have.
 type nested struct{ Inner *nested }
 

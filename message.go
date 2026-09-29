@@ -119,6 +119,10 @@ func Size(msg Message) (int, error) {
 }
 
 // UnmarshalOptions configures decoding.
+//
+// Elements of a repeated message field are allocated in one block per
+// field, so retaining a single decoded element keeps the whole block
+// alive. Copy elements that outlive the rest of the message.
 type UnmarshalOptions struct {
 	// AliasInput allows decoded bytes fields to point into data rather than
 	// being copied out of it. It avoids an allocation per bytes field, at the

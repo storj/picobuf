@@ -317,12 +317,7 @@ func (m *AllTypes) Decode(c *picobuf.Decoder) {
 	c.RepeatedBool(29, &m.Bools)
 	c.RepeatedString(30, &m.Strings)
 	c.RepeatedBytes(31, &m.Bytess)
-	m.Messages = slices.Grow(m.Messages, c.RepeatedMessageCount(32))
-	c.RepeatedMessage(32, func(c *picobuf.Decoder) {
-		x := new(Message)
-		c.Loop(x.Decode)
-		m.Messages = append(m.Messages, x)
-	})
+	picobuf.DecodeRepeatedMessages(c, 32, &m.Messages, (*Message).Decode)
 }
 
 func (m *AllTypes) GetInt32() (v int32) {
@@ -868,12 +863,7 @@ func (m *VariationsMessage) Decode(c *picobuf.Decoder) {
 		}
 		m.Opt.Decode(c)
 	})
-	m.Rep = slices.Grow(m.Rep, c.RepeatedMessageCount(3))
-	c.RepeatedMessage(3, func(c *picobuf.Decoder) {
-		x := new(Message)
-		c.Loop(x.Decode)
-		m.Rep = append(m.Rep, x)
-	})
+	picobuf.DecodeRepeatedMessages(c, 3, &m.Rep, (*Message).Decode)
 	c.PresentMessage(4, m.PresentBasic.Decode)
 	c.PresentMessage(5, m.PresentOpt.Decode)
 	m.PresentRep = slices.Grow(m.PresentRep, c.RepeatedMessageCount(6))

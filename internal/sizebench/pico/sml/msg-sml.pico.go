@@ -8,7 +8,6 @@
 package sml
 
 import (
-	slices "slices"
 	picobuf "storj.io/picobuf"
 	picowire "storj.io/picobuf/picowire"
 	strconv "strconv"
@@ -204,12 +203,7 @@ func (m *TypesUnused) Decode(c *picobuf.Decoder) {
 	c.RepeatedBool(30, &m.Bools)
 	c.RepeatedString(31, &m.Strings)
 	c.RepeatedBytes(32, &m.Bytess)
-	m.Messages = slices.Grow(m.Messages, c.RepeatedMessageCount(33))
-	c.RepeatedMessage(33, func(c *picobuf.Decoder) {
-		x := new(Message)
-		c.Loop(x.Decode)
-		m.Messages = append(m.Messages, x)
-	})
+	picobuf.DecodeRepeatedMessages(c, 33, &m.Messages, (*Message).Decode)
 	c.RepeatedEnum(34, func(x int32) {
 		m.Languages = append(m.Languages, (Language)(x))
 	})

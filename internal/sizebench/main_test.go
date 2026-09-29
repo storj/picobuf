@@ -15,9 +15,12 @@ func TestMessageSize(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	checkSize(t, "message size", pkg.size, 103924, 4000)
+	checkSize(t, "message size", pkg.size, 114484, 4000)
 	checkSize(t, "encode size", pkg.symbols.sum("one.(*Types).Encode"), 1239, 128)
-	checkSize(t, "decode size", pkg.symbols.sum("one.(*Types).Decode"), 2001, 128)
+	checkSize(t, "decode size", pkg.symbols.sum("one.(*Types).Decode"), 1449, 128)
+	// Generated Decode delegates repeated message fields to these generic
+	// helpers, so their instantiations are part of the decode cost.
+	checkSize(t, "repeated message decode size", pkg.symbols.sum("DecodeRepeatedMessages"), 1140, 128)
 }
 
 func checkSize(t *testing.T, name string, size, target, eps int64) {
