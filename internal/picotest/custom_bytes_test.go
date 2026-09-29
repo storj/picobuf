@@ -5,6 +5,7 @@ package picotest
 
 import (
 	"encoding/hex"
+	"slices"
 	"testing"
 
 	"storj.io/picobuf"
@@ -85,4 +86,35 @@ func equalID(a, b *pic.ID) bool {
 		return a == b
 	}
 	return *a == *b
+}
+
+func TestGeneratedCustomBytesRepeatedZero(t *testing.T) {
+	id := pic.ID{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+	in := CustomBytes{Rep: []pic.ID{{}, id}, PresentRep: []pic.ID{{}, id}}
+	data, err := picobuf.Marshal(&in)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var out CustomBytes
+	if err := picobuf.Unmarshal(data, &out); err != nil {
+		t.Fatal(err)
+	}
+	if !slices.Equal(out.Rep, in.Rep) || !slices.Equal(out.PresentRep, in.PresentRep) {
+		t.Fatalf("decoded as {Rep: %v, PresentRep: %v}, want {Rep: %v, PresentRep: %v}",
+			out.Rep, out.PresentRep, in.Rep, in.PresentRep)
+	}
+}
+
+func TestGeneratedCustomBytesOneofZero(t *testing.T) {
+	data, err := picobuf.Marshal(&CustomOneof{Kind: &CustomOneof_Id{}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	var out CustomOneof
+	if err := picobuf.Unmarshal(data, &out); err != nil {
+		t.Fatal(err)
+	}
+	if kind, ok := out.Kind.(*CustomOneof_Id); !ok || !kind.Id.IsZero() {
+		t.Fatalf("decoded zero oneof case as %#v from %x", out.Kind, data)
+	}
 }

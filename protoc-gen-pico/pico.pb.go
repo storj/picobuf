@@ -186,6 +186,13 @@ type FieldOptions struct {
 	//
 	// unless custom_serialize provides them. The methods define the wire
 	// encoding, so they must match the declared protobuf type of the field.
+	//
+	// The generated code calls PicoEncode only for values that are present:
+	// non-nil pointers, the selected oneof case, every repeated element and
+	// value fields. PicoEncode should therefore write the value, including
+	// the zero value, in full. Skipping zero values drops present fields,
+	// oneof cases and repeated elements, and writing a different length than
+	// gogoproto does breaks wire compatibility with it.
 	CustomType string `protobuf:"bytes,2,opt,name=custom_type,json=customType,proto3" json:"custom_type,omitempty"`
 	// custom_serialize names a converter type, in the same format as
 	// custom_type, that the field is cast to for encoding and decoding. The

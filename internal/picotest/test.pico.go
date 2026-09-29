@@ -1888,3 +1888,62 @@ func (m *HighUnknown) GetHigher() (v int64) {
 	}
 	return 0
 }
+
+type CustomOneof struct {
+	// Types that are assignable to Kind:
+	//
+	//	*CustomOneof_Id
+	Kind             isCustomOneof_Kind
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *CustomOneof) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	if m, ok := m.Kind.(*CustomOneof_Id); ok {
+		m.Id.PicoEncode(c, 1)
+	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
+	return true
+}
+
+func (m *CustomOneof) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	if c.PendingField() == 1 {
+		var x *CustomOneof_Id
+		if z, ok := m.Kind.(*CustomOneof_Id); ok {
+			x = z
+		} else {
+			x = new(CustomOneof_Id)
+			m.Kind = x
+		}
+		m := x
+		m.Id.PicoDecode(c, 1)
+	}
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
+}
+
+func (m *CustomOneof) GetKind() (v isCustomOneof_Kind) {
+	if m != nil {
+		return m.Kind
+	}
+	return nil
+}
+
+func (m *CustomOneof) GetId() (v pic.ID) {
+	if x, ok := m.GetKind().(*CustomOneof_Id); ok {
+		return x.Id
+	}
+	return // zero
+}
+
+type isCustomOneof_Kind interface{ isCustomOneof_Kind() }
+
+type CustomOneof_Id struct {
+	Id pic.ID
+}
+
+func (*CustomOneof_Id) isCustomOneof_Kind() {}

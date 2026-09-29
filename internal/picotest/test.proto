@@ -250,3 +250,9 @@ message HighUnknown {
   int64 high = 64;
   int64 higher = 100000;
 }
+
+message CustomOneof {
+  oneof kind {
+    bytes id = 1 [(pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"];
+  }
+}
