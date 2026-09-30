@@ -180,9 +180,9 @@ func Size(msg Message) (int, error) {
 // limits are capped at math.MaxInt32, sufficient for serialized protobuf messages
 // smaller than 2 GiB.
 //
-// Elements of a repeated message field are allocated in one block per
-// field, so retaining a single decoded element keeps the whole block
-// alive. Copy elements that outlive the rest of the message.
+// Elements of a repeated message field are allocated together in blocks of
+// up to 4 KiB, so retaining a single decoded element keeps the rest of its
+// block alive. Copy elements that outlive the rest of the message.
 type UnmarshalOptions struct {
 	// AliasInput allows decoded bytes fields to point into data rather than
 	// being copied out of it. It avoids an allocation per bytes field, at the

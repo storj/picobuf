@@ -6,6 +6,7 @@ package picobuf
 import (
 	"bytes"
 	"slices"
+	"unsafe"
 
 	"storj.io/picobuf/internal/protowire"
 )
@@ -148,23 +149,23 @@ func (dec *Decoder) RepeatedMessageCount(field FieldNumber) int {
 }
 
 // DecodeRepeatedMessages decodes repeated message values for field into out.
-// The elements are allocated in one block instead of one allocation each, so
-// retaining a single element keeps the whole block alive.
-//
-// TODO: allocate in bounded chunks, so that retaining one element pins at
-// most a few kilobytes instead of the whole field.
+// The elements are allocated in blocks of at most maxElementBlockBytes
+// instead of one allocation each, so retaining a single element keeps the
+// rest of its block alive.
 func DecodeRepeatedMessages[T any](dec *Decoder, field FieldNumber, out *[]*T, decode func(*T, *Decoder)) {
-	n := dec.RepeatedMessageCount(field)
-	*out = slices.Grow(*out, n)
-	// The count is a lower bound, so fall back on individual allocations if
-	// it is exceeded.
-	elems := make([]T, n)
-	i := 0
+	remaining := dec.RepeatedMessageCount(field)
+	*out = slices.Grow(*out, remaining)
+	var block []T
 	dec.RepeatedMessage(field, func(c *Decoder) {
 		var x *T
-		if i < len(elems) {
-			x = &elems[i]
-			i++
+		if len(block) == 0 && remaining > 0 {
+			n := elementBlockLen(remaining, unsafe.Sizeof(*x))
+			block, remaining = make([]T, n), remaining-n
+		}
+		// The count is a lower bound, so fall back on individual
+		// allocations once it is exceeded.
+		if len(block) > 0 {
+			x, block = &block[0], block[1:]
 		} else {
 			x = new(T)
 		}
@@ -175,23 +176,35 @@ func DecodeRepeatedMessages[T any](dec *Decoder, field FieldNumber, out *[]*T, d
 
 // DecodeRepeatedGroups is DecodeRepeatedMessages for delimited messages.
 func DecodeRepeatedGroups[T any](dec *Decoder, field FieldNumber, out *[]*T, decode func(*T, *Decoder)) {
-	n := dec.RepeatedGroupCount(field)
-	*out = slices.Grow(*out, n)
-	// The count is a lower bound, so fall back on individual allocations if
-	// it is exceeded.
-	elems := make([]T, n)
-	i := 0
+	remaining := dec.RepeatedGroupCount(field)
+	*out = slices.Grow(*out, remaining)
+	var block []T
 	dec.RepeatedGroup(field, func(c *Decoder) {
 		var x *T
-		if i < len(elems) {
-			x = &elems[i]
-			i++
+		if len(block) == 0 && remaining > 0 {
+			n := elementBlockLen(remaining, unsafe.Sizeof(*x))
+			block, remaining = make([]T, n), remaining-n
+		}
+		// The count is a lower bound, so fall back on individual
+		// allocations once it is exceeded.
+		if len(block) > 0 {
+			x, block = &block[0], block[1:]
 		} else {
 			x = new(T)
 		}
 		c.Loop(func(c *Decoder) { decode(x, c) })
 		*out = append(*out, x)
 	})
+}
+
+// maxElementBlockBytes bounds the memory that one retained element of a
+// repeated message field can keep alive.
+const maxElementBlockBytes = 4 << 10
+
+// elementBlockLen returns how many of the remaining elements of the given
+// size to allocate in the next block.
+func elementBlockLen(remaining int, size uintptr) int {
+	return min(remaining, max(1, maxElementBlockBytes/max(1, int(size))))
 }
 
 // RepeatedEnum decodes a repeated enumeration.

@@ -4,6 +4,7 @@
 package picobuf_test
 
 import (
+	"bytes"
 	"testing"
 	"time"
 
@@ -809,4 +810,35 @@ func TestCodec_UnrecognizedFields(t *testing.T) {
 	err = picobuf.Unmarshal(unknownData, &parsedKnown)
 	assert.NoError(t, err)
 	assert.DeepEqual(t, parsedKnown, initialKnown)
+}
+
+type blockElement[T any] struct{ Value T }
+
+type blockMessage[T any] struct{ Elems []*blockElement[T] }
+
+func (m *blockMessage[T]) Encode(c *picobuf.Encoder) bool { return true }
+
+func (m *blockMessage[T]) Decode(c *picobuf.Decoder) {
+	picobuf.DecodeRepeatedMessages(c, 1, &m.Elems, func(*blockElement[T], *picobuf.Decoder) {})
+}
+
+func TestDecodeRepeatedMessagesBoundsBlocks(t *testing.T) {
+	if raceEnabled {
+		t.Skip("allocation counts differ under the race detector")
+	}
+	data := bytes.Repeat([]byte{0x0a, 0x00}, 16)
+	allocs := func(decode func() error) float64 {
+		return testing.AllocsPerRun(100, func() {
+			if err := decode(); err != nil {
+				panic(err)
+			}
+		})
+	}
+	small := allocs(func() error { return picobuf.Unmarshal(data, &blockMessage[int32]{}) })
+	// 1 KiB elements fit four to a 4 KiB block, so 16 of them take four
+	// blocks instead of one.
+	large := allocs(func() error { return picobuf.Unmarshal(data, &blockMessage[[1 << 10]byte]{}) })
+	if large-small != 3 {
+		t.Fatalf("large elements allocated %.0f times, small %.0f, want 3 more blocks", large, small)
+	}
 }
