@@ -51,15 +51,11 @@ func (t *Timestamp) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 		return
 	}
 
-	var seconds int64
-	var nanos int32
-	c.Message(field, func(c *picobuf.Decoder) {
-		c.Int64(1, &seconds)
-		c.Int32(2, &nanos)
-	})
-	if c.Err() != nil {
+	state := picobuf.DecodeMessageValue(c, field, t, (*secondsNanos).decode)
+	if state == nil || c.Err() != nil {
 		return
 	}
+	seconds, nanos := state.seconds, state.nanos
 	if seconds < minTimestampSeconds || seconds > maxTimestampSeconds {
 		c.Fail(field, "timestamp seconds out of range")
 		return

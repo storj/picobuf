@@ -40,15 +40,11 @@ func (d *Duration) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 		return
 	}
 
-	var seconds int64
-	var nanos int32
-	c.Message(field, func(c *picobuf.Decoder) {
-		c.Int64(1, &seconds)
-		c.Int32(2, &nanos)
-	})
-	if c.Err() != nil {
+	state := picobuf.DecodeMessageValue(c, field, d, (*secondsNanos).decode)
+	if state == nil || c.Err() != nil {
 		return
 	}
+	seconds, nanos := state.seconds, state.nanos
 	if seconds < -315576000000 || seconds > 315576000000 {
 		c.Fail(field, "duration seconds out of range")
 		return

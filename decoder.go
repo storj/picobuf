@@ -19,7 +19,8 @@ const (
 // Decoder implements decoding of protobuf messages.
 type Decoder struct {
 	messageDecodeState
-	err *parseError
+	err           *parseError
+	messageValues map[any]any // lazily allocated wire state for converted message values
 
 	// Serialized protobuf messages are smaller than 2 GiB, so int32 is
 	// sufficient for nesting and repeated-element limits and counters.
@@ -170,6 +171,33 @@ func (dec *Decoder) RepeatedMessage(field FieldNumber, fn func(c *Decoder)) {
 func (dec *Decoder) RepeatedMessageCount(field FieldNumber) int {
 	return dec.repeatedFieldCount(field, protowire.BytesType)
 }
+
+// DecodeMessageValue decodes a message field into reusable wire state, initially
+// the zero T. It is intended for converters whose Go representation cannot retain
+// all protobuf components (for example, a saturating time.Duration conversion).
+// Repeated occurrences of the same destination merge into that state, even when
+// a parent message is split across occurrences. Distinct logical message values
+// must have distinct destination pointers. State lasts for this decoding only;
+// Decoder.Unmarshal clears it before returning.
+func DecodeMessageValue[T, V any](dec *Decoder, field FieldNumber, destination *V, decode func(*T, *Decoder)) *T {
+	if !dec.MatchField(field, 2) {
+		return nil
+	}
+	key := messageValueKey[T, V]{destination}
+	state, ok := dec.messageValues[key].(*T)
+	if !ok {
+		state = new(T)
+		if dec.messageValues == nil {
+			dec.messageValues = make(map[any]any)
+		}
+		dec.messageValues[key] = state
+	}
+	dec.Message(field, func(c *Decoder) { decode(state, c) })
+	return state
+}
+
+// The state type is part of the key, allowing a converter to use multiple views.
+type messageValueKey[T, V any] struct{ destination *V }
 
 // DecodeRepeatedMessages decodes repeated message values for field into out.
 // The elements are allocated in blocks of at most maxElementBlockBytes
