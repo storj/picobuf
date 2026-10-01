@@ -1079,14 +1079,16 @@ func (m *CustomBytes) Decode(c *picobuf.Decoder) {
 		}
 		m.Opt.PicoDecode(c, 2)
 	}
-	for c.PendingField() == 3 {
-		m.Rep = append(m.Rep, pic.ID{})
+	for c.TakeRepeated(3) {
+		var zero pic.ID
+		m.Rep = append(m.Rep, zero)
 		m.Rep[len(m.Rep)-1].PicoDecode(c, 3)
 	}
 	m.PresentBasic.PicoDecode(c, 4)
 	m.PresentOpt.PicoDecode(c, 5)
-	for c.PendingField() == 6 {
-		m.PresentRep = append(m.PresentRep, pic.ID{})
+	for c.TakeRepeated(6) {
+		var zero pic.ID
+		m.PresentRep = append(m.PresentRep, zero)
 		m.PresentRep[len(m.PresentRep)-1].PicoDecode(c, 6)
 	}
 	c.UnrecognizedFields(126, &m.XXX_unrecognized)
@@ -1243,22 +1245,24 @@ func (m *CustomMessageTypes) Decode(c *picobuf.Decoder) {
 		(*picoconv.Timestamp)(m.CustomTypeCast).PicoDecode(c, 4)
 	}
 	(*picoconv.Timestamp)(&m.PresentCustomTypeCast).PicoDecode(c, 5)
-	for c.PendingField() == 6 {
+	for c.TakeRepeated(6) {
 		x := new(pic.Timestamp)
 		x.PicoDecode(c, 6)
 		m.RepeatedCustomType = append(m.RepeatedCustomType, x)
 	}
-	for c.PendingField() == 7 {
-		m.RepeatedPresentCustomType = append(m.RepeatedPresentCustomType, pic.Timestamp{})
+	for c.TakeRepeated(7) {
+		var zero pic.Timestamp
+		m.RepeatedPresentCustomType = append(m.RepeatedPresentCustomType, zero)
 		m.RepeatedPresentCustomType[len(m.RepeatedPresentCustomType)-1].PicoDecode(c, 7)
 	}
-	for c.PendingField() == 8 {
+	for c.TakeRepeated(8) {
 		x := new(time.Time)
 		(*picoconv.Timestamp)(x).PicoDecode(c, 8)
 		m.RepeatedCustomTypeCast = append(m.RepeatedCustomTypeCast, x)
 	}
-	for c.PendingField() == 9 {
-		m.RepeatedPresentCustomTypeCast = append(m.RepeatedPresentCustomTypeCast, time.Time{})
+	for c.TakeRepeated(9) {
+		var zero time.Time
+		m.RepeatedPresentCustomTypeCast = append(m.RepeatedPresentCustomTypeCast, zero)
 		x := &m.RepeatedPresentCustomTypeCast[len(m.RepeatedPresentCustomTypeCast)-1]
 		(*picoconv.Timestamp)(x).PicoDecode(c, 9)
 	}
@@ -1947,3 +1951,79 @@ type CustomOneof_Id struct {
 }
 
 func (*CustomOneof_Id) isCustomOneof_Kind() {}
+
+type Duration struct {
+	Seconds          int64  `json:"seconds,omitzero"`
+	Nanos            int32  `json:"nanos,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *Duration) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.Int64(1, &m.Seconds)
+	c.Int32(2, &m.Nanos)
+	c.UnrecognizedFields(m.XXX_unrecognized)
+	return true
+}
+
+func (m *Duration) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.Int64(1, &m.Seconds)
+	c.Int32(2, &m.Nanos)
+	c.UnrecognizedFields(6, &m.XXX_unrecognized)
+}
+
+func (m *Duration) GetSeconds() (v int64) {
+	if m != nil {
+		return m.Seconds
+	}
+	return 0
+}
+
+func (m *Duration) GetNanos() (v int32) {
+	if m != nil {
+		return m.Nanos
+	}
+	return 0
+}
+
+type CustomDurations struct {
+	Values           []time.Duration `json:"values,omitzero"`
+	XXX_unrecognized []byte          `json:"-"`
+}
+
+func (m *CustomDurations) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	for i := range m.Values {
+		x := &m.Values[i]
+		(*picoconv.Duration)(x).PicoEncode(c, 1)
+	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
+	return true
+}
+
+func (m *CustomDurations) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	for c.TakeRepeated(1) {
+		var zero time.Duration
+		m.Values = append(m.Values, zero)
+		x := &m.Values[len(m.Values)-1]
+		(*picoconv.Duration)(x).PicoDecode(c, 1)
+	}
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
+}
+
+func (m *CustomDurations) GetValues() (v []time.Duration) {
+	if m != nil {
+		return m.Values
+	}
+	return nil
+}

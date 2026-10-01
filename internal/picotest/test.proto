@@ -256,3 +256,16 @@ message CustomOneof {
     bytes id = 1 [(pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"];
   }
 }
+
+message Duration {
+  int64 seconds = 1;
+  int32 nanos = 2;
+}
+
+message CustomDurations {
+  repeated Duration values = 1 [
+    (pico.field).always_present = true,
+    (pico.field).custom_type = "time.Duration",
+    (pico.field).custom_serialize = "storj.io/picobuf/picoconv.Duration"
+  ];
+}

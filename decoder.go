@@ -249,6 +249,14 @@ func (dec *Decoder) RepeatedEnum(field FieldNumber, add func(x int32)) {
 	}
 }
 
+// TakeRepeated reserves one repeated element when field is pending. It returns
+// false on another field or an exhausted limit. Generated custom decoders call
+// it before allocating each element; their scalar decoding methods do not count
+// repeated values themselves.
+func (dec *Decoder) TakeRepeated(field FieldNumber) bool {
+	return dec.pendingField == field && dec.takeRepeated(field)
+}
+
 func (dec *Decoder) takeRepeated(field FieldNumber) bool {
 	if dec.maxRepeatedElements <= 0 {
 		return true

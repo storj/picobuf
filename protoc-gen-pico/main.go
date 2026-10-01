@@ -566,7 +566,7 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 			gf.P("  (*", info.castType, ")(m.", field.GoName, ").PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("}")
 		case info.repeated && info.pointer:
-			gf.P("for c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("for c.TakeRepeated(", field.Desc.Number(), ") {")
 			gf.P("  x := new(", info.baseType, ")")
 			gf.P("  (*", info.castType, ")(x).PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", x)")
@@ -574,8 +574,9 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 		case !info.repeated && !info.pointer:
 			gf.P("(*", info.castType, ")(&m.", field.GoName, ").PicoDecode(c, ", field.Desc.Number(), ")")
 		case info.repeated && !info.pointer:
-			gf.P("for c.PendingField() == ", field.Desc.Number(), " {")
-			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", ", info.baseType, "{})")
+			gf.P("for c.TakeRepeated(", field.Desc.Number(), ") {")
+			gf.P("  var zero ", info.baseType)
+			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", zero)")
 			gf.P("  x := &m.", field.GoName, "[len(m.", field.GoName, ")-1]")
 			gf.P("  (*", info.castType, ")(x).PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("}")
@@ -595,7 +596,7 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 			gf.P("  m.", field.GoName, ".PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("}")
 		case info.repeated && info.pointer:
-			gf.P("for c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("for c.TakeRepeated(", field.Desc.Number(), ") {")
 			gf.P("  x := new(", info.baseType, ")")
 			gf.P("  x.PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", x)")
@@ -603,8 +604,9 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 		case !info.repeated && !info.pointer:
 			gf.P("m.", field.GoName, ".PicoDecode(c, ", field.Desc.Number(), ")")
 		case info.repeated && !info.pointer:
-			gf.P("for c.PendingField() == ", field.Desc.Number(), " {")
-			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", ", info.baseType, "{})")
+			gf.P("for c.TakeRepeated(", field.Desc.Number(), ") {")
+			gf.P("  var zero ", info.baseType)
+			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", zero)")
 			gf.P("  m.", field.GoName, "[len(m.", field.GoName, ")-1].PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("}")
 		}
