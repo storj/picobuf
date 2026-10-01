@@ -70,6 +70,7 @@ type generator struct {
 }
 
 func genFile(plugin *protogen.Plugin, file *protogen.File, conf config) {
+	reserveMethodNames(file.Messages, conf.GenerateFieldAccess)
 	gf := &generator{
 		Config:        conf,
 		GeneratedFile: plugin.NewGeneratedFile(file.GeneratedFilenamePrefix+".pico.go", file.GoImportPath),
@@ -110,6 +111,45 @@ func genFile(plugin *protogen.Plugin, file *protogen.File, conf config) {
 	genWalk(gf, file, file.Enums, file.Messages)
 	if gf.json != nil {
 		genJSONSchema(gf)
+	}
+}
+
+// protogen reserves protobuf-go's methods, but does not know picobuf's methods.
+// Reserve our names before emitting any fields, getters, or oneof accesses.
+func reserveMethodNames(messages []*protogen.Message, getters bool) {
+	for _, m := range messages {
+		reserved := map[string]bool{
+			"Encode": true, "Decode": true, "MarshalJSON": true, "UnmarshalJSON": true,
+			"PicoValidateRequired": true, "PicoValidateRequiredDepth": true,
+		}
+		used := make(map[string]bool)
+		for _, f := range m.Fields {
+			used[f.GoName] = true
+		}
+		for _, o := range m.Oneofs {
+			used[o.GoName] = true
+		}
+		rename := func(name *string) {
+			if !reserved[*name] {
+				return
+			}
+			candidate := *name + "_"
+			for reserved[candidate] || used[candidate] || getters && used["Get"+candidate] {
+				candidate += "_"
+			}
+			*name = candidate
+			used[candidate] = true
+			if getters {
+				reserved["Get"+candidate] = true
+			}
+		}
+		for _, f := range m.Fields {
+			rename(&f.GoName)
+		}
+		for _, o := range m.Oneofs {
+			rename(&o.GoName)
+		}
+		reserveMethodNames(m.Messages, getters)
 	}
 }
 

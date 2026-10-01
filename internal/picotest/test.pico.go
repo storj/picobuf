@@ -2035,3 +2035,52 @@ func (m *CustomDurations) GetValues() (v []time.Duration) {
 	}
 	return nil
 }
+
+type MethodNames struct {
+	Encode__         string `json:"encode,omitzero"`
+	Decode_          string `json:"decode,omitzero"`
+	GetEncode_       string `json:"get_encode_,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *MethodNames) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.String(1, &m.Encode__)
+	c.String(2, &m.Decode_)
+	c.String(3, &m.GetEncode_)
+	c.UnrecognizedFields(m.XXX_unrecognized)
+	return true
+}
+
+func (m *MethodNames) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.String(1, &m.Encode__)
+	c.String(2, &m.Decode_)
+	c.String(3, &m.GetEncode_)
+	c.UnrecognizedFields(14, &m.XXX_unrecognized)
+}
+
+func (m *MethodNames) GetEncode__() (v string) {
+	if m != nil {
+		return m.Encode__
+	}
+	return ""
+}
+
+func (m *MethodNames) GetDecode_() (v string) {
+	if m != nil {
+		return m.Decode_
+	}
+	return ""
+}
+
+func (m *MethodNames) GetGetEncode_() (v string) {
+	if m != nil {
+		return m.GetEncode_
+	}
+	return ""
+}

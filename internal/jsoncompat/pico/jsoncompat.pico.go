@@ -855,19 +855,122 @@ func (m *All) UnmarshalJSON(data []byte) error {
 	return picojson.Unmarshal(data, m, picojson_File_jsoncompat_proto, 1732)
 }
 
+type MethodNames struct {
+	Encode_          string `json:"encode,omitzero"`
+	Decode_          string `json:"decode,omitzero"`
+	MarshalJSON_     string `json:"marshalJSON,omitzero"`
+	UnmarshalJSON_   string `json:"unmarshalJSON,omitzero"`
+	GetEncode_       string `json:"get_encode_,omitzero"`
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *MethodNames) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	c.String(1, &m.Encode_)
+	c.String(2, &m.Decode_)
+	c.String(3, &m.MarshalJSON_)
+	c.String(4, &m.UnmarshalJSON_)
+	c.String(6, &m.GetEncode_)
+	c.UnrecognizedFields(m.XXX_unrecognized)
+	return true
+}
+
+func (m *MethodNames) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	c.String(1, &m.Encode_)
+	c.String(2, &m.Decode_)
+	c.String(3, &m.MarshalJSON_)
+	c.String(4, &m.UnmarshalJSON_)
+	c.String(6, &m.GetEncode_)
+	c.UnrecognizedFields(94, &m.XXX_unrecognized)
+}
+
+func (m MethodNames) MarshalJSON() ([]byte, error) {
+	return picojson.Marshal(&m, picojson_File_jsoncompat_proto, 1855)
+}
+
+func (m *MethodNames) UnmarshalJSON(data []byte) error {
+	if string(data) == "null" {
+		return nil
+	}
+	*m = MethodNames{}
+	return picojson.Unmarshal(data, m, picojson_File_jsoncompat_proto, 1855)
+}
+
+type MethodOneof struct {
+	// Types that are assignable to Encode_:
+	//
+	//	*MethodOneof_Decode
+	Encode_          isMethodOneof_Encode
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *MethodOneof) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	if m, ok := m.Encode_.(*MethodOneof_Decode); ok {
+		c.AlwaysString(1, &m.Decode_)
+	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
+	return true
+}
+
+func (m *MethodOneof) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	if c.MatchField(1, 2) {
+		var x *MethodOneof_Decode
+		if z, ok := m.Encode_.(*MethodOneof_Decode); ok {
+			x = z
+		} else {
+			x = new(MethodOneof_Decode)
+			m.Encode_ = x
+		}
+		m := x
+		c.String(1, &m.Decode_)
+	}
+	c.UnrecognizedFields(2, &m.XXX_unrecognized)
+}
+
+func (m MethodOneof) MarshalJSON() ([]byte, error) {
+	return picojson.Marshal(&m, picojson_File_jsoncompat_proto, 1956)
+}
+
+func (m *MethodOneof) UnmarshalJSON(data []byte) error {
+	if string(data) == "null" {
+		return nil
+	}
+	*m = MethodOneof{}
+	return picojson.Unmarshal(data, m, picojson_File_jsoncompat_proto, 1956)
+}
+
+type isMethodOneof_Encode interface{ isMethodOneof_Encode() }
+
+type MethodOneof_Decode struct {
+	Decode_ string
+}
+
+func (*MethodOneof_Decode) isMethodOneof_Encode() {}
+
 const picojson_File_jsoncompat_proto picojson.Schema = "" +
-	"$jsoncompat.Scalars\x12\x01\x05\x00\nint32\x02\x03\x00\nint64\x03\r\x00\fuint32\x04\x04\x00\fuint64\x05\x11\x00\fsint32\x06\x12\x00\fsint64\a\a\x00\x0efixed32\b\x06\x00\x0efixed64\t\x0f\x00\x10sfixed32\n\x10\x00\x10sfixed64\v\x02\x00\nfloat\f\x01\x00\fdouble\r\b\x00\bbool\x0e\t\x00\fstring\x0f\f\x00\nbytes\x10\x0e\x00\xbf\x0e\ncolor\x11\t\x10\x1esnake_case_name\x1asnakeCaseName\x12\t\x10\x0erenamed\x14customName" + // 0: jsoncompat.Scalars
-	"(jsoncompat.Optionals\t\x01\x05\x04/\x02\x03\x04A\x03\t\x04\xb5\x02\x04\f\x04\xc9\x02\x05\x01\x04\x91\x02\x06\x0e\x04\xbf\x0e\xdf\x02\a\b\x04\xa5\x02\b\x02\x04\xff\x01\t\x04\x04g" + // 236: jsoncompat.Optionals
-	" jsoncompat.Lists\r\x01\x05\x01/\x02\x03\x01A\x03\x04\x01g\x04\x11\x01{\x05\a\x01\xa3\x01\x06\x10\x01\xe7\x01\a\x02\x01\xff\x01\b\x01\x01\x91\x02\t\b\x01\xa5\x02\n\t\x01\xb5\x02\v\f\x01\xc9\x02\f\x0e\x01\xbf\x0e\xdf\x02\r\v\x01\x00\x10messages" + // 302: jsoncompat.Lists
+	"$jsoncompat.Scalars\x12\x01\x05\x00\nint32\x02\x03\x00\nint64\x03\r\x00\fuint32\x04\x04\x00\fuint64\x05\x11\x00\fsint32\x06\x12\x00\fsint64\a\a\x00\x0efixed32\b\x06\x00\x0efixed64\t\x0f\x00\x10sfixed32\n\x10\x00\x10sfixed64\v\x02\x00\nfloat\f\x01\x00\fdouble\r\b\x00\bbool\x0e\t\x00\fstring\x0f\f\x00\nbytes\x10\x0e\x00\xc2\x0f\ncolor\x11\t\x10\x1esnake_case_name\x1asnakeCaseName\x12\t\x10\x0erenamed\x14customName" + // 0: jsoncompat.Scalars
+	"(jsoncompat.Optionals\t\x01\x05\x04/\x02\x03\x04A\x03\t\x04\xb5\x02\x04\f\x04\xc9\x02\x05\x01\x04\x91\x02\x06\x0e\x04\xc2\x0f\xdf\x02\a\b\x04\xa5\x02\b\x02\x04\xff\x01\t\x04\x04g" + // 236: jsoncompat.Optionals
+	" jsoncompat.Lists\r\x01\x05\x01/\x02\x03\x01A\x03\x04\x01g\x04\x11\x01{\x05\a\x01\xa3\x01\x06\x10\x01\xe7\x01\a\x02\x01\xff\x01\b\x01\x01\x91\x02\t\b\x01\xa5\x02\n\t\x01\xb5\x02\v\f\x01\xc9\x02\f\x0e\x01\xc2\x0f\xdf\x02\r\v\x01\x00\x10messages" + // 302: jsoncompat.Lists
 	"\x1ejsoncompat.Maps\a\x01\v\x12\xec\x04\x18string_int64\x16stringInt64\x02\v\x12\x9e\x05\x18int32_string\x16int32String\x03\v\x12\xca\x05\x18bool_message\x16boolMessage\x04\v\x12\xf7\x05\x18uint64_color\x16uint64Color\x05\v\x12\xa5\x06\x18sint32_bytes\x16sint32Bytes\x06\v\x12\xd1\x06\x1astring_double\x18stringDouble\a\v\x12\xfe\x06\x18fixed64_bool\x16fixed64Bool" + // 391: jsoncompat.Maps
 	"@jsoncompat.Maps.StringInt64Entry\x02\x01\t\x00\x06key\x02\x03\x00\nvalue" + // 620: jsoncompat.Maps.StringInt64Entry
 	"@jsoncompat.Maps.Int32StringEntry\x02\x01\x05\x00\xa3\n\x02\t\x00\xb1\n" + // 670: jsoncompat.Maps.Int32StringEntry
 	"@jsoncompat.Maps.BoolMessageEntry\x02\x01\b\x00\xa3\n\x02\v\x04\x00\xb1\n" + // 714: jsoncompat.Maps.BoolMessageEntry
-	"@jsoncompat.Maps.Uint64ColorEntry\x02\x01\x04\x00\xa3\n\x02\x0e\x00\xbf\x0e\xb1\n" + // 759: jsoncompat.Maps.Uint64ColorEntry
+	"@jsoncompat.Maps.Uint64ColorEntry\x02\x01\x04\x00\xa3\n\x02\x0e\x00\xc2\x0f\xb1\n" + // 759: jsoncompat.Maps.Uint64ColorEntry
 	"@jsoncompat.Maps.Sint32BytesEntry\x02\x01\x11\x00\xa3\n\x02\f\x00\xb1\n" + // 805: jsoncompat.Maps.Sint32BytesEntry
 	"Bjsoncompat.Maps.StringDoubleEntry\x02\x01\t\x00\xa3\n\x02\x01\x00\xb1\n" + // 849: jsoncompat.Maps.StringDoubleEntry
 	"@jsoncompat.Maps.Fixed64BoolEntry\x02\x01\x06\x00\xa3\n\x02\b\x00\xb1\n" + // 894: jsoncompat.Maps.Fixed64BoolEntry
-	"\"jsoncompat.Oneofs\x05\x01\t\f\x01\bname\x02\v\f\x01\x00\x0escalars\x03\x03\f\x01\ncount\x04\x0e\f\x01\xbf\x0e\xdf\x02\x05\v\f\x01\xf0\a\btime" + // 938: jsoncompat.Oneofs
+	"\"jsoncompat.Oneofs\x05\x01\t\f\x01\bname\x02\v\f\x01\x00\x0escalars\x03\x03\f\x01\ncount\x04\x0e\f\x01\xc2\x0f\xdf\x02\x05\v\f\x01\xf0\a\btime" + // 938: jsoncompat.Oneofs
 	"2google.protobuf.Timestamp\x02\x01\x03\x00\x0eseconds\x02\x05\x00\nnanos" + // 1008: google.protobuf.Timestamp
 	"(jsoncompat.WellKnown\x0f\x01\v\x04\xf0\a\x12timestamp\x02\v\x04\xc1\t\x10duration\x03\v\x04\xe5\t\x91\x02\x04\v\x04\x87\n\xff\x01\x05\v\x04\xa8\nA\x06\v\x04\xc9\ng\a\v\x04\xeb\n/\b\v\x04\x8c\vS\t\v\x04\xae\v\xa5\x02\n\v\x04\xce\v\xb5\x02\v\v\x04\xf0\v\xc9\x02\f\v\x04\x91\f\bmask\r\v\x04\xb5\f\nempty\x0e\v\x01\xf0\a\x14timestamps\x0f\v\x02\xcc\f\x12durations" + // 1055: jsoncompat.WellKnown
 	"0google.protobuf.Duration\x02\x01\x03\x00\x9d\x10\x02\x05\x00\xb3\x10" + // 1217: google.protobuf.Duration
@@ -885,4 +988,6 @@ const picojson_File_jsoncompat_proto picojson.Schema = "" +
 	"Fjsoncompat.WellKnown.DurationsEntry\x02\x01\t\x00\xa3\n\x02\v\x04\xc1\t\xb1\n" + // 1612: jsoncompat.WellKnown.DurationsEntry
 	"\"jsoncompat.Custom\x04\x01\f\x00\x04id\x02\v\x04\xf0\a\xd7\x0f\x04\f\x00\x06raw\x03\v\x14\xf0\a\x1aoptional_time\x18optionalTime" + // 1661: jsoncompat.Custom
 	"\x1cjsoncompat.All\b\x01\v\x04\x00\x97\x0f\x02\v\x04\xec\x01\x12optionals\x03\v\x04\xae\x02\nlists\x04\v\x04\x87\x03\bmaps\x05\v\x04\xaa\a\foneofs\x06\v\x14\x9f\b\x14well_known\x12wellKnown\a\v\x04\xfd\f\fcustom\b\v\x04\xc4\r\x12recursive" + // 1732: jsoncompat.All
-	" jsoncompat.Color\x03\x00\"COLOR_UNSPECIFIED\x02\x12COLOR_RED\x03\x14COLOR_BLUE" // 1855: jsoncompat.Color
+	",jsoncompat.MethodNames\x05\x01\t\x00\fencode\x02\t\x00\fdecode\x03\t\x00\x16marshalJSON\x04\t\x00\x1aunmarshalJSON\x06\t\x10\x16get_encode_\x12getEncode" + // 1855: jsoncompat.MethodNames
+	",jsoncompat.MethodOneof\x01\x01\t\f\x01\xc9\x1d" + // 1956: jsoncompat.MethodOneof
+	" jsoncompat.Color\x03\x00\"COLOR_UNSPECIFIED\x02\x12COLOR_RED\x03\x14COLOR_BLUE" // 1986: jsoncompat.Color

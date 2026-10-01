@@ -135,3 +135,17 @@ message All {
   Custom    custom = 7;
   All       recursive = 8;
 }
+
+message MethodNames {
+  string encode = 1;
+  string decode = 2;
+  string marshalJSON = 3;
+  string unmarshalJSON = 4;
+  string get_encode_ = 6;
+}
+
+message MethodOneof {
+  oneof encode {
+    string decode = 1;
+  }
+}

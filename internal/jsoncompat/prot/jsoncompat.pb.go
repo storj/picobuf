@@ -1055,6 +1055,148 @@ func (x *All) GetRecursive() *All {
 	return nil
 }
 
+type MethodNames struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Encode        string                 `protobuf:"bytes,1,opt,name=encode,proto3" json:"encode,omitempty"`
+	Decode        string                 `protobuf:"bytes,2,opt,name=decode,proto3" json:"decode,omitempty"`
+	MarshalJSON   string                 `protobuf:"bytes,3,opt,name=marshalJSON,proto3" json:"marshalJSON,omitempty"`
+	UnmarshalJSON string                 `protobuf:"bytes,4,opt,name=unmarshalJSON,proto3" json:"unmarshalJSON,omitempty"`
+	GetEncode_    string                 `protobuf:"bytes,6,opt,name=get_encode_,json=getEncode,proto3" json:"get_encode_,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MethodNames) Reset() {
+	*x = MethodNames{}
+	mi := &file_jsoncompat_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MethodNames) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MethodNames) ProtoMessage() {}
+
+func (x *MethodNames) ProtoReflect() protoreflect.Message {
+	mi := &file_jsoncompat_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MethodNames.ProtoReflect.Descriptor instead.
+func (*MethodNames) Descriptor() ([]byte, []int) {
+	return file_jsoncompat_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *MethodNames) GetEncode() string {
+	if x != nil {
+		return x.Encode
+	}
+	return ""
+}
+
+func (x *MethodNames) GetDecode() string {
+	if x != nil {
+		return x.Decode
+	}
+	return ""
+}
+
+func (x *MethodNames) GetMarshalJSON() string {
+	if x != nil {
+		return x.MarshalJSON
+	}
+	return ""
+}
+
+func (x *MethodNames) GetUnmarshalJSON() string {
+	if x != nil {
+		return x.UnmarshalJSON
+	}
+	return ""
+}
+
+func (x *MethodNames) GetGetEncode_() string {
+	if x != nil {
+		return x.GetEncode_
+	}
+	return ""
+}
+
+type MethodOneof struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Encode:
+	//
+	//	*MethodOneof_Decode
+	Encode        isMethodOneof_Encode `protobuf_oneof:"encode"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MethodOneof) Reset() {
+	*x = MethodOneof{}
+	mi := &file_jsoncompat_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MethodOneof) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MethodOneof) ProtoMessage() {}
+
+func (x *MethodOneof) ProtoReflect() protoreflect.Message {
+	mi := &file_jsoncompat_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MethodOneof.ProtoReflect.Descriptor instead.
+func (*MethodOneof) Descriptor() ([]byte, []int) {
+	return file_jsoncompat_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *MethodOneof) GetEncode() isMethodOneof_Encode {
+	if x != nil {
+		return x.Encode
+	}
+	return nil
+}
+
+func (x *MethodOneof) GetDecode() string {
+	if x != nil {
+		if x, ok := x.Encode.(*MethodOneof_Decode); ok {
+			return x.Decode
+		}
+	}
+	return ""
+}
+
+type isMethodOneof_Encode interface {
+	isMethodOneof_Encode()
+}
+
+type MethodOneof_Decode struct {
+	Decode string `protobuf:"bytes,1,opt,name=decode,proto3,oneof"`
+}
+
+func (*MethodOneof_Decode) isMethodOneof_Encode() {}
+
 var File_jsoncompat_proto protoreflect.FileDescriptor
 
 const file_jsoncompat_proto_rawDesc = "" +
@@ -1190,7 +1332,16 @@ const file_jsoncompat_proto_rawDesc = "" +
 	"\n" +
 	"well_known\x18\x06 \x01(\v2\x15.jsoncompat.WellKnownR\twellKnown\x12*\n" +
 	"\x06custom\x18\a \x01(\v2\x12.jsoncompat.CustomR\x06custom\x12-\n" +
-	"\trecursive\x18\b \x01(\v2\x0f.jsoncompat.AllR\trecursive*F\n" +
+	"\trecursive\x18\b \x01(\v2\x0f.jsoncompat.AllR\trecursive\"\xa5\x01\n" +
+	"\vMethodNames\x12\x16\n" +
+	"\x06encode\x18\x01 \x01(\tR\x06encode\x12\x16\n" +
+	"\x06decode\x18\x02 \x01(\tR\x06decode\x12 \n" +
+	"\vmarshalJSON\x18\x03 \x01(\tR\vmarshalJSON\x12$\n" +
+	"\runmarshalJSON\x18\x04 \x01(\tR\runmarshalJSON\x12\x1e\n" +
+	"\vget_encode_\x18\x06 \x01(\tR\tgetEncode\"1\n" +
+	"\vMethodOneof\x12\x18\n" +
+	"\x06decode\x18\x01 \x01(\tH\x00R\x06decodeB\b\n" +
+	"\x06encode*F\n" +
 	"\x05Color\x12\x15\n" +
 	"\x11COLOR_UNSPECIFIED\x10\x00\x12\r\n" +
 	"\tCOLOR_RED\x10\x01\x12\x17\n" +
@@ -1210,7 +1361,7 @@ func file_jsoncompat_proto_rawDescGZIP() []byte {
 }
 
 var file_jsoncompat_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_jsoncompat_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_jsoncompat_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_jsoncompat_proto_goTypes = []any{
 	(Color)(0),                     // 0: jsoncompat.Color
 	(*Scalars)(nil),                // 1: jsoncompat.Scalars
@@ -1221,60 +1372,62 @@ var file_jsoncompat_proto_goTypes = []any{
 	(*WellKnown)(nil),              // 6: jsoncompat.WellKnown
 	(*Custom)(nil),                 // 7: jsoncompat.Custom
 	(*All)(nil),                    // 8: jsoncompat.All
-	nil,                            // 9: jsoncompat.Maps.StringInt64Entry
-	nil,                            // 10: jsoncompat.Maps.Int32StringEntry
-	nil,                            // 11: jsoncompat.Maps.BoolMessageEntry
-	nil,                            // 12: jsoncompat.Maps.Uint64ColorEntry
-	nil,                            // 13: jsoncompat.Maps.Sint32BytesEntry
-	nil,                            // 14: jsoncompat.Maps.StringDoubleEntry
-	nil,                            // 15: jsoncompat.Maps.Fixed64BoolEntry
-	nil,                            // 16: jsoncompat.WellKnown.DurationsEntry
-	(*timestamppb.Timestamp)(nil),  // 17: google.protobuf.Timestamp
-	(*durationpb.Duration)(nil),    // 18: google.protobuf.Duration
-	(*wrapperspb.DoubleValue)(nil), // 19: google.protobuf.DoubleValue
-	(*wrapperspb.FloatValue)(nil),  // 20: google.protobuf.FloatValue
-	(*wrapperspb.Int64Value)(nil),  // 21: google.protobuf.Int64Value
-	(*wrapperspb.UInt64Value)(nil), // 22: google.protobuf.UInt64Value
-	(*wrapperspb.Int32Value)(nil),  // 23: google.protobuf.Int32Value
-	(*wrapperspb.UInt32Value)(nil), // 24: google.protobuf.UInt32Value
-	(*wrapperspb.BoolValue)(nil),   // 25: google.protobuf.BoolValue
-	(*wrapperspb.StringValue)(nil), // 26: google.protobuf.StringValue
-	(*wrapperspb.BytesValue)(nil),  // 27: google.protobuf.BytesValue
-	(*fieldmaskpb.FieldMask)(nil),  // 28: google.protobuf.FieldMask
-	(*emptypb.Empty)(nil),          // 29: google.protobuf.Empty
+	(*MethodNames)(nil),            // 9: jsoncompat.MethodNames
+	(*MethodOneof)(nil),            // 10: jsoncompat.MethodOneof
+	nil,                            // 11: jsoncompat.Maps.StringInt64Entry
+	nil,                            // 12: jsoncompat.Maps.Int32StringEntry
+	nil,                            // 13: jsoncompat.Maps.BoolMessageEntry
+	nil,                            // 14: jsoncompat.Maps.Uint64ColorEntry
+	nil,                            // 15: jsoncompat.Maps.Sint32BytesEntry
+	nil,                            // 16: jsoncompat.Maps.StringDoubleEntry
+	nil,                            // 17: jsoncompat.Maps.Fixed64BoolEntry
+	nil,                            // 18: jsoncompat.WellKnown.DurationsEntry
+	(*timestamppb.Timestamp)(nil),  // 19: google.protobuf.Timestamp
+	(*durationpb.Duration)(nil),    // 20: google.protobuf.Duration
+	(*wrapperspb.DoubleValue)(nil), // 21: google.protobuf.DoubleValue
+	(*wrapperspb.FloatValue)(nil),  // 22: google.protobuf.FloatValue
+	(*wrapperspb.Int64Value)(nil),  // 23: google.protobuf.Int64Value
+	(*wrapperspb.UInt64Value)(nil), // 24: google.protobuf.UInt64Value
+	(*wrapperspb.Int32Value)(nil),  // 25: google.protobuf.Int32Value
+	(*wrapperspb.UInt32Value)(nil), // 26: google.protobuf.UInt32Value
+	(*wrapperspb.BoolValue)(nil),   // 27: google.protobuf.BoolValue
+	(*wrapperspb.StringValue)(nil), // 28: google.protobuf.StringValue
+	(*wrapperspb.BytesValue)(nil),  // 29: google.protobuf.BytesValue
+	(*fieldmaskpb.FieldMask)(nil),  // 30: google.protobuf.FieldMask
+	(*emptypb.Empty)(nil),          // 31: google.protobuf.Empty
 }
 var file_jsoncompat_proto_depIdxs = []int32{
 	0,  // 0: jsoncompat.Scalars.color:type_name -> jsoncompat.Color
 	0,  // 1: jsoncompat.Optionals.color:type_name -> jsoncompat.Color
 	0,  // 2: jsoncompat.Lists.color:type_name -> jsoncompat.Color
 	1,  // 3: jsoncompat.Lists.messages:type_name -> jsoncompat.Scalars
-	9,  // 4: jsoncompat.Maps.string_int64:type_name -> jsoncompat.Maps.StringInt64Entry
-	10, // 5: jsoncompat.Maps.int32_string:type_name -> jsoncompat.Maps.Int32StringEntry
-	11, // 6: jsoncompat.Maps.bool_message:type_name -> jsoncompat.Maps.BoolMessageEntry
-	12, // 7: jsoncompat.Maps.uint64_color:type_name -> jsoncompat.Maps.Uint64ColorEntry
-	13, // 8: jsoncompat.Maps.sint32_bytes:type_name -> jsoncompat.Maps.Sint32BytesEntry
-	14, // 9: jsoncompat.Maps.string_double:type_name -> jsoncompat.Maps.StringDoubleEntry
-	15, // 10: jsoncompat.Maps.fixed64_bool:type_name -> jsoncompat.Maps.Fixed64BoolEntry
+	11, // 4: jsoncompat.Maps.string_int64:type_name -> jsoncompat.Maps.StringInt64Entry
+	12, // 5: jsoncompat.Maps.int32_string:type_name -> jsoncompat.Maps.Int32StringEntry
+	13, // 6: jsoncompat.Maps.bool_message:type_name -> jsoncompat.Maps.BoolMessageEntry
+	14, // 7: jsoncompat.Maps.uint64_color:type_name -> jsoncompat.Maps.Uint64ColorEntry
+	15, // 8: jsoncompat.Maps.sint32_bytes:type_name -> jsoncompat.Maps.Sint32BytesEntry
+	16, // 9: jsoncompat.Maps.string_double:type_name -> jsoncompat.Maps.StringDoubleEntry
+	17, // 10: jsoncompat.Maps.fixed64_bool:type_name -> jsoncompat.Maps.Fixed64BoolEntry
 	1,  // 11: jsoncompat.Oneofs.scalars:type_name -> jsoncompat.Scalars
 	0,  // 12: jsoncompat.Oneofs.color:type_name -> jsoncompat.Color
-	17, // 13: jsoncompat.Oneofs.time:type_name -> google.protobuf.Timestamp
-	17, // 14: jsoncompat.WellKnown.timestamp:type_name -> google.protobuf.Timestamp
-	18, // 15: jsoncompat.WellKnown.duration:type_name -> google.protobuf.Duration
-	19, // 16: jsoncompat.WellKnown.double:type_name -> google.protobuf.DoubleValue
-	20, // 17: jsoncompat.WellKnown.float:type_name -> google.protobuf.FloatValue
-	21, // 18: jsoncompat.WellKnown.int64:type_name -> google.protobuf.Int64Value
-	22, // 19: jsoncompat.WellKnown.uint64:type_name -> google.protobuf.UInt64Value
-	23, // 20: jsoncompat.WellKnown.int32:type_name -> google.protobuf.Int32Value
-	24, // 21: jsoncompat.WellKnown.uint32:type_name -> google.protobuf.UInt32Value
-	25, // 22: jsoncompat.WellKnown.bool:type_name -> google.protobuf.BoolValue
-	26, // 23: jsoncompat.WellKnown.string:type_name -> google.protobuf.StringValue
-	27, // 24: jsoncompat.WellKnown.bytes:type_name -> google.protobuf.BytesValue
-	28, // 25: jsoncompat.WellKnown.mask:type_name -> google.protobuf.FieldMask
-	29, // 26: jsoncompat.WellKnown.empty:type_name -> google.protobuf.Empty
-	17, // 27: jsoncompat.WellKnown.timestamps:type_name -> google.protobuf.Timestamp
-	16, // 28: jsoncompat.WellKnown.durations:type_name -> jsoncompat.WellKnown.DurationsEntry
-	17, // 29: jsoncompat.Custom.time:type_name -> google.protobuf.Timestamp
-	17, // 30: jsoncompat.Custom.optional_time:type_name -> google.protobuf.Timestamp
+	19, // 13: jsoncompat.Oneofs.time:type_name -> google.protobuf.Timestamp
+	19, // 14: jsoncompat.WellKnown.timestamp:type_name -> google.protobuf.Timestamp
+	20, // 15: jsoncompat.WellKnown.duration:type_name -> google.protobuf.Duration
+	21, // 16: jsoncompat.WellKnown.double:type_name -> google.protobuf.DoubleValue
+	22, // 17: jsoncompat.WellKnown.float:type_name -> google.protobuf.FloatValue
+	23, // 18: jsoncompat.WellKnown.int64:type_name -> google.protobuf.Int64Value
+	24, // 19: jsoncompat.WellKnown.uint64:type_name -> google.protobuf.UInt64Value
+	25, // 20: jsoncompat.WellKnown.int32:type_name -> google.protobuf.Int32Value
+	26, // 21: jsoncompat.WellKnown.uint32:type_name -> google.protobuf.UInt32Value
+	27, // 22: jsoncompat.WellKnown.bool:type_name -> google.protobuf.BoolValue
+	28, // 23: jsoncompat.WellKnown.string:type_name -> google.protobuf.StringValue
+	29, // 24: jsoncompat.WellKnown.bytes:type_name -> google.protobuf.BytesValue
+	30, // 25: jsoncompat.WellKnown.mask:type_name -> google.protobuf.FieldMask
+	31, // 26: jsoncompat.WellKnown.empty:type_name -> google.protobuf.Empty
+	19, // 27: jsoncompat.WellKnown.timestamps:type_name -> google.protobuf.Timestamp
+	18, // 28: jsoncompat.WellKnown.durations:type_name -> jsoncompat.WellKnown.DurationsEntry
+	19, // 29: jsoncompat.Custom.time:type_name -> google.protobuf.Timestamp
+	19, // 30: jsoncompat.Custom.optional_time:type_name -> google.protobuf.Timestamp
 	1,  // 31: jsoncompat.All.scalars:type_name -> jsoncompat.Scalars
 	2,  // 32: jsoncompat.All.optionals:type_name -> jsoncompat.Optionals
 	3,  // 33: jsoncompat.All.lists:type_name -> jsoncompat.Lists
@@ -1285,7 +1438,7 @@ var file_jsoncompat_proto_depIdxs = []int32{
 	8,  // 38: jsoncompat.All.recursive:type_name -> jsoncompat.All
 	1,  // 39: jsoncompat.Maps.BoolMessageEntry.value:type_name -> jsoncompat.Scalars
 	0,  // 40: jsoncompat.Maps.Uint64ColorEntry.value:type_name -> jsoncompat.Color
-	18, // 41: jsoncompat.WellKnown.DurationsEntry.value:type_name -> google.protobuf.Duration
+	20, // 41: jsoncompat.WellKnown.DurationsEntry.value:type_name -> google.protobuf.Duration
 	42, // [42:42] is the sub-list for method output_type
 	42, // [42:42] is the sub-list for method input_type
 	42, // [42:42] is the sub-list for extension type_name
@@ -1307,13 +1460,16 @@ func file_jsoncompat_proto_init() {
 		(*Oneofs_Time)(nil),
 	}
 	file_jsoncompat_proto_msgTypes[6].OneofWrappers = []any{}
+	file_jsoncompat_proto_msgTypes[9].OneofWrappers = []any{
+		(*MethodOneof_Decode)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_jsoncompat_proto_rawDesc), len(file_jsoncompat_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   16,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

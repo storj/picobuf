@@ -269,3 +269,9 @@ message CustomDurations {
     (pico.field).custom_serialize = "storj.io/picobuf/picoconv.Duration"
   ];
 }
+
+message MethodNames {
+  string encode = 1;
+  string decode = 2;
+  string get_encode_ = 3;
+}
