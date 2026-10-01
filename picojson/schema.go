@@ -16,6 +16,7 @@ package picojson
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"storj.io/picobuf"
 	"storj.io/picobuf/internal/protowire"
@@ -103,7 +104,7 @@ func Unmarshal(data []byte, msg picobuf.Message, s Schema, offset int) error {
 var errSyntax = errors.New("invalid wire data")
 
 func fieldError(msg *message, field *field, err error) error {
-	return fmt.Errorf("%s.%s: %w", msg.Name, msg.text(field.name), err)
+	return &fieldPathError{message: msg.Name, field: msg.text(field.name), cause: err}
 }
 
 // reader decodes a schema from pos.
@@ -324,4 +325,30 @@ func (s Schema) enumNumber(offset int32, name string) (int32, bool) {
 		}
 	}
 	return 0, false
+}
+
+// Keep the path as links until it is displayed. Eagerly formatting every prefix
+// retains a quadratic amount of text for deeply nested invalid input.
+type fieldPathError struct {
+	message, field string
+	cause          error
+}
+
+func (e *fieldPathError) Unwrap() error { return e.cause }
+
+func (e *fieldPathError) Error() string {
+	var b strings.Builder
+	var err error = e
+	for {
+		path, ok := err.(*fieldPathError) //nolint:errorlint // walk only direct path links
+		if !ok {
+			b.WriteString(err.Error())
+			return b.String()
+		}
+		b.WriteString(path.message)
+		b.WriteByte('.')
+		b.WriteString(path.field)
+		b.WriteString(": ")
+		err = path.cause
+	}
 }
