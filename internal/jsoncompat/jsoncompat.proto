@@ -1,0 +1,137 @@
+// Copyright (C) 2026 Storj Labs, Inc.
+// See LICENSE for copying information.
+
+syntax = "proto3";
+
+package jsoncompat;
+
+import "pico.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+enum Color {
+  COLOR_UNSPECIFIED = 0;
+  COLOR_RED = 1;
+  COLOR_BLUE = -2;
+}
+
+message Scalars {
+  int32    int32 = 1;
+  int64    int64 = 2;
+  uint32   uint32 = 3;
+  uint64   uint64 = 4;
+  sint32   sint32 = 5;
+  sint64   sint64 = 6;
+  fixed32  fixed32 = 7;
+  fixed64  fixed64 = 8;
+  sfixed32 sfixed32 = 9;
+  sfixed64 sfixed64 = 10;
+  float    float = 11;
+  double   double = 12;
+  bool     bool = 13;
+  string   string = 14;
+  bytes    bytes = 15;
+  Color    color = 16;
+  string   snake_case_name = 17;
+  string   renamed = 18 [json_name = "customName"];
+}
+
+message Optionals {
+  optional int32  int32 = 1;
+  optional int64  int64 = 2;
+  optional string string = 3;
+  optional bytes  bytes = 4;
+  optional double double = 5;
+  optional Color  color = 6;
+  optional bool   bool = 7;
+  optional float  float = 8 [(pico.field).value_presence = true];
+  optional uint64 uint64 = 9 [(pico.field).value_presence = true];
+}
+
+message Lists {
+  repeated int32    int32 = 1;
+  repeated int64    int64 = 2;
+  repeated uint64   uint64 = 3;
+  repeated sint32   sint32 = 4;
+  repeated fixed32  fixed32 = 5;
+  repeated sfixed64 sfixed64 = 6;
+  repeated float    float = 7;
+  repeated double   double = 8;
+  repeated bool     bool = 9;
+  repeated string   string = 10;
+  repeated bytes    bytes = 11;
+  repeated Color    color = 12;
+  repeated Scalars  messages = 13;
+}
+
+message Maps {
+  map<string, int64>   string_int64 = 1;
+  map<int32, string>   int32_string = 2;
+  map<bool, Scalars>   bool_message = 3;
+  map<uint64, Color>   uint64_color = 4;
+  map<sint32, bytes>   sint32_bytes = 5;
+  map<string, double>  string_double = 6;
+  map<fixed64, bool>   fixed64_bool = 7;
+}
+
+message Oneofs {
+  oneof kind {
+    string                    name = 1;
+    Scalars                   scalars = 2;
+    int64                     count = 3;
+    Color                     color = 4;
+    google.protobuf.Timestamp time = 5;
+  }
+}
+
+message WellKnown {
+  google.protobuf.Timestamp   timestamp = 1;
+  google.protobuf.Duration    duration = 2;
+  google.protobuf.DoubleValue double = 3;
+  google.protobuf.FloatValue  float = 4;
+  google.protobuf.Int64Value  int64 = 5;
+  google.protobuf.UInt64Value uint64 = 6;
+  google.protobuf.Int32Value  int32 = 7;
+  google.protobuf.UInt32Value uint32 = 8;
+  google.protobuf.BoolValue   bool = 9;
+  google.protobuf.StringValue string = 10;
+  google.protobuf.BytesValue  bytes = 11;
+  google.protobuf.FieldMask   mask = 12;
+  google.protobuf.Empty       empty = 13;
+
+  repeated google.protobuf.Timestamp timestamps = 14;
+  map<string, google.protobuf.Duration> durations = 15;
+}
+
+message Custom {
+  bytes id = 1 [(pico.field).custom_type = "storj.io/picobuf/internal/picotest/pic.ID"];
+  google.protobuf.Timestamp time = 2 [
+    (pico.field).custom_type = "time.Time",
+    (pico.field).custom_serialize = "storj.io/picobuf/picoconv.Timestamp"
+  ];
+  // pic.RawString writes even an empty string, which ProtoJSON omits for an
+  // implicit field.
+  bytes raw = 4 [
+    (pico.field).custom_type = "string",
+    (pico.field).custom_serialize = "storj.io/picobuf/internal/picotest/pic.RawString"
+  ];
+  optional google.protobuf.Timestamp optional_time = 3 [
+    (pico.field).value_presence = true,
+    (pico.field).custom_type = "time.Time",
+    (pico.field).custom_serialize = "storj.io/picobuf/picoconv.Timestamp"
+  ];
+}
+
+message All {
+  Scalars   scalars = 1;
+  Optionals optionals = 2;
+  Lists     lists = 3;
+  Maps      maps = 4;
+  Oneofs    oneofs = 5;
+  WellKnown well_known = 6;
+  Custom    custom = 7;
+  All       recursive = 8;
+}

@@ -1,0 +1,2 @@
+go test fuzz v1
+string("{\"scalars\":{\"int32\":\"00\"}}")

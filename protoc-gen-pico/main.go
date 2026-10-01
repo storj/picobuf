@@ -30,6 +30,7 @@ const (
 type config struct {
 	GenerateFieldAccess bool
 	VersionOverride     string
+	ProtoJSON           bool
 }
 
 func main() {
@@ -38,6 +39,7 @@ func main() {
 
 	flags.BoolVar(&conf.GenerateFieldAccess, "field_access", false, "generate methods for accessing fields")
 	flags.StringVar(&conf.VersionOverride, "version_override", "", "override the version reported in generated code")
+	flags.BoolVar(&conf.ProtoJSON, "protojson", false, "generate ProtoJSON MarshalJSON and UnmarshalJSON methods (experimental)")
 
 	protogen.Options{
 		ParamFunc: flags.Set,
@@ -63,6 +65,8 @@ type generator struct {
 	Config config
 	*protogen.GeneratedFile
 	*protogen.File
+	// json is set with the protojson option.
+	json *jsonSchema
 }
 
 func genFile(plugin *protogen.Plugin, file *protogen.File, conf config) {
@@ -100,7 +104,13 @@ func genFile(plugin *protogen.Plugin, file *protogen.File, conf config) {
 	gf.P("package ", file.GoPackageName)
 	gf.P()
 
+	if conf.ProtoJSON {
+		gf.json = newJSONSchema(file)
+	}
 	genWalk(gf, file, file.Enums, file.Messages)
+	if gf.json != nil {
+		genJSONSchema(gf)
+	}
 }
 
 func genWalk(gf *generator, file *protogen.File, enums []*protogen.Enum, msgs []*protogen.Message) {
@@ -198,6 +208,9 @@ func genMessageMethods(gf *generator, m *protogen.Message) {
 	genMessageDecode(gf, m)
 	if gf.Config.GenerateFieldAccess {
 		genMessageFieldAccess(gf, m)
+	}
+	if gf.json != nil {
+		genJSONMethods(gf, m)
 	}
 }
 

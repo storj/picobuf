@@ -64,9 +64,9 @@ func (o *Optional[T]) PicoSetPtr() *T {
 	return &o.value
 }
 
-// errJSON reports that Optional does not implement encoding/json. Picobuf
-// does not implement the ProtoJSON mapping for encoding/json, see README.
-var errJSON = errors.New("picobuf: Optional does not support encoding/json")
+// errJSON reports that Optional does not implement encoding/json. Messages
+// generated with protojson=true encode Optional fields themselves.
+var errJSON = errors.New("picobuf: Optional does not support encoding/json, generate with protojson=true for ProtoJSON")
 
 // MarshalJSON reports an error, so that encoding/json fails instead of
 // silently encoding the field as {}.

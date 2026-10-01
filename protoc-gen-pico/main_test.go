@@ -463,3 +463,41 @@ func TestGenerateValuePresenceRejectsRepeatedAndOneof(t *testing.T) {
 		})
 	}
 }
+
+func TestGenerateProtoJSONRejectsUnsupportedTypes(t *testing.T) {
+	anyFile := &descriptorpb.FileDescriptorProto{
+		Name:        proto.String("google/protobuf/any.proto"),
+		Package:     proto.String("google.protobuf"),
+		Syntax:      proto.String("proto3"),
+		Options:     &descriptorpb.FileOptions{GoPackage: proto.String("example.com/anypb;anypb")},
+		MessageType: []*descriptorpb.DescriptorProto{{Name: proto.String("Any")}},
+	}
+	file := &descriptorpb.FileDescriptorProto{
+		Name:       proto.String("test.proto"),
+		Package:    proto.String("test"),
+		Syntax:     proto.String("proto3"),
+		Options:    &descriptorpb.FileOptions{GoPackage: proto.String("example.com/test;test")},
+		Dependency: []string{"google/protobuf/any.proto"},
+		MessageType: []*descriptorpb.DescriptorProto{{
+			Name: proto.String("Message"),
+			Field: []*descriptorpb.FieldDescriptorProto{{
+				Name: proto.String("value"), Number: proto.Int32(1),
+				Label:    descriptorpb.FieldDescriptorProto_LABEL_OPTIONAL.Enum(),
+				Type:     descriptorpb.FieldDescriptorProto_TYPE_MESSAGE.Enum(),
+				TypeName: proto.String(".google.protobuf.Any"),
+			}},
+		}},
+	}
+	plugin, err := (protogen.Options{}).New(&pluginpb.CodeGeneratorRequest{
+		ProtoFile: []*descriptorpb.FileDescriptorProto{anyFile, file}, FileToGenerate: []string{"test.proto"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		if recover() == nil {
+			t.Fatal("protojson accepted google.protobuf.Any")
+		}
+	}()
+	genFile(plugin, plugin.Files[1], config{ProtoJSON: true})
+}

@@ -72,15 +72,32 @@ message Person {
 
 Take a look at [picoconv.Timestamp](picoconv/timestamp.go) on how to implement custom serialization.
 
-### Editions and JSON
+### JSON
 
-Picobuf implements the protobuf binary wire format. It does not provide a
-ProtoJSON parser or serializer, so the Editions `features.json_format` setting
-does not change generated picobuf code. The protobuf compiler still validates
-the schema-level requirements of `ALLOW` before invoking the generator.
+By default picobuf only implements the protobuf binary wire format. Using
+Go's `encoding/json` with generated structs is not a substitute for ProtoJSON
+and is not guaranteed to produce the protobuf JSON mapping; fields generated
+with `value_presence` refuse to encode.
 
-Using Go's `encoding/json` with generated structs is not a substitute for
-ProtoJSON and is not guaranteed to produce the protobuf JSON mapping.
+Generating with `--pico_opt=protojson=true` adds `MarshalJSON` and
+`UnmarshalJSON` methods that implement the
+[ProtoJSON mapping](https://protobuf.dev/programming-guides/json/), using
+[picojson](picojson). picojson is experimental for the time being: its API
+and the generated schema may change in incompatible ways. Before Go 1.27,
+picojson uses [go-json-experiment/json](https://github.com/go-json-experiment/json)
+in place of encoding/json/jsontext. The conversion goes through the wire
+format, so custom types map to JSON as the protobuf type they are declared
+as. Referenced messages from other packages do not need the option.
+The mapping is checked against protojson, with these differences:
+
+* `google.protobuf.Any`, `Struct`, `Value`, `ListValue`, and group fields are
+  not supported; generation fails if a message refers to them.
+* The parser follows the JSON specification strictly, so it rejects some
+  malformed input that protojson accepts, such as the number `0e`.
+
+The Editions `features.json_format` setting does not change generated code.
+The protobuf compiler still validates the schema-level requirements of
+`ALLOW` before invoking the generator.
 
 ## Why?
 
