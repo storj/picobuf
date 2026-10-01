@@ -322,7 +322,7 @@ func generateDecoder() []byte {
 			pf("}\n")
 
 			pf("if dec.pendingWire != %v {\n", t.WireName())
-			pf("    dec.fail(field, \"expected wire type %v\")\n", t.ShortWireName())
+			pf("    dec.pendingUnknown = true\n")
 			pf("    return\n")
 			pf("}\n")
 
@@ -381,7 +381,7 @@ func generateDecoder() []byte {
 			pf("    dec.nextField(n)\n")
 
 			pf("default:\n")
-			pf("    dec.fail(field, \"expected wire type %v\")\n", t.ShortWireName())
+			pf("    dec.pendingUnknown = true\n")
 			pf("    return\n")
 			pf("}\n")
 

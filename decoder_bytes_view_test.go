@@ -40,7 +40,7 @@ func TestDecoderBytesViewAbsentAndInvalid(t *testing.T) {
 		wantErr bool
 	}{
 		{"absent", []byte{0x12, 0}, false},
-		{"wrong wire type", []byte{0x08, 1}, true},
+		{"wrong wire type", []byte{0x08, 1}, false},
 		{"truncated length", []byte{0x0a, 0x80}, true},
 		{"truncated payload", []byte{0x0a, 3, 1}, true},
 	} {

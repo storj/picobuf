@@ -232,6 +232,60 @@ func TestGenerateCustomBytesPresence(t *testing.T) {
 	}
 }
 
+func TestGenerateRepeatedCustomRejectsPacked(t *testing.T) {
+	custom := func(serialize string) *descriptorpb.FieldOptions {
+		opts := &descriptorpb.FieldOptions{}
+		proto.SetExtension(opts, E_Field, &FieldOptions{
+			CustomType:      "example.com/custom.Value",
+			CustomSerialize: serialize,
+		})
+		return opts
+	}
+
+	file := &descriptorpb.FileDescriptorProto{
+		Name:    proto.String("test.proto"),
+		Package: proto.String("test"),
+		Syntax:  proto.String("proto3"),
+		Options: &descriptorpb.FileOptions{GoPackage: proto.String("example.com/test;test")},
+		MessageType: []*descriptorpb.DescriptorProto{{
+			Name: proto.String("Message"),
+			Field: []*descriptorpb.FieldDescriptorProto{
+				{
+					Name: proto.String("custom"), Number: proto.Int32(1),
+					Label:   descriptorpb.FieldDescriptorProto_LABEL_REPEATED.Enum(),
+					Type:    descriptorpb.FieldDescriptorProto_TYPE_INT64.Enum(),
+					Options: custom(""),
+				},
+				{
+					Name: proto.String("serialized"), Number: proto.Int32(2),
+					Label:   descriptorpb.FieldDescriptorProto_LABEL_REPEATED.Enum(),
+					Type:    descriptorpb.FieldDescriptorProto_TYPE_FIXED32.Enum(),
+					Options: custom("example.com/custom.Codec"),
+				},
+			},
+		}},
+	}
+	plugin, err := (protogen.Options{}).New(&pluginpb.CodeGeneratorRequest{
+		ProtoFile: []*descriptorpb.FileDescriptorProto{file}, FileToGenerate: []string{"test.proto"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	genFile(plugin, plugin.Files[0], config{})
+	content := plugin.Response().File[0].GetContent()
+
+	// A custom decoder consumes a single element, so packed input must not
+	// enter the loop, otherwise nothing advances the decoder.
+	for _, want := range []string{
+		"for c.MatchField(1, 0) && c.TakeRepeated(1)",
+		"for c.MatchField(2, 5) && c.TakeRepeated(2)",
+	} {
+		if !strings.Contains(content, want) {
+			t.Fatalf("generated repeated custom code does not contain %q:\n%s", want, content)
+		}
+	}
+}
+
 func TestGenerateEnumPresence(t *testing.T) {
 	file := &descriptorpb.FileDescriptorProto{
 		Name:    proto.String("test.proto"),

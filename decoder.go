@@ -55,8 +55,9 @@ func (dec *Decoder) skipUTF8() bool {
 }
 
 type messageDecodeState struct {
-	pendingField FieldNumber    //nolint: structcheck
-	pendingWire  protowire.Type //nolint: structcheck
+	pendingField   FieldNumber    //nolint: structcheck
+	pendingWire    protowire.Type //nolint: structcheck
+	pendingUnknown bool           // known number with a mismatched wire type
 
 	buffer     []byte
 	groupField FieldNumber // nonzero while reading a group, whose end tag terminates this scope
@@ -92,6 +93,23 @@ func (dec *Decoder) Unmarshal(data []byte, msg Message, opts UnmarshalOptions) e
 
 // PendingField returns the next field number in the stream.
 func (dec *Decoder) PendingField() FieldNumber { return dec.pendingField }
+
+// MatchField reports whether the pending field has this number and one of the
+// supplied protobuf wire types (0 varint, 1 fixed64, 2 bytes, 3 group, 5 fixed32).
+// A matching number with another wire type is marked unrecognized, so generated
+// decoders can check before allocating presence pointers or replacing a oneof.
+func (dec *Decoder) MatchField(field FieldNumber, wireTypes ...int) bool {
+	if dec.pendingField != field {
+		return false
+	}
+	for _, wire := range wireTypes {
+		if int(dec.pendingWire) == wire {
+			return true
+		}
+	}
+	dec.pendingUnknown = true
+	return false
+}
 
 // Err returns error that occurred during decoding.
 func (dec *Decoder) Err() error {
@@ -130,11 +148,11 @@ func (dec *Decoder) leaveMessage(parent messageDecodeState) {
 // RepeatedMessage decodes a message.
 func (dec *Decoder) RepeatedMessage(field FieldNumber, fn func(c *Decoder)) {
 	for field == dec.pendingField {
-		if !dec.takeRepeated(field) {
+		if dec.pendingWire != protowire.BytesType {
+			dec.pendingUnknown = true
 			return
 		}
-		if dec.pendingWire != protowire.BytesType {
-			dec.fail(field, "expected wire type Bytes")
+		if !dec.takeRepeated(field) {
 			return
 		}
 
@@ -243,7 +261,7 @@ func (dec *Decoder) RepeatedEnum(field FieldNumber, add func(x int32)) {
 			add(int32(x))
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Varint")
+			dec.pendingUnknown = true
 			return
 		}
 	}
@@ -286,7 +304,7 @@ func (dec *Decoder) Message(field FieldNumber, fn func(*Decoder)) {
 		return
 	}
 	if dec.pendingWire != protowire.BytesType {
-		dec.fail(field, "expected wire type Bytes")
+		dec.pendingUnknown = true
 		return
 	}
 
@@ -304,7 +322,7 @@ func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Decoder)) {
 		return
 	}
 	if dec.pendingWire != protowire.BytesType {
-		dec.fail(field, "expected wire type Bytes")
+		dec.pendingUnknown = true
 		return
 	}
 
@@ -322,7 +340,7 @@ func (dec *Decoder) Group(field FieldNumber, fn func(*Decoder)) {
 		return
 	}
 	if dec.pendingWire != protowire.StartGroupType {
-		dec.fail(field, "expected wire type StartGroup")
+		dec.pendingUnknown = true
 		return
 	}
 
@@ -337,11 +355,11 @@ func (dec *Decoder) PresentGroup(field FieldNumber, fn func(*Decoder)) {
 // RepeatedGroup decodes repeated delimited messages.
 func (dec *Decoder) RepeatedGroup(field FieldNumber, fn func(*Decoder)) {
 	for field == dec.pendingField {
-		if !dec.takeRepeated(field) {
+		if dec.pendingWire != protowire.StartGroupType {
+			dec.pendingUnknown = true
 			return
 		}
-		if dec.pendingWire != protowire.StartGroupType {
-			dec.fail(field, "expected wire type StartGroup")
+		if !dec.takeRepeated(field) {
 			return
 		}
 
@@ -405,11 +423,11 @@ func (dec *Decoder) repeatedFieldCount(field FieldNumber, wire protowire.Type) i
 // are listed in excludeHigh.
 func (dec *Decoder) UnrecognizedFields(exclude uint64, out *[]byte, excludeHigh ...FieldNumber) {
 	for dec.pendingField >= 0 {
-		if field := dec.pendingField; field < 64 {
+		if field := dec.pendingField; !dec.pendingUnknown && field < 64 {
 			if exclude&(1<<uint64(field)) != 0 {
 				return
 			}
-		} else if containsField(excludeHigh, field) {
+		} else if !dec.pendingUnknown && containsField(excludeHigh, field) {
 			return
 		}
 
@@ -431,11 +449,11 @@ func (dec *Decoder) UnrecognizedFields(exclude uint64, out *[]byte, excludeHigh 
 // are listed in excludeHigh.
 func (dec *Decoder) RejectUnrecognizedFields(exclude uint64, excludeHigh ...FieldNumber) {
 	if field := dec.pendingField; field >= 0 {
-		if field < 64 {
+		if !dec.pendingUnknown && field < 64 {
 			if exclude&(1<<uint64(field)) != 0 {
 				return
 			}
-		} else if containsField(excludeHigh, field) {
+		} else if !dec.pendingUnknown && containsField(excludeHigh, field) {
 			return
 		}
 		dec.fail(field, "unrecognized field")
@@ -488,7 +506,7 @@ func (dec *Decoder) BytesView(field FieldNumber, v *[]byte) {
 		return
 	}
 	if dec.pendingWire != protowire.BytesType {
-		dec.fail(field, "expected wire type Bytes")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeBytes(dec.buffer)
@@ -541,6 +559,7 @@ func (dec *Decoder) nextField(advance int) {
 		dec.fail(0, "advance outside buffer")
 		return
 	}
+	dec.pendingUnknown = false
 	dec.buffer = dec.buffer[advance:]
 	if len(dec.buffer) == 0 {
 		if dec.groupField != 0 {

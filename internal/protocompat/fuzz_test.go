@@ -34,8 +34,8 @@ func FuzzCompat(f *testing.F) {
 	f.Add([]byte(nil))
 
 	f.Fuzz(func(t *testing.T, data []byte) {
-		// DiscardUnknown, because pico.Types does not capture unknown fields
-		// and so cannot echo them back the way protobuf-go does.
+		// Compare known fields; capture of unknown fields is tested separately.
+		// Unknown tags can have several equivalent varint encodings.
 		var reference prot.Types
 		referenceErr := proto.UnmarshalOptions{DiscardUnknown: true}.Unmarshal(data, &reference)
 
@@ -48,9 +48,13 @@ func FuzzCompat(f *testing.F) {
 			}
 			return
 		}
-		// picobuf is allowed to be stricter: it does not implement groups.
 		if err != nil {
-			return
+			t.Fatalf("rejected input accepted by protobuf-go: %v\ninput: %x", err, data)
+		}
+		decoded.XXX_unrecognized = nil
+		decoded.Message.XXX_unrecognized = nil
+		if decoded.OptionalMessage != nil {
+			decoded.OptionalMessage.XXX_unrecognized = nil
 		}
 		// picobuf has no way to represent a present submessage that is empty,
 		// so its encoding legitimately differs from the reference there.

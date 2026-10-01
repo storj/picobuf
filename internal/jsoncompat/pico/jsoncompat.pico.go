@@ -176,38 +176,38 @@ func (m *Optionals) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	if c.PendingField() == 1 {
+	if c.MatchField(1, 0) {
 		m.Int32 = new(int32)
 		c.Int32(1, m.Int32)
 	}
-	if c.PendingField() == 2 {
+	if c.MatchField(2, 0) {
 		m.Int64 = new(int64)
 		c.Int64(2, m.Int64)
 	}
-	if c.PendingField() == 3 {
+	if c.MatchField(3, 2) {
 		m.String_ = new(string)
 		c.String(3, m.String_)
 	}
-	if c.PendingField() == 4 {
+	if c.MatchField(4, 2) {
 		m.Bytes = new([]byte)
 		c.Bytes(4, m.Bytes)
 	}
-	if c.PendingField() == 5 {
+	if c.MatchField(5, 1) {
 		m.Double = new(float64)
 		c.Double(5, m.Double)
 	}
-	if c.PendingField() == 6 {
+	if c.MatchField(6, 0) {
 		m.Color = new(Color)
 		c.Int32(6, (*int32)(m.Color))
 	}
-	if c.PendingField() == 7 {
+	if c.MatchField(7, 0) {
 		m.Bool = new(bool)
 		c.Bool(7, m.Bool)
 	}
-	if c.PendingField() == 8 {
+	if c.MatchField(8, 5) {
 		c.Float(8, m.Float.PicoSetPtr())
 	}
-	if c.PendingField() == 9 {
+	if c.MatchField(9, 0) {
 		c.Uint64(9, m.Uint64.PicoSetPtr())
 	}
 	c.UnrecognizedFields(1022, &m.XXX_unrecognized)
@@ -399,7 +399,7 @@ func (m *Oneofs) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	if c.PendingField() == 1 {
+	if c.MatchField(1, 2) {
 		var x *Oneofs_Name
 		if z, ok := m.Kind.(*Oneofs_Name); ok {
 			x = z
@@ -410,7 +410,7 @@ func (m *Oneofs) Decode(c *picobuf.Decoder) {
 		m := x
 		c.String(1, &m.Name)
 	}
-	if c.PendingField() == 2 {
+	if c.MatchField(2, 2) {
 		var x *Oneofs_Scalars
 		if z, ok := m.Kind.(*Oneofs_Scalars); ok {
 			x = z
@@ -426,7 +426,7 @@ func (m *Oneofs) Decode(c *picobuf.Decoder) {
 			m.Scalars.Decode(c)
 		})
 	}
-	if c.PendingField() == 3 {
+	if c.MatchField(3, 0) {
 		var x *Oneofs_Count
 		if z, ok := m.Kind.(*Oneofs_Count); ok {
 			x = z
@@ -437,7 +437,7 @@ func (m *Oneofs) Decode(c *picobuf.Decoder) {
 		m := x
 		c.Int64(3, &m.Count)
 	}
-	if c.PendingField() == 4 {
+	if c.MatchField(4, 0) {
 		var x *Oneofs_Color
 		if z, ok := m.Kind.(*Oneofs_Color); ok {
 			x = z
@@ -448,7 +448,7 @@ func (m *Oneofs) Decode(c *picobuf.Decoder) {
 		m := x
 		c.Int32(4, (*int32)(&m.Color))
 	}
-	if c.PendingField() == 5 {
+	if c.MatchField(5, 2) {
 		var x *Oneofs_Time
 		if z, ok := m.Kind.(*Oneofs_Time); ok {
 			x = z
@@ -708,22 +708,22 @@ func (m *Custom) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	if c.PendingField() == 1 {
+	if c.MatchField(1, 2) {
 		if m.Id == nil {
 			m.Id = new(pic.ID)
 		}
 		m.Id.PicoDecode(c, 1)
 	}
-	if c.PendingField() == 2 {
+	if c.MatchField(2, 2) {
 		if m.Time == nil {
 			m.Time = new(time.Time)
 		}
 		(*picoconv.Timestamp)(m.Time).PicoDecode(c, 2)
 	}
-	if c.PendingField() == 3 {
+	if c.MatchField(3, 2) {
 		(*picoconv.Timestamp)(m.OptionalTime.PicoSetPtr()).PicoDecode(c, 3)
 	}
-	if c.PendingField() == 4 {
+	if c.MatchField(4, 2) {
 		if m.Raw == nil {
 			m.Raw = new(string)
 		}

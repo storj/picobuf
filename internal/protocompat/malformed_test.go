@@ -16,8 +16,8 @@ import (
 )
 
 // TestMalformed checks that adversarial input is rejected rather than panicking
-// or being silently truncated. picobuf may reject more than protobuf-go, since
-// it does not implement groups, but must never accept what protobuf-go rejects.
+// or being silently truncated. Inputs rejected by protobuf-go must also be
+// rejected by picobuf.
 func TestMalformed(t *testing.T) {
 	tag := func(num protowire.Number, typ protowire.Type) []byte {
 		return protowire.AppendTag(nil, num, typ)

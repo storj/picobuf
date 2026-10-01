@@ -93,15 +93,15 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	if c.PendingField() == 1 {
+	if c.MatchField(1, 0) {
 		m.ExplicitNumber = new(int32)
 		c.Int32(1, m.ExplicitNumber)
 	}
-	if c.PendingField() == 2 {
+	if c.MatchField(2, 2) {
 		m.ExplicitText = new(string)
 		c.String(2, m.ExplicitText)
 	}
-	if c.PendingField() == 3 {
+	if c.MatchField(3, 2) {
 		m.ExplicitData = new([]byte)
 		c.Bytes(3, m.ExplicitData)
 	}
@@ -116,14 +116,14 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 		}
 		m.Nested.Decode(c)
 	})
-	if c.PendingField() == 10 {
+	if c.MatchField(10, 0) {
 		m.ClosedState = new(ClosedState)
 		c.Int32(10, (*int32)(m.ClosedState))
 	}
 	c.RepeatedEnum(11, func(x int32) {
 		m.ClosedStates = append(m.ClosedStates, (ClosedState)(x))
 	})
-	if c.PendingField() == 12 {
+	if c.MatchField(12, 0) {
 		var x *Message_SelectedClosedState
 		if z, ok := m.ClosedSelection.(*Message_SelectedClosedState); ok {
 			x = z
@@ -165,7 +165,7 @@ func (m *Nested) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	if c.PendingField() == 1 {
+	if c.MatchField(1, 0) {
 		m.Value = new(int32)
 		c.Int32(1, m.Value)
 	}
@@ -205,7 +205,7 @@ func (m *RequiredMessage) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	if c.PendingField() == 1 {
+	if c.MatchField(1, 0) {
 		m.RequiredNumber = new(int32)
 		c.Int32(1, m.RequiredNumber)
 	}
@@ -350,7 +350,7 @@ func (m *RequiredNode) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	if c.PendingField() == 1 {
+	if c.MatchField(1, 0) {
 		m.Value = new(int32)
 		c.Int32(1, m.Value)
 	}

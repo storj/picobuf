@@ -538,13 +538,21 @@ func fieldsBitSet(m *protogen.Message) (low uint64, high []protoreflect.FieldNum
 
 func genFieldDecode(gf *generator, field *protogen.Field) {
 	info := fieldInfo(gf, field, field.Desc)
+	match := fmt.Sprintf("c.MatchField(%d, %s)", field.Desc.Number(), fieldWireTypes(field))
+	// Scalar and message decoders already guard their writes. Extra guards
+	// are needed only before allocating presence or invoking custom codecs.
+	if !info.pointer && !info.repeated && !info.optionalValue && !info.oneof &&
+		(info.kind == kindCast || info.kind == kindCustom) && !field.Desc.IsMap() {
+		gf.P("if ", match, " {")
+		defer gf.P("}")
+	}
 	if fieldContainsString(field.Desc) && !fieldValidatesUTF8(field.Desc) {
 		gf.P("c.WithoutUTF8Validation(func() {")
 		defer gf.P("})")
 	}
 
 	if info.oneof {
-		gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+		gf.P("if ", match, " {")
 		gf.P("var x *", oneofWrapperTypeName(gf, field))
 		gf.P("if z, ok := m.", field.Oneof.GoName, ".(*", oneofWrapperTypeName(gf, field), "); ok {")
 		gf.P("   x = z")
@@ -560,18 +568,18 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 	case info.kind == kindCast:
 		switch {
 		case info.optionalValue:
-			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("if ", match, " {")
 			gf.P("  (*", info.castType, ")(m.", field.GoName, ".PicoSetPtr()).PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("}")
 		case !info.repeated && info.pointer:
-			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("if ", match, " {")
 			gf.P("  if m.", field.GoName, " == nil {")
 			gf.P("    m.", field.GoName, " = new(", info.baseType, ")")
 			gf.P("  }")
 			gf.P("  (*", info.castType, ")(m.", field.GoName, ").PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("}")
 		case info.repeated && info.pointer:
-			gf.P("for c.TakeRepeated(", field.Desc.Number(), ") {")
+			gf.P("for ", match, " && c.TakeRepeated(", field.Desc.Number(), ") {")
 			gf.P("  x := new(", info.baseType, ")")
 			gf.P("  (*", info.castType, ")(x).PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", x)")
@@ -579,7 +587,7 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 		case !info.repeated && !info.pointer:
 			gf.P("(*", info.castType, ")(&m.", field.GoName, ").PicoDecode(c, ", field.Desc.Number(), ")")
 		case info.repeated && !info.pointer:
-			gf.P("for c.TakeRepeated(", field.Desc.Number(), ") {")
+			gf.P("for ", match, " && c.TakeRepeated(", field.Desc.Number(), ") {")
 			gf.P("  var zero ", info.baseType)
 			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", zero)")
 			gf.P("  x := &m.", field.GoName, "[len(m.", field.GoName, ")-1]")
@@ -590,18 +598,18 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 	case info.kind == kindCustom:
 		switch {
 		case info.optionalValue:
-			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("if ", match, " {")
 			gf.P("  m.", field.GoName, ".PicoSetPtr().PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("}")
 		case !info.repeated && info.pointer:
-			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("if ", match, " {")
 			gf.P("  if m.", field.GoName, " == nil {")
 			gf.P("    m.", field.GoName, " = new(", info.baseType, ")")
 			gf.P("  }")
 			gf.P("  m.", field.GoName, ".PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("}")
 		case info.repeated && info.pointer:
-			gf.P("for c.TakeRepeated(", field.Desc.Number(), ") {")
+			gf.P("for ", match, " && c.TakeRepeated(", field.Desc.Number(), ") {")
 			gf.P("  x := new(", info.baseType, ")")
 			gf.P("  x.PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", x)")
@@ -609,7 +617,7 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 		case !info.repeated && !info.pointer:
 			gf.P("m.", field.GoName, ".PicoDecode(c, ", field.Desc.Number(), ")")
 		case info.repeated && !info.pointer:
-			gf.P("for c.TakeRepeated(", field.Desc.Number(), ") {")
+			gf.P("for ", match, " && c.TakeRepeated(", field.Desc.Number(), ") {")
 			gf.P("  var zero ", info.baseType)
 			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", zero)")
 			gf.P("  m.", field.GoName, "[len(m.", field.GoName, ")-1].PicoDecode(c, ", field.Desc.Number(), ")")
@@ -622,7 +630,7 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 			panic("unsupported type " + field.Desc.Kind().GoString())
 		}
 		if info.optionalValue {
-			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("if ", match, " {")
 			gf.P("  c.", method, "(", field.Desc.Number(), ", m.", field.GoName, ".PicoSetPtr())")
 			gf.P("}")
 			break
@@ -636,7 +644,7 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 		if !info.pointer {
 			gf.P("c.", method, "(", field.Desc.Number(), ", &m.", field.GoName, ")")
 		} else {
-			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("if ", match, " {")
 			gf.P("  m.", field.GoName, " = new(", info.baseType, ")")
 			gf.P("  c.", method, "(", field.Desc.Number(), ", m.", field.GoName, ")")
 			gf.P("}")
@@ -676,11 +684,11 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 	case info.kind == kindEnum:
 		switch {
 		case info.optionalValue:
-			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("if ", match, " {")
 			gf.P("  c.Int32(", field.Desc.Number(), ", (*int32)(m.", field.GoName, ".PicoSetPtr()))")
 			gf.P("}")
 		case info.pointer && !info.repeated:
-			gf.P("if c.PendingField() == ", field.Desc.Number(), " {")
+			gf.P("if ", match, " {")
 			gf.P("  m.", field.GoName, " = new(", info.baseType, ")")
 			gf.P("  c.Int32(", field.Desc.Number(), ", (*int32)(m.", field.GoName, "))")
 			gf.P("}")
@@ -703,6 +711,24 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 	default:
 		panic("unhandled kind")
 	}
+}
+
+// fieldWireTypes lists the accepted protobuf wire types for generated guards.
+// Repeated fields accept only the element wire type: custom decoders decode
+// one element and cannot consume packed input.
+func fieldWireTypes(field *protogen.Field) string {
+	wire := "0"
+	switch field.Desc.Kind() {
+	case protoreflect.DoubleKind, protoreflect.Fixed64Kind, protoreflect.Sfixed64Kind:
+		wire = "1"
+	case protoreflect.StringKind, protoreflect.BytesKind, protoreflect.MessageKind:
+		wire = "2"
+	case protoreflect.GroupKind:
+		wire = "3"
+	case protoreflect.FloatKind, protoreflect.Fixed32Kind, protoreflect.Sfixed32Kind:
+		wire = "5"
+	}
+	return wire
 }
 
 func fieldContainsString(field protoreflect.FieldDescriptor) bool {

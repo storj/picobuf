@@ -462,7 +462,7 @@ func (m *CommandMessage) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.String(1, &m.Class)
-	if c.PendingField() == 2 {
+	if c.MatchField(2, 2) {
 		var x *CommandMessage_Name
 		if z, ok := m.Command.(*CommandMessage_Name); ok {
 			x = z
@@ -473,7 +473,7 @@ func (m *CommandMessage) Decode(c *picobuf.Decoder) {
 		m := x
 		c.String(2, &m.Name)
 	}
-	if c.PendingField() == 3 {
+	if c.MatchField(3, 2) {
 		var x *CommandMessage_Message
 		if z, ok := m.Command.(*CommandMessage_Message); ok {
 			x = z
@@ -489,7 +489,7 @@ func (m *CommandMessage) Decode(c *picobuf.Decoder) {
 			m.Message.Decode(c)
 		})
 	}
-	if c.PendingField() == 4 {
+	if c.MatchField(4, 0) {
 		var x *CommandMessage_Count
 		if z, ok := m.Command.(*CommandMessage_Count); ok {
 			x = z

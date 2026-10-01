@@ -21,7 +21,7 @@ func (dec *Decoder) Bool(field FieldNumber, v *bool) {
 		return
 	}
 	if dec.pendingWire != protowire.VarintType {
-		dec.fail(field, "expected wire type Varint")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeVarint(dec.buffer)
@@ -73,7 +73,7 @@ func (dec *Decoder) RepeatedBool(field FieldNumber, v *[]bool) {
 			*v = append(*v, x != 0)
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Varint")
+			dec.pendingUnknown = true
 			return
 		}
 	}
@@ -87,7 +87,7 @@ func (dec *Decoder) Int32(field FieldNumber, v *int32) {
 		return
 	}
 	if dec.pendingWire != protowire.VarintType {
-		dec.fail(field, "expected wire type Varint")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeVarint(dec.buffer)
@@ -139,7 +139,7 @@ func (dec *Decoder) RepeatedInt32(field FieldNumber, v *[]int32) {
 			*v = append(*v, int32(x))
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Varint")
+			dec.pendingUnknown = true
 			return
 		}
 	}
@@ -153,7 +153,7 @@ func (dec *Decoder) Int64(field FieldNumber, v *int64) {
 		return
 	}
 	if dec.pendingWire != protowire.VarintType {
-		dec.fail(field, "expected wire type Varint")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeVarint(dec.buffer)
@@ -205,7 +205,7 @@ func (dec *Decoder) RepeatedInt64(field FieldNumber, v *[]int64) {
 			*v = append(*v, int64(x))
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Varint")
+			dec.pendingUnknown = true
 			return
 		}
 	}
@@ -219,7 +219,7 @@ func (dec *Decoder) Uint32(field FieldNumber, v *uint32) {
 		return
 	}
 	if dec.pendingWire != protowire.VarintType {
-		dec.fail(field, "expected wire type Varint")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeVarint(dec.buffer)
@@ -271,7 +271,7 @@ func (dec *Decoder) RepeatedUint32(field FieldNumber, v *[]uint32) {
 			*v = append(*v, uint32(x))
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Varint")
+			dec.pendingUnknown = true
 			return
 		}
 	}
@@ -285,7 +285,7 @@ func (dec *Decoder) Uint64(field FieldNumber, v *uint64) {
 		return
 	}
 	if dec.pendingWire != protowire.VarintType {
-		dec.fail(field, "expected wire type Varint")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeVarint(dec.buffer)
@@ -337,7 +337,7 @@ func (dec *Decoder) RepeatedUint64(field FieldNumber, v *[]uint64) {
 			*v = append(*v, x)
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Varint")
+			dec.pendingUnknown = true
 			return
 		}
 	}
@@ -351,7 +351,7 @@ func (dec *Decoder) Sint32(field FieldNumber, v *int32) {
 		return
 	}
 	if dec.pendingWire != protowire.VarintType {
-		dec.fail(field, "expected wire type Varint")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeVarint(dec.buffer)
@@ -403,7 +403,7 @@ func (dec *Decoder) RepeatedSint32(field FieldNumber, v *[]int32) {
 			*v = append(*v, decodeZigZag32(uint32(x)))
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Varint")
+			dec.pendingUnknown = true
 			return
 		}
 	}
@@ -417,7 +417,7 @@ func (dec *Decoder) Sint64(field FieldNumber, v *int64) {
 		return
 	}
 	if dec.pendingWire != protowire.VarintType {
-		dec.fail(field, "expected wire type Varint")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeVarint(dec.buffer)
@@ -469,7 +469,7 @@ func (dec *Decoder) RepeatedSint64(field FieldNumber, v *[]int64) {
 			*v = append(*v, protowire.DecodeZigZag(x))
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Varint")
+			dec.pendingUnknown = true
 			return
 		}
 	}
@@ -483,7 +483,7 @@ func (dec *Decoder) Fixed32(field FieldNumber, v *uint32) {
 		return
 	}
 	if dec.pendingWire != protowire.Fixed32Type {
-		dec.fail(field, "expected wire type Fixed32")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeFixed32(dec.buffer)
@@ -530,7 +530,7 @@ func (dec *Decoder) RepeatedFixed32(field FieldNumber, v *[]uint32) {
 			*v = append(*v, x)
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Fixed32")
+			dec.pendingUnknown = true
 			return
 		}
 	}
@@ -544,7 +544,7 @@ func (dec *Decoder) Fixed64(field FieldNumber, v *uint64) {
 		return
 	}
 	if dec.pendingWire != protowire.Fixed64Type {
-		dec.fail(field, "expected wire type Fixed64")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeFixed64(dec.buffer)
@@ -591,7 +591,7 @@ func (dec *Decoder) RepeatedFixed64(field FieldNumber, v *[]uint64) {
 			*v = append(*v, x)
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Fixed64")
+			dec.pendingUnknown = true
 			return
 		}
 	}
@@ -605,7 +605,7 @@ func (dec *Decoder) Sfixed32(field FieldNumber, v *int32) {
 		return
 	}
 	if dec.pendingWire != protowire.Fixed32Type {
-		dec.fail(field, "expected wire type Fixed32")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeFixed32(dec.buffer)
@@ -652,7 +652,7 @@ func (dec *Decoder) RepeatedSfixed32(field FieldNumber, v *[]int32) {
 			*v = append(*v, int32(x))
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Fixed32")
+			dec.pendingUnknown = true
 			return
 		}
 	}
@@ -666,7 +666,7 @@ func (dec *Decoder) Sfixed64(field FieldNumber, v *int64) {
 		return
 	}
 	if dec.pendingWire != protowire.Fixed64Type {
-		dec.fail(field, "expected wire type Fixed64")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeFixed64(dec.buffer)
@@ -713,7 +713,7 @@ func (dec *Decoder) RepeatedSfixed64(field FieldNumber, v *[]int64) {
 			*v = append(*v, int64(x))
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Fixed64")
+			dec.pendingUnknown = true
 			return
 		}
 	}
@@ -727,7 +727,7 @@ func (dec *Decoder) Float(field FieldNumber, v *float32) {
 		return
 	}
 	if dec.pendingWire != protowire.Fixed32Type {
-		dec.fail(field, "expected wire type Fixed32")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeFixed32(dec.buffer)
@@ -774,7 +774,7 @@ func (dec *Decoder) RepeatedFloat(field FieldNumber, v *[]float32) {
 			*v = append(*v, math.Float32frombits(x))
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Fixed32")
+			dec.pendingUnknown = true
 			return
 		}
 	}
@@ -788,7 +788,7 @@ func (dec *Decoder) Double(field FieldNumber, v *float64) {
 		return
 	}
 	if dec.pendingWire != protowire.Fixed64Type {
-		dec.fail(field, "expected wire type Fixed64")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeFixed64(dec.buffer)
@@ -835,7 +835,7 @@ func (dec *Decoder) RepeatedDouble(field FieldNumber, v *[]float64) {
 			*v = append(*v, math.Float64frombits(x))
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Fixed64")
+			dec.pendingUnknown = true
 			return
 		}
 	}
@@ -849,7 +849,7 @@ func (dec *Decoder) String(field FieldNumber, v *string) {
 		return
 	}
 	if dec.pendingWire != protowire.BytesType {
-		dec.fail(field, "expected wire type Bytes")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeString(dec.buffer)
@@ -888,7 +888,7 @@ func (dec *Decoder) RepeatedString(field FieldNumber, v *[]string) {
 			*v = append(*v, x)
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Bytes")
+			dec.pendingUnknown = true
 			return
 		}
 	}
@@ -902,7 +902,7 @@ func (dec *Decoder) Bytes(field FieldNumber, v *[]byte) {
 		return
 	}
 	if dec.pendingWire != protowire.BytesType {
-		dec.fail(field, "expected wire type Bytes")
+		dec.pendingUnknown = true
 		return
 	}
 	x, n := protowire.ConsumeBytes(dec.buffer)
@@ -933,7 +933,7 @@ func (dec *Decoder) RepeatedBytes(field FieldNumber, v *[][]byte) {
 			*v = append(*v, dec.copyBytes(x))
 			dec.nextField(n)
 		default:
-			dec.fail(field, "expected wire type Bytes")
+			dec.pendingUnknown = true
 			return
 		}
 	}

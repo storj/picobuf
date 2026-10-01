@@ -683,13 +683,13 @@ func (m *Piece) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	if c.PendingField() == 1 {
+	if c.MatchField(1, 2) {
 		if m.Id == nil {
 			m.Id = new(pic.ID)
 		}
 		m.Id.PicoDecode(c, 1)
 	}
-	if c.PendingField() == 2 {
+	if c.MatchField(2, 2) {
 		if m.Alt == nil {
 			m.Alt = new(string)
 		}
@@ -863,7 +863,7 @@ func (m *VariationsScalar) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.String(1, &m.Value)
-	if c.PendingField() == 2 {
+	if c.MatchField(2, 2) {
 		m.Opt = new(string)
 		c.String(2, m.Opt)
 	}
@@ -871,7 +871,7 @@ func (m *VariationsScalar) Decode(c *picobuf.Decoder) {
 	c.String(4, &m.PresentBasic)
 	c.String(5, &m.PresentOpt)
 	c.RepeatedString(6, &m.PresentRep)
-	if c.PendingField() == 7 {
+	if c.MatchField(7, 2) {
 		m.OptBytes = new([]byte)
 		c.Bytes(7, m.OptBytes)
 	}
@@ -1067,26 +1067,30 @@ func (m *CustomBytes) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	if c.PendingField() == 1 {
+	if c.MatchField(1, 2) {
 		if m.Value == nil {
 			m.Value = new(pic.ID)
 		}
 		m.Value.PicoDecode(c, 1)
 	}
-	if c.PendingField() == 2 {
+	if c.MatchField(2, 2) {
 		if m.Opt == nil {
 			m.Opt = new(pic.ID)
 		}
 		m.Opt.PicoDecode(c, 2)
 	}
-	for c.TakeRepeated(3) {
+	for c.MatchField(3, 2) && c.TakeRepeated(3) {
 		var zero pic.ID
 		m.Rep = append(m.Rep, zero)
 		m.Rep[len(m.Rep)-1].PicoDecode(c, 3)
 	}
-	m.PresentBasic.PicoDecode(c, 4)
-	m.PresentOpt.PicoDecode(c, 5)
-	for c.TakeRepeated(6) {
+	if c.MatchField(4, 2) {
+		m.PresentBasic.PicoDecode(c, 4)
+	}
+	if c.MatchField(5, 2) {
+		m.PresentOpt.PicoDecode(c, 5)
+	}
+	for c.MatchField(6, 2) && c.TakeRepeated(6) {
 		var zero pic.ID
 		m.PresentRep = append(m.PresentRep, zero)
 		m.PresentRep[len(m.PresentRep)-1].PicoDecode(c, 6)
@@ -1231,36 +1235,40 @@ func (m *CustomMessageTypes) Decode(c *picobuf.Decoder) {
 		}
 		m.Normal.Decode(c)
 	})
-	if c.PendingField() == 2 {
+	if c.MatchField(2, 2) {
 		if m.CustomType == nil {
 			m.CustomType = new(pic.Timestamp)
 		}
 		m.CustomType.PicoDecode(c, 2)
 	}
-	m.PresentCustomType.PicoDecode(c, 3)
-	if c.PendingField() == 4 {
+	if c.MatchField(3, 2) {
+		m.PresentCustomType.PicoDecode(c, 3)
+	}
+	if c.MatchField(4, 2) {
 		if m.CustomTypeCast == nil {
 			m.CustomTypeCast = new(time.Time)
 		}
 		(*picoconv.Timestamp)(m.CustomTypeCast).PicoDecode(c, 4)
 	}
-	(*picoconv.Timestamp)(&m.PresentCustomTypeCast).PicoDecode(c, 5)
-	for c.TakeRepeated(6) {
+	if c.MatchField(5, 2) {
+		(*picoconv.Timestamp)(&m.PresentCustomTypeCast).PicoDecode(c, 5)
+	}
+	for c.MatchField(6, 2) && c.TakeRepeated(6) {
 		x := new(pic.Timestamp)
 		x.PicoDecode(c, 6)
 		m.RepeatedCustomType = append(m.RepeatedCustomType, x)
 	}
-	for c.TakeRepeated(7) {
+	for c.MatchField(7, 2) && c.TakeRepeated(7) {
 		var zero pic.Timestamp
 		m.RepeatedPresentCustomType = append(m.RepeatedPresentCustomType, zero)
 		m.RepeatedPresentCustomType[len(m.RepeatedPresentCustomType)-1].PicoDecode(c, 7)
 	}
-	for c.TakeRepeated(8) {
+	for c.MatchField(8, 2) && c.TakeRepeated(8) {
 		x := new(time.Time)
 		(*picoconv.Timestamp)(x).PicoDecode(c, 8)
 		m.RepeatedCustomTypeCast = append(m.RepeatedCustomTypeCast, x)
 	}
-	for c.TakeRepeated(9) {
+	for c.MatchField(9, 2) && c.TakeRepeated(9) {
 		var zero time.Time
 		m.RepeatedPresentCustomTypeCast = append(m.RepeatedPresentCustomTypeCast, zero)
 		x := &m.RepeatedPresentCustomTypeCast[len(m.RepeatedPresentCustomTypeCast)-1]
@@ -1484,22 +1492,22 @@ func (m *OptionalValues) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	if c.PendingField() == 1 {
+	if c.MatchField(1, 0) {
 		c.Int32(1, m.Int32.PicoSetPtr())
 	}
-	if c.PendingField() == 2 {
+	if c.MatchField(2, 2) {
 		c.String(2, m.String_.PicoSetPtr())
 	}
-	if c.PendingField() == 3 {
+	if c.MatchField(3, 2) {
 		c.Bytes(3, m.Bytes.PicoSetPtr())
 	}
-	if c.PendingField() == 4 {
+	if c.MatchField(4, 1) {
 		c.Double(4, m.Double.PicoSetPtr())
 	}
-	if c.PendingField() == 5 {
+	if c.MatchField(5, 0) {
 		c.Int32(5, (*int32)(m.Enum.PicoSetPtr()))
 	}
-	if c.PendingField() == 6 {
+	if c.MatchField(6, 2) {
 		(*picoconv.Timestamp)(m.Time.PicoSetPtr()).PicoDecode(c, 6)
 	}
 	c.UnrecognizedFields(126, &m.XXX_unrecognized)
@@ -1658,7 +1666,7 @@ func (m *Tag) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.String(1, &m.Key)
-	if c.PendingField() == 2 {
+	if c.MatchField(2, 2) {
 		var x *Tag_String_
 		if z, ok := m.Value.(*Tag_String_); ok {
 			x = z
@@ -1669,7 +1677,7 @@ func (m *Tag) Decode(c *picobuf.Decoder) {
 		m := x
 		c.Bytes(2, &m.String_)
 	}
-	if c.PendingField() == 3 {
+	if c.MatchField(3, 0) {
 		var x *Tag_Int64
 		if z, ok := m.Value.(*Tag_Int64); ok {
 			x = z
@@ -1680,7 +1688,7 @@ func (m *Tag) Decode(c *picobuf.Decoder) {
 		m := x
 		c.Int64(3, &m.Int64)
 	}
-	if c.PendingField() == 4 {
+	if c.MatchField(4, 1) {
 		var x *Tag_Double
 		if z, ok := m.Value.(*Tag_Double); ok {
 			x = z
@@ -1691,7 +1699,7 @@ func (m *Tag) Decode(c *picobuf.Decoder) {
 		m := x
 		c.Double(4, &m.Double)
 	}
-	if c.PendingField() == 5 {
+	if c.MatchField(5, 2) {
 		var x *Tag_Bytes
 		if z, ok := m.Value.(*Tag_Bytes); ok {
 			x = z
@@ -1702,7 +1710,7 @@ func (m *Tag) Decode(c *picobuf.Decoder) {
 		m := x
 		c.Bytes(5, &m.Bytes)
 	}
-	if c.PendingField() == 6 {
+	if c.MatchField(6, 0) {
 		var x *Tag_Bool
 		if z, ok := m.Value.(*Tag_Bool); ok {
 			x = z
@@ -1713,7 +1721,7 @@ func (m *Tag) Decode(c *picobuf.Decoder) {
 		m := x
 		c.Bool(6, &m.Bool)
 	}
-	if c.PendingField() == 7 {
+	if c.MatchField(7, 0) {
 		var x *Tag_DurationNs
 		if z, ok := m.Value.(*Tag_DurationNs); ok {
 			x = z
@@ -1724,7 +1732,7 @@ func (m *Tag) Decode(c *picobuf.Decoder) {
 		m := x
 		c.Int64(7, &m.DurationNs)
 	}
-	if c.PendingField() == 8 {
+	if c.MatchField(8, 2) {
 		var x *Tag_Timestamp
 		if z, ok := m.Value.(*Tag_Timestamp); ok {
 			x = z
@@ -1916,7 +1924,7 @@ func (m *CustomOneof) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	if c.PendingField() == 1 {
+	if c.MatchField(1, 2) {
 		var x *CustomOneof_Id
 		if z, ok := m.Kind.(*CustomOneof_Id); ok {
 			x = z
@@ -2012,7 +2020,7 @@ func (m *CustomDurations) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	for c.TakeRepeated(1) {
+	for c.MatchField(1, 2) && c.TakeRepeated(1) {
 		var zero time.Duration
 		m.Values = append(m.Values, zero)
 		x := &m.Values[len(m.Values)-1]

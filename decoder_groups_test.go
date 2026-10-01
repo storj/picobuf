@@ -23,7 +23,7 @@ func TestUnknownGroupsRespectDepth(t *testing.T) {
 
 func TestGroupBoundaries(t *testing.T) {
 	for _, mode := range []string{"Group", "RepeatedGroup"} {
-		for _, data := range [][]byte{{0x0b}, {0x0b, 0x14}, {0x0c}, {0x0b, 0x0b, 0x0c}, {0x0a, 1, 0x0c}} {
+		for _, data := range [][]byte{{0x0b}, {0x0b, 0x14}, {0x0c}, {0x0b, 0x0b, 0x0c}} {
 			if err := picobuf.Unmarshal(data, &stateMessage{mode: mode}); err == nil {
 				t.Fatalf("%s accepted %x", mode, data)
 			}

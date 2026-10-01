@@ -128,71 +128,71 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	if c.PendingField() == 1 {
+	if c.MatchField(1, 0) {
 		m.Number = new(int32)
 		c.Int32(1, m.Number)
 	}
-	if c.PendingField() == 2 {
+	if c.MatchField(2, 2) {
 		m.Text = new(string)
 		c.String(2, m.Text)
 	}
-	if c.PendingField() == 3 {
+	if c.MatchField(3, 2) {
 		m.Data = new([]byte)
 		c.Bytes(3, m.Data)
 	}
-	if c.PendingField() == 4 {
+	if c.MatchField(4, 0) {
 		m.State = new(State)
 		c.Int32(4, (*int32)(m.State))
 	}
-	if c.PendingField() == 5 {
+	if c.MatchField(5, 0) {
 		m.Boolean = new(bool)
 		c.Bool(5, m.Boolean)
 	}
-	if c.PendingField() == 6 {
+	if c.MatchField(6, 0) {
 		m.Int64Value = new(int64)
 		c.Int64(6, m.Int64Value)
 	}
-	if c.PendingField() == 7 {
+	if c.MatchField(7, 0) {
 		m.Uint32Value = new(uint32)
 		c.Uint32(7, m.Uint32Value)
 	}
-	if c.PendingField() == 8 {
+	if c.MatchField(8, 0) {
 		m.Uint64Value = new(uint64)
 		c.Uint64(8, m.Uint64Value)
 	}
-	if c.PendingField() == 9 {
+	if c.MatchField(9, 0) {
 		m.Sint32Value = new(int32)
 		c.Sint32(9, m.Sint32Value)
 	}
-	if c.PendingField() == 10 {
+	if c.MatchField(10, 0) {
 		m.Sint64Value = new(int64)
 		c.Sint64(10, m.Sint64Value)
 	}
-	if c.PendingField() == 11 {
+	if c.MatchField(11, 5) {
 		m.Fixed32Value = new(uint32)
 		c.Fixed32(11, m.Fixed32Value)
 	}
-	if c.PendingField() == 12 {
+	if c.MatchField(12, 1) {
 		m.Fixed64Value = new(uint64)
 		c.Fixed64(12, m.Fixed64Value)
 	}
-	if c.PendingField() == 13 {
+	if c.MatchField(13, 5) {
 		m.Sfixed32Value = new(int32)
 		c.Sfixed32(13, m.Sfixed32Value)
 	}
-	if c.PendingField() == 14 {
+	if c.MatchField(14, 1) {
 		m.Sfixed64Value = new(int64)
 		c.Sfixed64(14, m.Sfixed64Value)
 	}
-	if c.PendingField() == 15 {
+	if c.MatchField(15, 5) {
 		m.FloatValue = new(float32)
 		c.Float(15, m.FloatValue)
 	}
-	if c.PendingField() == 16 {
+	if c.MatchField(16, 1) {
 		m.DoubleValue = new(float64)
 		c.Double(16, m.DoubleValue)
 	}
-	if c.PendingField() == 17 {
+	if c.MatchField(17, 0) {
 		var x *Message_SelectedState
 		if z, ok := m.Selection.(*Message_SelectedState); ok {
 			x = z
@@ -203,7 +203,7 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 		m := x
 		c.Int32(17, (*int32)(&m.SelectedState))
 	}
-	if c.PendingField() == 18 {
+	if c.MatchField(18, 2) {
 		var x *Message_SelectedText
 		if z, ok := m.Selection.(*Message_SelectedText); ok {
 			x = z

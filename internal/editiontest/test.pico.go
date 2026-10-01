@@ -45,12 +45,12 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 		return
 	}
 	c.WithoutUTF8Validation(func() {
-		if c.PendingField() == 1 {
+		if c.MatchField(1, 2) {
 			m.Unvalidated = new(string)
 			c.String(1, m.Unvalidated)
 		}
 	})
-	if c.PendingField() == 2 {
+	if c.MatchField(2, 2) {
 		m.Validated = new(string)
 		c.String(2, m.Validated)
 	}

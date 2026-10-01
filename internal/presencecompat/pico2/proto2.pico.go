@@ -64,21 +64,21 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	if c.PendingField() == 1 {
+	if c.MatchField(1, 0) {
 		m.Number = new(int32)
 		c.Int32(1, m.Number)
 	}
 	c.WithoutUTF8Validation(func() {
-		if c.PendingField() == 2 {
+		if c.MatchField(2, 2) {
 			m.Text = new(string)
 			c.String(2, m.Text)
 		}
 	})
-	if c.PendingField() == 3 {
+	if c.MatchField(3, 2) {
 		m.Data = new([]byte)
 		c.Bytes(3, m.Data)
 	}
-	if c.PendingField() == 4 {
+	if c.MatchField(4, 0) {
 		m.State = new(State)
 		c.Int32(4, (*int32)(m.State))
 	}

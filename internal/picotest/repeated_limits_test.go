@@ -48,3 +48,15 @@ func TestCustomDurationValues(t *testing.T) {
 		t.Fatalf("got %v, want %v", got.Values, m.Values)
 	}
 }
+
+func TestCustomRepeatedWrongWire(t *testing.T) {
+	var m CustomMessageTypes
+	// A valid empty timestamp, a varint with the same number, and another timestamp.
+	data := []byte{0x42, 0, 0x40, 7, 0x42, 0}
+	if err := (picobuf.UnmarshalOptions{MaxRepeatedElements: 2}).Unmarshal(data, &m); err != nil {
+		t.Fatal(err)
+	}
+	if len(m.RepeatedCustomTypeCast) != 2 || !bytes.Equal(m.XXX_unrecognized, []byte{0x40, 7}) {
+		t.Fatalf("unexpected decoding: %+v", m)
+	}
+}
