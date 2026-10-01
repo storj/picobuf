@@ -30,7 +30,7 @@ func FuzzDecoderTag(f *testing.F) {
 			return
 		}
 		field, wire, n := protowire.ConsumeTag(data)
-		if n < 0 || field < protowire.MinValidNumber || field > protowire.MaxValidNumber {
+		if n < 0 || field < protowire.MinValidNumber || field > protowire.MaxValidNumber || wire == protowire.EndGroupType {
 			if dec.Err() == nil {
 				t.Fatalf("accepted invalid tag: %x", data)
 			}

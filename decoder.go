@@ -58,7 +58,8 @@ type messageDecodeState struct {
 	pendingField FieldNumber    //nolint: structcheck
 	pendingWire  protowire.Type //nolint: structcheck
 
-	buffer []byte
+	buffer     []byte
+	groupField FieldNumber // nonzero while reading a group, whose end tag terminates this scope
 }
 
 // NewDecoder returns a new Decoder.
@@ -103,13 +104,17 @@ func (dec *Decoder) Err() error {
 // enterMessage saves the parent in the caller's stack frame rather than in a
 // growing slice. The depth budget counts how many more levels may be entered.
 func (dec *Decoder) enterMessage(message []byte) messageDecodeState {
+	return dec.enterScope(message, 0)
+}
+
+func (dec *Decoder) enterScope(message []byte, group FieldNumber) messageDecodeState {
 	parent := dec.messageDecodeState
 	tooDeep := dec.depthBudget <= 0
 	if tooDeep {
 		message = nil
 	}
 	dec.depthBudget--
-	dec.messageDecodeState = messageDecodeState{buffer: message}
+	dec.messageDecodeState = messageDecodeState{buffer: message, groupField: group}
 	dec.nextField(0)
 	if tooDeep {
 		dec.fail(0, "exceeded maximum recursion depth")
@@ -313,15 +318,7 @@ func (dec *Decoder) Group(field FieldNumber, fn func(*Decoder)) {
 		return
 	}
 
-	message, n := protowire.ConsumeGroup(protowire.Number(field), dec.buffer)
-	if n < 0 {
-		dec.fail(field, "unable to parse group")
-		return
-	}
-	parent := dec.enterMessage(message)
-	dec.Loop(fn)
-	dec.leaveMessage(parent)
-	dec.nextField(n)
+	dec.group(field, func(c *Decoder) { c.Loop(fn) })
 }
 
 // PresentGroup decodes an always-present delimited message.
@@ -340,20 +337,27 @@ func (dec *Decoder) RepeatedGroup(field FieldNumber, fn func(*Decoder)) {
 			return
 		}
 
-		message, n := protowire.ConsumeGroup(protowire.Number(field), dec.buffer)
-		if n < 0 {
-			dec.fail(field, "unable to parse group")
-			return
-		}
-		parent := dec.enterMessage(message)
-		fn(dec)
-		dec.leaveMessage(parent)
-		dec.nextField(n)
+		dec.group(field, fn)
 	}
 }
 
-// RepeatedGroupCount returns the number of consecutive group values for field,
-// capped by the remaining repeated element limit.
+// group decodes directly from the parent buffer. nextField consumes the matching
+// end tag and stops this scope, leaving the parent's remaining bytes untouched.
+func (dec *Decoder) group(field FieldNumber, fn func(*Decoder)) {
+	parent := dec.enterScope(dec.buffer, field)
+	fn(dec)
+	// A callback may leave fields unread, just as with RepeatedMessage.
+	if dec.pendingField.IsValid() {
+		dec.Loop(func(*Decoder) {})
+	}
+	consumed := len(parent.buffer) - len(dec.buffer)
+	dec.leaveMessage(parent)
+	dec.nextField(consumed)
+}
+
+// RepeatedGroupCount returns a lower bound on consecutive group values for field,
+// capped by the remaining repeated element limit. Lookahead is bounded to avoid
+// rescanning entire nested groups before decoding them.
 func (dec *Decoder) RepeatedGroupCount(field FieldNumber) int {
 	return dec.repeatedFieldCount(field, protowire.StartGroupType)
 }
@@ -364,9 +368,12 @@ func (dec *Decoder) repeatedFieldCount(field FieldNumber, wire protowire.Type) i
 	}
 
 	buffer := dec.buffer
+	if wire == protowire.StartGroupType {
+		buffer = buffer[:min(len(buffer), 256)]
+	}
 	count := 0
 	for {
-		n := protowire.ConsumeFieldValue(protowire.Number(field), wire, buffer)
+		n := protowire.ConsumeFieldValueDepth(protowire.Number(field), wire, buffer, int(dec.depthBudget))
 		if n < 0 {
 			break
 		}
@@ -398,7 +405,7 @@ func (dec *Decoder) UnrecognizedFields(exclude uint64, out *[]byte, excludeHigh 
 			return
 		}
 
-		n := protowire.ConsumeFieldValue(protowire.Number(dec.pendingField), dec.pendingWire, dec.buffer)
+		n := protowire.ConsumeFieldValueDepth(protowire.Number(dec.pendingField), dec.pendingWire, dec.buffer, int(dec.depthBudget))
 		if n < 0 {
 			dec.fail(dec.pendingField, "unable to parse unrecognized field")
 			return
@@ -455,7 +462,7 @@ func (dec *Decoder) Loop(fn func(*Decoder)) {
 		}
 		if len(dec.buffer) == startingLength {
 			// we didn't process any of the fields
-			n := protowire.ConsumeFieldValue(protowire.Number(dec.pendingField), dec.pendingWire, dec.buffer)
+			n := protowire.ConsumeFieldValueDepth(protowire.Number(dec.pendingField), dec.pendingWire, dec.buffer, int(dec.depthBudget))
 			dec.nextField(n)
 		}
 	}
@@ -518,12 +525,20 @@ func (e parseError) Error() string {
 }
 
 func (dec *Decoder) nextField(advance int) {
+	if dec.err != nil {
+		dec.pendingField = fieldDecodingErrored
+		return
+	}
 	if advance < 0 || advance > len(dec.buffer) {
 		dec.fail(0, "advance outside buffer")
 		return
 	}
 	dec.buffer = dec.buffer[advance:]
 	if len(dec.buffer) == 0 {
+		if dec.groupField != 0 {
+			dec.fail(dec.groupField, "unterminated group")
+			return
+		}
 		dec.pendingField = fieldDecodingDone
 		return
 	}
@@ -534,6 +549,7 @@ func (dec *Decoder) nextField(advance int) {
 		dec.pendingField = FieldNumber(tag >> 3)
 		dec.pendingWire = protowire.Type(tag & 7)
 		dec.buffer = dec.buffer[1:]
+		dec.checkEndGroup()
 		return
 	}
 
@@ -551,4 +567,17 @@ func (dec *Decoder) nextField(advance int) {
 	}
 	dec.buffer = dec.buffer[n:]
 	dec.pendingField, dec.pendingWire = FieldNumber(field), wire
+	dec.checkEndGroup()
+}
+
+// checkEndGroup prevents callbacks from seeing end tags as ordinary fields.
+func (dec *Decoder) checkEndGroup() {
+	if dec.pendingWire != protowire.EndGroupType {
+		return
+	}
+	if dec.groupField == 0 || dec.pendingField != dec.groupField {
+		dec.fail(dec.pendingField, "unexpected end group")
+		return
+	}
+	dec.pendingField = fieldDecodingDone
 }

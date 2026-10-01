@@ -123,6 +123,11 @@ func ConsumeFieldValue(num Number, typ Type, b []byte) (n int) {
 	return consumeFieldValueD(num, typ, b, DefaultRecursionLimit)
 }
 
+// ConsumeFieldValueDepth is ConsumeFieldValue with a remaining group depth budget.
+func ConsumeFieldValueDepth(num Number, typ Type, b []byte, depth int) int {
+	return consumeFieldValueD(num, typ, b, depth-1)
+}
+
 func consumeFieldValueD(num Number, typ Type, b []byte, depth int) (n int) {
 	switch typ {
 	case VarintType:
