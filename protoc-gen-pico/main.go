@@ -238,31 +238,27 @@ func messageNeedsRequiredValidation(m *protogen.Message, seen map[protoreflect.F
 
 func genMessageRequiredValidation(gf *generator, m *protogen.Message) {
 	gf.P("func (m *", m.GoIdent, ") PicoValidateRequired() error {")
+	gf.P("return ", picobufPackage.Ident("ValidateRequired"), "(m)")
+	gf.P("}")
+	gf.P("func (m *", m.GoIdent, ") PicoValidateRequiredDepth(depth int) error {")
 	gf.P("if m == nil { return nil }")
-	defer func() {
-		gf.P("return nil")
-		gf.P("}")
-		gf.P()
-	}()
-
+	defer func() { gf.P("return nil"); gf.P("}"); gf.P() }()
+	validate := func(expr string) {
+		gf.P("if err := ", picobufPackage.Ident("ValidateRequiredDepth"), "(", expr, ", depth+1); err != nil { return err }")
+	}
 	for _, field := range m.Fields {
 		info := fieldInfo(gf, field, field.Desc)
 		if field.Desc.Cardinality() == protoreflect.Required {
 			if !info.pointer {
 				panic("required field is not represented by a pointer")
 			}
-			gf.P("if m.", field.GoName, " == nil {")
-			gf.P("  return ", picobufPackage.Ident("MissingRequiredField"), "(", field.Desc.Number(), ")")
-			gf.P("}")
+			gf.P("if m.", field.GoName, " == nil { return ", picobufPackage.Ident("MissingRequiredField"), "(", field.Desc.Number(), ") }")
 		}
-
 		if field.Desc.IsMap() {
-			// messageNeedsRequiredValidation recurses through the synthetic
-			// map entry, so message values must be validated here as well.
-			if field.Desc.MapValue().Kind() == protoreflect.MessageKind &&
-				messageNeedsRequiredValidation(field.Message.Fields[1].Message, nil) {
+			if field.Desc.MapValue().Kind() == protoreflect.MessageKind && messageNeedsRequiredValidation(field.Message.Fields[1].Message, nil) {
 				gf.P("for _, x := range m.", field.GoName, " {")
-				gf.P("  if err := ", picobufPackage.Ident("ValidateRequired"), "(x); err != nil { return err }")
+				gf.P("if x == nil { x = new(", info.value.baseType, ") }")
+				validate("x")
 				gf.P("}")
 			}
 			continue
@@ -272,20 +268,29 @@ func genMessageRequiredValidation(gf *generator, m *protogen.Message) {
 		}
 		if info.oneof {
 			gf.P("if x, ok := m.", field.Oneof.GoName, ".(*", oneofWrapperTypeName(gf, field), "); ok {")
-			gf.P("  if err := ", picobufPackage.Ident("ValidateRequired"), "(x.", field.GoName, "); err != nil { return err }")
+			if info.pointer {
+				gf.P("value := x.", field.GoName)
+				gf.P("if value == nil { value = new(", info.baseType, ") }")
+				validate("value")
+			} else {
+				validate("&x." + field.GoName)
+			}
 			gf.P("}")
-			continue
-		}
-		if info.repeated {
+		} else if info.repeated {
 			gf.P("for _, x := range m.", field.GoName, " {")
-			gf.P("  if err := ", picobufPackage.Ident("ValidateRequired"), "(x); err != nil { return err }")
+			if info.pointer {
+				gf.P("if x == nil { x = new(", info.baseType, ") }")
+				validate("x")
+			} else {
+				validate("&x")
+			}
 			gf.P("}")
-			continue
-		}
-		if info.pointer {
-			gf.P("if err := ", picobufPackage.Ident("ValidateRequired"), "(m.", field.GoName, "); err != nil { return err }")
+		} else if info.pointer {
+			gf.P("if m.", field.GoName, " != nil {")
+			validate("m." + field.GoName)
+			gf.P("}")
 		} else {
-			gf.P("if err := ", picobufPackage.Ident("ValidateRequired"), "(&m.", field.GoName, "); err != nil { return err }")
+			validate("&m." + field.GoName)
 		}
 	}
 }

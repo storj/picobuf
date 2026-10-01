@@ -178,6 +178,9 @@ type RequiredMessage struct {
 }
 
 func (m *RequiredMessage) PicoValidateRequired() error {
+	return picobuf.ValidateRequired(m)
+}
+func (m *RequiredMessage) PicoValidateRequiredDepth(depth int) error {
 	if m == nil {
 		return nil
 	}
@@ -215,11 +218,16 @@ type RequiredParent struct {
 }
 
 func (m *RequiredParent) PicoValidateRequired() error {
+	return picobuf.ValidateRequired(m)
+}
+func (m *RequiredParent) PicoValidateRequiredDepth(depth int) error {
 	if m == nil {
 		return nil
 	}
-	if err := picobuf.ValidateRequired(m.Child); err != nil {
-		return err
+	if m.Child != nil {
+		if err := picobuf.ValidateRequiredDepth(m.Child, depth+1); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -254,11 +262,17 @@ type RequiredMapParent struct {
 }
 
 func (m *RequiredMapParent) PicoValidateRequired() error {
+	return picobuf.ValidateRequired(m)
+}
+func (m *RequiredMapParent) PicoValidateRequiredDepth(depth int) error {
 	if m == nil {
 		return nil
 	}
 	for _, x := range m.Children {
-		if err := picobuf.ValidateRequired(x); err != nil {
+		if x == nil {
+			x = new(RequiredMessage)
+		}
+		if err := picobuf.ValidateRequiredDepth(x, depth+1); err != nil {
 			return err
 		}
 	}
@@ -280,4 +294,72 @@ func (m *RequiredMapParent) Decode(c *picobuf.Decoder) {
 	}
 	(*picowire.MapOf[string, *RequiredMessage, picowire.StringCodec, picowire.MessageCodec[RequiredMessage, *RequiredMessage]])(&m.Children).PicoDecode(c, 1)
 	c.UnrecognizedFields(2, &m.XXX_unrecognized)
+}
+
+type RequiredNode struct {
+	Value            *int32          `json:"value,omitzero"`
+	Child            *RequiredNode   `json:"child,omitzero"`
+	Children         []*RequiredNode `json:"children,omitzero"`
+	XXX_unrecognized []byte          `json:"-"`
+}
+
+func (m *RequiredNode) PicoValidateRequired() error {
+	return picobuf.ValidateRequired(m)
+}
+func (m *RequiredNode) PicoValidateRequiredDepth(depth int) error {
+	if m == nil {
+		return nil
+	}
+	if m.Value == nil {
+		return picobuf.MissingRequiredField(1)
+	}
+	if m.Child != nil {
+		if err := picobuf.ValidateRequiredDepth(m.Child, depth+1); err != nil {
+			return err
+		}
+	}
+	for _, x := range m.Children {
+		if x == nil {
+			x = new(RequiredNode)
+		}
+		if err := picobuf.ValidateRequiredDepth(x, depth+1); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (m *RequiredNode) Encode(c *picobuf.Encoder) bool {
+	if m == nil {
+		return false
+	}
+	if m.Value != nil {
+		c.AlwaysInt32(1, m.Value)
+	}
+	if m.Child != nil {
+		c.Message(2, m.Child.Encode)
+	}
+	for _, x := range m.Children {
+		c.AlwaysMessage(3, x.Encode)
+	}
+	c.UnrecognizedFields(m.XXX_unrecognized)
+	return true
+}
+
+func (m *RequiredNode) Decode(c *picobuf.Decoder) {
+	if m == nil {
+		return
+	}
+	if c.PendingField() == 1 {
+		m.Value = new(int32)
+		c.Int32(1, m.Value)
+	}
+	c.Message(2, func(c *picobuf.Decoder) {
+		if m.Child == nil {
+			m.Child = new(RequiredNode)
+		}
+		m.Child.Decode(c)
+	})
+	picobuf.DecodeRepeatedMessages(c, 3, &m.Children, (*RequiredNode).Decode)
+	c.UnrecognizedFields(14, &m.XXX_unrecognized)
 }

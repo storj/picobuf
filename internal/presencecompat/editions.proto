@@ -49,3 +49,9 @@ message RequiredParent {
 message RequiredMapParent {
   map<string, RequiredMessage> children = 1;
 }
+
+message RequiredNode {
+  int32 value = 1 [features.field_presence = LEGACY_REQUIRED];
+  RequiredNode child = 2;
+  repeated RequiredNode children = 3;
+}
