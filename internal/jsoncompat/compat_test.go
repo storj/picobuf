@@ -413,6 +413,14 @@ func FuzzJSONInput(f *testing.F) {
 // picojson may reject input that protojson accepts, as long as it accepts
 // the protojson encoding of the same message.
 func checkInput(t *testing.T, input string, stricter bool) {
+	// Generated UnmarshalJSON follows encoding/json: a literal null is a no-op.
+	if input == "null" {
+		got := pico.All{Scalars: &pico.Scalars{Int32: 7}}
+		if err := got.UnmarshalJSON([]byte(input)); err != nil || got.Scalars == nil || got.Scalars.Int32 != 7 {
+			t.Fatal("null must leave the receiver unchanged")
+		}
+		return
+	}
 	var want prot.All
 	wantErr := protojson.Unmarshal([]byte(input), &want)
 	var got pico.All
