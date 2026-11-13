@@ -41,13 +41,17 @@ message Address {
 }
 ```
 
-`picobuf` also supports some non-standard features:
+`picobuf` also supports some non-standard features. They are options defined
+in [pico.proto](pico.proto), which needs to be on the `protoc` include path,
+for example with `-I$(go list -m -f '{{.Dir}}' storj.io/picobuf)`:
 
 ```
 syntax = "proto3";
 option go_package = "example.test/pb";
 
 package example;
+
+import "pico.proto";
 
 message Timestamp {
   int64 seconds = 1;
@@ -135,8 +139,8 @@ Similarly, there are contraindications when it doesn't make sense to use it:
 * you need features such as:
 	* any messages
 	* reflection
-	* json
 	* descriptors
+	* JSON for `google.protobuf.Any` or `Struct`, see [JSON](#json)
 
 ## Benchmark
 
