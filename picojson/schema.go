@@ -82,7 +82,7 @@ func Marshal(msg picobuf.Message, s Schema, offset int) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	// ponytail: 2x wire size fits most messages; growth handles the rest.
+	// Twice the wire size fits most messages, growth handles the rest.
 	m := marshaler{schema: s, out: make([]byte, 0, 2*len(wire)+16)}
 	if err := m.message(int32(offset), wire); err != nil {
 		return nil, fmt.Errorf("picojson: %w", err)

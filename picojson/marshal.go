@@ -219,7 +219,7 @@ func (m *marshaler) walk(msg *message, wire []byte, render bool) (bool, error) {
 			continue
 		}
 		if f.Oneof != 0 {
-			// ponytail: messages with more than 64 oneofs use grouped.
+			// The bitmask holds 64 oneofs, messages with more use grouped.
 			bit := uint64(1) << (f.Oneof - 1)
 			if f.Oneof > 64 || oneofs&bit != 0 {
 				return false, nil
