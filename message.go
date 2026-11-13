@@ -17,10 +17,10 @@ type Message interface {
 	Decode(*Decoder)
 }
 
-// RequiredFields is implemented by generated messages that can validate
-// legacy required fields. The depth is the nesting depth of the message,
-// which is zero for the root; validators pass it on to ValidateRequiredDepth
-// for their children.
+// RequiredFields is the interface that generated messages implement to
+// validate legacy required fields. depth is the nesting depth of the message,
+// zero for the root. A validator passes it on to ValidateRequiredDepth for its
+// children.
 type RequiredFields interface {
 	PicoValidateRequiredDepth(depth int) error
 }
@@ -30,9 +30,9 @@ func ValidateRequired(msg any) error {
 	return ValidateRequiredDepth(msg, 0)
 }
 
-// ValidateRequiredDepth validates a child at the supplied nesting depth. It is
-// used by generated validators to carry one budget through the entire graph.
-// The root message has depth zero.
+// ValidateRequiredDepth validates a child at the given nesting depth.
+// Generated validators call it so that one depth budget covers the whole
+// message graph. The root message has depth zero.
 func ValidateRequiredDepth(msg any, depth int) error {
 	if depth > protowire.DefaultRecursionLimit {
 		return fmt.Errorf("exceeded maximum recursion depth while validating required fields")
@@ -48,20 +48,20 @@ func MissingRequiredField(field FieldNumber) error {
 	return fmt.Errorf("required field %s is not set", field)
 }
 
-// CustomType defines methods that are used for custom encode or decode
-// behaviors.
+// CustomType is the interface that a custom type implements to encode and
+// decode itself.
 type CustomType interface {
 	PicoEncode(*Encoder, FieldNumber)
 	PicoDecode(*Decoder, FieldNumber)
 }
 
-// FieldNumber corresponds to a protobuf field number.
+// FieldNumber is a protobuf field number.
 type FieldNumber protowire.Number
 
-// IsValid returns whether the field number is in correct range.
+// IsValid reports whether the field number is in the valid range.
 func (field FieldNumber) IsValid() bool { return protowire.Number(field).IsValid() }
 
-// String converts field number to a number.
+// String formats the field number in decimal.
 func (field FieldNumber) String() string {
 	const maxDigitsUint32 = len("-2147483648")
 	var z [maxDigitsUint32]byte // for 32bits
@@ -88,11 +88,11 @@ func (field FieldNumber) String() string {
 	return string(z[i:])
 }
 
-// Marshal encodes msg as bytes.
+// Marshal encodes msg.
 //
-// It sizes the message first and encodes into an exactly sized buffer, so
-// msg.Encode runs twice and must behave deterministically. Custom encoders
-// can use Encoder.IsSizing to distinguish the passes.
+// It sizes the message first and then encodes into a buffer of that size, so
+// msg.Encode runs twice and must do the same thing both times. A custom
+// encoder can tell the passes apart with Encoder.IsSizing.
 func Marshal(msg Message) ([]byte, error) {
 	enc, err := sizeForMarshal(msg)
 	if err != nil || enc.size == 0 {
@@ -106,11 +106,11 @@ func Marshal(msg Message) ([]byte, error) {
 	return enc.Buffer(), nil
 }
 
-// MarshalAppend appends the encoding of msg to buffer and returns the
-// extended buffer. On error it returns buffer with its original length.
+// MarshalAppend appends the encoding of msg to buffer and returns the extended
+// buffer. On error it returns buffer with its original length.
 //
-// Like Marshal, it sizes the message first to reserve output space, so
-// msg.Encode runs twice and must behave deterministically.
+// Like Marshal, it sizes the message first to reserve the output space, so
+// msg.Encode runs twice and must do the same thing both times.
 func MarshalAppend(buffer []byte, msg Message) ([]byte, error) {
 	return new(Encoder).marshalAppend(buffer, msg)
 }
@@ -175,22 +175,22 @@ func Size(msg Message) (int, error) {
 	return enc.size, nil
 }
 
-// UnmarshalOptions configures decoding. Positive recursion and repeated-element
-// limits are capped at math.MaxInt32, sufficient for serialized protobuf messages
-// smaller than 2 GiB.
+// UnmarshalOptions configures decoding. The decoder caps positive recursion
+// and repeated-element limits at math.MaxInt32. That is enough, because a
+// serialized protobuf message is smaller than 2 GiB.
 //
-// Elements of a repeated message field are allocated together in blocks of
-// up to 4 KiB, so retaining a single decoded element keeps the rest of its
-// block alive. Copy elements that outlive the rest of the message.
+// The decoder allocates the elements of a repeated message field together in
+// blocks of up to 4 KiB, so keeping one decoded element keeps the rest of its
+// block alive. Copy the elements that outlive the rest of the message.
 type UnmarshalOptions struct {
-	// AliasInput allows decoded bytes fields to point into data rather than
-	// being copied out of it. It avoids an allocation per bytes field, at the
-	// cost of tying the decoded message to data: data must outlive the message
-	// and must not be modified or reused, otherwise the message changes with
-	// it. String fields are always copied.
+	// AliasInput lets decoded bytes fields point into data instead of holding a
+	// copy. That saves an allocation per bytes field, but it ties the decoded
+	// message to data. Keep data alive and unchanged for as long as the message
+	// is in use, otherwise the message changes with it. The decoder always copies
+	// string fields.
 	AliasInput bool
-	// AllowInvalidUTF8 permits string fields containing invalid UTF-8. By
-	// default, invalid protobuf strings cause unmarshalling to fail.
+	// AllowInvalidUTF8 permits string fields that contain invalid UTF-8. By
+	// default such a string fails unmarshaling.
 	AllowInvalidUTF8 bool
 
 	// MaxInputSize rejects inputs larger than this many bytes. Zero disables
@@ -203,7 +203,8 @@ type UnmarshalOptions struct {
 	MaxRepeatedElements int
 }
 
-// Unmarshal decodes data into msg.
+// Unmarshal decodes data into msg. It merges into msg and does not reset it
+// first.
 func (opts UnmarshalOptions) Unmarshal(data []byte, msg Message) error {
 	if opts.MaxInputSize > 0 && len(data) > opts.MaxInputSize {
 		return parseError{message: "input exceeds maximum size"}
@@ -234,7 +235,8 @@ func (opts UnmarshalOptions) unmarshal(data []byte, msg Message, dec *Decoder) e
 	return err
 }
 
-// Unmarshal decodes msg as bytes.
+// Unmarshal decodes data into msg. It merges into msg and does not reset it
+// first.
 func Unmarshal(data []byte, msg Message) error {
 	return UnmarshalOptions{}.Unmarshal(data, msg)
 }

@@ -7,7 +7,7 @@ import (
 	"storj.io/picobuf/internal/protowire"
 )
 
-// Encoder implements encoding of protobuf format.
+// Encoder encodes the protobuf wire format.
 type Encoder struct {
 	buffer []byte
 	size   int
@@ -31,13 +31,13 @@ type Encoder struct {
 
 var errEncodeRecursionDepth = &encodeError{message: "picobuf: exceeded maximum nesting depth while encoding"}
 
-// WithoutUTF8Validation runs fn without validating encoded string fields.
-// It is intended for generated code implementing protobuf schema features.
+// WithoutUTF8Validation runs fn without validating the string fields that fn
+// encodes. Generated code uses it to implement protobuf schema features.
 //
-// The exemption covers strings encoded directly within the current message,
-// including map entry keys and values, but not strings inside nested
-// messages, which carry their own UTF-8 validation features. fn cannot
-// panic, so the state is restored with a plain call rather than a defer.
+// The exemption covers the strings of the current message, including map entry
+// keys and values. It does not cover strings inside nested messages, which
+// have their own UTF-8 validation features. fn cannot panic, so the encoder
+// restores its state with a plain call instead of a defer.
 func (enc *Encoder) WithoutUTF8Validation(fn func()) {
 	prevSkip, prevDepth := enc.skipUTF8Validation, enc.skipUTF8Depth
 	enc.skipUTF8Validation, enc.skipUTF8Depth = true, enc.depth
@@ -59,9 +59,9 @@ func (enc *Encoder) Err() error {
 	return enc.err
 }
 
-// IsSizing reports whether the encoder is counting bytes for Size rather than
-// producing an encoded buffer. Custom encoders may use this to avoid work that
-// only contributes to the encoded contents.
+// IsSizing reports whether the encoder is counting bytes instead of writing
+// them. A custom encoder can use it to skip work that only the written bytes
+// need.
 func (enc *Encoder) IsSizing() bool { return enc.sizing }
 
 func (enc *Encoder) offset() int {
@@ -95,7 +95,7 @@ func (enc *Encoder) appendVarint(v uint64) {
 	}
 }
 
-// Fail fails the encoding process.
+// Fail fails the encoding with an error for field.
 func (enc *Encoder) Fail(field FieldNumber, msg string) {
 	enc.fail(field, msg)
 }
@@ -133,29 +133,31 @@ func (enc *Encoder) enterMessage() bool {
 	return true
 }
 
-// NewEncoder creates a new Encoder for encoding fields without a message
-// type: call the field methods and take the result from Buffer, after
-// checking Err. Unlike Marshal, encoding a message with msg.Encode this way
-// does not validate its required fields.
+// NewEncoder creates an Encoder that encodes fields without a message type.
+// Call the field methods, check Err, and take the result from Buffer. Unlike
+// Marshal, it does not validate the required fields of a message encoded with
+// msg.Encode.
 func NewEncoder() *Encoder {
 	return NewEncoderBuffer(make([]byte, 0, 64))
 }
 
-// NewEncoderBuffer is NewEncoder with the storage of buffer, which avoids
-// allocating the output while it fits. The encoding starts at buffer[:0].
+// NewEncoderBuffer is NewEncoder that writes into buffer, starting at
+// buffer[:0]. It does not allocate the output while the output fits.
 func NewEncoderBuffer(buffer []byte) *Encoder {
 	return &Encoder{buffer: buffer[:0]}
 }
 
-// MarshalAppend appends msg to buffer using reusable encoder storage. The zero
-// value is ready to use. Like MarshalAppend, this sizes first and then encodes;
-// msg.Encode must behave deterministically across the two passes.
+// MarshalAppend appends the encoding of msg to buffer and reuses the storage
+// of the encoder. The zero value is ready to use. Like the MarshalAppend
+// function, it sizes the message first and then encodes it, so msg.Encode runs
+// twice and must do the same thing both times.
 //
-// An Encoder must not be used concurrently or reentered from an encoding
-// callback. Callbacks must not retain it for use after MarshalAppend returns.
-// The method clears message state, including on error or panic, but retains
-// prefix-hint scratch space for reuse. It does not retain the output buffer;
-// the caller owns the returned bytes and controls buffer reuse.
+// Do not use an Encoder concurrently, and do not reenter it from an encoding
+// callback. A callback must not keep the encoder for use after MarshalAppend
+// returns. MarshalAppend clears the state of the message, also on error or
+// panic, and keeps its scratch space for length prefixes. It does not keep the
+// output buffer. The caller owns the returned bytes and decides when to reuse
+// them.
 func (enc *Encoder) MarshalAppend(buffer []byte, msg Message) ([]byte, error) {
 	defer func() {
 		hints := enc.lengthHints
@@ -168,10 +170,10 @@ func (enc *Encoder) MarshalAppend(buffer []byte, msg Message) ([]byte, error) {
 	return enc.marshalAppend(buffer, msg)
 }
 
-// Buffer returns the encoded internal buffer.
+// Buffer returns the bytes encoded so far.
 func (enc *Encoder) Buffer() []byte { return enc.buffer }
 
-// Message encodes a message when its callback reports it is present.
+// Message encodes a message field when fn reports that the message is present.
 //
 //go:noinline
 func (enc *Encoder) Message(field FieldNumber, fn func(enc *Encoder) bool) {
@@ -216,14 +218,16 @@ func (enc *Encoder) Message(field FieldNumber, fn func(enc *Encoder) bool) {
 	}
 }
 
-// AlwaysMessage encodes an message always.
+// AlwaysMessage encodes a message field, also when fn reports that the message
+// is absent.
 //
 //go:noinline
 func (enc *Encoder) AlwaysMessage(field FieldNumber, fn func(enc *Encoder) bool) {
 	enc.alwaysAnyBytes(field, func() { fn(enc) })
 }
 
-// PresentMessage encodes an always present message.
+// PresentMessage encodes a message field that is always present, unless its
+// encoding is empty.
 //
 //go:noinline
 func (enc *Encoder) PresentMessage(field FieldNumber, fn func(enc *Encoder) bool) {
@@ -299,7 +303,8 @@ func (enc *Encoder) RepeatedEnum(field FieldNumber, n int, fn func(index uint) i
 	})
 }
 
-// AlwaysAnyBytes encodes field as Bytes and handles encoding the length.
+// AlwaysAnyBytes encodes field with the bytes wire type. fn writes the
+// contents, and AlwaysAnyBytes writes their length.
 func (enc *Encoder) AlwaysAnyBytes(field FieldNumber, fn func()) {
 	enc.alwaysAnyBytes(field, fn)
 }
@@ -424,7 +429,8 @@ func (enc *Encoder) finishBytes(field FieldNumber, tagStart, lengthStart, messag
 	protowire.PutUvarint(enc.buffer[lengthStart:lengthStart+width], uint64(messageLength))
 }
 
-// UnrecognizedFields encodes fields that are not in the provided set.
+// UnrecognizedFields writes out, which holds the unrecognized fields that
+// decoding captured.
 func (enc *Encoder) UnrecognizedFields(out []byte) {
 	if enc.sizing {
 		enc.size += len(out)

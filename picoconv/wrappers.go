@@ -7,20 +7,20 @@ import (
 	"storj.io/picobuf"
 )
 
-// This file implements the google.protobuf wrapper types as conversions to
-// plain Go types, so that a wrapper field can be declared as e.g.
+// This file converts the google.protobuf wrapper types to plain Go types. A
+// wrapper field declared as
 //
 //	google.protobuf.BoolValue is_valid = 1 [
 //	    (pico.field).custom_type = "bool",
 //	    (pico.field).custom_serialize = "storj.io/picobuf/picoconv.BoolValue"
 //	];
 //
-// which generates a *bool field, where nil means the wrapper is absent.
+// generates a *bool field, where nil means that the wrapper is absent.
 
-// BoolValue implements google.protobuf.BoolValue conversion to bool.
+// BoolValue converts between google.protobuf.BoolValue and bool.
 type BoolValue bool
 
-// PicoEncode implements custom encoding function.
+// PicoEncode implements picobuf.CustomType.
 func (v *BoolValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
 		return
@@ -32,7 +32,7 @@ func (v *BoolValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	})
 }
 
-// PicoDecode implements custom decoding function.
+// PicoDecode implements picobuf.CustomType.
 func (v *BoolValue) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	if c.PendingField() != field {
 		return
@@ -47,10 +47,10 @@ func (v *BoolValue) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	*v = BoolValue(value)
 }
 
-// Int32Value implements google.protobuf.Int32Value conversion to int32.
+// Int32Value converts between google.protobuf.Int32Value and int32.
 type Int32Value int32
 
-// PicoEncode implements custom encoding function.
+// PicoEncode implements picobuf.CustomType.
 func (v *Int32Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
 		return
@@ -62,7 +62,7 @@ func (v *Int32Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	})
 }
 
-// PicoDecode implements custom decoding function.
+// PicoDecode implements picobuf.CustomType.
 func (v *Int32Value) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	if c.PendingField() != field {
 		return
@@ -77,10 +77,10 @@ func (v *Int32Value) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	*v = Int32Value(value)
 }
 
-// Int64Value implements google.protobuf.Int64Value conversion to int64.
+// Int64Value converts between google.protobuf.Int64Value and int64.
 type Int64Value int64
 
-// PicoEncode implements custom encoding function.
+// PicoEncode implements picobuf.CustomType.
 func (v *Int64Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
 		return
@@ -92,7 +92,7 @@ func (v *Int64Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	})
 }
 
-// PicoDecode implements custom decoding function.
+// PicoDecode implements picobuf.CustomType.
 func (v *Int64Value) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	if c.PendingField() != field {
 		return
@@ -107,10 +107,10 @@ func (v *Int64Value) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	*v = Int64Value(value)
 }
 
-// UInt32Value implements google.protobuf.UInt32Value conversion to uint32.
+// UInt32Value converts between google.protobuf.UInt32Value and uint32.
 type UInt32Value uint32
 
-// PicoEncode implements custom encoding function.
+// PicoEncode implements picobuf.CustomType.
 func (v *UInt32Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
 		return
@@ -122,7 +122,7 @@ func (v *UInt32Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) 
 	})
 }
 
-// PicoDecode implements custom decoding function.
+// PicoDecode implements picobuf.CustomType.
 func (v *UInt32Value) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	if c.PendingField() != field {
 		return
@@ -137,10 +137,10 @@ func (v *UInt32Value) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) 
 	*v = UInt32Value(value)
 }
 
-// UInt64Value implements google.protobuf.UInt64Value conversion to uint64.
+// UInt64Value converts between google.protobuf.UInt64Value and uint64.
 type UInt64Value uint64
 
-// PicoEncode implements custom encoding function.
+// PicoEncode implements picobuf.CustomType.
 func (v *UInt64Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
 		return
@@ -152,7 +152,7 @@ func (v *UInt64Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) 
 	})
 }
 
-// PicoDecode implements custom decoding function.
+// PicoDecode implements picobuf.CustomType.
 func (v *UInt64Value) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	if c.PendingField() != field {
 		return
@@ -167,10 +167,10 @@ func (v *UInt64Value) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) 
 	*v = UInt64Value(value)
 }
 
-// FloatValue implements google.protobuf.FloatValue conversion to float32.
+// FloatValue converts between google.protobuf.FloatValue and float32.
 type FloatValue float32
 
-// PicoEncode implements custom encoding function.
+// PicoEncode implements picobuf.CustomType.
 func (v *FloatValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
 		return
@@ -182,7 +182,7 @@ func (v *FloatValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	})
 }
 
-// PicoDecode implements custom decoding function.
+// PicoDecode implements picobuf.CustomType.
 func (v *FloatValue) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	if c.PendingField() != field {
 		return
@@ -197,10 +197,10 @@ func (v *FloatValue) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	*v = FloatValue(value)
 }
 
-// DoubleValue implements google.protobuf.DoubleValue conversion to float64.
+// DoubleValue converts between google.protobuf.DoubleValue and float64.
 type DoubleValue float64
 
-// PicoEncode implements custom encoding function.
+// PicoEncode implements picobuf.CustomType.
 func (v *DoubleValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
 		return
@@ -212,7 +212,7 @@ func (v *DoubleValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) 
 	})
 }
 
-// PicoDecode implements custom decoding function.
+// PicoDecode implements picobuf.CustomType.
 func (v *DoubleValue) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	if c.PendingField() != field {
 		return
@@ -227,10 +227,10 @@ func (v *DoubleValue) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) 
 	*v = DoubleValue(value)
 }
 
-// StringValue implements google.protobuf.StringValue conversion to string.
+// StringValue converts between google.protobuf.StringValue and string.
 type StringValue string
 
-// PicoEncode implements custom encoding function.
+// PicoEncode implements picobuf.CustomType.
 func (v *StringValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
 		return
@@ -242,7 +242,7 @@ func (v *StringValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) 
 	})
 }
 
-// PicoDecode implements custom decoding function.
+// PicoDecode implements picobuf.CustomType.
 func (v *StringValue) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	if c.PendingField() != field {
 		return
@@ -257,10 +257,10 @@ func (v *StringValue) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) 
 	*v = StringValue(value)
 }
 
-// BytesValue implements google.protobuf.BytesValue conversion to []byte.
+// BytesValue converts between google.protobuf.BytesValue and []byte.
 type BytesValue []byte
 
-// PicoEncode implements custom encoding function.
+// PicoEncode implements picobuf.CustomType.
 func (v *BytesValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
 		return
@@ -272,7 +272,7 @@ func (v *BytesValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	})
 }
 
-// PicoDecode implements custom decoding function.
+// PicoDecode implements picobuf.CustomType.
 func (v *BytesValue) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	if c.PendingField() != field {
 		return

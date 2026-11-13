@@ -16,7 +16,7 @@ const (
 	fieldDecodingDone    = FieldNumber(-2)
 )
 
-// Decoder implements decoding of protobuf messages.
+// Decoder decodes protobuf messages.
 type Decoder struct {
 	messageDecodeState
 	err           *parseError
@@ -35,13 +35,13 @@ type Decoder struct {
 	skipUTF8Validation bool
 }
 
-// WithoutUTF8Validation runs fn without validating decoded string fields.
-// It is intended for generated code implementing protobuf schema features.
+// WithoutUTF8Validation runs fn without validating the string fields that fn
+// decodes. Generated code uses it to implement protobuf schema features.
 //
-// The exemption covers strings decoded directly within the current message,
-// including map entry keys and values, but not strings inside nested
-// messages, which carry their own UTF-8 validation features. fn cannot
-// panic, so the state is restored with a plain call rather than a defer.
+// The exemption covers the strings of the current message, including map entry
+// keys and values. It does not cover strings inside nested messages, which
+// have their own UTF-8 validation features. fn cannot panic, so the decoder
+// restores its state with a plain call instead of a defer.
 func (dec *Decoder) WithoutUTF8Validation(fn func()) {
 	prevSkip, prevBudget := dec.skipUTF8Validation, dec.skipUTF8Budget
 	dec.skipUTF8Validation, dec.skipUTF8Budget = true, dec.depthBudget
@@ -64,10 +64,10 @@ type messageDecodeState struct {
 	groupField FieldNumber // nonzero while reading a group, whose end tag terminates this scope
 }
 
-// NewDecoder returns a new Decoder for decoding fields of data without a
-// message type: call Loop with the field methods, then check Err. Unlike
-// Unmarshal, it applies no UnmarshalOptions, and decoding a message with
-// msg.Decode this way does not validate its required fields.
+// NewDecoder returns a Decoder that decodes the fields of data without a
+// message type. Call Loop with the field methods, then check Err. Unlike
+// Unmarshal, it applies no UnmarshalOptions, and it does not validate the
+// required fields of a message decoded with msg.Decode.
 func NewDecoder(data []byte) *Decoder {
 	return newDecoder(data)
 }
@@ -79,14 +79,16 @@ func newDecoder(data []byte) *Decoder {
 	}
 }
 
-// Unmarshal decodes data into msg using reusable decoder storage. The zero value
-// is ready to use. Pass UnmarshalOptions{} for the default decoding options.
-// Like UnmarshalOptions.Unmarshal, this merges into msg rather than resetting it.
+// Unmarshal decodes data into msg and reuses the storage of the decoder. The
+// zero value is ready to use. Pass UnmarshalOptions{} for the default options.
+// Like UnmarshalOptions.Unmarshal, it merges into msg and does not reset it
+// first.
 //
-// A Decoder must not be used concurrently or reentered from a decoding callback.
-// Its state is cleared before this method returns, including on failure or panic;
-// callbacks must not retain it for use after Unmarshal returns. Decoded values
-// remain valid according to opts.AliasInput, independently of decoder reuse.
+// Do not use a Decoder concurrently, and do not reenter it from a decoding
+// callback. Unmarshal clears the state of the decoder before it returns, also
+// on failure or panic, so a callback must not keep the decoder for later use.
+// Reusing the decoder does not affect the decoded values, which stay valid as
+// opts.AliasInput describes.
 func (dec *Decoder) Unmarshal(data []byte, msg Message, opts UnmarshalOptions) error {
 	defer func() { *dec = Decoder{} }()
 	if opts.MaxInputSize > 0 && len(data) > opts.MaxInputSize {
@@ -99,9 +101,10 @@ func (dec *Decoder) Unmarshal(data []byte, msg Message, opts UnmarshalOptions) e
 func (dec *Decoder) PendingField() FieldNumber { return dec.pendingField }
 
 // MatchField reports whether the pending field has this number and one of the
-// supplied protobuf wire types (0 varint, 1 fixed64, 2 bytes, 3 group, 5 fixed32).
-// A matching number with another wire type is marked unrecognized, so generated
-// decoders can check before allocating presence pointers or replacing a oneof.
+// given protobuf wire types. The wire types are 0 for varint, 1 for fixed64, 2
+// for bytes, 3 for group, and 5 for fixed32. When the number matches and the
+// wire type does not, MatchField marks the field as unrecognized. Generated
+// decoders call it before they allocate a presence pointer or replace a oneof.
 func (dec *Decoder) MatchField(field FieldNumber, wireTypes ...int) bool {
 	if dec.pendingField != field {
 		return false
@@ -115,7 +118,7 @@ func (dec *Decoder) MatchField(field FieldNumber, wireTypes ...int) bool {
 	return false
 }
 
-// Err returns error that occurred during decoding.
+// Err returns the error that occurred during decoding.
 func (dec *Decoder) Err() error {
 	if dec.err == nil {
 		return nil
@@ -149,7 +152,8 @@ func (dec *Decoder) leaveMessage(parent messageDecodeState) {
 	dec.depthBudget++
 }
 
-// RepeatedMessage decodes a message.
+// RepeatedMessage calls fn for each consecutive value of a repeated message
+// field.
 func (dec *Decoder) RepeatedMessage(field FieldNumber, fn func(c *Decoder)) {
 	for field == dec.pendingField {
 		if dec.pendingWire != protowire.BytesType {
@@ -175,13 +179,14 @@ func (dec *Decoder) RepeatedMessageCount(field FieldNumber) int {
 	return dec.repeatedFieldCount(field, protowire.BytesType)
 }
 
-// DecodeMessageValue decodes a message field into reusable wire state, initially
-// the zero T. It is intended for converters whose Go representation cannot retain
-// all protobuf components (for example, a saturating time.Duration conversion).
-// Repeated occurrences of the same destination merge into that state, even when
-// a parent message is split across occurrences. Distinct logical message values
-// must have distinct destination pointers. State lasts for this decoding only;
-// Decoder.Unmarshal clears it before returning.
+// DecodeMessageValue decodes a message field into wire state of type T, which
+// the decoder keeps for destination. The state starts as the zero T.
+// Converters use it when their Go representation cannot hold every protobuf
+// component, as with a time.Duration that saturates. Later occurrences of the
+// field for the same destination merge into that state, even when the parent
+// message itself arrives in several occurrences. Two different message values
+// must have different destination pointers. The state lasts for one decoding,
+// and Decoder.Unmarshal clears it before it returns.
 func DecodeMessageValue[T, V any](dec *Decoder, field FieldNumber, destination *V, decode func(*T, *Decoder)) *T {
 	if !dec.MatchField(field, 2) {
 		return nil
@@ -203,9 +208,8 @@ func DecodeMessageValue[T, V any](dec *Decoder, field FieldNumber, destination *
 type messageValueKey[T, V any] struct{ destination *V }
 
 // DecodeRepeatedMessages decodes repeated message values for field into out.
-// The elements are allocated in blocks of at most maxElementBlockBytes
-// instead of one allocation each, so retaining a single element keeps the
-// rest of its block alive.
+// It allocates the elements in blocks of at most 4 KiB instead of one by one,
+// so keeping a single element keeps the rest of its block alive.
 func DecodeRepeatedMessages[T any](dec *Decoder, field FieldNumber, out *[]*T, decode func(*T, *Decoder)) {
 	remaining := dec.RepeatedMessageCount(field)
 	*out = slices.Grow(*out, remaining)
@@ -299,9 +303,9 @@ func (dec *Decoder) RepeatedEnum(field FieldNumber, add func(x int32)) {
 }
 
 // TakeRepeated reserves one repeated element when field is pending. It returns
-// false on another field or an exhausted limit. Generated custom decoders call
-// it before allocating each element; their scalar decoding methods do not count
-// repeated values themselves.
+// false when another field is pending or the limit is used up. Generated
+// decoders for custom types call it before they allocate each element, because
+// the scalar decoding methods that they use do not count repeated values.
 func (dec *Decoder) TakeRepeated(field FieldNumber) bool {
 	return dec.pendingField == field && dec.takeRepeated(field)
 }
@@ -329,7 +333,8 @@ func (dec *Decoder) repeatedReservation(count int) int {
 	return count
 }
 
-// Message decodes a message.
+// Message decodes a message field. It calls fn in a Loop over the fields of
+// the message.
 func (dec *Decoder) Message(field FieldNumber, fn func(*Decoder)) {
 	if field != dec.pendingField {
 		return
@@ -347,7 +352,8 @@ func (dec *Decoder) Message(field FieldNumber, fn func(*Decoder)) {
 	dec.nextField(n)
 }
 
-// PresentMessage decodes an always present message.
+// PresentMessage decodes a message field that is always present. It calls fn
+// in a Loop over the fields of the message.
 func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Decoder)) {
 	if field != dec.pendingField {
 		return
@@ -412,9 +418,10 @@ func (dec *Decoder) group(field FieldNumber, fn func(*Decoder)) {
 	dec.nextField(consumed)
 }
 
-// RepeatedGroupCount returns a lower bound on consecutive group values for field,
-// capped by the remaining repeated element limit. Lookahead is bounded to avoid
-// rescanning entire nested groups before decoding them.
+// RepeatedGroupCount returns a lower bound on the consecutive group values for
+// field, capped by the remaining repeated element limit. The decoder bounds
+// its lookahead, so that it does not scan whole nested groups before it
+// decodes them.
 func (dec *Decoder) RepeatedGroupCount(field FieldNumber) int {
 	return dec.repeatedFieldCount(field, protowire.StartGroupType)
 }
@@ -448,10 +455,11 @@ func (dec *Decoder) repeatedFieldCount(field FieldNumber, wire protowire.Type) i
 	return dec.repeatedReservation(count)
 }
 
-// UnrecognizedFields decodes fields that are not in the provided set.
+// UnrecognizedFields appends to out the fields that the message does not
+// recognize.
 //
-// Fields below 64 are excluded via the exclude bitmask, higher field numbers
-// are listed in excludeHigh.
+// The exclude bitmask holds the recognized field numbers below 64, and
+// excludeHigh lists the higher ones.
 func (dec *Decoder) UnrecognizedFields(exclude uint64, out *[]byte, excludeHigh ...FieldNumber) {
 	for dec.pendingField >= 0 {
 		if field := dec.pendingField; !dec.pendingUnknown && field < 64 {
@@ -473,11 +481,11 @@ func (dec *Decoder) UnrecognizedFields(exclude uint64, out *[]byte, excludeHigh 
 	}
 }
 
-// RejectUnrecognizedFields fails decoding when a pending field is not in the
-// provided set.
+// RejectUnrecognizedFields fails decoding when the message does not recognize
+// the pending field.
 //
-// Fields below 64 are excluded via the exclude bitmask, higher field numbers
-// are listed in excludeHigh.
+// The exclude bitmask holds the recognized field numbers below 64, and
+// excludeHigh lists the higher ones.
 func (dec *Decoder) RejectUnrecognizedFields(exclude uint64, excludeHigh ...FieldNumber) {
 	if field := dec.pendingField; field >= 0 {
 		if !dec.pendingUnknown && field < 64 {
@@ -504,7 +512,8 @@ func containsField(fields []FieldNumber, field FieldNumber) bool {
 	return false
 }
 
-// Loop loops fields until all messages have been processed.
+// Loop calls fn until it has consumed every field of the current message. It
+// skips a field that fn does not decode.
 func (dec *Decoder) Loop(fn func(*Decoder)) {
 	if !dec.init {
 		dec.nextField(0)
@@ -525,13 +534,12 @@ func (dec *Decoder) Loop(fn func(*Decoder)) {
 	}
 }
 
-// BytesView decodes a bytes field without copying its contents, regardless of
-// UnmarshalOptions.AliasInput. The view aliases the input and must be treated as
-// read-only. Copy it if it must remain unchanged when the input is modified or
-// reused.
-// This is intended for custom decoders that immediately copy into their own
-// storage, avoiding the intermediate allocation made by Bytes.
-// Like Bytes, it leaves v unchanged when field is not pending or cannot be read.
+// BytesView decodes a bytes field without copying it, whatever
+// UnmarshalOptions.AliasInput says. The view aliases the input, so treat it as
+// read-only, and copy it if it has to outlive changes to the input. Custom
+// decoders that copy into their own storage use it to skip the allocation that
+// Bytes makes. Like Bytes, it leaves v unchanged when field is not pending or
+// cannot be read.
 func (dec *Decoder) BytesView(field FieldNumber, v *[]byte) {
 	if field != dec.pendingField {
 		return
@@ -560,7 +568,7 @@ func (dec *Decoder) copyBytes(x []byte) []byte {
 	return bytes.Clone(x)
 }
 
-// Fail fails the decoding process.
+// Fail stops decoding with an error for field.
 func (dec *Decoder) Fail(field FieldNumber, msg string) {
 	dec.fail(field, msg)
 }

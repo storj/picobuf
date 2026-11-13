@@ -5,10 +5,11 @@ package picobuf
 
 import "errors"
 
-// Optional is an explicit-presence field stored by value, avoiding the
-// pointer allocation of a *T field. The zero value is absent.
+// Optional is a field with explicit presence that is stored by value, which
+// saves the allocation of a *T field. The zero value is absent.
 //
-// It is generated for fields declaring (pico.field).value_presence = true.
+// The generator uses it for fields that set (pico.field).value_presence =
+// true.
 type Optional[T any] struct {
 	value T
 	set   bool
@@ -30,10 +31,10 @@ func (o Optional[T]) GetOr(def T) T {
 	return def
 }
 
-// Present returns whether a value is present.
+// Present reports whether a value is present.
 func (o Optional[T]) Present() bool { return o.set }
 
-// IsZero returns whether the value is absent, making `json:",omitzero"` omit
+// IsZero reports whether the value is absent, so that `json:",omitzero"` omits
 // absent fields.
 func (o Optional[T]) IsZero() bool { return !o.set }
 
@@ -57,8 +58,8 @@ func (o *Optional[T]) Ptr() *T {
 	return &o.value
 }
 
-// PicoSetPtr marks the value present and returns a pointer to it. It is
-// intended for generated decoding code.
+// PicoSetPtr marks the value present and returns a pointer to it. Generated
+// decoding code calls it.
 func (o *Optional[T]) PicoSetPtr() *T {
 	o.set = true
 	return &o.value

@@ -10,10 +10,10 @@ import (
 	"storj.io/picobuf"
 )
 
-// Duration implements protobuf duration conversion to standard time.Duration.
+// Duration converts between a protobuf duration and time.Duration.
 type Duration time.Duration
 
-// PicoEncode implements custom encoding function.
+// PicoEncode implements picobuf.CustomType.
 func (d *Duration) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if d == nil {
 		return
@@ -32,7 +32,7 @@ func (d *Duration) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	})
 }
 
-// PicoDecode implements custom decoding function.
+// PicoDecode implements picobuf.CustomType.
 func (d *Duration) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	if c.PendingField() != field {
 		return

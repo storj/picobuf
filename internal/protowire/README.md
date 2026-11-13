@@ -1,1 +1,1 @@
-This package is a clone of `google.golang.org/protobuf/encoding/protowire` to remove dependency on `internal/detrand` package, which does unnecessary initialization and brings in significant dependencies.
+This package is a copy of `google.golang.org/protobuf/encoding/protowire` without its dependency on the `internal/detrand` package. `detrand` runs initialization that picobuf does not need and brings in more dependencies.

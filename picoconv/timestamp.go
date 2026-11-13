@@ -9,7 +9,7 @@ import (
 	"storj.io/picobuf"
 )
 
-// Timestamp implements protobuf timestamp conversion to standard time.Time.
+// Timestamp converts between a protobuf timestamp and time.Time.
 type Timestamp time.Time
 
 // Protobuf timestamps must be between 0001-01-01T00:00:00Z and
@@ -19,7 +19,7 @@ const (
 	maxTimestampSeconds = 253402300799
 )
 
-// PicoEncode implements custom encoding function.
+// PicoEncode implements picobuf.CustomType.
 func (t *Timestamp) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if t == nil {
 		return
@@ -43,7 +43,7 @@ func (t *Timestamp) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	})
 }
 
-// PicoDecode implements custom decoding function.
+// PicoDecode implements picobuf.CustomType.
 func (t *Timestamp) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	if c.PendingField() != field {
 		return
