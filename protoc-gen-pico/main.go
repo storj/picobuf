@@ -120,7 +120,7 @@ func reserveMethodNames(messages []*protogen.Message, getters bool) {
 	for _, m := range messages {
 		reserved := map[string]bool{
 			"Encode": true, "Decode": true, "MarshalJSON": true, "UnmarshalJSON": true,
-			"PicoValidateRequired": true, "PicoValidateRequiredDepth": true,
+			"PicoValidateRequiredDepth": true,
 		}
 		used := make(map[string]bool)
 		for _, f := range m.Fields {
@@ -282,9 +282,6 @@ func messageNeedsRequiredValidation(m *protogen.Message, seen map[protoreflect.F
 }
 
 func genMessageRequiredValidation(gf *generator, m *protogen.Message) {
-	gf.P("func (m *", m.GoIdent, ") PicoValidateRequired() error {")
-	gf.P("return ", picobufPackage.Ident("ValidateRequired"), "(m)")
-	gf.P("}")
 	gf.P("func (m *", m.GoIdent, ") PicoValidateRequiredDepth(depth int) error {")
 	gf.P("if m == nil { return nil }")
 	defer func() { gf.P("return nil"); gf.P("}"); gf.P() }()

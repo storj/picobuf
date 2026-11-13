@@ -18,9 +18,11 @@ type Message interface {
 }
 
 // RequiredFields is implemented by generated messages that can validate
-// legacy required fields.
+// legacy required fields. The depth is the nesting depth of the message,
+// which is zero for the root; validators pass it on to ValidateRequiredDepth
+// for their children.
 type RequiredFields interface {
-	PicoValidateRequired() error
+	PicoValidateRequiredDepth(depth int) error
 }
 
 // ValidateRequired validates all legacy required fields known to msg.
@@ -30,17 +32,13 @@ func ValidateRequired(msg any) error {
 
 // ValidateRequiredDepth validates a child at the supplied nesting depth. It is
 // used by generated validators to carry one budget through the entire graph.
-// Older generated validators are still supported, but must be regenerated to
-// participate in bounded validation. The root message has depth zero.
+// The root message has depth zero.
 func ValidateRequiredDepth(msg any, depth int) error {
 	if depth > protowire.DefaultRecursionLimit {
 		return fmt.Errorf("exceeded maximum recursion depth while validating required fields")
 	}
-	if required, ok := msg.(interface{ PicoValidateRequiredDepth(int) error }); ok {
-		return required.PicoValidateRequiredDepth(depth)
-	}
 	if required, ok := msg.(RequiredFields); ok {
-		return required.PicoValidateRequired()
+		return required.PicoValidateRequiredDepth(depth)
 	}
 	return nil
 }

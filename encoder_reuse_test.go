@@ -139,7 +139,7 @@ type requiredEncodeMessage struct {
 
 func (m *requiredEncodeMessage) Encode(*picobuf.Encoder) bool { m.called = true; return true }
 func (*requiredEncodeMessage) Decode(*picobuf.Decoder)        {}
-func (m *requiredEncodeMessage) PicoValidateRequired() error {
+func (m *requiredEncodeMessage) PicoValidateRequiredDepth(int) error {
 	if !m.present {
 		return picobuf.MissingRequiredField(1)
 	}

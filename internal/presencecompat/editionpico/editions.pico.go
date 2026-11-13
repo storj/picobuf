@@ -177,9 +177,6 @@ type RequiredMessage struct {
 	XXX_unrecognized []byte `json:"-"`
 }
 
-func (m *RequiredMessage) PicoValidateRequired() error {
-	return picobuf.ValidateRequired(m)
-}
 func (m *RequiredMessage) PicoValidateRequiredDepth(depth int) error {
 	if m == nil {
 		return nil
@@ -217,9 +214,6 @@ type RequiredParent struct {
 	XXX_unrecognized []byte           `json:"-"`
 }
 
-func (m *RequiredParent) PicoValidateRequired() error {
-	return picobuf.ValidateRequired(m)
-}
 func (m *RequiredParent) PicoValidateRequiredDepth(depth int) error {
 	if m == nil {
 		return nil
@@ -261,9 +255,6 @@ type RequiredMapParent struct {
 	XXX_unrecognized []byte                      `json:"-"`
 }
 
-func (m *RequiredMapParent) PicoValidateRequired() error {
-	return picobuf.ValidateRequired(m)
-}
 func (m *RequiredMapParent) PicoValidateRequiredDepth(depth int) error {
 	if m == nil {
 		return nil
@@ -303,9 +294,6 @@ type RequiredNode struct {
 	XXX_unrecognized []byte          `json:"-"`
 }
 
-func (m *RequiredNode) PicoValidateRequired() error {
-	return picobuf.ValidateRequired(m)
-}
 func (m *RequiredNode) PicoValidateRequiredDepth(depth int) error {
 	if m == nil {
 		return nil

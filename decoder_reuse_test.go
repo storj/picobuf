@@ -109,7 +109,7 @@ func BenchmarkDecoderReuse(b *testing.B) {
 
 type reuseRequiredMessage struct{ reuseMessage }
 
-func (m *reuseRequiredMessage) PicoValidateRequired() error {
+func (m *reuseRequiredMessage) PicoValidateRequiredDepth(int) error {
 	if m.value == 0 {
 		return MissingRequiredField(1)
 	}
