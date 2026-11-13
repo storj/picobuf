@@ -39,7 +39,7 @@ func main() {
 
 	flags.BoolVar(&conf.GenerateFieldAccess, "field_access", false, "generate methods for accessing fields")
 	flags.StringVar(&conf.VersionOverride, "version_override", "", "override the version reported in generated code")
-	flags.BoolVar(&conf.ProtoJSON, "protojson", false, "generate ProtoJSON MarshalJSON and UnmarshalJSON methods (experimental)")
+	flags.BoolVar(&conf.ProtoJSON, "protojson", false, "generate ProtoJSON MarshalJSON and UnmarshalJSON methods")
 
 	protogen.Options{
 		ParamFunc: flags.Set,

@@ -86,12 +86,11 @@ with `value_presence` refuse to encode.
 Generating with `--pico_opt=protojson=true` adds `MarshalJSON` and
 `UnmarshalJSON` methods that implement the
 [ProtoJSON mapping](https://protobuf.dev/programming-guides/json/), using
-[picojson](picojson). picojson is experimental for the time being: its API
-and the generated schema may change in incompatible ways. Before Go 1.27,
-picojson uses [go-json-experiment/json](https://github.com/go-json-experiment/json)
-in place of encoding/json/jsontext. The conversion goes through the wire
-format, so custom types map to JSON as the protobuf type they are declared
-as. Referenced messages from other packages do not need the option.
+[picojson](picojson). Before Go 1.27, picojson uses
+[go-json-experiment/json](https://github.com/go-json-experiment/json) in
+place of encoding/json/jsontext. The conversion goes through the wire format,
+so custom types map to JSON as the protobuf type they are declared as.
+Referenced messages from other packages do not need the option.
 The mapping is checked against protojson, with these differences:
 
 * `google.protobuf.Any`, `Struct`, `Value`, `ListValue`, and group fields are

@@ -8,9 +8,6 @@
 // with picobuf and renders the wire data as JSON, and Unmarshal parses the
 // JSON into wire data and decodes that with picobuf. Custom types therefore
 // map to JSON as the protobuf type they are declared as.
-//
-// picojson is experimental for the time being: its API and the generated
-// schema may change in incompatible ways.
 package picojson
 
 import (
