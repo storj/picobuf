@@ -137,27 +137,29 @@ Do not use picobuf when you need:
 
 ## Benchmark
 
-[sizebench](./internal/sizebench) measures the binary size.
+[sizebench](./internal/sizebench) measures the binary size. Run it with
+`go run .` in that directory.
 
 ```
-go1.19.5
+go1.27.1
+google.golang.org/protobuf v1.36.12
 goos: linux
 goarch: amd64
 // A basic "fmt.Println" executable size.
-ExeBase               1     1814.766 KB
+ExeBase               1     2337.796 KB
 // A basic "fmt.Println" executable size, but contains code
 // that switches the compiler into conservative mode.
-ExeBaseConserv        1     2549.444 KB
+ExeBaseConserv        1     2510.273 KB
 // Picobuf generated binary size (non-conservative).
-ExePico/Sml           1     2000.987 KB      186.221 KB-Δ
+ExePico/Sml           1     2415.854 KB       78.058 KB-Δ
 // Picobuf generated binary size (conservative).
-ExePicoConserv/Sml    1     2700.553 KB      151.109 KB-Δ
+ExePicoConserv/Sml    1     2579.459 KB       69.186 KB-Δ
 // Protobuf generated binary size (conservative).
-ExeProto/Sml          1     4978.815 KB     2429.371 KB-Δ
+ExeProto/Sml          1     5419.604 KB     2909.331 KB-Δ
 ```
 
 The message definitions are in [msg-sml.proto](./internal/sizebench/msg-sml.proto).
 
 The protobuf binary is about 3 MB bigger than the picobuf binary in
-non-conservative mode, and about 2.3 MB bigger than the one in conservative
+non-conservative mode, and about 2.8 MB bigger than the one in conservative
 mode.
