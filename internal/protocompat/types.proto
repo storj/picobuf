@@ -8,8 +8,11 @@ package types;
 import "pico.proto";
 
 enum Language {
+  option allow_alias = true;
   UNKNOWN = 0;
+  UNSPECIFIED = 0;
   ENGLISH = 1;
+  EN = 1;
   SPANISH = 3;
   FRENCH = 4;
   GERMAN = 5;

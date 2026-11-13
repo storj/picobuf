@@ -16,6 +16,14 @@ import (
 	"storj.io/picobuf/internal/protocompat/prot"
 )
 
+func TestEnumAliases(t *testing.T) {
+	for _, value := range []pico.Language{pico.Language_UNSPECIFIED, pico.Language_EN} {
+		if got, want := value.String(), prot.Language(value).String(); got != want {
+			t.Fatalf("alias %d: got %q, want %q", value, got, want)
+		}
+	}
+}
+
 func TestMessageMapDefaultsMatchProtobuf(t *testing.T) {
 	t.Run("marshal nil", func(t *testing.T) {
 		message := &pico.Map{StringMessage: map[string]*pico.OptionalMessage{"a": nil}}

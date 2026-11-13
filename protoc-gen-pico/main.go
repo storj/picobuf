@@ -177,7 +177,12 @@ func genEnum(gf *generator, e *protogen.Enum) {
 
 	gf.P("func (m ", e.GoIdent, ") String() string {")
 	gf.P("switch m {")
+	seen := make(map[protoreflect.EnumNumber]bool)
 	for _, v := range e.Values {
+		if seen[v.Desc.Number()] {
+			continue
+		}
+		seen[v.Desc.Number()] = true
 		gf.P("case ", v.GoIdent, ": return ", strconv.Quote(string(v.Desc.Name())))
 	}
 	itoaName := gf.QualifiedGoIdent(strconvPackage.Ident("Itoa"))

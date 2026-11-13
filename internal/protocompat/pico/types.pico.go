@@ -16,11 +16,13 @@ import (
 type Language int32
 
 const (
-	Language_UNKNOWN Language = 0
-	Language_ENGLISH Language = 1
-	Language_SPANISH Language = 3
-	Language_FRENCH  Language = 4
-	Language_GERMAN  Language = 5
+	Language_UNKNOWN     Language = 0
+	Language_UNSPECIFIED Language = 0
+	Language_ENGLISH     Language = 1
+	Language_EN          Language = 1
+	Language_SPANISH     Language = 3
+	Language_FRENCH      Language = 4
+	Language_GERMAN      Language = 5
 )
 
 func (m Language) String() string {
