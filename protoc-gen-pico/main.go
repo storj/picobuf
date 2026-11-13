@@ -469,6 +469,9 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 			presentMethod = "PresentGroup"
 		}
 		switch {
+		case info.oneof:
+			// The wrapper carries presence even when its message is nil.
+			gf.P("c.", alwaysMethod, "(", field.Desc.Number(), ", m.", field.GoName, ".Encode)")
 		case info.pointer && !info.repeated:
 			// An absent generated message has nothing to encode. Skip the
 			// callback and its sizing/length-prefix bookkeeping altogether.

@@ -24,6 +24,33 @@ func TestEnumAliases(t *testing.T) {
 	}
 }
 
+func TestNilMessageOneof(t *testing.T) {
+	m := &pico.CommandMessage{Command: &pico.CommandMessage_Message{}}
+	want, err := proto.Marshal(&prot.CommandMessage{Command: &prot.CommandMessage_Message{}})
+	assert.NoError(t, err)
+	for name, marshal := range map[string]func() ([]byte, error){
+		"marshal": func() ([]byte, error) { return picobuf.Marshal(m) },
+		"buffer":  func() ([]byte, error) { return picobuf.MarshalBuffer(m, nil) },
+		"append":  func() ([]byte, error) { return picobuf.MarshalAppend(nil, m) },
+	} {
+		t.Run(name, func(t *testing.T) {
+			got, err := marshal()
+			assert.NoError(t, err)
+			if !bytes.Equal(got, want) {
+				t.Fatalf("nil oneof: got %x, want %x", got, want)
+			}
+			var back pico.CommandMessage
+			assert.NoError(t, picobuf.Unmarshal(got, &back))
+			if _, ok := back.Command.(*pico.CommandMessage_Message); !ok {
+				t.Fatalf("lost oneof selection: %T", back.Command)
+			}
+		})
+	}
+	if m.Command.(*pico.CommandMessage_Message).Message != nil {
+		t.Fatal("marshal mutated the nil message")
+	}
+}
+
 func TestMessageMapDefaultsMatchProtobuf(t *testing.T) {
 	t.Run("marshal nil", func(t *testing.T) {
 		message := &pico.Map{StringMessage: map[string]*pico.OptionalMessage{"a": nil}}

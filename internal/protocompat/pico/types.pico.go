@@ -448,9 +448,7 @@ func (m *CommandMessage) Encode(c *picobuf.Encoder) bool {
 		c.AlwaysString(2, &m.Name)
 	}
 	if m, ok := m.Command.(*CommandMessage_Message); ok {
-		if m.Message != nil {
-			c.Message(3, m.Message.Encode)
-		}
+		c.AlwaysMessage(3, m.Message.Encode)
 	}
 	if m, ok := m.Command.(*CommandMessage_Count); ok {
 		c.AlwaysInt32(4, &m.Count)

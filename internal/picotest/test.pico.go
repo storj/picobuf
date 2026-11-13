@@ -1653,9 +1653,7 @@ func (m *Tag) Encode(c *picobuf.Encoder) bool {
 		c.AlwaysInt64(7, &m.DurationNs)
 	}
 	if m, ok := m.Value.(*Tag_Timestamp); ok {
-		if m.Timestamp != nil {
-			c.Message(8, m.Timestamp.Encode)
-		}
+		c.AlwaysMessage(8, m.Timestamp.Encode)
 	}
 	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true

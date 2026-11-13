@@ -376,9 +376,7 @@ func (m *Oneofs) Encode(c *picobuf.Encoder) bool {
 		c.AlwaysString(1, &m.Name)
 	}
 	if m, ok := m.Kind.(*Oneofs_Scalars); ok {
-		if m.Scalars != nil {
-			c.Message(2, m.Scalars.Encode)
-		}
+		c.AlwaysMessage(2, m.Scalars.Encode)
 	}
 	if m, ok := m.Kind.(*Oneofs_Count); ok {
 		c.AlwaysInt64(3, &m.Count)
@@ -387,9 +385,7 @@ func (m *Oneofs) Encode(c *picobuf.Encoder) bool {
 		c.AlwaysInt32(4, (*int32)(&m.Color))
 	}
 	if m, ok := m.Kind.(*Oneofs_Time); ok {
-		if m.Time != nil {
-			c.Message(5, m.Time.Encode)
-		}
+		c.AlwaysMessage(5, m.Time.Encode)
 	}
 	c.UnrecognizedFields(m.XXX_unrecognized)
 	return true
