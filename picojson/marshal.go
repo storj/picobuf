@@ -20,6 +20,9 @@ type marshaler struct {
 	out    []byte
 	// irregular is set once some wire data needed grouped.
 	irregular bool
+	// unordered holds the offsets of the messages that needed grouped only
+	// because they declare their fields out of numeric order.
+	unordered []int32
 }
 
 // wireValue is one occurrence of a field in wire data.
@@ -115,7 +118,7 @@ func (m *marshaler) message(offset int32, wire []byte) error {
 	if handled, err := m.wellKnown(&msg, wire); handled {
 		return err
 	}
-	if m.irregular {
+	if m.irregular || slices.Contains(m.unordered, offset) {
 		// Check first, so that a subtree is not rendered again at every
 		// level that needs grouped.
 		if ok, _ := m.walk(&msg, wire, false); !ok {
@@ -136,17 +139,25 @@ func (m *marshaler) message(offset int32, wire []byte) error {
 			return err
 		}
 	}
-	m.irregular = true
+	// picobuf encodes fields by number, so a message that declares them in
+	// another order needs grouped whenever such fields are set. That says
+	// nothing about the wire data of other messages.
+	if msg.ordered() {
+		m.irregular = true
+	} else if !slices.Contains(m.unordered, offset) {
+		m.unordered = append(m.unordered, offset)
+	}
 	m.out = m.out[:start]
 	return m.grouped(&msg, wire)
 }
 
 // walk handles msg in a single pass over the wire data. That works for
-// regular wire data, as picobuf encodes it: fields in declaration order,
-// each singular field and oneof at most once, the values of a repeated
-// field together, and map entries sorted by key. Otherwise, such as with
-// unrecognized fields that picobuf appends, it reports false, and grouped
-// renders msg.
+// regular wire data, as picobuf encodes it: fields by number, each singular
+// field and oneof at most once, the values of a repeated field together,
+// and map entries sorted by key. It renders in declaration order, so the
+// fields that are set also have to be declared by increasing number.
+// Otherwise, such as with unrecognized fields that picobuf appends, it
+// reports false, and grouped renders msg.
 //
 // With render, walk renders msg and stops at the first error. Without, it
 // only reports whether the wire data is regular.

@@ -229,6 +229,22 @@ func (it *iter) find(number int32) (field, bool) {
 	}
 }
 
+// ordered reports whether the fields are declared by increasing number,
+// which is the order that picobuf encodes them in.
+func (m *message) ordered() bool {
+	it := m.iter()
+	for last := int32(0); ; {
+		f, ok := it.next()
+		if !ok {
+			return true
+		}
+		if f.Number < last {
+			return false
+		}
+		last = f.Number
+	}
+}
+
 // first returns the first field, the value of a wrapper.
 func (m *message) first() field {
 	it := m.iter()
