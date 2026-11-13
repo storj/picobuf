@@ -296,12 +296,12 @@ func (enc *Encoder) RepeatedEnum(field FieldNumber, n int, fn func(index uint) i
 }
 
 // AlwaysAnyBytes encodes field as Bytes and handles encoding the length.
-func (enc *Encoder) AlwaysAnyBytes(field FieldNumber, fn func()) bool {
-	return enc.alwaysAnyBytes(field, fn)
+func (enc *Encoder) AlwaysAnyBytes(field FieldNumber, fn func()) {
+	enc.alwaysAnyBytes(field, fn)
 }
 
 // alwaysAnyBytes encodes field as Bytes and handles encoding the length.
-func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
+func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) {
 	if enc.sizing {
 		hint := enc.reserveLengthHint()
 		start := enc.size
@@ -315,7 +315,7 @@ func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
 			enc.setLengthHint(hint, width)
 		}
 		enc.size += protowire.SizeTag(protowire.Number(field)) + width
-		return true
+		return
 	}
 	tagStart := len(enc.buffer)
 	width := enc.nextLengthHint()
@@ -330,7 +330,6 @@ func (enc *Encoder) alwaysAnyBytes(field FieldNumber, fn func()) bool {
 	if !enc.putLength(lengthStart, messageStart) {
 		enc.finishBytes(field, tagStart, lengthStart, messageStart)
 	}
-	return true
 }
 
 // inlineLengthHints is the number of four-bit widths in the two inline words.
