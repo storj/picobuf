@@ -181,7 +181,7 @@ type FieldOptions struct {
 	// type, given as an import path followed by a dot and the type name,
 	// e.g. "storj.io/common/storj.NodeID". The type must implement
 	//
-	//	PicoEncode(*picobuf.Encoder, picobuf.FieldNumber) bool
+	//	PicoEncode(*picobuf.Encoder, picobuf.FieldNumber)
 	//	PicoDecode(*picobuf.Decoder, picobuf.FieldNumber)
 	//
 	// unless custom_serialize provides them. The methods define the wire

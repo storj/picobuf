@@ -14,9 +14,9 @@ import (
 type Duration time.Duration
 
 // PicoEncode implements custom encoding function.
-func (d *Duration) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (d *Duration) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if d == nil {
-		return false
+		return
 	}
 	z := time.Duration(*d)
 
@@ -30,8 +30,6 @@ func (d *Duration) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) boo
 		c.Int32(2, &nanos)
 		return true
 	})
-
-	return true
 }
 
 // PicoDecode implements custom decoding function.

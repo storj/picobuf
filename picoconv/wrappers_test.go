@@ -25,7 +25,7 @@ func (m *fieldMessage) Decode(c *picobuf.Decoder)      { m.decode(c) }
 
 // wrapperField serializes as a message with the wrapper at field 1.
 type wrapperField interface {
-	PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool
+	PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber)
 	PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber)
 }
 

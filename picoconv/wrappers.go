@@ -21,16 +21,15 @@ import (
 type BoolValue bool
 
 // PicoEncode implements custom encoding function.
-func (v *BoolValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (v *BoolValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
-		return false
+		return
 	}
 	value := bool(*v)
 	c.Message(field, func(c *picobuf.Encoder) bool {
 		c.Bool(1, &value)
 		return true
 	})
-	return true
 }
 
 // PicoDecode implements custom decoding function.
@@ -52,16 +51,15 @@ func (v *BoolValue) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 type Int32Value int32
 
 // PicoEncode implements custom encoding function.
-func (v *Int32Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (v *Int32Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
-		return false
+		return
 	}
 	value := int32(*v)
 	c.Message(field, func(c *picobuf.Encoder) bool {
 		c.Int32(1, &value)
 		return true
 	})
-	return true
 }
 
 // PicoDecode implements custom decoding function.
@@ -83,16 +81,15 @@ func (v *Int32Value) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 type Int64Value int64
 
 // PicoEncode implements custom encoding function.
-func (v *Int64Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (v *Int64Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
-		return false
+		return
 	}
 	value := int64(*v)
 	c.Message(field, func(c *picobuf.Encoder) bool {
 		c.Int64(1, &value)
 		return true
 	})
-	return true
 }
 
 // PicoDecode implements custom decoding function.
@@ -114,16 +111,15 @@ func (v *Int64Value) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 type UInt32Value uint32
 
 // PicoEncode implements custom encoding function.
-func (v *UInt32Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (v *UInt32Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
-		return false
+		return
 	}
 	value := uint32(*v)
 	c.Message(field, func(c *picobuf.Encoder) bool {
 		c.Uint32(1, &value)
 		return true
 	})
-	return true
 }
 
 // PicoDecode implements custom decoding function.
@@ -145,16 +141,15 @@ func (v *UInt32Value) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) 
 type UInt64Value uint64
 
 // PicoEncode implements custom encoding function.
-func (v *UInt64Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (v *UInt64Value) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
-		return false
+		return
 	}
 	value := uint64(*v)
 	c.Message(field, func(c *picobuf.Encoder) bool {
 		c.Uint64(1, &value)
 		return true
 	})
-	return true
 }
 
 // PicoDecode implements custom decoding function.
@@ -176,16 +171,15 @@ func (v *UInt64Value) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) 
 type FloatValue float32
 
 // PicoEncode implements custom encoding function.
-func (v *FloatValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (v *FloatValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
-		return false
+		return
 	}
 	value := float32(*v)
 	c.Message(field, func(c *picobuf.Encoder) bool {
 		c.Float(1, &value)
 		return true
 	})
-	return true
 }
 
 // PicoDecode implements custom decoding function.
@@ -207,16 +201,15 @@ func (v *FloatValue) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 type DoubleValue float64
 
 // PicoEncode implements custom encoding function.
-func (v *DoubleValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (v *DoubleValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
-		return false
+		return
 	}
 	value := float64(*v)
 	c.Message(field, func(c *picobuf.Encoder) bool {
 		c.Double(1, &value)
 		return true
 	})
-	return true
 }
 
 // PicoDecode implements custom decoding function.
@@ -238,16 +231,15 @@ func (v *DoubleValue) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) 
 type StringValue string
 
 // PicoEncode implements custom encoding function.
-func (v *StringValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (v *StringValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
-		return false
+		return
 	}
 	value := string(*v)
 	c.Message(field, func(c *picobuf.Encoder) bool {
 		c.String(1, &value)
 		return true
 	})
-	return true
 }
 
 // PicoDecode implements custom decoding function.
@@ -269,16 +261,15 @@ func (v *StringValue) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) 
 type BytesValue []byte
 
 // PicoEncode implements custom encoding function.
-func (v *BytesValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (v *BytesValue) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if v == nil {
-		return false
+		return
 	}
 	value := []byte(*v)
 	c.Message(field, func(c *picobuf.Encoder) bool {
 		c.Bytes(1, &value)
 		return true
 	})
-	return true
 }
 
 // PicoDecode implements custom decoding function.

@@ -57,13 +57,12 @@ type RawDuration struct {
 	Nanos   int32
 }
 
-func (d *RawDuration) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (d *RawDuration) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	c.Message(field, func(c *picobuf.Encoder) bool {
 		c.Int64(1, &d.Seconds)
 		c.Int32(2, &d.Nanos)
 		return true
 	})
-	return true
 }
 
 func (d *RawDuration) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {

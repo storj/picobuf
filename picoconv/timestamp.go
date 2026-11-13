@@ -20,9 +20,9 @@ const (
 )
 
 // PicoEncode implements custom encoding function.
-func (t *Timestamp) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (t *Timestamp) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if t == nil {
-		return false
+		return
 	}
 	z := time.Time(*t)
 
@@ -34,15 +34,13 @@ func (t *Timestamp) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bo
 	nanos := int32(z.Nanosecond())
 	if seconds < minTimestampSeconds || seconds > maxTimestampSeconds {
 		c.Fail(field, "timestamp seconds out of range")
-		return false
+		return
 	}
 	c.Message(field, func(c *picobuf.Encoder) bool {
 		c.Int64(1, &seconds)
 		c.Int32(2, &nanos)
 		return true
 	})
-
-	return true
 }
 
 // PicoDecode implements custom decoding function.

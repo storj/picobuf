@@ -17,10 +17,9 @@ func (id ID) IsZero() bool {
 
 // PicoEncode implements picobuf field encoding. Like gogoproto custom
 // types, it always writes the full length, including for the zero ID.
-func (id *ID) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (id *ID) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	p := id[:]
 	c.AlwaysBytes(field, &p)
-	return true
 }
 
 // PicoDecode implements picobuf field decoding.
@@ -43,10 +42,9 @@ type RawString string
 
 // PicoEncode implements custom encoding function. It always writes the
 // value, including the empty string.
-func (id *RawString) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (id *RawString) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	xs := []byte(*id)
 	c.AlwaysBytes(field, &xs)
-	return true
 }
 
 // PicoDecode implements custom decoding function.
@@ -67,9 +65,9 @@ type Timestamp struct {
 }
 
 // PicoEncode implements picobuf field encoding.
-func (t *Timestamp) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (t *Timestamp) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if t == nil {
-		return false
+		return
 	}
 
 	c.AlwaysMessage(field, func(c *picobuf.Encoder) bool {
@@ -77,7 +75,6 @@ func (t *Timestamp) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bo
 		c.Int32(2, &t.Nanos)
 		return true
 	})
-	return true
 }
 
 // PicoDecode implements picobuf field decoding.

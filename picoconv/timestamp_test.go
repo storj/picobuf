@@ -19,13 +19,12 @@ type rawTimestamp struct {
 	nanos   int32
 }
 
-func (t *rawTimestamp) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) bool {
+func (t *rawTimestamp) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	c.Message(field, func(c *picobuf.Encoder) bool {
 		c.Int64(1, &t.seconds)
 		c.Int32(2, &t.nanos)
 		return true
 	})
-	return true
 }
 
 type rawTimestampMessage struct {
@@ -33,7 +32,8 @@ type rawTimestampMessage struct {
 }
 
 func (m *rawTimestampMessage) Encode(c *picobuf.Encoder) bool {
-	return m.value.PicoEncode(c, 1)
+	m.value.PicoEncode(c, 1)
+	return true
 }
 
 func (m *rawTimestampMessage) Decode(c *picobuf.Decoder) {}
@@ -43,7 +43,8 @@ type timestampMessage struct {
 }
 
 func (m *timestampMessage) Encode(c *picobuf.Encoder) bool {
-	return m.value.PicoEncode(c, 1)
+	m.value.PicoEncode(c, 1)
+	return true
 }
 
 func (m *timestampMessage) Decode(c *picobuf.Decoder) {

@@ -49,9 +49,9 @@ func MissingRequiredField(field FieldNumber) error {
 }
 
 // CustomType defines methods that are used for custom encode or decode
-// behaviors. PicoEncode reports whether it encoded the field.
+// behaviors.
 type CustomType interface {
-	PicoEncode(*Encoder, FieldNumber) bool
+	PicoEncode(*Encoder, FieldNumber)
 	PicoDecode(*Decoder, FieldNumber)
 }
 
