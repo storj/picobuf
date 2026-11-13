@@ -51,7 +51,17 @@ func (t *Timestamp) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 		return
 	}
 
-	state := picobuf.DecodeMessageValue(c, field, t, (*secondsNanos).decode)
+	state := picobuf.DecodeMessageValue(c, field, t, func(v *secondsNanos, c *picobuf.Decoder) {
+		if !v.initialized {
+			// A zero Go time represents an unset destination. Seed existing
+			// values once, then retain the raw components across occurrences.
+			if z := time.Time(*t); !z.IsZero() {
+				v.seconds, v.nanos = z.Unix(), int32(z.Nanosecond())
+			}
+			v.initialized = true
+		}
+		v.decode(c)
+	})
 	if state == nil || c.Err() != nil {
 		return
 	}

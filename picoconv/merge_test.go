@@ -66,3 +66,53 @@ func TestConverterDecoderReuse(t *testing.T) {
 		t.Fatal("decoder retained previous message state")
 	}
 }
+
+func TestTimestampMergesExistingValue(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		data []byte
+		want time.Time
+	}{
+		{"empty", []byte{10, 0}, time.Unix(123, 456).UTC()},
+		{"seconds", timeParts(1, 789), time.Unix(789, 456).UTC()},
+		{"nanos", timeParts(2, 789), time.Unix(123, 789).UTC()},
+		{"zero seconds", timeParts(1, 0), time.Unix(0, 456).UTC()},
+		{"zero nanos", timeParts(2, 0), time.Unix(123, 0).UTC()},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			m := timestampMessage{value: Timestamp(time.Unix(123, 456).UTC())}
+			if err := picobuf.Unmarshal(tc.data, &m); err != nil {
+				t.Fatal(err)
+			}
+			if got := time.Time(m.value); !got.Equal(tc.want) {
+				t.Fatalf("got %v, want %v", got, tc.want)
+			}
+		})
+	}
+}
+
+func TestDurationMergesExistingValue(t *testing.T) {
+	for _, sign := range []int64{1, -1} {
+		for _, tc := range []struct {
+			name string
+			data []byte
+			want time.Duration
+		}{
+			{"empty", []byte{10, 0}, time.Duration(sign * (123e9 + 456))},
+			{"seconds", timeParts(1, sign*789), time.Duration(sign * (789e9 + 456))},
+			{"nanos", timeParts(2, sign*789), time.Duration(sign * (123e9 + 789))},
+			{"zero seconds", timeParts(1, 0), time.Duration(sign * 456)},
+			{"zero nanos", timeParts(2, 0), time.Duration(sign * 123e9)},
+		} {
+			t.Run(tc.name, func(t *testing.T) {
+				m := DurationMessage{Value: Duration(sign * (123e9 + 456))}
+				if err := picobuf.Unmarshal(tc.data, &m); err != nil {
+					t.Fatal(err)
+				}
+				if got := time.Duration(m.Value); got != tc.want {
+					t.Fatalf("got %v, want %v", got, tc.want)
+				}
+			})
+		}
+	}
+}

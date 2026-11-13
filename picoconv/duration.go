@@ -40,7 +40,14 @@ func (d *Duration) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 		return
 	}
 
-	state := picobuf.DecodeMessageValue(c, field, d, (*secondsNanos).decode)
+	state := picobuf.DecodeMessageValue(c, field, d, func(v *secondsNanos, c *picobuf.Decoder) {
+		if !v.initialized {
+			n := int64(*d)
+			v.seconds, v.nanos = n/1e9, int32(n%1e9)
+			v.initialized = true
+		}
+		v.decode(c)
+	})
 	if state == nil || c.Err() != nil {
 		return
 	}

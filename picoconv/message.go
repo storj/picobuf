@@ -9,8 +9,9 @@ import "storj.io/picobuf"
 // Reconstructing them from time.Time loses the distinction between an unset
 // value and year 1; reconstructing from time.Duration loses overflowing seconds.
 type secondsNanos struct {
-	seconds int64
-	nanos   int32
+	seconds     int64
+	nanos       int32
+	initialized bool
 }
 
 func (v *secondsNanos) decode(c *picobuf.Decoder) {
