@@ -133,14 +133,12 @@ func (enc *Encoder) enterMessage() bool {
 	return true
 }
 
-// NewEncoder creates a new Encoder.
+// NewEncoder creates a new Encoder for encoding fields without a message
+// type: call the field methods and take the result from Buffer, after
+// checking Err. Unlike Marshal, encoding a message with msg.Encode this way
+// does not validate its required fields.
 func NewEncoder() *Encoder {
-	return NewEncoderBuffer(make([]byte, 0, 64))
-}
-
-// NewEncoderBuffer creates a new encoder using a preallocated buffer.
-func NewEncoderBuffer(buffer []byte) *Encoder {
-	return &Encoder{buffer: buffer[:0]}
+	return &Encoder{buffer: make([]byte, 0, 64)}
 }
 
 // MarshalAppend appends msg to buffer using reusable encoder storage. The zero

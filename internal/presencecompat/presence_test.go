@@ -398,8 +398,8 @@ func TestEditionsMapLegacyRequiredMatchesProtobuf(t *testing.T) {
 		if _, err := picobuf.Marshal(message); err == nil {
 			t.Error("picobuf marshaled a nil map value with a missing required field")
 		}
-		if _, err := picobuf.MarshalBuffer(message, nil); err == nil {
-			t.Error("picobuf MarshalBuffer accepted a nil map value with a missing required field")
+		if _, err := picobuf.MarshalAppend(nil, message); err == nil {
+			t.Error("picobuf MarshalAppend accepted a nil map value with a missing required field")
 		}
 		if message.Children["a"] != nil {
 			t.Fatal("marshal mutated the nil map value")

@@ -30,7 +30,6 @@ func TestNilMessageOneof(t *testing.T) {
 	assert.NoError(t, err)
 	for name, marshal := range map[string]func() ([]byte, error){
 		"marshal": func() ([]byte, error) { return picobuf.Marshal(m) },
-		"buffer":  func() ([]byte, error) { return picobuf.MarshalBuffer(m, nil) },
 		"append":  func() ([]byte, error) { return picobuf.MarshalAppend(nil, m) },
 	} {
 		t.Run(name, func(t *testing.T) {

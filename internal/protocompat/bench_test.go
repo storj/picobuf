@@ -52,7 +52,7 @@ func BenchmarkPicobuf(b *testing.B) {
 		var buf [64]byte
 		for k := 0; k < b.N; k++ {
 			for i := range data {
-				_, _ = picobuf.MarshalBuffer(&data[i], buf[:])
+				_, _ = picobuf.MarshalAppend(buf[:0], &data[i])
 			}
 		}
 

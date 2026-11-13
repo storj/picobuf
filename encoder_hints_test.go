@@ -50,10 +50,13 @@ func TestMarshalNestedExactCapacity(t *testing.T) {
 
 func checkMarshalEncoding(t *testing.T, msg picobuf.Message, exactCapacity bool) {
 	t.Helper()
-	want, err := picobuf.MarshalBuffer(msg, nil)
-	if err != nil {
+	// An encoder without the sizing pass predicts and corrects the lengths.
+	enc := picobuf.NewEncoder()
+	msg.Encode(enc)
+	if err := enc.Err(); err != nil {
 		t.Fatal(err)
 	}
+	want := enc.Buffer()
 	got, err := picobuf.Marshal(msg)
 	if err != nil || !bytes.Equal(got, want) {
 		t.Fatalf("Marshal differs from single-pass encoding: %v", err)

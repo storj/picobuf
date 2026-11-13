@@ -64,7 +64,10 @@ type messageDecodeState struct {
 	groupField FieldNumber // nonzero while reading a group, whose end tag terminates this scope
 }
 
-// NewDecoder returns a new Decoder.
+// NewDecoder returns a new Decoder for decoding fields of data without a
+// message type: call Loop with the field methods, then check Err. Unlike
+// Unmarshal, it applies no UnmarshalOptions, and decoding a message with
+// msg.Decode this way does not validate its required fields.
 func NewDecoder(data []byte) *Decoder {
 	return newDecoder(data)
 }

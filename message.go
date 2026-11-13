@@ -162,19 +162,6 @@ func (enc *Encoder) sizeForMarshal(msg Message) error {
 	return nil
 }
 
-// MarshalBuffer encodes msg as bytes with buffer.
-func MarshalBuffer(msg Message, buffer []byte) ([]byte, error) {
-	if err := ValidateRequired(msg); err != nil {
-		return nil, err
-	}
-	enc := &Encoder{buffer: buffer[:0]}
-	msg.Encode(enc)
-	if enc.err != nil {
-		return nil, enc.err
-	}
-	return enc.Buffer(), nil
-}
-
 // Size returns the encoded size of msg without constructing its wire data.
 func Size(msg Message) (int, error) {
 	if err := ValidateRequired(msg); err != nil {
