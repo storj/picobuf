@@ -70,6 +70,7 @@ var (
 	errOverflow    = errors.New("variable length integer overflow")
 	errReserved    = errors.New("cannot parse reserved wire type")
 	errEndGroup    = errors.New("mismatching end group marker")
+	errRecursion   = errors.New("exceeded maximum recursion depth")
 	errParse       = errors.New("parse error")
 )
 
@@ -90,6 +91,8 @@ func ParseError(n int) error {
 		return errReserved
 	case errCodeEndGroup:
 		return errEndGroup
+	case errCodeRecursionDepth:
+		return errRecursion
 	default:
 		return errParse
 	}

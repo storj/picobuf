@@ -584,7 +584,13 @@ func (dec *Decoder) nextField(advance int) {
 		return
 	}
 	if advance < 0 || advance > len(dec.buffer) {
-		dec.fail(0, "advance outside buffer")
+		// A negative advance is the protowire error from consuming the value
+		// of the pending field.
+		msg := "advance outside buffer"
+		if err := protowire.ParseError(advance); err != nil {
+			msg = err.Error()
+		}
+		dec.fail(dec.pendingField, msg)
 		return
 	}
 	dec.pendingUnknown = false

@@ -735,6 +735,37 @@ func TestDecoder_UnrecognizedFields_Decode(t *testing.T) {
 	}))
 }
 
+func TestDecoder_MalformedValueError(t *testing.T) {
+	tests := []struct {
+		name string
+		data []byte
+		msg  picobuf.Message
+		opts picobuf.UnmarshalOptions
+		want string
+	}{
+		{"message", []byte{0x0a, 0x05, 0x01}, new(nested), picobuf.UnmarshalOptions{},
+			"failed while parsing 1: unexpected EOF"},
+		{"repeated message", []byte{0x1a, 0x05, 0x01}, new(picotest.VariationsMessage), picobuf.UnmarshalOptions{},
+			"failed while parsing 3: unexpected EOF"},
+		{"packed", []byte{0x0a, 0x05, 0x01}, new(packedScalars), picobuf.UnmarshalOptions{},
+			"failed while parsing 1: unexpected EOF"},
+		{"skipped truncated", []byte{0x10, 0x80}, new(nested), picobuf.UnmarshalOptions{},
+			"failed while parsing 2: unexpected EOF"},
+		{"skipped overflow", append([]byte{0x10}, bytes.Repeat([]byte{0xff}, 10)...), new(nested), picobuf.UnmarshalOptions{},
+			"failed while parsing 2: variable length integer overflow"},
+		// Two nested groups in field 2, which nested does not have.
+		{"skipped depth", []byte{0x13, 0x13, 0x14, 0x14}, new(nested), picobuf.UnmarshalOptions{MaxRecursionDepth: 1},
+			"failed while parsing 2: exceeded maximum recursion depth"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := tt.opts.Unmarshal(tt.data, tt.msg)
+			assert.Error(t, err)
+			assert.Equal(t, err.Error(), tt.want)
+		})
+	}
+}
+
 func TestDecoder_UnrecognizedFields_Truncated(t *testing.T) {
 	// field 5, wire type Bytes, with a length that runs past the buffer
 	var decoded picotest.UnknownMessage
