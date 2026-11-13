@@ -6,12 +6,10 @@ package picojson
 import (
 	"bytes"
 	"encoding/base64"
-	"encoding/binary"
 	"errors"
 	"fmt"
 	"io"
 	"math"
-	"slices"
 	"strconv"
 	"strings"
 
@@ -26,6 +24,11 @@ type unmarshaler struct {
 
 // unmarshalWire parses data as the message at offset in s into wire data.
 func unmarshalWire(data []byte, s Schema, offset int32) ([]byte, error) {
+	// Wire data is at most ten times its JSON, a list of zero DoubleValue
+	// with five byte tags, which keeps every length within lengthSize.
+	if len(data) > math.MaxInt32 {
+		return nil, errors.New("input too large")
+	}
 	u := unmarshaler{schema: s, dec: jsontext.NewDecoder(bytes.NewReader(data))}
 	out, err := u.message(offset, nil)
 	if err != nil {
@@ -115,7 +118,7 @@ func (u *unmarshaler) field(f *field, out []byte) ([]byte, error) {
 			if err != nil {
 				return nil, err
 			}
-			out = protowire.AppendTag(out, protowire.Number(f.Number), protowire.BytesType)
+			out = reserveLength(protowire.AppendTag(out, protowire.Number(f.Number), protowire.BytesType))
 			start := len(out)
 			if out, err = appendMapKey(&keyField, tok.String(), out); err != nil {
 				return nil, err
@@ -135,7 +138,7 @@ func (u *unmarshaler) field(f *field, out []byte) ([]byte, error) {
 			if out, err = u.value(&valueField, out); err != nil {
 				return nil, err
 			}
-			out = insertLength(out, start)
+			putLength(out, start)
 		}
 		_, err = u.dec.ReadToken()
 	case f.List:
@@ -157,13 +160,14 @@ func (u *unmarshaler) field(f *field, out []byte) ([]byte, error) {
 // value appends one value of f, with its tag.
 func (u *unmarshaler) value(f *field, out []byte) ([]byte, error) {
 	if f.Kind == messageKind {
-		out = protowire.AppendTag(out, protowire.Number(f.Number), protowire.BytesType)
+		out = reserveLength(protowire.AppendTag(out, protowire.Number(f.Number), protowire.BytesType))
 		start := len(out)
 		out, err := u.message(f.Type, out)
 		if err != nil {
 			return nil, err
 		}
-		return insertLength(out, start), nil
+		putLength(out, start)
+		return out, nil
 	}
 
 	tok, err := u.dec.ReadToken()
@@ -336,11 +340,28 @@ func appendInteger(f *field, x uint64, out []byte) []byte {
 	return protowire.AppendVarint(out, x)
 }
 
-// insertLength inserts the length prefix of the value that out holds from
-// start, moving the value in place.
-func insertLength(out []byte, start int) []byte {
-	var prefix [binary.MaxVarintLen64]byte
-	return slices.Insert(out, start, protowire.AppendVarint(prefix[:0], uint64(len(out)-start))...)
+// lengthSize is the width of every length prefix in the wire data. A prefix
+// of the minimal width has to move the value it precedes once the length is
+// known, which costs a nested message its size at every level around it.
+// The padded varints are valid but not canonical, which is fine for wire
+// data that picobuf decodes right away.
+const lengthSize = 5
+
+// reserveLength reserves the length prefix of the value appended after it.
+func reserveLength(out []byte) []byte {
+	return append(out, make([]byte, lengthSize)...)
+}
+
+// putLength fills the prefix reserved before start with the length of the
+// value that out holds from start.
+func putLength(out []byte, start int) {
+	n := len(out) - start
+	prefix := out[start-lengthSize : start]
+	for i := range prefix {
+		prefix[i] = byte(n) | 0x80
+		n >>= 7
+	}
+	prefix[lengthSize-1] &^= 0x80
 }
 
 func isJSONNumber(text string) bool {
