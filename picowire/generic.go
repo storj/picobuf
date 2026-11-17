@@ -91,9 +91,7 @@ func (MessageCodec[M, P]) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNu
 
 // PicoDecode decodes a message-valued map entry.
 func (MessageCodec[M, P]) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber, value *P) {
-	dec.Message(field, func(dec *picobuf.Decoder) {
-		dec.Loop((*value).Decode)
-	})
+	dec.Message(field, (*value).Decode)
 }
 
 // PicoDefault resets a message-valued map entry to an empty message, which is
