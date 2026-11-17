@@ -45,25 +45,22 @@ func (t *Timestamp) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 
 // PicoDecode implements picobuf.CustomType.
 func (t *Timestamp) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
-	if c.PendingField() != field {
+	if !c.MatchField(field, 2) {
 		return
 	}
 
-	state := picobuf.DecodeMessageValue(c, field, t, func(v *secondsNanos, c *picobuf.Decoder) {
-		if !v.initialized {
-			// A zero Go time represents an unset destination. Seed existing
-			// values once, then retain the raw components across occurrences.
-			if z := time.Time(*t); !z.IsZero() {
-				v.seconds, v.nanos = z.Unix(), int32(z.Nanosecond())
-			}
-			v.initialized = true
-		}
-		v.decode(c)
-	})
-	if state == nil || c.Err() != nil {
+	kept := picobuf.KeptMessageValue[secondsNanos](c, t)
+	var v secondsNanos
+	if kept != nil {
+		v = *kept
+	} else {
+		v = timestampParts(time.Time(*t))
+	}
+	c.Message(field, v.decode)
+	if c.Err() != nil {
 		return
 	}
-	seconds, nanos := state.seconds, state.nanos
+	seconds, nanos := v.seconds, v.nanos
 	if seconds < minTimestampSeconds || seconds > maxTimestampSeconds {
 		c.Fail(field, "timestamp seconds out of range")
 		return
@@ -74,6 +71,22 @@ func (t *Timestamp) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	}
 
 	*t = Timestamp(time.Unix(seconds, int64(nanos)).UTC())
+
+	// A later occurrence starts from *t, unless *t cannot reproduce v.
+	if kept != nil {
+		*kept = v
+	} else if timestampParts(time.Time(*t)) != v {
+		picobuf.KeepMessageValue(c, t, v)
+	}
+}
+
+// timestampParts returns the components of z. A zero time is the unset value,
+// whose components are zero.
+func timestampParts(z time.Time) secondsNanos {
+	if z.IsZero() {
+		return secondsNanos{}
+	}
+	return secondsNanos{z.Unix(), int32(z.Nanosecond())}
 }
 
 var _ picobuf.CustomType = (*Timestamp)(nil)

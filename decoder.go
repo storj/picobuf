@@ -179,29 +179,35 @@ func (dec *Decoder) RepeatedMessageCount(field FieldNumber) int {
 	return dec.repeatedFieldCount(field, protowire.BytesType)
 }
 
-// DecodeMessageValue decodes a message field into wire state of type T, which
-// the decoder keeps for destination. The state starts as the zero T.
-// Converters use it when their Go representation cannot hold every protobuf
-// component, as with a time.Duration that saturates. Later occurrences of the
-// field for the same destination merge into that state, even when the parent
-// message itself arrives in several occurrences. Two different message values
+// KeptMessageValue returns the wire state that KeepMessageValue stored for
+// destination earlier in this decoding, or nil.
+//
+// Converters use the pair when their Go representation cannot always hold
+// the protobuf components, as with a time.Duration that saturates. Later
+// occurrences of the field must merge into the components rather than into
+// the converted value, even when the parent message itself arrives in several
+// occurrences. A converter seeds its components from the destination and keeps
+// them only when the destination cannot reproduce them, so the common case
+// allocates nothing.
+func KeptMessageValue[T, V any](dec *Decoder, destination *V) *T {
+	state, _ := dec.messageValues[messageValueKey[T, V]{destination}].(*T)
+	return state
+}
+
+// KeepMessageValue stores state for destination, for KeptMessageValue to
+// return to the later occurrences of the field. Two different message values
 // must have different destination pointers. The state lasts for one decoding,
 // and Decoder.Unmarshal clears it before it returns.
-func DecodeMessageValue[T, V any](dec *Decoder, field FieldNumber, destination *V, decode func(*T, *Decoder)) *T {
-	if !dec.MatchField(field, 2) {
-		return nil
-	}
+func KeepMessageValue[T, V any](dec *Decoder, destination *V, state T) {
 	key := messageValueKey[T, V]{destination}
-	state, ok := dec.messageValues[key].(*T)
-	if !ok {
-		state = new(T)
-		if dec.messageValues == nil {
-			dec.messageValues = make(map[any]any)
-		}
-		dec.messageValues[key] = state
+	if kept, ok := dec.messageValues[key].(*T); ok {
+		*kept = state
+		return
 	}
-	dec.Message(field, func(c *Decoder) { decode(state, c) })
-	return state
+	if dec.messageValues == nil {
+		dec.messageValues = make(map[any]any)
+	}
+	dec.messageValues[key] = &state
 }
 
 // The state type is part of the key, allowing a converter to use multiple views.

@@ -34,22 +34,22 @@ func (d *Duration) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 
 // PicoDecode implements picobuf.CustomType.
 func (d *Duration) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
-	if c.PendingField() != field {
+	if !c.MatchField(field, 2) {
 		return
 	}
 
-	state := picobuf.DecodeMessageValue(c, field, d, func(v *secondsNanos, c *picobuf.Decoder) {
-		if !v.initialized {
-			n := int64(*d)
-			v.seconds, v.nanos = n/1e9, int32(n%1e9)
-			v.initialized = true
-		}
-		v.decode(c)
-	})
-	if state == nil || c.Err() != nil {
+	kept := picobuf.KeptMessageValue[secondsNanos](c, d)
+	var v secondsNanos
+	if kept != nil {
+		v = *kept
+	} else {
+		v = durationParts(time.Duration(*d))
+	}
+	c.Message(field, v.decode)
+	if c.Err() != nil {
 		return
 	}
-	seconds, nanos := state.seconds, state.nanos
+	seconds, nanos := v.seconds, v.nanos
 	if seconds < -315576000000 || seconds > 315576000000 {
 		c.Fail(field, "duration seconds out of range")
 		return
@@ -69,17 +69,26 @@ func (d *Duration) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 	overflow = overflow || (seconds < 0 && nanos < 0 && z > 0)
 	overflow = overflow || (seconds > 0 && nanos > 0 && z < 0)
 	if overflow {
-		switch {
-		case seconds < 0:
-			*d = Duration(time.Duration(math.MinInt64))
-			return
-		case seconds > 0:
-			*d = Duration(time.Duration(math.MaxInt64))
-			return
+		// seconds is nonzero: nanos alone cannot overflow.
+		z = math.MaxInt64
+		if seconds < 0 {
+			z = math.MinInt64
 		}
 	}
-
 	*d = Duration(z)
+
+	// A later occurrence starts from *d, unless *d saturated and cannot
+	// reproduce v.
+	if kept != nil {
+		*kept = v
+	} else if durationParts(z) != v {
+		picobuf.KeepMessageValue(c, d, v)
+	}
+}
+
+func durationParts(z time.Duration) secondsNanos {
+	n := int64(z)
+	return secondsNanos{n / 1e9, int32(n % 1e9)}
 }
 
 var _ picobuf.CustomType = (*Duration)(nil)

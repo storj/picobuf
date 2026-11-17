@@ -116,3 +116,24 @@ func TestDurationMergesExistingValue(t *testing.T) {
 		}
 	}
 }
+
+func TestConverterDecodeDoesNotAllocate(t *testing.T) {
+	timestamp := append(timeParts(1, 123), timeParts(2, 456)...)
+	duration := timeParts(1, 123)
+
+	var dec picobuf.Decoder
+	var tm timestampMessage
+	var dm DurationMessage
+	allocs := testing.AllocsPerRun(100, func() {
+		tm, dm = timestampMessage{}, DurationMessage{}
+		if err := dec.Unmarshal(timestamp, &tm, picobuf.UnmarshalOptions{}); err != nil {
+			t.Fatal(err)
+		}
+		if err := dec.Unmarshal(duration, &dm, picobuf.UnmarshalOptions{}); err != nil {
+			t.Fatal(err)
+		}
+	})
+	if allocs != 0 {
+		t.Fatalf("got %v allocations, want 0", allocs)
+	}
+}

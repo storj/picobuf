@@ -41,3 +41,32 @@ func TestConvertedRepeatedValuesStayDistinct(t *testing.T) {
 		t.Fatalf("got %v", values)
 	}
 }
+
+// TestConvertedMessageDecodeDoesNotAllocate guards against converted
+// timestamps allocating per decoded value, which once tripled the allocations
+// of a typical storj order limit.
+func TestConvertedMessageDecodeDoesNotAllocate(t *testing.T) {
+	timestamp := []byte{8, 123, 16, 0xc8, 3} // seconds=123, nanos=456
+	var data []byte
+	for _, field := range []byte{5, 9, 9} { // present_custom_type_cast and two repeated values
+		data = append(data, field<<3|2, byte(len(timestamp)))
+		data = append(data, timestamp...)
+	}
+
+	var dec picobuf.Decoder
+	m := CustomMessageTypes{RepeatedPresentCustomTypeCast: make([]time.Time, 0, 2)}
+	allocs := testing.AllocsPerRun(100, func() {
+		m.PresentCustomTypeCast = time.Time{}
+		m.RepeatedPresentCustomTypeCast = m.RepeatedPresentCustomTypeCast[:0]
+		if err := dec.Unmarshal(data, &m, picobuf.UnmarshalOptions{}); err != nil {
+			t.Fatal(err)
+		}
+	})
+	if allocs != 0 {
+		t.Fatalf("got %v allocations, want 0", allocs)
+	}
+	want := time.Unix(123, 456)
+	if !m.PresentCustomTypeCast.Equal(want) || len(m.RepeatedPresentCustomTypeCast) != 2 || !m.RepeatedPresentCustomTypeCast[1].Equal(want) {
+		t.Fatalf("got %v %v", m.PresentCustomTypeCast, m.RepeatedPresentCustomTypeCast)
+	}
+}

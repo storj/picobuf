@@ -5,13 +5,13 @@ package picoconv
 
 import "storj.io/picobuf"
 
-// Both time conversions retain their wire components until decoding finishes.
-// Reconstructing them from time.Time loses the distinction between an unset
-// value and year 1; reconstructing from time.Duration loses overflowing seconds.
+// secondsNanos holds the wire components of a timestamp or a duration. A field
+// that occurs several times merges into the components, which the converted
+// value cannot always reproduce: time.Time does not distinguish an unset value
+// from year 1, and time.Duration saturates.
 type secondsNanos struct {
-	seconds     int64
-	nanos       int32
-	initialized bool
+	seconds int64
+	nanos   int32
 }
 
 func (v *secondsNanos) decode(c *picobuf.Decoder) {
