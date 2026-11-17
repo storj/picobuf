@@ -90,9 +90,14 @@ func TestGenerateUTF8ValidationFeatures(t *testing.T) {
 			}
 			genFile(plugin, plugin.Files[0], config{})
 			content := plugin.Response().File[0].GetContent()
-			gotUnvalidated := strings.Contains(content, "WithoutUTF8Validation")
+			gotUnvalidated := strings.Contains(content, "UnvalidatedString(")
 			if gotUnvalidated != test.wantUnvalidated {
 				t.Fatalf("generated unvalidated=%v, want %v:\n%s", gotUnvalidated, test.wantUnvalidated, content)
+			}
+			// a plain string field does not need the wrapper, so that
+			// unicode/utf8 can be left out of the program.
+			if strings.Contains(content, "WithoutUTF8Validation") {
+				t.Fatalf("generated WithoutUTF8Validation for a string field:\n%s", content)
 			}
 		})
 	}

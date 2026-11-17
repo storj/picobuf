@@ -1022,6 +1022,68 @@ func (enc *Encoder) AlwaysRepeatedString(field FieldNumber, v *[]string) {
 	}
 }
 
+// UnvalidatedString encodes non-default string, without validating UTF-8, protobuf type.
+//
+//go:noinline
+func (enc *Encoder) UnvalidatedString(field FieldNumber, v *string) {
+	if len(*v) == 0 {
+		return
+	}
+	if enc.sizing {
+		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(*v))
+		return
+	}
+	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+	enc.buffer = protowire.AppendString(enc.buffer, *v)
+}
+
+// RepeatedUnvalidatedString encodes non-empty repeated string, without validating UTF-8, protobuf type.
+//
+//go:noinline
+func (enc *Encoder) RepeatedUnvalidatedString(field FieldNumber, v *[]string) {
+	if len(*v) == 0 {
+		return
+	}
+	if enc.sizing {
+		for _, x := range *v {
+			enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(x))
+		}
+		return
+	}
+	for _, x := range *v {
+		enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+		enc.buffer = protowire.AppendString(enc.buffer, x)
+	}
+}
+
+// AlwaysUnvalidatedString encodes string, without validating UTF-8, protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysUnvalidatedString(field FieldNumber, v *string) {
+	if enc.sizing {
+		enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(*v))
+		return
+	}
+	enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+	enc.buffer = protowire.AppendString(enc.buffer, *v)
+}
+
+// AlwaysRepeatedUnvalidatedString encodes all repeated string, without validating UTF-8, protobuf type.
+//
+//go:noinline
+func (enc *Encoder) AlwaysRepeatedUnvalidatedString(field FieldNumber, v *[]string) {
+	if enc.sizing {
+		for _, x := range *v {
+			enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(x))
+		}
+		return
+	}
+	for _, x := range *v {
+		enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
+		enc.buffer = protowire.AppendString(enc.buffer, x)
+	}
+}
+
 // Bytes encodes non-default bytes protobuf type.
 //
 //go:noinline

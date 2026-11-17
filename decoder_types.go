@@ -894,6 +894,51 @@ func (dec *Decoder) RepeatedString(field FieldNumber, v *[]string) {
 	}
 }
 
+// UnvalidatedString decodes string, without validating UTF-8, protobuf type.
+//
+//go:noinline
+func (dec *Decoder) UnvalidatedString(field FieldNumber, v *string) {
+	if field != dec.pendingField {
+		return
+	}
+	if dec.pendingWire != protowire.BytesType {
+		dec.pendingUnknown = true
+		return
+	}
+	x, n := protowire.ConsumeString(dec.buffer)
+	if n < 0 {
+		dec.fail(field, "unable to parse String")
+		return
+	}
+	*v = x
+	dec.nextField(n)
+}
+
+// RepeatedUnvalidatedString decodes repeated string, without validating UTF-8, protobuf type.
+//
+//go:noinline
+func (dec *Decoder) RepeatedUnvalidatedString(field FieldNumber, v *[]string) {
+	*v = slices.Grow(*v, dec.repeatedFieldCount(field, protowire.BytesType))
+	for field == dec.pendingField {
+		switch dec.pendingWire {
+		case protowire.BytesType:
+			if !dec.takeRepeated(field) {
+				return
+			}
+			x, n := protowire.ConsumeString(dec.buffer)
+			if n < 0 {
+				dec.fail(field, "unable to parse String")
+				return
+			}
+			*v = append(*v, x)
+			dec.nextField(n)
+		default:
+			dec.pendingUnknown = true
+			return
+		}
+	}
+}
+
 // Bytes decodes bytes protobuf type.
 //
 //go:noinline

@@ -361,7 +361,7 @@ func genMessageEncode(gf *generator, m *protogen.Message) {
 
 func genFieldEncode(gf *generator, field *protogen.Field) {
 	info := fieldInfo(gf, field, field.Desc)
-	if fieldContainsString(field.Desc) && !fieldValidatesUTF8(field.Desc) {
+	if needsWithoutUTF8Validation(info, field.Desc) {
 		gf.P("c.WithoutUTF8Validation(func() {")
 		defer gf.P("})")
 	}
@@ -421,7 +421,7 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 		}
 
 	case info.kind == kindInternal:
-		method, ok := codecMethodName[field.Desc.Kind()]
+		method, ok := internalMethodName(field.Desc)
 		if !ok {
 			panic("unsupported type " + field.Desc.Kind().GoString())
 		}
@@ -591,7 +591,7 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 		gf.P("if ", match, " {")
 		defer gf.P("}")
 	}
-	if fieldContainsString(field.Desc) && !fieldValidatesUTF8(field.Desc) {
+	if needsWithoutUTF8Validation(info, field.Desc) {
 		gf.P("c.WithoutUTF8Validation(func() {")
 		defer gf.P("})")
 	}
@@ -670,7 +670,7 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 		}
 
 	case info.kind == kindInternal:
-		method, ok := codecMethodName[field.Desc.Kind()]
+		method, ok := internalMethodName(field.Desc)
 		if !ok {
 			panic("unsupported type " + field.Desc.Kind().GoString())
 		}
@@ -781,6 +781,28 @@ func fieldContainsString(field protoreflect.FieldDescriptor) bool {
 		return true
 	}
 	return field.IsMap() && (field.MapKey().Kind() == protoreflect.StringKind || field.MapValue().Kind() == protoreflect.StringKind)
+}
+
+// internalMethodName returns the name of the Encoder and Decoder methods for
+// a field of a built-in type, without the Always and Repeated prefixes.
+func internalMethodName(field protoreflect.FieldDescriptor) (string, bool) {
+	if field.Kind() == protoreflect.StringKind && !fieldValidatesUTF8(field) {
+		return "UnvalidatedString", true
+	}
+	method, ok := codecMethodName[field.Kind()]
+	return method, ok
+}
+
+// needsWithoutUTF8Validation reports whether the field has to be encoded and
+// decoded inside WithoutUTF8Validation. A string field of a built-in type uses
+// the UnvalidatedString methods instead, which leave unicode/utf8 out of
+// programs that never validate. Maps and custom types call the validating
+// methods, so they still need the wrapper.
+func needsWithoutUTF8Validation(info fieldInformation, field protoreflect.FieldDescriptor) bool {
+	if !fieldContainsString(field) || fieldValidatesUTF8(field) {
+		return false
+	}
+	return info.kind != kindInternal || field.IsMap()
 }
 
 // fieldValidatesUTF8 resolves the utf8_validation feature for a field.

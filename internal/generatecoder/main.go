@@ -104,6 +104,14 @@ func (t *PrimitiveType) ShortWireName() string {
 	}
 }
 
+// Doc returns the name of the type for the documentation.
+func (t *PrimitiveType) Doc() string {
+	if t.Name == "UnvalidatedString" {
+		return "string, without validating UTF-8,"
+	}
+	return strings.ToLower(t.Name)
+}
+
 // IsValidMapKey returns whether primitive can be used as a map key.
 func (t *PrimitiveType) IsValidMapKey() bool {
 	return t.Name != "Float" && t.Name != "Double" && t.Name != "Bytes"
@@ -124,7 +132,23 @@ var types = []PrimitiveType{
 	{"Float", float32(0), protowire.Fixed32Type, "Fixed32", "math.Float32bits(%s)", "math.Float32frombits(%s)"},
 	{"Double", float64(0), protowire.Fixed64Type, "Fixed64", "math.Float64bits(%s)", "math.Float64frombits(%s)"},
 	{"String", string(""), protowire.BytesType, "String", "%s", "%s"},
+	// UnvalidatedString is for string fields with utf8_validation = NONE. Unlike
+	// String it does not refer to unicode/utf8, so the validation is linked
+	// only into programs that use it.
+	{"UnvalidatedString", string(""), protowire.BytesType, "String", "%s", "%s"},
 	{"Bytes", []byte{}, protowire.BytesType, "Bytes", "%s", "dec.copyBytes(%s)"}, //TODO: reuse the existing bytes buffer to reduce allocs.
+}
+
+// mapTypes returns the types used for map keys and values. Maps validate their
+// strings, protoc-gen-pico wraps the field when the validation is disabled.
+func mapTypes() []PrimitiveType {
+	var xs []PrimitiveType
+	for _, t := range types {
+		if t.Name != "UnvalidatedString" {
+			xs = append(xs, t)
+		}
+	}
+	return xs
 }
 
 func main() {
@@ -164,11 +188,11 @@ func generateEncoder() []byte {
 		for _, always := range []bool{false, true} {
 			{ // encoding a single value
 				if always {
-					pf("// Always%s encodes %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
+					pf("// Always%s encodes %s protobuf type.\n", t.Name, t.Doc())
 					pf("//go:noinline\n")
 					pf("func (enc *Encoder) Always%s(field FieldNumber, v *%s) {\n", t.Name, t.TypeName())
 				} else {
-					pf("// %s encodes non-default %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
+					pf("// %s encodes non-default %s protobuf type.\n", t.Name, t.Doc())
 					pf("//go:noinline\n")
 					pf("func (enc *Encoder) %s(field FieldNumber, v *%s) {\n", t.Name, t.TypeName())
 					if t.Wire == protowire.BytesType {
@@ -198,11 +222,11 @@ func generateEncoder() []byte {
 			{
 				// encoding repeated values
 				if always {
-					pf("// AlwaysRepeated%s encodes all repeated %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
+					pf("// AlwaysRepeated%s encodes all repeated %s protobuf type.\n", t.Name, t.Doc())
 					pf("//go:noinline\n")
 					pf("func (enc *Encoder) AlwaysRepeated%s(field FieldNumber, v *[]%s) {\n", t.Name, t.TypeName())
 				} else {
-					pf("// Repeated%s encodes non-empty repeated %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
+					pf("// Repeated%s encodes non-empty repeated %s protobuf type.\n", t.Name, t.Doc())
 					pf("//go:noinline\n")
 					pf("func (enc *Encoder) Repeated%s(field FieldNumber, v *[]%s) {\n", t.Name, t.TypeName())
 					pf("if len(*v) == 0 { return }\n")
@@ -313,7 +337,7 @@ func generateDecoder() []byte {
 
 	for _, t := range types {
 		{ // decoding single value
-			pf("// %s decodes %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
+			pf("// %s decodes %s protobuf type.\n", t.Name, t.Doc())
 			pf("//go:noinline\n")
 			pf("func (dec *Decoder) %s(field FieldNumber, v *%s) {\n", t.Name, t.TypeName())
 
@@ -337,7 +361,7 @@ func generateDecoder() []byte {
 		}
 
 		{ // decoding repeated values
-			pf("// Repeated%s decodes repeated %s protobuf type.\n", t.Name, strings.ToLower(t.Name))
+			pf("// Repeated%s decodes repeated %s protobuf type.\n", t.Name, t.Doc())
 			pf("//go:noinline\n")
 			pf("func (dec *Decoder) Repeated%s(field FieldNumber, v *[]%s) {\n", t.Name, t.TypeName())
 			if !t.IsScalar() {
@@ -411,9 +435,9 @@ func generateMaps() []byte {
 	pf(`import "storj.io/picobuf"`)
 	pf("\n")
 
-	for _, t := range types {
+	for _, t := range mapTypes() {
 		codec := t.Name + "Codec"
-		pf("// %s encodes and decodes %s map entries.\n", codec, strings.ToLower(t.Name))
+		pf("// %s encodes and decodes %s map entries.\n", codec, t.Doc())
 		pf("type %s struct{}\n\n", codec)
 
 		pf("// PicoEncode encodes a map entry key or value, which is always emitted.\n")
@@ -432,12 +456,12 @@ func generateMaps() []byte {
 		pf("}\n\n")
 	}
 
-	for _, key := range types {
+	for _, key := range mapTypes() {
 		if !key.IsValidMapKey() {
 			continue
 		}
 
-		for _, val := range types {
+		for _, val := range mapTypes() {
 			mapType := "Map" + key.Name + val.Name
 			pf("// %s implements map<%s,%s>.\n", mapType, strings.ToLower(key.Name), strings.ToLower(val.Name))
 			pf("type %s map[%s]%s\n\n", mapType, key.TypeName(), val.TypeName())

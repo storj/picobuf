@@ -24,11 +24,9 @@ func (m *Message) Encode(c *picobuf.Encoder) bool {
 	if m == nil {
 		return false
 	}
-	c.WithoutUTF8Validation(func() {
-		if m.Unvalidated != nil {
-			c.AlwaysString(1, m.Unvalidated)
-		}
-	})
+	if m.Unvalidated != nil {
+		c.AlwaysUnvalidatedString(1, m.Unvalidated)
+	}
 	if m.Validated != nil {
 		c.AlwaysString(2, m.Validated)
 	}
@@ -44,12 +42,10 @@ func (m *Message) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	c.WithoutUTF8Validation(func() {
-		if c.MatchField(1, 2) {
-			m.Unvalidated = new(string)
-			c.String(1, m.Unvalidated)
-		}
-	})
+	if c.MatchField(1, 2) {
+		m.Unvalidated = new(string)
+		c.UnvalidatedString(1, m.Unvalidated)
+	}
 	if c.MatchField(2, 2) {
 		m.Validated = new(string)
 		c.String(2, m.Validated)
