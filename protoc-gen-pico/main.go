@@ -4,10 +4,11 @@
 package main
 
 import (
+	"cmp"
 	"flag"
 	"fmt"
 	"runtime/debug"
-	"sort"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -346,10 +347,7 @@ func genMessageEncode(gf *generator, m *protogen.Message) {
 		gf.P()
 	}()
 
-	fields := append([]*protogen.Field(nil), m.Fields...)
-	sort.Slice(fields, func(i, j int) bool {
-		return fields[i].Desc.Number() < fields[j].Desc.Number()
-	})
+	fields := fieldsByNumber(m)
 
 	for _, field := range fields {
 		genFieldEncode(gf, field)
@@ -521,12 +519,6 @@ func genFieldEncode(gf *generator, field *protogen.Field) {
 			}
 		}
 
-	case info.kind == kindMap:
-		if info.repeated {
-			panic("map cannot be repeated")
-		}
-
-		panic("unsupported map")
 	default:
 		panic("unhandled kind")
 	}
@@ -540,10 +532,7 @@ func genMessageDecode(gf *generator, m *protogen.Message) {
 		gf.P()
 	}()
 
-	fields := append([]*protogen.Field(nil), m.Fields...)
-	sort.Slice(fields, func(i, j int) bool {
-		return fields[i].Desc.Number() < fields[j].Desc.Number()
-	})
+	fields := fieldsByNumber(m)
 
 	for _, field := range fields {
 		genFieldDecode(gf, field)
@@ -747,12 +736,6 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 			gf.P("})")
 		}
 
-	case info.kind == kindMap:
-		if info.repeated {
-			panic("map cannot be repeated")
-		}
-
-		panic("unsupported map")
 	default:
 		panic("unhandled kind")
 	}
@@ -849,7 +832,6 @@ const (
 	kindInternal = fieldKind(iota)
 	kindMessage
 	kindEnum
-	kindMap
 	kindCustom
 	kindCast
 )
@@ -907,8 +889,6 @@ func fieldInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldDesc
 		info.baseType = "[]byte"
 	case protoreflect.MessageKind, protoreflect.GroupKind:
 		if field.Desc.IsMap() {
-			info.kind = kindMap
-
 			if keyKind := desc.MapKey().Kind(); !validMapKey[keyKind] {
 				panic("invalid map key " + keyKind.String())
 			}
@@ -1128,11 +1108,15 @@ func oneofWrapperTypeName(gf *generator, field *protogen.Field) string {
 	return field.GoIdent.GoName
 }
 
-func genMessageFieldAccess(gf *generator, m *protogen.Message) {
-	fields := append([]*protogen.Field(nil), m.Fields...)
-	sort.Slice(fields, func(i, j int) bool {
-		return fields[i].Desc.Number() < fields[j].Desc.Number()
+// fieldsByNumber returns the fields of m sorted by field number.
+func fieldsByNumber(m *protogen.Message) []*protogen.Field {
+	return slices.SortedFunc(slices.Values(m.Fields), func(a, b *protogen.Field) int {
+		return cmp.Compare(a.Desc.Number(), b.Desc.Number())
 	})
+}
+
+func genMessageFieldAccess(gf *generator, m *protogen.Message) {
+	fields := fieldsByNumber(m)
 
 	for _, field := range fields {
 		genFieldAccess(gf, m, field)
