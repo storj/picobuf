@@ -12,7 +12,6 @@ package picojson
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"storj.io/picobuf"
@@ -82,7 +81,7 @@ func Marshal(msg picobuf.Message, s Schema, offset int) ([]byte, error) {
 	// Twice the wire size fits most messages, growth handles the rest.
 	m := marshaler{schema: s, out: make([]byte, 0, 2*len(wire)+16)}
 	if err := m.message(int32(offset), wire); err != nil {
-		return nil, fmt.Errorf("picojson: %w", err)
+		return nil, wrap("picojson: ", err)
 	}
 	return m.out, nil
 }
@@ -92,7 +91,7 @@ func Marshal(msg picobuf.Message, s Schema, offset int) ([]byte, error) {
 func Unmarshal(data []byte, msg picobuf.Message, s Schema, offset int) error {
 	wire, err := unmarshalWire(data, s, int32(offset))
 	if err != nil {
-		return fmt.Errorf("picojson: %w", err)
+		return wrap("picojson: ", err)
 	}
 	return picobuf.Unmarshal(wire, msg)
 }
@@ -339,6 +338,17 @@ func (s Schema) enumNumber(offset int32, name string) (int32, bool) {
 	}
 	return 0, false
 }
+
+// wrapError prefixes an error, like fmt.Errorf(prefix+"%w", err).
+type wrapError struct {
+	prefix string
+	err    error
+}
+
+func wrap(prefix string, err error) error { return &wrapError{prefix: prefix, err: err} }
+
+func (e *wrapError) Error() string { return e.prefix + e.err.Error() }
+func (e *wrapError) Unwrap() error { return e.err }
 
 // Keep the path as links until it is displayed. Eagerly formatting every prefix
 // retains a quadratic amount of text for deeply nested invalid input.

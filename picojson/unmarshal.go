@@ -7,7 +7,6 @@ import (
 	"bytes"
 	"encoding/base64"
 	"errors"
-	"fmt"
 	"io"
 	"math"
 	"strconv"
@@ -46,7 +45,7 @@ func (u *unmarshaler) read(kind jsontext.Kind) (jsontext.Token, error) {
 		return tok, err
 	}
 	if tok.Kind() != kind {
-		return tok, fmt.Errorf("unexpected %v, want %v", tok.Kind(), kind)
+		return tok, errors.New("unexpected " + tok.Kind().String() + ", want " + kind.String())
 	}
 	return tok, nil
 }
@@ -70,7 +69,7 @@ func (u *unmarshaler) message(offset int32, out []byte) ([]byte, error) {
 		}
 		i, f, ok := fields.find(tok.String())
 		if !ok {
-			return nil, fmt.Errorf("%s: unknown field %q", msg.Name, tok.String())
+			return nil, errors.New(msg.Name + ": unknown field " + strconv.Quote(tok.String()))
 		}
 		if seen[i] {
 			return nil, fieldError(&msg, &f, errors.New("field set more than once"))
@@ -128,7 +127,7 @@ func (u *unmarshaler) field(f *field, out []byte) ([]byte, error) {
 			if keyField.Kind != stringKind && keyField.Kind != boolKind {
 				key := string(out[start:])
 				if _, exists := keys[key]; exists {
-					return nil, fmt.Errorf("duplicate map key %q", tok.String())
+					return nil, errors.New("duplicate map key " + strconv.Quote(tok.String()))
 				}
 				if keys == nil {
 					keys = make(map[string]struct{})
@@ -177,7 +176,7 @@ func (u *unmarshaler) value(f *field, out []byte) ([]byte, error) {
 	switch f.Kind {
 	case boolKind:
 		if k := tok.Kind(); k != 't' && k != 'f' {
-			return nil, fmt.Errorf("unexpected %v, want a bool", k)
+			return nil, errors.New("unexpected " + k.String() + ", want a bool")
 		}
 		out = protowire.AppendTag(out, protowire.Number(f.Number), protowire.VarintType)
 		return protowire.AppendVarint(out, protowire.EncodeBool(tok.Bool())), nil
@@ -186,17 +185,17 @@ func (u *unmarshaler) value(f *field, out []byte) ([]byte, error) {
 		case '"':
 			number, ok := u.schema.enumNumber(f.Type, tok.String())
 			if !ok {
-				return nil, fmt.Errorf("unknown enum value %q", tok.String())
+				return nil, errors.New("unknown enum value " + strconv.Quote(tok.String()))
 			}
 			out = protowire.AppendTag(out, protowire.Number(f.Number), protowire.VarintType)
 			return protowire.AppendVarint(out, uint64(int64(number))), nil
 		case '0':
 			return appendText(&field{Number: f.Number, Kind: int32Kind}, tok.String(), out)
 		}
-		return nil, fmt.Errorf("unexpected %v, want an enum", tok.Kind())
+		return nil, errors.New("unexpected " + tok.Kind().String() + ", want an enum")
 	case stringKind, bytesKind:
 		if tok.Kind() != '"' {
-			return nil, fmt.Errorf("unexpected %v, want a string", tok.Kind())
+			return nil, errors.New("unexpected " + tok.Kind().String() + ", want a string")
 		}
 	default:
 		switch tok.Kind() {
@@ -207,10 +206,10 @@ func (u *unmarshaler) value(f *field, out []byte) ([]byte, error) {
 			special := (f.Kind == floatKind || f.Kind == doubleKind) &&
 				(text == "NaN" || text == "Infinity" || text == "-Infinity")
 			if !special && !isJSONNumber(text) {
-				return nil, fmt.Errorf("invalid number %q", text)
+				return nil, errors.New("invalid number " + strconv.Quote(text))
 			}
 		default:
-			return nil, fmt.Errorf("unexpected %v, want a number", tok.Kind())
+			return nil, errors.New("unexpected " + tok.Kind().String() + ", want a number")
 		}
 	}
 	return appendText(f, tok.String(), out)
@@ -234,7 +233,7 @@ func appendText(f *field, text string, out []byte) ([]byte, error) {
 	case boolKind:
 		b, err := strconv.ParseBool(text)
 		if err != nil || (text != "true" && text != "false") {
-			return nil, fmt.Errorf("invalid bool %q", text)
+			return nil, errors.New("invalid bool " + strconv.Quote(text))
 		}
 		out = protowire.AppendTag(out, num, protowire.VarintType)
 		return protowire.AppendVarint(out, protowire.EncodeBool(b)), nil
@@ -288,7 +287,7 @@ func appendText(f *field, text string, out []byte) ([]byte, error) {
 		}
 		x = v
 	default:
-		return nil, fmt.Errorf("unhandled kind %d", f.Kind)
+		return nil, errors.New("unhandled kind " + strconv.Itoa(int(f.Kind)))
 	}
 
 	return appendInteger(f, x, out), nil
@@ -310,13 +309,13 @@ func appendMapKey(f *field, text string, out []byte) ([]byte, error) {
 	case uint32Kind, fixed32Kind, uint64Kind, fixed64Kind:
 		v, err := strconv.ParseUint(text, 10, bits)
 		if err != nil {
-			return nil, fmt.Errorf("invalid map key %q", text)
+			return nil, errors.New("invalid map key " + strconv.Quote(text))
 		}
 		x = v
 	default:
 		v, err := strconv.ParseInt(text, 10, bits)
 		if err != nil {
-			return nil, fmt.Errorf("invalid map key %q", text)
+			return nil, errors.New("invalid map key " + strconv.Quote(text))
 		}
 		x = uint64(v)
 		if f.Kind == sint32Kind || f.Kind == sint64Kind {
@@ -380,7 +379,7 @@ func parseInt(text string, bits int) (int64, error) {
 			return v, nil
 		}
 	}
-	return 0, fmt.Errorf("invalid integer %q", text)
+	return 0, errors.New("invalid integer " + strconv.Quote(text))
 }
 
 func parseUint(text string, bits int) (uint64, error) {
@@ -392,7 +391,7 @@ func parseUint(text string, bits int) (uint64, error) {
 			return v, nil
 		}
 	}
-	return 0, fmt.Errorf("invalid unsigned integer %q", text)
+	return 0, errors.New("invalid unsigned integer " + strconv.Quote(text))
 }
 
 // integerText expands an integral JSON number into decimal digits without
@@ -451,7 +450,7 @@ func parseFloat(text string, bits int) (float64, error) {
 	}
 	x, err := strconv.ParseFloat(text, bits)
 	if err != nil || math.IsInf(x, 0) || math.IsNaN(x) {
-		return 0, fmt.Errorf("invalid number %q", text)
+		return 0, errors.New("invalid number " + strconv.Quote(text))
 	}
 	return x, nil
 }
@@ -468,7 +467,7 @@ func decodeBase64(text string) ([]byte, error) {
 	}
 	b, err := enc.DecodeString(text)
 	if err != nil {
-		return nil, fmt.Errorf("invalid base64: %w", err)
+		return nil, wrap("invalid base64: ", err)
 	}
 	return b, nil
 }

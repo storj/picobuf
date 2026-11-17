@@ -5,7 +5,6 @@ package picojson
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -58,7 +57,7 @@ func (m *marshaler) wellKnown(msg *message, wire []byte) (bool, error) {
 			return true, err
 		}
 		if seconds < minTimestampSeconds || seconds > maxTimestampSeconds || nanos < 0 || nanos >= 1e9 {
-			return true, fmt.Errorf("%s out of range: %ds %dns", msg.Name, seconds, nanos)
+			return true, errors.New(msg.Name + " out of range: " + strconv.FormatInt(seconds, 10) + "s " + strconv.Itoa(int(nanos)) + "ns")
 		}
 		text := time.Unix(seconds, int64(nanos)).UTC().Format("2006-01-02T15:04:05.000000000")
 		text = trimNanos(text) + "Z"
@@ -71,13 +70,13 @@ func (m *marshaler) wellKnown(msg *message, wire []byte) (bool, error) {
 		}
 		if seconds < -maxDurationSeconds || seconds > maxDurationSeconds ||
 			nanos <= -1e9 || nanos >= 1e9 || (seconds > 0 && nanos < 0) || (seconds < 0 && nanos > 0) {
-			return true, fmt.Errorf("%s out of range: %ds %dns", msg.Name, seconds, nanos)
+			return true, errors.New(msg.Name + " out of range: " + strconv.FormatInt(seconds, 10) + "s " + strconv.Itoa(int(nanos)) + "ns")
 		}
 		sign := ""
 		if seconds < 0 || nanos < 0 {
 			sign, seconds, nanos = "-", -seconds, -nanos
 		}
-		text := fmt.Sprintf("%s%d.%09d", sign, seconds, nanos)
+		text := sign + strconv.FormatInt(seconds, 10) + "." + strconv.Itoa(int(nanos) + 1e9)[1:]
 		m.out, err = jsontext.AppendQuote(m.out, trimNanos(text)+"s")
 		return true, err
 	case msg.Name == "google.protobuf.FieldMask":
@@ -121,7 +120,7 @@ func (u *unmarshaler) wellKnown(msg *message, out []byte) (bool, []byte, error) 
 		dot, zone := strings.LastIndexByte(text, '.'), strings.LastIndexAny(text, "Z-+")
 		if err != nil || t.Unix() < minTimestampSeconds || t.Unix() > maxTimestampSeconds ||
 			(dot >= 0 && zone >= dot && zone-dot > len(".999999999")) {
-			return true, nil, fmt.Errorf("invalid %s %q", msg.Name, text)
+			return true, nil, errors.New("invalid " + msg.Name + " " + strconv.Quote(text))
 		}
 		return true, appendSecondsNanos(out, t.Unix(), int32(t.Nanosecond())), nil
 	case msg.Name == "google.protobuf.Duration":
@@ -131,7 +130,7 @@ func (u *unmarshaler) wellKnown(msg *message, out []byte) (bool, []byte, error) 
 		}
 		seconds, nanos, err := parseDuration(tok.String())
 		if err != nil {
-			return true, nil, fmt.Errorf("invalid %s %q: %w", msg.Name, tok.String(), err)
+			return true, nil, wrap("invalid "+msg.Name+" "+strconv.Quote(tok.String())+": ", err)
 		}
 		return true, appendSecondsNanos(out, seconds, nanos), nil
 	case msg.Name == "google.protobuf.FieldMask":
@@ -261,7 +260,7 @@ func parseDuration(text string) (seconds int64, nanos int32, err error) {
 func snakeToCamel(path string) (string, error) {
 	camel := jsonCamelCase(path)
 	if !validFullName(path) || jsonSnakeCase(camel) != path {
-		return "", fmt.Errorf("invalid FieldMask path %q", path)
+		return "", errors.New("invalid FieldMask path " + strconv.Quote(path))
 	}
 	return camel, nil
 }
@@ -269,7 +268,7 @@ func snakeToCamel(path string) (string, error) {
 func camelToSnake(path string) (string, error) {
 	snake := jsonSnakeCase(path)
 	if strings.Contains(path, "_") || !validFullName(snake) {
-		return "", fmt.Errorf("invalid FieldMask path %q", path)
+		return "", errors.New("invalid FieldMask path " + strconv.Quote(path))
 	}
 	return snake, nil
 }
