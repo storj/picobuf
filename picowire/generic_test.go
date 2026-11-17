@@ -4,7 +4,9 @@
 package picowire
 
 import (
+	"math/rand/v2"
 	"reflect"
+	"slices"
 	"testing"
 
 	"storj.io/picobuf"
@@ -56,5 +58,21 @@ func TestMapOfDecodesEachEntryWithProtobufDefaults(t *testing.T) {
 	}
 	if !reflect.DeepEqual(message.Values, want) {
 		t.Fatalf("decoded %#v, want %#v", message.Values, want)
+	}
+}
+
+func TestSortKeys(t *testing.T) {
+	rng := rand.New(rand.NewPCG(1, 2))
+	for _, n := range []int{0, 1, 2, 3, 4, 13, 14, 100, 1000} {
+		keys := make([]int64, n)
+		for i := range keys {
+			keys[i] = rng.Int64N(int64(n/2 + 1)) // with duplicates
+		}
+		want := slices.Clone(keys)
+		slices.Sort(want)
+		sortKeys(keys)
+		if !slices.Equal(keys, want) {
+			t.Fatalf("n=%d: got %v, want %v", n, keys, want)
+		}
 	}
 }

@@ -6,7 +6,6 @@ package picowire
 import (
 	"cmp"
 	"iter"
-	"slices"
 
 	"storj.io/picobuf"
 )
@@ -28,7 +27,7 @@ func sortedMap[K cmp.Ordered, V any](m map[K]V) iter.Seq2[K, V] {
 		for key := range m {
 			keys = append(keys, key)
 		}
-		slices.Sort(keys)
+		sortKeys(keys)
 		for _, key := range keys {
 			if !yield(key, m[key]) {
 				return
@@ -44,6 +43,24 @@ func boolMap[V any](m map[bool]V) iter.Seq2[bool, V] {
 		for _, key := range [2]bool{false, true} {
 			if val, ok := m[key]; ok && !yield(key, val) {
 				return
+			}
+		}
+	}
+}
+
+// sortKeys sorts map keys with a Shellsort. TinyGo instantiates a sort for
+// every key type, and slices.Sort is several kilobytes each, while this is a
+// few hundred bytes. With Knuth's gaps it stays O(n^1.5); switch back to
+// slices.SortFunc if encoding huge maps becomes a bottleneck.
+func sortKeys[K cmp.Ordered](keys []K) {
+	gap := 1
+	for gap < len(keys)/3 {
+		gap = 3*gap + 1
+	}
+	for ; gap > 0; gap /= 3 {
+		for i := gap; i < len(keys); i++ {
+			for j := i; j >= gap && cmp.Less(keys[j], keys[j-gap]); j -= gap {
+				keys[j-gap], keys[j] = keys[j], keys[j-gap]
 			}
 		}
 	}
