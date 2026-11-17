@@ -1014,7 +1014,7 @@ func mapValueInfo(gf *generator, field *protogen.Field, desc protoreflect.FieldD
 
 // mapCastType returns the picowire type used to serialize the map. Maps with a
 // scalar value use the specialized implementations, the rest use MapOf with the
-// matching key and value codecs.
+// matching key and value codecs, or MapOfBool for bool keys.
 func mapCastType(gf *generator, info *fieldInformation, desc protoreflect.FieldDescriptor) string {
 	keyMethod := codecMethodName[desc.MapKey().Kind()]
 	if valueMethod, ok := codecMethodName[desc.MapValue().Kind()]; ok {
@@ -1031,6 +1031,11 @@ func mapCastType(gf *generator, info *fieldInformation, desc protoreflect.FieldD
 			"[" + info.value.baseType + "]"
 	default:
 		panic("unsupported map value " + desc.MapValue().Kind().String())
+	}
+
+	if desc.MapKey().Kind() == protoreflect.BoolKind {
+		return gf.QualifiedGoIdent(picowirePackage.Ident("MapOfBool")) +
+			"[" + info.value.goType + ", " + valueCodec + "]"
 	}
 
 	keyCodec := gf.QualifiedGoIdent(picowirePackage.Ident(keyMethod + "Codec"))

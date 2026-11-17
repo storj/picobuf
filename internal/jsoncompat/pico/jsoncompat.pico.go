@@ -321,7 +321,7 @@ func (m *Maps) Encode(c *picobuf.Encoder) bool {
 	}
 	(*picowire.MapStringInt64)(&m.StringInt64).PicoEncode(c, 1)
 	(*picowire.MapInt32String)(&m.Int32String).PicoEncode(c, 2)
-	(*picowire.MapOf[bool, *Scalars, picowire.BoolCodec, picowire.MessageCodec[Scalars, *Scalars]])(&m.BoolMessage).PicoEncode(c, 3)
+	(*picowire.MapOfBool[*Scalars, picowire.MessageCodec[Scalars, *Scalars]])(&m.BoolMessage).PicoEncode(c, 3)
 	(*picowire.MapOf[uint64, Color, picowire.Uint64Codec, picowire.EnumCodec[Color]])(&m.Uint64Color).PicoEncode(c, 4)
 	(*picowire.MapSint32Bytes)(&m.Sint32Bytes).PicoEncode(c, 5)
 	(*picowire.MapStringDouble)(&m.StringDouble).PicoEncode(c, 6)
@@ -336,7 +336,7 @@ func (m *Maps) Decode(c *picobuf.Decoder) {
 	}
 	(*picowire.MapStringInt64)(&m.StringInt64).PicoDecode(c, 1)
 	(*picowire.MapInt32String)(&m.Int32String).PicoDecode(c, 2)
-	(*picowire.MapOf[bool, *Scalars, picowire.BoolCodec, picowire.MessageCodec[Scalars, *Scalars]])(&m.BoolMessage).PicoDecode(c, 3)
+	(*picowire.MapOfBool[*Scalars, picowire.MessageCodec[Scalars, *Scalars]])(&m.BoolMessage).PicoDecode(c, 3)
 	(*picowire.MapOf[uint64, Color, picowire.Uint64Codec, picowire.EnumCodec[Color]])(&m.Uint64Color).PicoDecode(c, 4)
 	(*picowire.MapSint32Bytes)(&m.Sint32Bytes).PicoDecode(c, 5)
 	(*picowire.MapStringDouble)(&m.StringDouble).PicoDecode(c, 6)

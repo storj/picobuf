@@ -127,7 +127,7 @@ func TestMapDecodeCapsSizeHint(t *testing.T) {
 }
 
 type genericBoolMapMessage struct {
-	Values MapOf[bool, bool, BoolCodec, BoolCodec]
+	Values MapOfBool[bool, BoolCodec]
 }
 
 func (message *genericBoolMapMessage) Encode(enc *picobuf.Encoder) bool {
@@ -137,4 +137,24 @@ func (message *genericBoolMapMessage) Encode(enc *picobuf.Encoder) bool {
 
 func (message *genericBoolMapMessage) Decode(dec *picobuf.Decoder) {
 	message.Values.PicoDecode(dec, 1)
+}
+
+func TestBoolMapOrder(t *testing.T) {
+	// false sorts before true, like the other implementations order the keys.
+	want := []byte{
+		0x0a, 0x04, 0x08, 0x00, 0x10, 0x00, // {false: false}
+		0x0a, 0x04, 0x08, 0x01, 0x10, 0x01, // {true: true}
+	}
+	for _, msg := range []picobuf.Message{
+		&boolMapMessage{Values: MapBoolBool{true: true, false: false}},
+		&genericBoolMapMessage{Values: MapOfBool[bool, BoolCodec]{true: true, false: false}},
+	} {
+		data, err := picobuf.Marshal(msg)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.Equal(data, want) {
+			t.Fatalf("%T: got %x, want %x", msg, data, want)
+		}
+	}
 }

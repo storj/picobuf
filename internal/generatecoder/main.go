@@ -468,7 +468,7 @@ func generateMaps() []byte {
 
 			sorted := "sortedMap(*m)"
 			if key.TypeName() == "bool" {
-				sorted = "sortedMapFunc(*m, compareBool)"
+				sorted = "boolMap(*m)"
 			}
 			pf("// PicoEncode encodes as protobuf, with entries sorted by key.\n")
 			pf("//go:noinline\n")

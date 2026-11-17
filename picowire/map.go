@@ -282,7 +282,7 @@ type MapBoolBool map[bool]bool
 //
 //go:noinline
 func (m *MapBoolBool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMapFunc(*m, compareBool) {
+	for key, val := range boolMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysBool(2, &val)
@@ -320,7 +320,7 @@ type MapBoolInt32 map[bool]int32
 //
 //go:noinline
 func (m *MapBoolInt32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMapFunc(*m, compareBool) {
+	for key, val := range boolMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysInt32(2, &val)
@@ -358,7 +358,7 @@ type MapBoolInt64 map[bool]int64
 //
 //go:noinline
 func (m *MapBoolInt64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMapFunc(*m, compareBool) {
+	for key, val := range boolMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysInt64(2, &val)
@@ -396,7 +396,7 @@ type MapBoolUint32 map[bool]uint32
 //
 //go:noinline
 func (m *MapBoolUint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMapFunc(*m, compareBool) {
+	for key, val := range boolMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysUint32(2, &val)
@@ -434,7 +434,7 @@ type MapBoolUint64 map[bool]uint64
 //
 //go:noinline
 func (m *MapBoolUint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMapFunc(*m, compareBool) {
+	for key, val := range boolMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysUint64(2, &val)
@@ -472,7 +472,7 @@ type MapBoolSint32 map[bool]int32
 //
 //go:noinline
 func (m *MapBoolSint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMapFunc(*m, compareBool) {
+	for key, val := range boolMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysSint32(2, &val)
@@ -510,7 +510,7 @@ type MapBoolSint64 map[bool]int64
 //
 //go:noinline
 func (m *MapBoolSint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMapFunc(*m, compareBool) {
+	for key, val := range boolMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysSint64(2, &val)
@@ -548,7 +548,7 @@ type MapBoolFixed32 map[bool]uint32
 //
 //go:noinline
 func (m *MapBoolFixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMapFunc(*m, compareBool) {
+	for key, val := range boolMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysFixed32(2, &val)
@@ -586,7 +586,7 @@ type MapBoolFixed64 map[bool]uint64
 //
 //go:noinline
 func (m *MapBoolFixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMapFunc(*m, compareBool) {
+	for key, val := range boolMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysFixed64(2, &val)
@@ -624,7 +624,7 @@ type MapBoolSfixed32 map[bool]int32
 //
 //go:noinline
 func (m *MapBoolSfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMapFunc(*m, compareBool) {
+	for key, val := range boolMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysSfixed32(2, &val)
@@ -662,7 +662,7 @@ type MapBoolSfixed64 map[bool]int64
 //
 //go:noinline
 func (m *MapBoolSfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMapFunc(*m, compareBool) {
+	for key, val := range boolMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysSfixed64(2, &val)
@@ -700,7 +700,7 @@ type MapBoolFloat map[bool]float32
 //
 //go:noinline
 func (m *MapBoolFloat) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMapFunc(*m, compareBool) {
+	for key, val := range boolMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysFloat(2, &val)
@@ -738,7 +738,7 @@ type MapBoolDouble map[bool]float64
 //
 //go:noinline
 func (m *MapBoolDouble) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMapFunc(*m, compareBool) {
+	for key, val := range boolMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysDouble(2, &val)
@@ -776,7 +776,7 @@ type MapBoolString map[bool]string
 //
 //go:noinline
 func (m *MapBoolString) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMapFunc(*m, compareBool) {
+	for key, val := range boolMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysString(2, &val)
@@ -814,7 +814,7 @@ type MapBoolBytes map[bool][]byte
 //
 //go:noinline
 func (m *MapBoolBytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMapFunc(*m, compareBool) {
+	for key, val := range boolMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysBytes(2, &val)

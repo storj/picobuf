@@ -6,7 +6,6 @@ package picowire
 import (
 	"cmp"
 	"iter"
-	"reflect"
 	"slices"
 
 	"storj.io/picobuf"
@@ -38,63 +37,16 @@ func sortedMap[K cmp.Ordered, V any](m map[K]V) iter.Seq2[K, V] {
 	}
 }
 
-// sortedMapFunc is sortedMap for key types that cmp.Ordered cannot express,
-// such as bool and named types.
-func sortedMapFunc[K MapKey, V any](m map[K]V, compare func(a, b K) int) iter.Seq2[K, V] {
-	return func(yield func(K, V) bool) {
-		if len(m) < 2 {
-			for key, val := range m {
-				if !yield(key, val) {
-					return
-				}
-			}
-			return
-		}
-		keys := make([]K, 0, len(m))
-		for key := range m {
-			keys = append(keys, key)
-		}
-		slices.SortFunc(keys, compare)
-		for _, key := range keys {
-			if !yield(key, m[key]) {
+// boolMap iterates over a map with bool keys in key order, false first.
+// There are only two keys, so there is nothing to sort.
+func boolMap[V any](m map[bool]V) iter.Seq2[bool, V] {
+	return func(yield func(bool, V) bool) {
+		for _, key := range [2]bool{false, true} {
+			if val, ok := m[key]; ok && !yield(key, val) {
 				return
 			}
 		}
 	}
-}
-
-// compareBool orders false before true, matching numeric key order.
-func compareBool(a, b bool) int {
-	switch {
-	case a == b:
-		return 0
-	case b:
-		return -1
-	default:
-		return 1
-	}
-}
-
-// compareMapKeys orders map keys by value, so that map encoding is
-// deterministic. Named key types prevent a cmp.Ordered constraint, hence the
-// reflection.
-func compareMapKeys[K MapKey](a, b K) int {
-	av, bv := reflect.ValueOf(a), reflect.ValueOf(b)
-	switch av.Kind() {
-	case reflect.Bool:
-		return compareBool(av.Bool(), bv.Bool())
-	case reflect.Int32, reflect.Int64:
-		return cmp.Compare(av.Int(), bv.Int())
-	case reflect.Uint32, reflect.Uint64:
-		return cmp.Compare(av.Uint(), bv.Uint())
-	default:
-		return cmp.Compare(av.String(), bv.String())
-	}
-}
-
-// MapKey is a protobuf map key.
-type MapKey interface {
-	~bool | ~int32 | ~int64 | ~uint32 | ~uint64 | ~string
 }
 
 // MapCodec encodes and decodes a map key or value.
@@ -163,7 +115,7 @@ func (EnumCodec[E]) PicoDefault(value *E) {
 }
 
 // MapOf implements a protobuf map using custom key and value wire codecs.
-type MapOf[K MapKey, V any, KC MapCodec[K], VC MapCodec[V]] map[K]V
+type MapOf[K cmp.Ordered, V any, KC MapCodec[K], VC MapCodec[V]] map[K]V
 
 // PicoEncode encodes as protobuf, with entries sorted by key.
 //
@@ -173,7 +125,7 @@ func (m *MapOf[K, V, KC, VC]) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 	var valueCodec VC
 	// key and val are passed by value, so that they do not escape through the
 	// dictionary dispatched codec calls.
-	for key, val := range sortedMapFunc(*m, compareMapKeys[K]) {
+	for key, val := range sortedMap(*m) {
 		enc.AlwaysAnyBytes(field, func() {
 			keyCodec.PicoEncode(enc, 1, key)
 			valueCodec.PicoEncode(enc, 2, val)
@@ -190,6 +142,36 @@ const maxMapSizeHint = 1024
 //
 //go:noinline
 func (m *MapOf[K, V, KC, VC]) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
+	decodeMap[K, V, KC, VC]((*map[K]V)(m), dec, field)
+}
+
+// MapOfBool implements a protobuf map with bool keys using a custom value wire
+// codec. It is separate from MapOf, so that MapOf can order its keys with
+// cmp.Ordered, which excludes bool.
+type MapOfBool[V any, VC MapCodec[V]] map[bool]V
+
+// PicoEncode encodes as protobuf, with entries sorted by key.
+//
+//go:noinline
+func (m *MapOfBool[V, VC]) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
+	var valueCodec VC
+	for key, val := range boolMap(*m) {
+		enc.AlwaysAnyBytes(field, func() {
+			enc.AlwaysBool(1, &key)
+			valueCodec.PicoEncode(enc, 2, val)
+		})
+	}
+}
+
+// PicoDecode decodes as protobuf.
+//
+//go:noinline
+func (m *MapOfBool[V, VC]) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber) {
+	decodeMap[bool, V, BoolCodec, VC]((*map[bool]V)(m), dec, field)
+}
+
+// decodeMap decodes map entries into m with the key and value codecs.
+func decodeMap[K comparable, V any, KC MapCodec[K], VC MapCodec[V]](m *map[K]V, dec *picobuf.Decoder, field picobuf.FieldNumber) {
 	var keyCodec KC
 	var valueCodec VC
 	// key and val are hoisted out of the entry, because the codec calls are
