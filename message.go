@@ -4,7 +4,7 @@
 package picobuf
 
 import (
-	"fmt"
+	"errors"
 	"math"
 	"slices"
 
@@ -35,7 +35,7 @@ func ValidateRequired(msg any) error {
 // message graph. The root message has depth zero.
 func ValidateRequiredDepth(msg any, depth int) error {
 	if depth > protowire.DefaultRecursionLimit {
-		return fmt.Errorf("exceeded maximum recursion depth while validating required fields")
+		return errors.New("exceeded maximum recursion depth while validating required fields")
 	}
 	if required, ok := msg.(RequiredFields); ok {
 		return required.PicoValidateRequiredDepth(depth)
@@ -45,7 +45,7 @@ func ValidateRequiredDepth(msg any, depth int) error {
 
 // MissingRequiredField returns an error for an unset legacy required field.
 func MissingRequiredField(field FieldNumber) error {
-	return fmt.Errorf("required field %s is not set", field)
+	return errors.New("required field " + field.String() + " is not set")
 }
 
 // CustomType is the interface that a custom type implements to encode and
