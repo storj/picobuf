@@ -184,12 +184,9 @@ func (enc *Encoder) sizeForMarshal(msg Message) error {
 	if err := ValidateRequired(msg); err != nil {
 		return err
 	}
-	hints := enc.lengthHints
-	if hints != nil {
-		hints.widths = hints.widths[:0]
-		hints.read = 0
-	}
-	*enc = Encoder{sizing: true, hintCount: 1, lengthHints: hints, deterministic: enc.deterministic}
+	deterministic := enc.deterministic
+	enc.reset()
+	enc.sizing, enc.hintCount, enc.deterministic = true, 1, deterministic
 	msg.Encode(enc)
 	if enc.err != nil {
 		return enc.err
@@ -248,15 +245,15 @@ type UnmarshalOptions struct {
 // Unmarshal decodes data into msg. It merges into msg and does not reset it
 // first.
 func (opts UnmarshalOptions) Unmarshal(data []byte, msg Message) error {
-	if opts.MaxInputSize > 0 && len(data) > opts.MaxInputSize {
-		return parseError{message: "input exceeds maximum size"}
-	}
 	return opts.unmarshal(data, msg, new(Decoder))
 }
 
 // unmarshal initializes caller-provided storage. Ordinary Unmarshal leaves the
 // resulting state intact; Decoder.Unmarshal clears it before returning.
 func (opts UnmarshalOptions) unmarshal(data []byte, msg Message, dec *Decoder) error {
+	if opts.MaxInputSize > 0 && len(data) > opts.MaxInputSize {
+		return parseError{message: "input exceeds maximum size"}
+	}
 	*dec = Decoder{
 		messageDecodeState: messageDecodeState{buffer: data},
 		depthBudget:        protowire.DefaultRecursionLimit,

@@ -69,10 +69,6 @@ type messageDecodeState struct {
 // Unmarshal, it applies no UnmarshalOptions, and it does not validate the
 // required fields of a message decoded with msg.Decode.
 func NewDecoder(data []byte) *Decoder {
-	return newDecoder(data)
-}
-
-func newDecoder(data []byte) *Decoder {
 	return &Decoder{
 		messageDecodeState: messageDecodeState{buffer: data},
 		depthBudget:        protowire.DefaultRecursionLimit,
@@ -91,9 +87,6 @@ func newDecoder(data []byte) *Decoder {
 // opts.AliasInput describes.
 func (dec *Decoder) Unmarshal(data []byte, msg Message, opts UnmarshalOptions) error {
 	defer func() { *dec = Decoder{} }()
-	if opts.MaxInputSize > 0 && len(data) > opts.MaxInputSize {
-		return parseError{message: "input exceeds maximum size"}
-	}
 	return opts.unmarshal(data, msg, dec)
 }
 
@@ -383,20 +376,7 @@ func (dec *Decoder) Message(field FieldNumber, fn func(*Decoder)) {
 // PresentMessage decodes a message field that is always present. It calls fn
 // in a Loop over the fields of the message.
 func (dec *Decoder) PresentMessage(field FieldNumber, fn func(*Decoder)) {
-	if field != dec.pendingField {
-		return
-	}
-	if dec.pendingWire != protowire.BytesType {
-		dec.pendingUnknown = true
-		return
-	}
-
-	message, n := protowire.ConsumeBytes(dec.buffer)
-	parent := dec.enterMessage(message)
-	dec.Loop(fn)
-	dec.leaveMessage(parent)
-
-	dec.nextField(n)
+	dec.Message(field, fn)
 }
 
 // Group decodes a delimited message.
@@ -490,11 +470,7 @@ func (dec *Decoder) repeatedFieldCount(field FieldNumber, wire protowire.Type) i
 // excludeHigh lists the higher ones.
 func (dec *Decoder) UnrecognizedFields(exclude uint64, out *[]byte, excludeHigh ...FieldNumber) {
 	for dec.pendingField >= 0 {
-		if field := dec.pendingField; !dec.pendingUnknown && field < 64 {
-			if exclude&(1<<uint64(field)) != 0 {
-				return
-			}
-		} else if !dec.pendingUnknown && containsField(excludeHigh, field) {
+		if dec.pendingRecognized(exclude, excludeHigh) {
 			return
 		}
 
@@ -515,15 +491,22 @@ func (dec *Decoder) UnrecognizedFields(exclude uint64, out *[]byte, excludeHigh 
 // The exclude bitmask holds the recognized field numbers below 64, and
 // excludeHigh lists the higher ones.
 func (dec *Decoder) RejectUnrecognizedFields(exclude uint64, excludeHigh ...FieldNumber) {
-	if field := dec.pendingField; field >= 0 {
-		if !dec.pendingUnknown && field < 64 {
-			if exclude&(1<<uint64(field)) != 0 {
-				return
-			}
-		} else if !dec.pendingUnknown && containsField(excludeHigh, field) {
-			return
-		}
+	if field := dec.pendingField; field >= 0 && !dec.pendingRecognized(exclude, excludeHigh) {
 		dec.fail(field, "unrecognized field")
+	}
+}
+
+// pendingRecognized reports whether the message recognizes the pending field.
+// The exclude bitmask holds the recognized field numbers below 64, and
+// excludeHigh lists the higher ones.
+func (dec *Decoder) pendingRecognized(exclude uint64, excludeHigh []FieldNumber) bool {
+	switch field := dec.pendingField; {
+	case dec.pendingUnknown:
+		return false
+	case field < 64:
+		return exclude&(1<<uint64(field)) != 0
+	default:
+		return containsField(excludeHigh, field)
 	}
 }
 

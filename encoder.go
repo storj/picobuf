@@ -263,7 +263,12 @@ func (enc *Encoder) Group(field FieldNumber, fn func(enc *Encoder) bool) {
 //
 //go:noinline
 func (enc *Encoder) AlwaysGroup(field FieldNumber, fn func(enc *Encoder) bool) {
-	enc.alwaysGroup(field, func() { fn(enc) })
+	enc.appendTag(field, protowire.StartGroupType)
+	if enc.enterMessage() {
+		fn(enc)
+		enc.depth--
+	}
+	enc.appendTag(field, protowire.EndGroupType)
 }
 
 // PresentGroup encodes a non-empty always-present delimited message.
@@ -277,28 +282,18 @@ func (enc *Encoder) PresentGroup(field FieldNumber, fn func(enc *Encoder) bool) 
 	})
 }
 
-func (enc *Encoder) anyGroup(field FieldNumber, fn func(enc *Encoder) bool) bool {
+func (enc *Encoder) anyGroup(field FieldNumber, fn func(enc *Encoder) bool) {
 	start := enc.offset()
 	enc.appendTag(field, protowire.StartGroupType)
 	if !enc.enterMessage() {
 		enc.truncate(start)
-		return false
+		return
 	}
 	ok := fn(enc)
 	enc.depth--
 	if !ok {
 		enc.truncate(start)
-		return false
-	}
-	enc.appendTag(field, protowire.EndGroupType)
-	return true
-}
-
-func (enc *Encoder) alwaysGroup(field FieldNumber, fn func()) {
-	enc.appendTag(field, protowire.StartGroupType)
-	if enc.enterMessage() {
-		fn()
-		enc.depth--
+		return
 	}
 	enc.appendTag(field, protowire.EndGroupType)
 }
