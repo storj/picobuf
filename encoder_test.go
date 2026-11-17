@@ -351,3 +351,30 @@ func TestEncoder_UnrecognizedFields(t *testing.T) {
 		0x18, 0x25,
 	})
 }
+
+func TestMarshalReusesEncoders(t *testing.T) {
+	if raceEnabled {
+		t.Skip("the race detector drops pooled values")
+	}
+	// more nested messages than the encoder keeps hints for inline, so that
+	// the overflow hint storage is reused too.
+	msg := &picotest.AllTypes{}
+	for i := range 100 {
+		msg.Messages = append(msg.Messages, &picotest.Message{Int32: int32(i)})
+	}
+	buffer := make([]byte, 0, 1024)
+	// warm up the pool
+	if _, err := picobuf.Marshal(msg); err != nil {
+		t.Fatal(err)
+	}
+
+	if allocs := testing.AllocsPerRun(100, func() { _, _ = picobuf.Marshal(msg) }); allocs != 1 {
+		t.Errorf("Marshal allocated %v times, want only the output", allocs)
+	}
+	if allocs := testing.AllocsPerRun(100, func() { _, _ = picobuf.MarshalAppend(buffer[:0], msg) }); allocs != 0 {
+		t.Errorf("MarshalAppend allocated %v times", allocs)
+	}
+	if allocs := testing.AllocsPerRun(100, func() { _, _ = picobuf.Size(msg) }); allocs != 0 {
+		t.Errorf("Size allocated %v times", allocs)
+	}
+}

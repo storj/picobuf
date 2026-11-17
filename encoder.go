@@ -159,15 +159,19 @@ func NewEncoderBuffer(buffer []byte) *Encoder {
 // output buffer. The caller owns the returned bytes and decides when to reuse
 // them.
 func (enc *Encoder) MarshalAppend(buffer []byte, msg Message) ([]byte, error) {
-	defer func() {
-		hints := enc.lengthHints
-		if hints != nil {
-			hints.widths = hints.widths[:0]
-			hints.read = 0
-		}
-		*enc = Encoder{lengthHints: hints}
-	}()
+	defer enc.reset()
 	return enc.marshalAppend(buffer, msg)
+}
+
+// reset clears the state of the encoder, but keeps its scratch space for
+// length prefixes.
+func (enc *Encoder) reset() {
+	hints := enc.lengthHints
+	if hints != nil {
+		hints.widths = hints.widths[:0]
+		hints.read = 0
+	}
+	*enc = Encoder{lengthHints: hints}
 }
 
 // Buffer returns the bytes encoded so far.

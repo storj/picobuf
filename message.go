@@ -7,6 +7,7 @@ import (
 	"errors"
 	"math"
 	"slices"
+	"sync"
 
 	"storj.io/picobuf/internal/protowire"
 )
@@ -94,8 +95,16 @@ func (field FieldNumber) String() string {
 // msg.Encode runs twice and must do the same thing both times. A custom
 // encoder can tell the passes apart with Encoder.IsSizing.
 func Marshal(msg Message) ([]byte, error) {
-	enc, err := sizeForMarshal(msg)
-	if err != nil || enc.size == 0 {
+	// The encoder is returned to the pool without defer, which costs several
+	// kilobytes in TinyGo. If msg.Encode panics, the encoder is dropped.
+	enc := getEncoder()
+	data, err := enc.marshal(msg)
+	putEncoder(enc)
+	return data, err
+}
+
+func (enc *Encoder) marshal(msg Message) ([]byte, error) {
+	if err := enc.sizeForMarshal(msg); err != nil || enc.size == 0 {
 		return nil, err
 	}
 	enc.buffer = make([]byte, 0, enc.size)
@@ -112,7 +121,10 @@ func Marshal(msg Message) ([]byte, error) {
 // Like Marshal, it sizes the message first to reserve the output space, so
 // msg.Encode runs twice and must do the same thing both times.
 func MarshalAppend(buffer []byte, msg Message) ([]byte, error) {
-	return new(Encoder).marshalAppend(buffer, msg)
+	enc := getEncoder()
+	data, err := enc.marshalAppend(buffer, msg)
+	putEncoder(enc)
+	return data, err
 }
 
 func (enc *Encoder) marshalAppend(buffer []byte, msg Message) ([]byte, error) {
@@ -136,14 +148,6 @@ type lengthHints struct {
 // sizeForMarshal retains prefix-width hints and reuses the sizing encoder for
 // the writing pass. Small messages pack their hints into the encoder itself;
 // larger messages allocate overflow storage lazily. Size does not collect hints.
-func sizeForMarshal(msg Message) (*Encoder, error) {
-	enc := new(Encoder)
-	if err := enc.sizeForMarshal(msg); err != nil {
-		return nil, err
-	}
-	return enc, nil
-}
-
 func (enc *Encoder) sizeForMarshal(msg Message) error {
 	if err := ValidateRequired(msg); err != nil {
 		return err
@@ -167,12 +171,15 @@ func Size(msg Message) (int, error) {
 	if err := ValidateRequired(msg); err != nil {
 		return 0, err
 	}
-	enc := &Encoder{sizing: true}
+	enc := getEncoder()
+	enc.sizing = true
 	msg.Encode(enc)
+	size, err := enc.size, error(nil)
 	if enc.err != nil {
-		return 0, enc.err
+		size, err = 0, enc.err
 	}
-	return enc.size, nil
+	putEncoder(enc)
+	return size, err
 }
 
 // UnmarshalOptions configures decoding. The decoder caps positive recursion
@@ -239,4 +246,24 @@ func (opts UnmarshalOptions) unmarshal(data []byte, msg Message, dec *Decoder) e
 // first.
 func Unmarshal(data []byte, msg Message) error {
 	return UnmarshalOptions{}.Unmarshal(data, msg)
+}
+
+// encoderPool keeps encoders, and the storage for their length prefix hints,
+// between calls to Marshal, MarshalAppend and Size. Otherwise every call
+// allocates the encoder, which escapes through msg.Encode, and regrows the
+// hints of a message with many nested fields.
+var encoderPool = sync.Pool{New: func() any { return new(Encoder) }}
+
+// maxPooledLengthHints limits the hint storage that goes back into the pool,
+// so that a single huge message does not keep its storage alive.
+const maxPooledLengthHints = 64 << 10
+
+func getEncoder() *Encoder { return encoderPool.Get().(*Encoder) }
+
+func putEncoder(enc *Encoder) {
+	enc.reset()
+	if hints := enc.lengthHints; hints != nil && cap(hints.widths) > maxPooledLengthHints {
+		enc.lengthHints = nil
+	}
+	encoderPool.Put(enc)
 }
