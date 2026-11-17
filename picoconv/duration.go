@@ -13,6 +13,12 @@ import (
 // Duration converts between a protobuf duration and time.Duration.
 type Duration time.Duration
 
+// Protobuf durations must be within about ±10000 years.
+const (
+	maxDurationSeconds = 315576000000
+	maxDurationNanos   = 999999999
+)
+
 // PicoEncode implements picobuf.CustomType.
 func (d *Duration) PicoEncode(c *picobuf.Encoder, field picobuf.FieldNumber) {
 	if d == nil {
@@ -50,11 +56,11 @@ func (d *Duration) PicoDecode(c *picobuf.Decoder, field picobuf.FieldNumber) {
 		return
 	}
 	seconds, nanos := v.seconds, v.nanos
-	if seconds < -315576000000 || seconds > 315576000000 {
+	if seconds < -maxDurationSeconds || seconds > maxDurationSeconds {
 		c.Fail(field, "duration seconds out of range")
 		return
 	}
-	if nanos < -999999999 || nanos > 999999999 {
+	if nanos < -maxDurationNanos || nanos > maxDurationNanos {
 		c.Fail(field, "duration nanos out of range")
 		return
 	}
