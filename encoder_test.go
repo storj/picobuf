@@ -56,6 +56,26 @@ func TestMarshalAppendKeepsBufferOnError(t *testing.T) {
 	assert.Equal(t, appended, []byte{1, 2, 3})
 }
 
+func TestNewEncoderBuffer(t *testing.T) {
+	var storage [16]byte
+	value := int32(5)
+	encode := func() {
+		enc := picobuf.NewEncoderBuffer(storage[:])
+		enc.Int32(1, &value)
+		out := enc.Buffer()
+		if enc.Err() != nil || len(out) != 2 || &out[0] != &storage[0] {
+			t.Fatal("did not encode into the provided buffer")
+		}
+	}
+	encode()
+	assert.Equal(t, storage[:2], []byte{0x08, 0x05})
+	if !raceEnabled {
+		if allocs := testing.AllocsPerRun(100, encode); allocs != 0 {
+			t.Fatalf("encoding into a provided buffer allocated %v times", allocs)
+		}
+	}
+}
+
 func TestEncoder_RecursionLimit(t *testing.T) {
 	// nested is the self-referential message from decoder_test.go.
 	shallow := new(nested)
