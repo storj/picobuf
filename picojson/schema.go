@@ -255,20 +255,6 @@ func (m *message) fieldByNumber(number int32) (field, bool) {
 	return it.find(number)
 }
 
-// indexByNumber returns the index of the field with the given number, or -1.
-func (m *message) indexByNumber(number int32) int {
-	it := m.iter()
-	for i := 0; ; i++ {
-		f, ok := it.next()
-		if !ok {
-			return -1
-		}
-		if f.Number == number {
-			return i
-		}
-	}
-}
-
 // nameLookup scans fields in declaration order until a name requires a
 // restart. It then indexes both spellings, keeping arbitrary JSON field
 // order linear without allocating an index for the usual ordered input.

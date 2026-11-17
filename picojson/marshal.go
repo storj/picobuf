@@ -203,7 +203,7 @@ func (m *marshaler) walk(msg *message, wire []byte, render bool) (bool, error) {
 		probe := it
 		next, ok := probe.find(int32(num))
 		if !ok {
-			if msg.indexByNumber(int32(num)) >= 0 {
+			if _, ok := msg.fieldByNumber(int32(num)); ok {
 				return false, nil // out of order
 			}
 			continue // unknown
@@ -501,22 +501,23 @@ func (m *marshaler) mapValue(f *field, vs []wireValue) error {
 		key   string
 		value wireValue
 	}
-	var pairs []pair
-	index := map[string]int{}
+	pairs := make([]pair, 0, len(vs))
+	index := make(map[string]int, len(vs))
+	var b []byte
 	for _, v := range vs {
 		key, value, err := decodeEntry(&e, v)
 		if err != nil {
 			return err
 		}
-		b, err := appendKey(nil, e.key.Kind, key)
+		b, err = appendKey(b[:0], e.key.Kind, key)
 		if err != nil {
 			return err
 		}
-		text := string(b)
-		if i, ok := index[text]; ok {
+		if i, ok := index[string(b)]; ok {
 			pairs[i].value = value
 			continue
 		}
+		text := string(b)
 		index[text] = len(pairs)
 		pairs = append(pairs, pair{text, value})
 	}

@@ -231,8 +231,8 @@ func appendText(f *field, text string, out []byte) ([]byte, error) {
 		out = protowire.AppendTag(out, num, protowire.BytesType)
 		return protowire.AppendBytes(out, b), nil
 	case boolKind:
-		b, err := strconv.ParseBool(text)
-		if err != nil || (text != "true" && text != "false") {
+		b := text == "true"
+		if !b && text != "false" {
 			return nil, errors.New("invalid bool " + strconv.Quote(text))
 		}
 		out = protowire.AppendTag(out, num, protowire.VarintType)

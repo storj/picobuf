@@ -307,17 +307,21 @@ func jsonSnakeCase(s string) string {
 // validFullName reports whether s is a dot-separated list of protobuf
 // identifiers.
 func validFullName(s string) bool {
-	for _, part := range strings.Split(s, ".") {
-		if part == "" {
-			return false
-		}
-		for i := 0; i < len(part); i++ {
-			c := part[i]
-			letter := c == '_' || 'a' <= c && c <= 'z' || 'A' <= c && c <= 'Z'
-			if !letter && (i == 0 || c < '0' || c > '9') {
+	start := true // at the start of an identifier
+	for i := 0; i < len(s); i++ {
+		switch c := s[i]; {
+		case c == '.':
+			if start {
 				return false
 			}
+			start = true
+			continue
+		case c == '_' || 'a' <= c && c <= 'z' || 'A' <= c && c <= 'Z':
+		case '0' <= c && c <= '9' && !start:
+		default:
+			return false
 		}
+		start = false
 	}
-	return true
+	return !start
 }
