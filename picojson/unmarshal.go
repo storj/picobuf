@@ -28,7 +28,7 @@ func unmarshalWire(data []byte, s Schema, offset int32) ([]byte, error) {
 	if len(data) > math.MaxInt32 {
 		return nil, errors.New("input too large")
 	}
-	u := unmarshaler{schema: s, dec: jsontext.NewDecoder(bytes.NewReader(data))}
+	u := unmarshaler{schema: s, dec: jsontext.NewDecoder(bytes.NewBuffer(data))}
 	out, err := u.message(offset, nil)
 	if err != nil {
 		return nil, err
