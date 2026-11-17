@@ -962,21 +962,22 @@ func (enc *Encoder) RepeatedString(field FieldNumber, v *[]string) {
 	if len(*v) == 0 {
 		return
 	}
-	if enc.sizing {
+	if !enc.skipUTF8() {
 		for _, x := range *v {
-			if !enc.skipUTF8() && !utf8.ValidString(x) {
+			if !utf8.ValidString(x) {
 				enc.fail(field, "invalid UTF-8")
 				return
 			}
-			enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(x))
+		}
+	}
+	if enc.sizing {
+		tagSize := protowire.SizeTag(protowire.Number(field))
+		for _, x := range *v {
+			enc.size += tagSize + protowire.SizeBytes(len(x))
 		}
 		return
 	}
 	for _, x := range *v {
-		if !enc.skipUTF8() && !utf8.ValidString(x) {
-			enc.fail(field, "invalid UTF-8")
-			return
-		}
 		enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 		enc.buffer = protowire.AppendString(enc.buffer, x)
 	}
@@ -1002,21 +1003,22 @@ func (enc *Encoder) AlwaysString(field FieldNumber, v *string) {
 //
 //go:noinline
 func (enc *Encoder) AlwaysRepeatedString(field FieldNumber, v *[]string) {
-	if enc.sizing {
+	if !enc.skipUTF8() {
 		for _, x := range *v {
-			if !enc.skipUTF8() && !utf8.ValidString(x) {
+			if !utf8.ValidString(x) {
 				enc.fail(field, "invalid UTF-8")
 				return
 			}
-			enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(x))
+		}
+	}
+	if enc.sizing {
+		tagSize := protowire.SizeTag(protowire.Number(field))
+		for _, x := range *v {
+			enc.size += tagSize + protowire.SizeBytes(len(x))
 		}
 		return
 	}
 	for _, x := range *v {
-		if !enc.skipUTF8() && !utf8.ValidString(x) {
-			enc.fail(field, "invalid UTF-8")
-			return
-		}
 		enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)
 		enc.buffer = protowire.AppendString(enc.buffer, x)
 	}
@@ -1045,8 +1047,9 @@ func (enc *Encoder) RepeatedUnvalidatedString(field FieldNumber, v *[]string) {
 		return
 	}
 	if enc.sizing {
+		tagSize := protowire.SizeTag(protowire.Number(field))
 		for _, x := range *v {
-			enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(x))
+			enc.size += tagSize + protowire.SizeBytes(len(x))
 		}
 		return
 	}
@@ -1073,8 +1076,9 @@ func (enc *Encoder) AlwaysUnvalidatedString(field FieldNumber, v *string) {
 //go:noinline
 func (enc *Encoder) AlwaysRepeatedUnvalidatedString(field FieldNumber, v *[]string) {
 	if enc.sizing {
+		tagSize := protowire.SizeTag(protowire.Number(field))
 		for _, x := range *v {
-			enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(x))
+			enc.size += tagSize + protowire.SizeBytes(len(x))
 		}
 		return
 	}
@@ -1107,8 +1111,9 @@ func (enc *Encoder) RepeatedBytes(field FieldNumber, v *[][]byte) {
 		return
 	}
 	if enc.sizing {
+		tagSize := protowire.SizeTag(protowire.Number(field))
 		for _, x := range *v {
-			enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(x))
+			enc.size += tagSize + protowire.SizeBytes(len(x))
 		}
 		return
 	}
@@ -1135,8 +1140,9 @@ func (enc *Encoder) AlwaysBytes(field FieldNumber, v *[]byte) {
 //go:noinline
 func (enc *Encoder) AlwaysRepeatedBytes(field FieldNumber, v *[][]byte) {
 	if enc.sizing {
+		tagSize := protowire.SizeTag(protowire.Number(field))
 		for _, x := range *v {
-			enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(x))
+			enc.size += tagSize + protowire.SizeBytes(len(x))
 		}
 		return
 	}

@@ -84,26 +84,6 @@ func (t *PrimitiveType) WireName() string {
 	}
 }
 
-// ShortWireName returns the wire type for the errors.
-func (t *PrimitiveType) ShortWireName() string {
-	switch t.Wire {
-	case protowire.VarintType:
-		return "Varint"
-	case protowire.Fixed32Type:
-		return "Fixed32"
-	case protowire.Fixed64Type:
-		return "Fixed64"
-	case protowire.BytesType:
-		return "Bytes"
-	case protowire.StartGroupType:
-		return "StartGroup"
-	case protowire.EndGroupType:
-		return "EndGroup"
-	default:
-		panic("unhandled wire type")
-	}
-}
-
 // Doc returns the name of the type for the documentation.
 func (t *PrimitiveType) Doc() string {
 	if t.Name == "UnvalidatedString" {
@@ -265,23 +245,17 @@ func generateEncoder() []byte {
 							pf("    }\n")
 							pf("})\n")
 						}
-					case protowire.Fixed32Type:
+					case protowire.Fixed32Type, protowire.Fixed64Type:
+						size := 4
+						if t.Wire == protowire.Fixed64Type {
+							size = 8
+						}
 						pf("if enc.sizing {\n")
-						pf("enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(*v)*4)\n")
+						pf("enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(*v)*%d)\n", size)
 						pf("return\n")
 						pf("}\n")
 						pf("enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)\n")
-						pf("enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*4))\n")
-						pf("for _, x := range *v {\n")
-						pf("    enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "x")
-						pf("}\n")
-					case protowire.Fixed64Type:
-						pf("if enc.sizing {\n")
-						pf("enc.size += protowire.SizeTag(protowire.Number(field)) + protowire.SizeBytes(len(*v)*8)\n")
-						pf("return\n")
-						pf("}\n")
-						pf("enc.buffer = appendTag(enc.buffer, field, protowire.BytesType)\n")
-						pf("enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*8))\n")
+						pf("enc.buffer = protowire.AppendVarint(enc.buffer, uint64(len(*v)*%d))\n", size)
 						pf("for _, x := range *v {\n")
 						pf("    enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "x")
 						pf("}\n")
@@ -290,19 +264,21 @@ func generateEncoder() []byte {
 					}
 
 				} else {
-					pf("if enc.sizing {\n")
-					pf("for _, x := range *v {\n")
 					if t.Name == "String" {
-						pf("    if !enc.skipUTF8() && !utf8.ValidString(x) { enc.fail(field, \"invalid UTF-8\"); return }\n")
+						pf("if !enc.skipUTF8() {\n")
+						pf("for _, x := range *v {\n")
+						pf("    if !utf8.ValidString(x) { enc.fail(field, \"invalid UTF-8\"); return }\n")
+						pf("}\n")
+						pf("}\n")
 					}
-					pf("enc.size += protowire.SizeTag(protowire.Number(field)) + %s\n", t.SizeFmt("x"))
+					pf("if enc.sizing {\n")
+					pf("tagSize := protowire.SizeTag(protowire.Number(field))\n")
+					pf("for _, x := range *v {\n")
+					pf("enc.size += tagSize + %s\n", t.SizeFmt("x"))
 					pf("}\n")
 					pf("return\n")
 					pf("}\n")
 					pf("for _, x := range *v {\n")
-					if t.Name == "String" {
-						pf("    if !enc.skipUTF8() && !utf8.ValidString(x) { enc.fail(field, \"invalid UTF-8\"); return }\n")
-					}
 					pf("    enc.buffer = appendTag(enc.buffer, field, %s)\n", t.WireName())
 					pf("    enc.buffer = protowire.Append%s(enc.buffer, "+t.EncodeFmt+")\n", t.Suffix, "x")
 					pf("}\n")
