@@ -76,3 +76,59 @@ func FuzzCompat(f *testing.F) {
 		}
 	})
 }
+
+// FuzzCompatRepeated is FuzzCompat for repeated fields, which decode both
+// packed and unpacked.
+func FuzzCompatRepeated(f *testing.F) {
+	seed, err := proto.Marshal(&prot.RepeatedTypes{
+		Int32: []int32{-2, 1, 300}, Int64: []int64{-2, 1 << 40}, Uint32: []uint32{1, 1 << 31},
+		Uint64: []uint64{1, 1 << 63}, Sint32: []int32{-2, 2}, Sint64: []int64{-2, 2},
+		Fixed32: []uint32{1, 2}, Fixed64: []uint64{1, 2}, Sfixed32: []int32{-2}, Sfixed64: []int64{-2},
+		Float: []float32{1, 2}, Double: []float64{1, 2}, Bool: []bool{true, false},
+		String_: []string{"a", ""}, Bytes: [][]byte{{1}, nil},
+		Message:  []*prot.Message{{Int32: 1}, {}},
+		Language: []prot.Language{1, 0},
+	})
+	if err != nil {
+		f.Fatal(err)
+	}
+	f.Add(seed)
+	// unpacked varints and fixed values
+	f.Add([]byte{0x08, 0x01, 0x08, 0x96, 0x02, 0x3d, 1, 0, 0, 0, 0x41, 1, 0, 0, 0, 0, 0, 0, 0})
+	f.Add([]byte(nil))
+
+	f.Fuzz(func(t *testing.T, data []byte) {
+		var reference prot.RepeatedTypes
+		referenceErr := proto.UnmarshalOptions{DiscardUnknown: true}.Unmarshal(data, &reference)
+
+		var decoded pico.RepeatedTypes
+		err := picobuf.Unmarshal(data, &decoded)
+
+		if referenceErr != nil {
+			if err == nil {
+				t.Fatalf("accepted input that protobuf-go rejected (%v)\ninput: %x", referenceErr, data)
+			}
+			return
+		}
+		if err != nil {
+			t.Fatalf("rejected input accepted by protobuf-go: %v\ninput: %x", err, data)
+		}
+		decoded.XXX_unrecognized = nil
+		for i := range decoded.Message {
+			decoded.Message[i].XXX_unrecognized = nil
+		}
+
+		referenceData, err := proto.Marshal(&reference)
+		if err != nil {
+			t.Fatal(err)
+		}
+		decodedData, err := picobuf.Marshal(&decoded)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.Equal(referenceData, decodedData) {
+			t.Fatalf("decoded differently than protobuf-go\ninput:  %x\ngoogle: %x\npico:   %x",
+				data, referenceData, decodedData)
+		}
+	})
+}

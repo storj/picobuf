@@ -373,25 +373,59 @@ func generateDecoder() []byte {
 			if t.IsScalar() {
 				pf("case protowire.BytesType:\n")
 				pf("    packed, n := protowire.ConsumeBytes(dec.buffer)\n")
+				// The packed run is decoded into a local slice and accounted
+				// against the repeated element limit once, which keeps the
+				// per-element work to the decoding itself.
 				switch t.Wire {
 				case protowire.VarintType:
 					pf("    count := 0\n")
 					pf("    for _, x := range packed { if x < 0x80 { count++ } }\n")
-				case protowire.Fixed32Type:
-					pf("    count := len(packed) / protowire.SizeFixed32()\n")
-				case protowire.Fixed64Type:
-					pf("    count := len(packed) / protowire.SizeFixed64()\n")
+					pf("    allowed := dec.repeatedReservation(count)\n")
+					pf("    s := slices.Grow(*v, allowed)\n")
+					pf("    start := len(s)\n")
+					pf("    for len(packed) > 0 {\n")
+					// count includes only terminated varints, so reaching
+					// allowed with input left is either the limit or a
+					// truncated last varint.
+					pf("        if len(s)-start == allowed {\n")
+					pf("            *v = s\n")
+					pf("            dec.addRepeated(allowed)\n")
+					pf("            if allowed < count { dec.fail(field, \"exceeded maximum repeated elements\") } else { dec.fail(field, \"unable to parse Varint\") }\n")
+					pf("            return\n")
+					pf("        }\n")
+					pf("        var x uint64\n")
+					pf("        if b := packed[0]; b < 0x80 {\n")
+					pf("            x = uint64(b)\n")
+					pf("            packed = packed[1:]\n")
+					pf("        } else {\n")
+					pf("            var xn int\n")
+					pf("            x, xn = protowire.ConsumeVarint(packed)\n")
+					pf("            if xn < 0 { *v = s; dec.fail(field, \"unable to parse Varint\"); return }\n")
+					pf("            packed = packed[xn:]\n")
+					pf("        }\n")
+					pf("        s = append(s, "+t.DecodeFmt+")\n", "x")
+					pf("    }\n")
+					pf("    *v = s\n")
+					pf("    dec.addRepeated(len(s) - start)\n")
+				case protowire.Fixed32Type, protowire.Fixed64Type:
+					size, load := 4, "le32"
+					if t.Wire == protowire.Fixed64Type {
+						size, load = 8, "le64"
+					}
+					pf("    count := len(packed) / %d\n", size)
+					pf("    allowed := dec.repeatedReservation(count)\n")
+					pf("    s := slices.Grow(*v, allowed)\n")
+					pf("    for p := packed[:allowed*%d]; len(p) >= %d; p = p[%d:] {\n", size, size, size)
+					pf("        x := %s(p)\n", load)
+					pf("        s = append(s, "+t.DecodeFmt+")\n", "x")
+					pf("    }\n")
+					pf("    *v = s\n")
+					pf("    dec.addRepeated(allowed)\n")
+					pf("    if allowed < count { dec.fail(field, \"exceeded maximum repeated elements\"); return }\n")
+					pf("    if len(packed)%%%d != 0 { dec.fail(field, \"unable to parse %v\"); return }\n", size, t.Suffix)
 				default:
 					panic("unhandled scalar wire type")
 				}
-				pf("    *v = slices.Grow(*v, dec.repeatedReservation(count))\n")
-				pf("    for len(packed) > 0 {\n")
-				pf("         if !dec.takeRepeated(field) { return }\n")
-				pf("         x, xn := protowire.Consume%v(packed)\n", t.Suffix)
-				pf("         if xn < 0 { dec.fail(field, \"unable to parse %v\"); return }\n", t.Suffix)
-				pf("         *v = append(*v, "+t.DecodeFmt+")\n", "x")
-				pf("         packed = packed[xn:]\n")
-				pf("    }\n")
 				pf("    dec.nextField(n)\n")
 			}
 			pf("case %v:\n", t.WireName())

@@ -5,6 +5,7 @@ package picobuf_test
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 	"time"
 
@@ -222,6 +223,14 @@ func TestDecoder_PackedVarintRejectsMalformedPayload(t *testing.T) {
 	var got packedScalars
 	err := picobuf.Unmarshal([]byte{0x0a, 0x01, 0x80}, &got)
 	assert.Error(t, err)
+
+	// a truncated last varint after complete ones is a parse error, not the
+	// repeated element limit, which is not set here.
+	got = packedScalars{}
+	err = picobuf.Unmarshal([]byte{0x0a, 0x02, 0x01, 0x80}, &got)
+	assert.Error(t, err)
+	assert.That(t, strings.Contains(err.Error(), "unable to parse Varint"))
+	assert.DeepEqual(t, got.Unsigned, []uint64{1})
 }
 
 func TestDecoder_RepeatedMessagesPreallocate(t *testing.T) {

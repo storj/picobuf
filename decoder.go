@@ -322,6 +322,28 @@ func (dec *Decoder) takeRepeated(field FieldNumber) bool {
 	return true
 }
 
+// addRepeated accounts for count elements of a packed field, which the caller
+// limited with repeatedReservation.
+func (dec *Decoder) addRepeated(count int) {
+	if dec.maxRepeatedElements > 0 {
+		dec.repeatedElements += int32(count)
+	}
+}
+
+// le32 decodes a little-endian fixed32. It avoids encoding/binary, which
+// depends on reflect.
+func le32(b []byte) uint32 {
+	_ = b[3]
+	return uint32(b[0]) | uint32(b[1])<<8 | uint32(b[2])<<16 | uint32(b[3])<<24
+}
+
+// le64 decodes a little-endian fixed64.
+func le64(b []byte) uint64 {
+	_ = b[7]
+	return uint64(b[0]) | uint64(b[1])<<8 | uint64(b[2])<<16 | uint64(b[3])<<24 |
+		uint64(b[4])<<32 | uint64(b[5])<<40 | uint64(b[6])<<48 | uint64(b[7])<<56
+}
+
 func (dec *Decoder) repeatedReservation(count int) int {
 	if dec.maxRepeatedElements <= 0 {
 		return count

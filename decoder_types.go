@@ -47,19 +47,38 @@ func (dec *Decoder) RepeatedBool(field FieldNumber, v *[]bool) {
 					count++
 				}
 			}
-			*v = slices.Grow(*v, dec.repeatedReservation(count))
+			allowed := dec.repeatedReservation(count)
+			s := slices.Grow(*v, allowed)
+			start := len(s)
 			for len(packed) > 0 {
-				if !dec.takeRepeated(field) {
+				if len(s)-start == allowed {
+					*v = s
+					dec.addRepeated(allowed)
+					if allowed < count {
+						dec.fail(field, "exceeded maximum repeated elements")
+					} else {
+						dec.fail(field, "unable to parse Varint")
+					}
 					return
 				}
-				x, xn := protowire.ConsumeVarint(packed)
-				if xn < 0 {
-					dec.fail(field, "unable to parse Varint")
-					return
+				var x uint64
+				if b := packed[0]; b < 0x80 {
+					x = uint64(b)
+					packed = packed[1:]
+				} else {
+					var xn int
+					x, xn = protowire.ConsumeVarint(packed)
+					if xn < 0 {
+						*v = s
+						dec.fail(field, "unable to parse Varint")
+						return
+					}
+					packed = packed[xn:]
 				}
-				*v = append(*v, x != 0)
-				packed = packed[xn:]
+				s = append(s, x != 0)
 			}
+			*v = s
+			dec.addRepeated(len(s) - start)
 			dec.nextField(n)
 		case protowire.VarintType:
 			if !dec.takeRepeated(field) {
@@ -113,19 +132,38 @@ func (dec *Decoder) RepeatedInt32(field FieldNumber, v *[]int32) {
 					count++
 				}
 			}
-			*v = slices.Grow(*v, dec.repeatedReservation(count))
+			allowed := dec.repeatedReservation(count)
+			s := slices.Grow(*v, allowed)
+			start := len(s)
 			for len(packed) > 0 {
-				if !dec.takeRepeated(field) {
+				if len(s)-start == allowed {
+					*v = s
+					dec.addRepeated(allowed)
+					if allowed < count {
+						dec.fail(field, "exceeded maximum repeated elements")
+					} else {
+						dec.fail(field, "unable to parse Varint")
+					}
 					return
 				}
-				x, xn := protowire.ConsumeVarint(packed)
-				if xn < 0 {
-					dec.fail(field, "unable to parse Varint")
-					return
+				var x uint64
+				if b := packed[0]; b < 0x80 {
+					x = uint64(b)
+					packed = packed[1:]
+				} else {
+					var xn int
+					x, xn = protowire.ConsumeVarint(packed)
+					if xn < 0 {
+						*v = s
+						dec.fail(field, "unable to parse Varint")
+						return
+					}
+					packed = packed[xn:]
 				}
-				*v = append(*v, int32(x))
-				packed = packed[xn:]
+				s = append(s, int32(x))
 			}
+			*v = s
+			dec.addRepeated(len(s) - start)
 			dec.nextField(n)
 		case protowire.VarintType:
 			if !dec.takeRepeated(field) {
@@ -179,19 +217,38 @@ func (dec *Decoder) RepeatedInt64(field FieldNumber, v *[]int64) {
 					count++
 				}
 			}
-			*v = slices.Grow(*v, dec.repeatedReservation(count))
+			allowed := dec.repeatedReservation(count)
+			s := slices.Grow(*v, allowed)
+			start := len(s)
 			for len(packed) > 0 {
-				if !dec.takeRepeated(field) {
+				if len(s)-start == allowed {
+					*v = s
+					dec.addRepeated(allowed)
+					if allowed < count {
+						dec.fail(field, "exceeded maximum repeated elements")
+					} else {
+						dec.fail(field, "unable to parse Varint")
+					}
 					return
 				}
-				x, xn := protowire.ConsumeVarint(packed)
-				if xn < 0 {
-					dec.fail(field, "unable to parse Varint")
-					return
+				var x uint64
+				if b := packed[0]; b < 0x80 {
+					x = uint64(b)
+					packed = packed[1:]
+				} else {
+					var xn int
+					x, xn = protowire.ConsumeVarint(packed)
+					if xn < 0 {
+						*v = s
+						dec.fail(field, "unable to parse Varint")
+						return
+					}
+					packed = packed[xn:]
 				}
-				*v = append(*v, int64(x))
-				packed = packed[xn:]
+				s = append(s, int64(x))
 			}
+			*v = s
+			dec.addRepeated(len(s) - start)
 			dec.nextField(n)
 		case protowire.VarintType:
 			if !dec.takeRepeated(field) {
@@ -245,19 +302,38 @@ func (dec *Decoder) RepeatedUint32(field FieldNumber, v *[]uint32) {
 					count++
 				}
 			}
-			*v = slices.Grow(*v, dec.repeatedReservation(count))
+			allowed := dec.repeatedReservation(count)
+			s := slices.Grow(*v, allowed)
+			start := len(s)
 			for len(packed) > 0 {
-				if !dec.takeRepeated(field) {
+				if len(s)-start == allowed {
+					*v = s
+					dec.addRepeated(allowed)
+					if allowed < count {
+						dec.fail(field, "exceeded maximum repeated elements")
+					} else {
+						dec.fail(field, "unable to parse Varint")
+					}
 					return
 				}
-				x, xn := protowire.ConsumeVarint(packed)
-				if xn < 0 {
-					dec.fail(field, "unable to parse Varint")
-					return
+				var x uint64
+				if b := packed[0]; b < 0x80 {
+					x = uint64(b)
+					packed = packed[1:]
+				} else {
+					var xn int
+					x, xn = protowire.ConsumeVarint(packed)
+					if xn < 0 {
+						*v = s
+						dec.fail(field, "unable to parse Varint")
+						return
+					}
+					packed = packed[xn:]
 				}
-				*v = append(*v, uint32(x))
-				packed = packed[xn:]
+				s = append(s, uint32(x))
 			}
+			*v = s
+			dec.addRepeated(len(s) - start)
 			dec.nextField(n)
 		case protowire.VarintType:
 			if !dec.takeRepeated(field) {
@@ -311,19 +387,38 @@ func (dec *Decoder) RepeatedUint64(field FieldNumber, v *[]uint64) {
 					count++
 				}
 			}
-			*v = slices.Grow(*v, dec.repeatedReservation(count))
+			allowed := dec.repeatedReservation(count)
+			s := slices.Grow(*v, allowed)
+			start := len(s)
 			for len(packed) > 0 {
-				if !dec.takeRepeated(field) {
+				if len(s)-start == allowed {
+					*v = s
+					dec.addRepeated(allowed)
+					if allowed < count {
+						dec.fail(field, "exceeded maximum repeated elements")
+					} else {
+						dec.fail(field, "unable to parse Varint")
+					}
 					return
 				}
-				x, xn := protowire.ConsumeVarint(packed)
-				if xn < 0 {
-					dec.fail(field, "unable to parse Varint")
-					return
+				var x uint64
+				if b := packed[0]; b < 0x80 {
+					x = uint64(b)
+					packed = packed[1:]
+				} else {
+					var xn int
+					x, xn = protowire.ConsumeVarint(packed)
+					if xn < 0 {
+						*v = s
+						dec.fail(field, "unable to parse Varint")
+						return
+					}
+					packed = packed[xn:]
 				}
-				*v = append(*v, x)
-				packed = packed[xn:]
+				s = append(s, x)
 			}
+			*v = s
+			dec.addRepeated(len(s) - start)
 			dec.nextField(n)
 		case protowire.VarintType:
 			if !dec.takeRepeated(field) {
@@ -377,19 +472,38 @@ func (dec *Decoder) RepeatedSint32(field FieldNumber, v *[]int32) {
 					count++
 				}
 			}
-			*v = slices.Grow(*v, dec.repeatedReservation(count))
+			allowed := dec.repeatedReservation(count)
+			s := slices.Grow(*v, allowed)
+			start := len(s)
 			for len(packed) > 0 {
-				if !dec.takeRepeated(field) {
+				if len(s)-start == allowed {
+					*v = s
+					dec.addRepeated(allowed)
+					if allowed < count {
+						dec.fail(field, "exceeded maximum repeated elements")
+					} else {
+						dec.fail(field, "unable to parse Varint")
+					}
 					return
 				}
-				x, xn := protowire.ConsumeVarint(packed)
-				if xn < 0 {
-					dec.fail(field, "unable to parse Varint")
-					return
+				var x uint64
+				if b := packed[0]; b < 0x80 {
+					x = uint64(b)
+					packed = packed[1:]
+				} else {
+					var xn int
+					x, xn = protowire.ConsumeVarint(packed)
+					if xn < 0 {
+						*v = s
+						dec.fail(field, "unable to parse Varint")
+						return
+					}
+					packed = packed[xn:]
 				}
-				*v = append(*v, decodeZigZag32(uint32(x)))
-				packed = packed[xn:]
+				s = append(s, decodeZigZag32(uint32(x)))
 			}
+			*v = s
+			dec.addRepeated(len(s) - start)
 			dec.nextField(n)
 		case protowire.VarintType:
 			if !dec.takeRepeated(field) {
@@ -443,19 +557,38 @@ func (dec *Decoder) RepeatedSint64(field FieldNumber, v *[]int64) {
 					count++
 				}
 			}
-			*v = slices.Grow(*v, dec.repeatedReservation(count))
+			allowed := dec.repeatedReservation(count)
+			s := slices.Grow(*v, allowed)
+			start := len(s)
 			for len(packed) > 0 {
-				if !dec.takeRepeated(field) {
+				if len(s)-start == allowed {
+					*v = s
+					dec.addRepeated(allowed)
+					if allowed < count {
+						dec.fail(field, "exceeded maximum repeated elements")
+					} else {
+						dec.fail(field, "unable to parse Varint")
+					}
 					return
 				}
-				x, xn := protowire.ConsumeVarint(packed)
-				if xn < 0 {
-					dec.fail(field, "unable to parse Varint")
-					return
+				var x uint64
+				if b := packed[0]; b < 0x80 {
+					x = uint64(b)
+					packed = packed[1:]
+				} else {
+					var xn int
+					x, xn = protowire.ConsumeVarint(packed)
+					if xn < 0 {
+						*v = s
+						dec.fail(field, "unable to parse Varint")
+						return
+					}
+					packed = packed[xn:]
 				}
-				*v = append(*v, protowire.DecodeZigZag(x))
-				packed = packed[xn:]
+				s = append(s, protowire.DecodeZigZag(x))
 			}
+			*v = s
+			dec.addRepeated(len(s) - start)
 			dec.nextField(n)
 		case protowire.VarintType:
 			if !dec.takeRepeated(field) {
@@ -503,19 +636,22 @@ func (dec *Decoder) RepeatedFixed32(field FieldNumber, v *[]uint32) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
-			count := len(packed) / protowire.SizeFixed32()
-			*v = slices.Grow(*v, dec.repeatedReservation(count))
-			for len(packed) > 0 {
-				if !dec.takeRepeated(field) {
-					return
-				}
-				x, xn := protowire.ConsumeFixed32(packed)
-				if xn < 0 {
-					dec.fail(field, "unable to parse Fixed32")
-					return
-				}
-				*v = append(*v, x)
-				packed = packed[xn:]
+			count := len(packed) / 4
+			allowed := dec.repeatedReservation(count)
+			s := slices.Grow(*v, allowed)
+			for p := packed[:allowed*4]; len(p) >= 4; p = p[4:] {
+				x := le32(p)
+				s = append(s, x)
+			}
+			*v = s
+			dec.addRepeated(allowed)
+			if allowed < count {
+				dec.fail(field, "exceeded maximum repeated elements")
+				return
+			}
+			if len(packed)%4 != 0 {
+				dec.fail(field, "unable to parse Fixed32")
+				return
 			}
 			dec.nextField(n)
 		case protowire.Fixed32Type:
@@ -564,19 +700,22 @@ func (dec *Decoder) RepeatedFixed64(field FieldNumber, v *[]uint64) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
-			count := len(packed) / protowire.SizeFixed64()
-			*v = slices.Grow(*v, dec.repeatedReservation(count))
-			for len(packed) > 0 {
-				if !dec.takeRepeated(field) {
-					return
-				}
-				x, xn := protowire.ConsumeFixed64(packed)
-				if xn < 0 {
-					dec.fail(field, "unable to parse Fixed64")
-					return
-				}
-				*v = append(*v, x)
-				packed = packed[xn:]
+			count := len(packed) / 8
+			allowed := dec.repeatedReservation(count)
+			s := slices.Grow(*v, allowed)
+			for p := packed[:allowed*8]; len(p) >= 8; p = p[8:] {
+				x := le64(p)
+				s = append(s, x)
+			}
+			*v = s
+			dec.addRepeated(allowed)
+			if allowed < count {
+				dec.fail(field, "exceeded maximum repeated elements")
+				return
+			}
+			if len(packed)%8 != 0 {
+				dec.fail(field, "unable to parse Fixed64")
+				return
 			}
 			dec.nextField(n)
 		case protowire.Fixed64Type:
@@ -625,19 +764,22 @@ func (dec *Decoder) RepeatedSfixed32(field FieldNumber, v *[]int32) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
-			count := len(packed) / protowire.SizeFixed32()
-			*v = slices.Grow(*v, dec.repeatedReservation(count))
-			for len(packed) > 0 {
-				if !dec.takeRepeated(field) {
-					return
-				}
-				x, xn := protowire.ConsumeFixed32(packed)
-				if xn < 0 {
-					dec.fail(field, "unable to parse Fixed32")
-					return
-				}
-				*v = append(*v, int32(x))
-				packed = packed[xn:]
+			count := len(packed) / 4
+			allowed := dec.repeatedReservation(count)
+			s := slices.Grow(*v, allowed)
+			for p := packed[:allowed*4]; len(p) >= 4; p = p[4:] {
+				x := le32(p)
+				s = append(s, int32(x))
+			}
+			*v = s
+			dec.addRepeated(allowed)
+			if allowed < count {
+				dec.fail(field, "exceeded maximum repeated elements")
+				return
+			}
+			if len(packed)%4 != 0 {
+				dec.fail(field, "unable to parse Fixed32")
+				return
 			}
 			dec.nextField(n)
 		case protowire.Fixed32Type:
@@ -686,19 +828,22 @@ func (dec *Decoder) RepeatedSfixed64(field FieldNumber, v *[]int64) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
-			count := len(packed) / protowire.SizeFixed64()
-			*v = slices.Grow(*v, dec.repeatedReservation(count))
-			for len(packed) > 0 {
-				if !dec.takeRepeated(field) {
-					return
-				}
-				x, xn := protowire.ConsumeFixed64(packed)
-				if xn < 0 {
-					dec.fail(field, "unable to parse Fixed64")
-					return
-				}
-				*v = append(*v, int64(x))
-				packed = packed[xn:]
+			count := len(packed) / 8
+			allowed := dec.repeatedReservation(count)
+			s := slices.Grow(*v, allowed)
+			for p := packed[:allowed*8]; len(p) >= 8; p = p[8:] {
+				x := le64(p)
+				s = append(s, int64(x))
+			}
+			*v = s
+			dec.addRepeated(allowed)
+			if allowed < count {
+				dec.fail(field, "exceeded maximum repeated elements")
+				return
+			}
+			if len(packed)%8 != 0 {
+				dec.fail(field, "unable to parse Fixed64")
+				return
 			}
 			dec.nextField(n)
 		case protowire.Fixed64Type:
@@ -747,19 +892,22 @@ func (dec *Decoder) RepeatedFloat(field FieldNumber, v *[]float32) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
-			count := len(packed) / protowire.SizeFixed32()
-			*v = slices.Grow(*v, dec.repeatedReservation(count))
-			for len(packed) > 0 {
-				if !dec.takeRepeated(field) {
-					return
-				}
-				x, xn := protowire.ConsumeFixed32(packed)
-				if xn < 0 {
-					dec.fail(field, "unable to parse Fixed32")
-					return
-				}
-				*v = append(*v, math.Float32frombits(x))
-				packed = packed[xn:]
+			count := len(packed) / 4
+			allowed := dec.repeatedReservation(count)
+			s := slices.Grow(*v, allowed)
+			for p := packed[:allowed*4]; len(p) >= 4; p = p[4:] {
+				x := le32(p)
+				s = append(s, math.Float32frombits(x))
+			}
+			*v = s
+			dec.addRepeated(allowed)
+			if allowed < count {
+				dec.fail(field, "exceeded maximum repeated elements")
+				return
+			}
+			if len(packed)%4 != 0 {
+				dec.fail(field, "unable to parse Fixed32")
+				return
 			}
 			dec.nextField(n)
 		case protowire.Fixed32Type:
@@ -808,19 +956,22 @@ func (dec *Decoder) RepeatedDouble(field FieldNumber, v *[]float64) {
 		switch dec.pendingWire {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
-			count := len(packed) / protowire.SizeFixed64()
-			*v = slices.Grow(*v, dec.repeatedReservation(count))
-			for len(packed) > 0 {
-				if !dec.takeRepeated(field) {
-					return
-				}
-				x, xn := protowire.ConsumeFixed64(packed)
-				if xn < 0 {
-					dec.fail(field, "unable to parse Fixed64")
-					return
-				}
-				*v = append(*v, math.Float64frombits(x))
-				packed = packed[xn:]
+			count := len(packed) / 8
+			allowed := dec.repeatedReservation(count)
+			s := slices.Grow(*v, allowed)
+			for p := packed[:allowed*8]; len(p) >= 8; p = p[8:] {
+				x := le64(p)
+				s = append(s, math.Float64frombits(x))
+			}
+			*v = s
+			dec.addRepeated(allowed)
+			if allowed < count {
+				dec.fail(field, "exceeded maximum repeated elements")
+				return
+			}
+			if len(packed)%8 != 0 {
+				dec.fail(field, "unable to parse Fixed64")
+				return
 			}
 			dec.nextField(n)
 		case protowire.Fixed64Type:
