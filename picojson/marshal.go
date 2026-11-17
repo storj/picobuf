@@ -154,8 +154,9 @@ func (m *marshaler) message(offset int32, wire []byte) error {
 // walk handles msg in a single pass over the wire data. That works for
 // regular wire data, as picobuf encodes it: fields by number, each singular
 // field and oneof at most once, the values of a repeated field together,
-// and map entries sorted by key. It renders in declaration order, so the
-// fields that are set also have to be declared by increasing number.
+// and map entries sorted by key, which Marshal asks for with
+// picobuf.MarshalOptions.Deterministic. It renders in declaration order, so
+// the fields that are set also have to be declared by increasing number.
 // Otherwise, such as with unrecognized fields that picobuf appends, it
 // reports false, and grouped renders msg.
 //
@@ -408,10 +409,10 @@ func (m *marshaler) newMapEntry(f *field) mapEntry {
 	return mapEntry{key: key, value: value}
 }
 
-// mapEntry checks that the entry in v sorts after the previous one, which
-// picobuf encodes them in, so that keys do not repeat; otherwise, it
-// reports false and mapValue renders the map. With render, it also appends
-// the entry.
+// mapEntry checks that the entry in v sorts after the previous one, the order
+// that picobuf encodes them in with MarshalOptions.Deterministic, so that keys
+// do not repeat; otherwise, it reports false and mapValue renders the map.
+// With render, it also appends the entry.
 func (m *marshaler) mapEntry(e *mapEntry, v wireValue, render bool) (bool, error) {
 	key, value, err := decodeEntry(e, v)
 	if err != nil {

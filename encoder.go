@@ -30,6 +30,8 @@ type Encoder struct {
 	// validatedUTF8 is set for the writing pass of Marshal, after the sizing
 	// pass has already validated every string.
 	validatedUTF8 bool
+	// deterministic sorts map entries by key, see MarshalOptions.
+	deterministic bool
 }
 
 var errEncodeRecursionDepth = &encodeError{message: "picobuf: exceeded maximum nesting depth while encoding"}
@@ -53,6 +55,10 @@ func (enc *Encoder) WithoutUTF8Validation(fn func()) {
 func (enc *Encoder) skipUTF8() bool {
 	return enc.validatedUTF8 || enc.skipUTF8Validation && enc.depth <= enc.skipUTF8Depth+1
 }
+
+// Deterministic reports whether map entries have to be encoded sorted by key,
+// which MarshalOptions.Deterministic asks for.
+func (enc *Encoder) Deterministic() bool { return enc.deterministic }
 
 // Err returns the error that occurred during encoding.
 func (enc *Encoder) Err() error {
@@ -153,7 +159,8 @@ func NewEncoderBuffer(buffer []byte) *Encoder {
 // MarshalAppend appends the encoding of msg to buffer and reuses the storage
 // of the encoder. The zero value is ready to use. Like the MarshalAppend
 // function, it sizes the message first and then encodes it, so msg.Encode runs
-// twice and must do the same thing both times.
+// twice and must do the same thing both times, and it does not sort map
+// entries.
 //
 // Do not use an Encoder concurrently, and do not reenter it from an encoding
 // callback. A callback must not keep the encoder for use after MarshalAppend

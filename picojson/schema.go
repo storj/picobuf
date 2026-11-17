@@ -74,7 +74,8 @@ const (
 
 // Marshal encodes msg, described by the message at offset in s, as ProtoJSON.
 func Marshal(msg picobuf.Message, s Schema, offset int) ([]byte, error) {
-	wire, err := picobuf.Marshal(msg)
+	// walk relies on map entries sorted by key.
+	wire, err := picobuf.MarshalOptions{Deterministic: true}.Marshal(msg)
 	if err != nil {
 		return nil, err
 	}

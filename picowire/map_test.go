@@ -30,7 +30,7 @@ func TestMapEncodingIsSortedByKey(t *testing.T) {
 		"b": "2", "a": "1", "c": "3",
 	}}
 
-	data, err := picobuf.Marshal(&message)
+	data, err := picobuf.MarshalOptions{Deterministic: true}.Marshal(&message)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -66,7 +66,7 @@ func TestMapOfEncodingIsSortedByKey(t *testing.T) {
 		9: "nine", 3: "three", 7: "seven",
 	}}
 
-	data, err := picobuf.Marshal(&message)
+	data, err := picobuf.MarshalOptions{Deterministic: true}.Marshal(&message)
 	if err != nil {
 		t.Fatal(err)
 	}

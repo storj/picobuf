@@ -9,12 +9,12 @@ import (
 	"storj.io/picobuf"
 )
 
-// rangeSorted calls fn for the map entries in key order, so that encoding is
-// deterministic. Single-entry maps are iterated directly to avoid the key
-// slice allocation. It takes a callback rather than returning an iterator,
-// because range-over-func adds several hundred bytes to every caller.
-func rangeSorted[K cmp.Ordered, V any](m map[K]V, fn func(K, V)) {
-	if len(m) < 2 {
+// rangeSorted calls fn for the map entries in key order when the encoder is
+// deterministic, and in map iteration order otherwise. It takes a callback
+// rather than returning an iterator, because range-over-func adds several
+// hundred bytes to every caller.
+func rangeSorted[K cmp.Ordered, V any](enc *picobuf.Encoder, m map[K]V, fn func(K, V)) {
+	if len(m) < 2 || !enc.Deterministic() {
 		for key, val := range m {
 			fn(key, val)
 		}
@@ -126,7 +126,7 @@ func (EnumCodec[E]) PicoDefault(value *E) {
 // MapOf implements a protobuf map using custom key and value wire codecs.
 type MapOf[K cmp.Ordered, V any, KC MapCodec[K], VC MapCodec[V]] map[K]V
 
-// PicoEncode encodes as protobuf, with entries sorted by key.
+// PicoEncode encodes as protobuf, with entries sorted by key when the encoder is deterministic.
 //
 //go:noinline
 func (m *MapOf[K, V, KC, VC]) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
@@ -134,7 +134,7 @@ func (m *MapOf[K, V, KC, VC]) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 	var valueCodec VC
 	// key and val are passed by value, so that they do not escape through the
 	// dictionary dispatched codec calls.
-	rangeSorted(*m, func(key K, val V) {
+	rangeSorted(enc, *m, func(key K, val V) {
 		enc.AlwaysAnyBytes(field, func() {
 			keyCodec.PicoEncode(enc, 1, key)
 			valueCodec.PicoEncode(enc, 2, val)
@@ -159,7 +159,7 @@ func (m *MapOf[K, V, KC, VC]) PicoDecode(dec *picobuf.Decoder, field picobuf.Fie
 // cmp.Ordered, which excludes bool.
 type MapOfBool[V any, VC MapCodec[V]] map[bool]V
 
-// PicoEncode encodes as protobuf, with entries sorted by key.
+// PicoEncode encodes as protobuf, with entries sorted by key when the encoder is deterministic.
 //
 //go:noinline
 func (m *MapOfBool[V, VC]) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {

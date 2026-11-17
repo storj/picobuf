@@ -4,6 +4,8 @@
 package jsoncompat
 
 import (
+	"strconv"
+	"strings"
 	"testing"
 
 	"google.golang.org/protobuf/encoding/protojson"
@@ -160,5 +162,30 @@ func TestJSONWrongWireType(t *testing.T) {
 		"mask":              {WellKnown: &pico.WellKnown{Mask: &picowkt.FieldMask{Paths: []string{"foo"}, XXX_unrecognized: []byte{8, 1}}}},
 	} {
 		t.Run(name, func(t *testing.T) { checkPreservedWire(t, m) })
+	}
+}
+
+// TestJSONMapOrder verifies that map keys come out sorted, and the same every
+// time, although picobuf.Marshal does not sort map entries by default.
+func TestJSONMapOrder(t *testing.T) {
+	msg := &pico.Maps{StringInt64: map[string]int64{}}
+	for i := range 20 {
+		msg.StringInt64[strconv.Itoa(100+i)] = int64(i)
+	}
+	first, err := msg.MarshalJSON()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.HasPrefix(string(first), `{"stringInt64":{"100":"0","101":"1",`) {
+		t.Fatalf("keys not sorted: %s", first)
+	}
+	for range 20 {
+		again, err := msg.MarshalJSON()
+		if err != nil {
+			t.Fatal(err)
+		}
+		if string(again) != string(first) {
+			t.Fatalf("output changed:\n%s\n%s", first, again)
+		}
 	}
 }

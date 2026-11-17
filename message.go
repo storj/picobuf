@@ -94,10 +94,35 @@ func (field FieldNumber) String() string {
 // It sizes the message first and then encodes into a buffer of that size, so
 // msg.Encode runs twice and must do the same thing both times. A custom
 // encoder can tell the passes apart with Encoder.IsSizing.
+//
+// Map entries are encoded in the iteration order of the Go map, so the same
+// message can encode to different bytes. Use MarshalOptions with Deterministic
+// for data that is signed, hashed or compared byte for byte.
 func Marshal(msg Message) ([]byte, error) {
+	return MarshalOptions{}.Marshal(msg)
+}
+
+// MarshalOptions configures encoding. The zero value encodes like Marshal and
+// MarshalAppend.
+type MarshalOptions struct {
+	// Deterministic encodes map entries sorted by key, so that the same
+	// message encodes to the same bytes. Use it for data that is signed,
+	// hashed or compared byte for byte. Without it, map entries are encoded
+	// in the iteration order of the Go map, which skips sorting the keys.
+	//
+	// Like in other protobuf implementations, the encoding is deterministic
+	// only for the same version of the schema and of picobuf. It is not a
+	// canonical encoding across implementations, although the order matches
+	// google.golang.org/protobuf with Deterministic set.
+	Deterministic bool
+}
+
+// Marshal encodes msg, see Marshal.
+func (opts MarshalOptions) Marshal(msg Message) ([]byte, error) {
 	// The encoder is returned to the pool without defer, which costs several
 	// kilobytes in TinyGo. If msg.Encode panics, the encoder is dropped.
 	enc := getEncoder()
+	enc.deterministic = opts.Deterministic
 	data, err := enc.marshal(msg)
 	putEncoder(enc)
 	return data, err
@@ -119,9 +144,16 @@ func (enc *Encoder) marshal(msg Message) ([]byte, error) {
 // buffer. On error it returns buffer with its original length.
 //
 // Like Marshal, it sizes the message first to reserve the output space, so
-// msg.Encode runs twice and must do the same thing both times.
+// msg.Encode runs twice and must do the same thing both times, and it does not
+// sort map entries.
 func MarshalAppend(buffer []byte, msg Message) ([]byte, error) {
+	return MarshalOptions{}.MarshalAppend(buffer, msg)
+}
+
+// MarshalAppend appends the encoding of msg to buffer, see MarshalAppend.
+func (opts MarshalOptions) MarshalAppend(buffer []byte, msg Message) ([]byte, error) {
 	enc := getEncoder()
+	enc.deterministic = opts.Deterministic
 	data, err := enc.marshalAppend(buffer, msg)
 	putEncoder(enc)
 	return data, err
@@ -157,7 +189,7 @@ func (enc *Encoder) sizeForMarshal(msg Message) error {
 		hints.widths = hints.widths[:0]
 		hints.read = 0
 	}
-	*enc = Encoder{sizing: true, hintCount: 1, lengthHints: hints}
+	*enc = Encoder{sizing: true, hintCount: 1, lengthHints: hints, deterministic: enc.deterministic}
 	msg.Encode(enc)
 	if enc.err != nil {
 		return enc.err
