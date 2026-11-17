@@ -87,7 +87,7 @@ func run() error {
 	pkgResults := map[idx]pkgResult{}
 	failures := []error{}
 
-	var g syncGroup
+	var g sync.WaitGroup
 	for _, osarch := range osarches {
 		for _, target := range exeTargets {
 			g.Go(func() {
@@ -314,10 +314,4 @@ func parseSymbol(line string) (sym symbol, err error) {
 
 	sym.name = strings.Join(tokens[2:], " ")
 	return sym, nil
-}
-
-type syncGroup struct{ sync.WaitGroup }
-
-func (g *syncGroup) Go(fn func()) {
-	g.WaitGroup.Go(fn)
 }
