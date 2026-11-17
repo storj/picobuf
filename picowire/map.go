@@ -282,12 +282,12 @@ type MapBoolBool map[bool]bool
 //
 //go:noinline
 func (m *MapBoolBool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val bool) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysBool(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -320,12 +320,12 @@ type MapBoolInt32 map[bool]int32
 //
 //go:noinline
 func (m *MapBoolInt32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysInt32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -358,12 +358,12 @@ type MapBoolInt64 map[bool]int64
 //
 //go:noinline
 func (m *MapBoolInt64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysInt64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -396,12 +396,12 @@ type MapBoolUint32 map[bool]uint32
 //
 //go:noinline
 func (m *MapBoolUint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysUint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -434,12 +434,12 @@ type MapBoolUint64 map[bool]uint64
 //
 //go:noinline
 func (m *MapBoolUint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysUint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -472,12 +472,12 @@ type MapBoolSint32 map[bool]int32
 //
 //go:noinline
 func (m *MapBoolSint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysSint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -510,12 +510,12 @@ type MapBoolSint64 map[bool]int64
 //
 //go:noinline
 func (m *MapBoolSint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysSint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -548,12 +548,12 @@ type MapBoolFixed32 map[bool]uint32
 //
 //go:noinline
 func (m *MapBoolFixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysFixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -586,12 +586,12 @@ type MapBoolFixed64 map[bool]uint64
 //
 //go:noinline
 func (m *MapBoolFixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysFixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -624,12 +624,12 @@ type MapBoolSfixed32 map[bool]int32
 //
 //go:noinline
 func (m *MapBoolSfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysSfixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -662,12 +662,12 @@ type MapBoolSfixed64 map[bool]int64
 //
 //go:noinline
 func (m *MapBoolSfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysSfixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -700,12 +700,12 @@ type MapBoolFloat map[bool]float32
 //
 //go:noinline
 func (m *MapBoolFloat) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val float32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysFloat(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -738,12 +738,12 @@ type MapBoolDouble map[bool]float64
 //
 //go:noinline
 func (m *MapBoolDouble) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val float64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysDouble(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -776,12 +776,12 @@ type MapBoolString map[bool]string
 //
 //go:noinline
 func (m *MapBoolString) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val string) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysString(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -814,12 +814,12 @@ type MapBoolBytes map[bool][]byte
 //
 //go:noinline
 func (m *MapBoolBytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val []byte) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			enc.AlwaysBytes(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -852,12 +852,12 @@ type MapInt32Bool map[int32]bool
 //
 //go:noinline
 func (m *MapInt32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val bool) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt32(1, &key)
 			enc.AlwaysBool(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -890,12 +890,12 @@ type MapInt32Int32 map[int32]int32
 //
 //go:noinline
 func (m *MapInt32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt32(1, &key)
 			enc.AlwaysInt32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -928,12 +928,12 @@ type MapInt32Int64 map[int32]int64
 //
 //go:noinline
 func (m *MapInt32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt32(1, &key)
 			enc.AlwaysInt64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -966,12 +966,12 @@ type MapInt32Uint32 map[int32]uint32
 //
 //go:noinline
 func (m *MapInt32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt32(1, &key)
 			enc.AlwaysUint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1004,12 +1004,12 @@ type MapInt32Uint64 map[int32]uint64
 //
 //go:noinline
 func (m *MapInt32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt32(1, &key)
 			enc.AlwaysUint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1042,12 +1042,12 @@ type MapInt32Sint32 map[int32]int32
 //
 //go:noinline
 func (m *MapInt32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt32(1, &key)
 			enc.AlwaysSint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1080,12 +1080,12 @@ type MapInt32Sint64 map[int32]int64
 //
 //go:noinline
 func (m *MapInt32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt32(1, &key)
 			enc.AlwaysSint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1118,12 +1118,12 @@ type MapInt32Fixed32 map[int32]uint32
 //
 //go:noinline
 func (m *MapInt32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt32(1, &key)
 			enc.AlwaysFixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1156,12 +1156,12 @@ type MapInt32Fixed64 map[int32]uint64
 //
 //go:noinline
 func (m *MapInt32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt32(1, &key)
 			enc.AlwaysFixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1194,12 +1194,12 @@ type MapInt32Sfixed32 map[int32]int32
 //
 //go:noinline
 func (m *MapInt32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt32(1, &key)
 			enc.AlwaysSfixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1232,12 +1232,12 @@ type MapInt32Sfixed64 map[int32]int64
 //
 //go:noinline
 func (m *MapInt32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt32(1, &key)
 			enc.AlwaysSfixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1270,12 +1270,12 @@ type MapInt32Float map[int32]float32
 //
 //go:noinline
 func (m *MapInt32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val float32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt32(1, &key)
 			enc.AlwaysFloat(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1308,12 +1308,12 @@ type MapInt32Double map[int32]float64
 //
 //go:noinline
 func (m *MapInt32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val float64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt32(1, &key)
 			enc.AlwaysDouble(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1346,12 +1346,12 @@ type MapInt32String map[int32]string
 //
 //go:noinline
 func (m *MapInt32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val string) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt32(1, &key)
 			enc.AlwaysString(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1384,12 +1384,12 @@ type MapInt32Bytes map[int32][]byte
 //
 //go:noinline
 func (m *MapInt32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val []byte) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt32(1, &key)
 			enc.AlwaysBytes(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1422,12 +1422,12 @@ type MapInt64Bool map[int64]bool
 //
 //go:noinline
 func (m *MapInt64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val bool) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt64(1, &key)
 			enc.AlwaysBool(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1460,12 +1460,12 @@ type MapInt64Int32 map[int64]int32
 //
 //go:noinline
 func (m *MapInt64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt64(1, &key)
 			enc.AlwaysInt32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1498,12 +1498,12 @@ type MapInt64Int64 map[int64]int64
 //
 //go:noinline
 func (m *MapInt64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt64(1, &key)
 			enc.AlwaysInt64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1536,12 +1536,12 @@ type MapInt64Uint32 map[int64]uint32
 //
 //go:noinline
 func (m *MapInt64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt64(1, &key)
 			enc.AlwaysUint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1574,12 +1574,12 @@ type MapInt64Uint64 map[int64]uint64
 //
 //go:noinline
 func (m *MapInt64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt64(1, &key)
 			enc.AlwaysUint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1612,12 +1612,12 @@ type MapInt64Sint32 map[int64]int32
 //
 //go:noinline
 func (m *MapInt64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt64(1, &key)
 			enc.AlwaysSint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1650,12 +1650,12 @@ type MapInt64Sint64 map[int64]int64
 //
 //go:noinline
 func (m *MapInt64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt64(1, &key)
 			enc.AlwaysSint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1688,12 +1688,12 @@ type MapInt64Fixed32 map[int64]uint32
 //
 //go:noinline
 func (m *MapInt64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt64(1, &key)
 			enc.AlwaysFixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1726,12 +1726,12 @@ type MapInt64Fixed64 map[int64]uint64
 //
 //go:noinline
 func (m *MapInt64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt64(1, &key)
 			enc.AlwaysFixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1764,12 +1764,12 @@ type MapInt64Sfixed32 map[int64]int32
 //
 //go:noinline
 func (m *MapInt64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt64(1, &key)
 			enc.AlwaysSfixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1802,12 +1802,12 @@ type MapInt64Sfixed64 map[int64]int64
 //
 //go:noinline
 func (m *MapInt64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt64(1, &key)
 			enc.AlwaysSfixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1840,12 +1840,12 @@ type MapInt64Float map[int64]float32
 //
 //go:noinline
 func (m *MapInt64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val float32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt64(1, &key)
 			enc.AlwaysFloat(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1878,12 +1878,12 @@ type MapInt64Double map[int64]float64
 //
 //go:noinline
 func (m *MapInt64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val float64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt64(1, &key)
 			enc.AlwaysDouble(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1916,12 +1916,12 @@ type MapInt64String map[int64]string
 //
 //go:noinline
 func (m *MapInt64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val string) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt64(1, &key)
 			enc.AlwaysString(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1954,12 +1954,12 @@ type MapInt64Bytes map[int64][]byte
 //
 //go:noinline
 func (m *MapInt64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val []byte) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysInt64(1, &key)
 			enc.AlwaysBytes(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -1992,12 +1992,12 @@ type MapUint32Bool map[uint32]bool
 //
 //go:noinline
 func (m *MapUint32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val bool) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint32(1, &key)
 			enc.AlwaysBool(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2030,12 +2030,12 @@ type MapUint32Int32 map[uint32]int32
 //
 //go:noinline
 func (m *MapUint32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint32(1, &key)
 			enc.AlwaysInt32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2068,12 +2068,12 @@ type MapUint32Int64 map[uint32]int64
 //
 //go:noinline
 func (m *MapUint32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint32(1, &key)
 			enc.AlwaysInt64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2106,12 +2106,12 @@ type MapUint32Uint32 map[uint32]uint32
 //
 //go:noinline
 func (m *MapUint32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint32(1, &key)
 			enc.AlwaysUint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2144,12 +2144,12 @@ type MapUint32Uint64 map[uint32]uint64
 //
 //go:noinline
 func (m *MapUint32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint32(1, &key)
 			enc.AlwaysUint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2182,12 +2182,12 @@ type MapUint32Sint32 map[uint32]int32
 //
 //go:noinline
 func (m *MapUint32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint32(1, &key)
 			enc.AlwaysSint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2220,12 +2220,12 @@ type MapUint32Sint64 map[uint32]int64
 //
 //go:noinline
 func (m *MapUint32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint32(1, &key)
 			enc.AlwaysSint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2258,12 +2258,12 @@ type MapUint32Fixed32 map[uint32]uint32
 //
 //go:noinline
 func (m *MapUint32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint32(1, &key)
 			enc.AlwaysFixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2296,12 +2296,12 @@ type MapUint32Fixed64 map[uint32]uint64
 //
 //go:noinline
 func (m *MapUint32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint32(1, &key)
 			enc.AlwaysFixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2334,12 +2334,12 @@ type MapUint32Sfixed32 map[uint32]int32
 //
 //go:noinline
 func (m *MapUint32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint32(1, &key)
 			enc.AlwaysSfixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2372,12 +2372,12 @@ type MapUint32Sfixed64 map[uint32]int64
 //
 //go:noinline
 func (m *MapUint32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint32(1, &key)
 			enc.AlwaysSfixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2410,12 +2410,12 @@ type MapUint32Float map[uint32]float32
 //
 //go:noinline
 func (m *MapUint32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val float32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint32(1, &key)
 			enc.AlwaysFloat(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2448,12 +2448,12 @@ type MapUint32Double map[uint32]float64
 //
 //go:noinline
 func (m *MapUint32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val float64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint32(1, &key)
 			enc.AlwaysDouble(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2486,12 +2486,12 @@ type MapUint32String map[uint32]string
 //
 //go:noinline
 func (m *MapUint32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val string) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint32(1, &key)
 			enc.AlwaysString(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2524,12 +2524,12 @@ type MapUint32Bytes map[uint32][]byte
 //
 //go:noinline
 func (m *MapUint32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val []byte) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint32(1, &key)
 			enc.AlwaysBytes(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2562,12 +2562,12 @@ type MapUint64Bool map[uint64]bool
 //
 //go:noinline
 func (m *MapUint64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val bool) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint64(1, &key)
 			enc.AlwaysBool(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2600,12 +2600,12 @@ type MapUint64Int32 map[uint64]int32
 //
 //go:noinline
 func (m *MapUint64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint64(1, &key)
 			enc.AlwaysInt32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2638,12 +2638,12 @@ type MapUint64Int64 map[uint64]int64
 //
 //go:noinline
 func (m *MapUint64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint64(1, &key)
 			enc.AlwaysInt64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2676,12 +2676,12 @@ type MapUint64Uint32 map[uint64]uint32
 //
 //go:noinline
 func (m *MapUint64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint64(1, &key)
 			enc.AlwaysUint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2714,12 +2714,12 @@ type MapUint64Uint64 map[uint64]uint64
 //
 //go:noinline
 func (m *MapUint64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint64(1, &key)
 			enc.AlwaysUint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2752,12 +2752,12 @@ type MapUint64Sint32 map[uint64]int32
 //
 //go:noinline
 func (m *MapUint64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint64(1, &key)
 			enc.AlwaysSint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2790,12 +2790,12 @@ type MapUint64Sint64 map[uint64]int64
 //
 //go:noinline
 func (m *MapUint64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint64(1, &key)
 			enc.AlwaysSint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2828,12 +2828,12 @@ type MapUint64Fixed32 map[uint64]uint32
 //
 //go:noinline
 func (m *MapUint64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint64(1, &key)
 			enc.AlwaysFixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2866,12 +2866,12 @@ type MapUint64Fixed64 map[uint64]uint64
 //
 //go:noinline
 func (m *MapUint64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint64(1, &key)
 			enc.AlwaysFixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2904,12 +2904,12 @@ type MapUint64Sfixed32 map[uint64]int32
 //
 //go:noinline
 func (m *MapUint64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint64(1, &key)
 			enc.AlwaysSfixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2942,12 +2942,12 @@ type MapUint64Sfixed64 map[uint64]int64
 //
 //go:noinline
 func (m *MapUint64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint64(1, &key)
 			enc.AlwaysSfixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -2980,12 +2980,12 @@ type MapUint64Float map[uint64]float32
 //
 //go:noinline
 func (m *MapUint64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val float32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint64(1, &key)
 			enc.AlwaysFloat(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3018,12 +3018,12 @@ type MapUint64Double map[uint64]float64
 //
 //go:noinline
 func (m *MapUint64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val float64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint64(1, &key)
 			enc.AlwaysDouble(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3056,12 +3056,12 @@ type MapUint64String map[uint64]string
 //
 //go:noinline
 func (m *MapUint64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val string) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint64(1, &key)
 			enc.AlwaysString(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3094,12 +3094,12 @@ type MapUint64Bytes map[uint64][]byte
 //
 //go:noinline
 func (m *MapUint64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val []byte) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysUint64(1, &key)
 			enc.AlwaysBytes(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3132,12 +3132,12 @@ type MapSint32Bool map[int32]bool
 //
 //go:noinline
 func (m *MapSint32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val bool) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint32(1, &key)
 			enc.AlwaysBool(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3170,12 +3170,12 @@ type MapSint32Int32 map[int32]int32
 //
 //go:noinline
 func (m *MapSint32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint32(1, &key)
 			enc.AlwaysInt32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3208,12 +3208,12 @@ type MapSint32Int64 map[int32]int64
 //
 //go:noinline
 func (m *MapSint32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint32(1, &key)
 			enc.AlwaysInt64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3246,12 +3246,12 @@ type MapSint32Uint32 map[int32]uint32
 //
 //go:noinline
 func (m *MapSint32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint32(1, &key)
 			enc.AlwaysUint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3284,12 +3284,12 @@ type MapSint32Uint64 map[int32]uint64
 //
 //go:noinline
 func (m *MapSint32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint32(1, &key)
 			enc.AlwaysUint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3322,12 +3322,12 @@ type MapSint32Sint32 map[int32]int32
 //
 //go:noinline
 func (m *MapSint32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint32(1, &key)
 			enc.AlwaysSint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3360,12 +3360,12 @@ type MapSint32Sint64 map[int32]int64
 //
 //go:noinline
 func (m *MapSint32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint32(1, &key)
 			enc.AlwaysSint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3398,12 +3398,12 @@ type MapSint32Fixed32 map[int32]uint32
 //
 //go:noinline
 func (m *MapSint32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint32(1, &key)
 			enc.AlwaysFixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3436,12 +3436,12 @@ type MapSint32Fixed64 map[int32]uint64
 //
 //go:noinline
 func (m *MapSint32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint32(1, &key)
 			enc.AlwaysFixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3474,12 +3474,12 @@ type MapSint32Sfixed32 map[int32]int32
 //
 //go:noinline
 func (m *MapSint32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint32(1, &key)
 			enc.AlwaysSfixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3512,12 +3512,12 @@ type MapSint32Sfixed64 map[int32]int64
 //
 //go:noinline
 func (m *MapSint32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint32(1, &key)
 			enc.AlwaysSfixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3550,12 +3550,12 @@ type MapSint32Float map[int32]float32
 //
 //go:noinline
 func (m *MapSint32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val float32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint32(1, &key)
 			enc.AlwaysFloat(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3588,12 +3588,12 @@ type MapSint32Double map[int32]float64
 //
 //go:noinline
 func (m *MapSint32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val float64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint32(1, &key)
 			enc.AlwaysDouble(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3626,12 +3626,12 @@ type MapSint32String map[int32]string
 //
 //go:noinline
 func (m *MapSint32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val string) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint32(1, &key)
 			enc.AlwaysString(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3664,12 +3664,12 @@ type MapSint32Bytes map[int32][]byte
 //
 //go:noinline
 func (m *MapSint32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val []byte) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint32(1, &key)
 			enc.AlwaysBytes(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3702,12 +3702,12 @@ type MapSint64Bool map[int64]bool
 //
 //go:noinline
 func (m *MapSint64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val bool) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint64(1, &key)
 			enc.AlwaysBool(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3740,12 +3740,12 @@ type MapSint64Int32 map[int64]int32
 //
 //go:noinline
 func (m *MapSint64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint64(1, &key)
 			enc.AlwaysInt32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3778,12 +3778,12 @@ type MapSint64Int64 map[int64]int64
 //
 //go:noinline
 func (m *MapSint64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint64(1, &key)
 			enc.AlwaysInt64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3816,12 +3816,12 @@ type MapSint64Uint32 map[int64]uint32
 //
 //go:noinline
 func (m *MapSint64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint64(1, &key)
 			enc.AlwaysUint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3854,12 +3854,12 @@ type MapSint64Uint64 map[int64]uint64
 //
 //go:noinline
 func (m *MapSint64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint64(1, &key)
 			enc.AlwaysUint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3892,12 +3892,12 @@ type MapSint64Sint32 map[int64]int32
 //
 //go:noinline
 func (m *MapSint64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint64(1, &key)
 			enc.AlwaysSint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3930,12 +3930,12 @@ type MapSint64Sint64 map[int64]int64
 //
 //go:noinline
 func (m *MapSint64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint64(1, &key)
 			enc.AlwaysSint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -3968,12 +3968,12 @@ type MapSint64Fixed32 map[int64]uint32
 //
 //go:noinline
 func (m *MapSint64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint64(1, &key)
 			enc.AlwaysFixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4006,12 +4006,12 @@ type MapSint64Fixed64 map[int64]uint64
 //
 //go:noinline
 func (m *MapSint64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint64(1, &key)
 			enc.AlwaysFixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4044,12 +4044,12 @@ type MapSint64Sfixed32 map[int64]int32
 //
 //go:noinline
 func (m *MapSint64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint64(1, &key)
 			enc.AlwaysSfixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4082,12 +4082,12 @@ type MapSint64Sfixed64 map[int64]int64
 //
 //go:noinline
 func (m *MapSint64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint64(1, &key)
 			enc.AlwaysSfixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4120,12 +4120,12 @@ type MapSint64Float map[int64]float32
 //
 //go:noinline
 func (m *MapSint64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val float32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint64(1, &key)
 			enc.AlwaysFloat(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4158,12 +4158,12 @@ type MapSint64Double map[int64]float64
 //
 //go:noinline
 func (m *MapSint64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val float64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint64(1, &key)
 			enc.AlwaysDouble(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4196,12 +4196,12 @@ type MapSint64String map[int64]string
 //
 //go:noinline
 func (m *MapSint64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val string) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint64(1, &key)
 			enc.AlwaysString(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4234,12 +4234,12 @@ type MapSint64Bytes map[int64][]byte
 //
 //go:noinline
 func (m *MapSint64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val []byte) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSint64(1, &key)
 			enc.AlwaysBytes(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4272,12 +4272,12 @@ type MapFixed32Bool map[uint32]bool
 //
 //go:noinline
 func (m *MapFixed32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val bool) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed32(1, &key)
 			enc.AlwaysBool(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4310,12 +4310,12 @@ type MapFixed32Int32 map[uint32]int32
 //
 //go:noinline
 func (m *MapFixed32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed32(1, &key)
 			enc.AlwaysInt32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4348,12 +4348,12 @@ type MapFixed32Int64 map[uint32]int64
 //
 //go:noinline
 func (m *MapFixed32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed32(1, &key)
 			enc.AlwaysInt64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4386,12 +4386,12 @@ type MapFixed32Uint32 map[uint32]uint32
 //
 //go:noinline
 func (m *MapFixed32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed32(1, &key)
 			enc.AlwaysUint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4424,12 +4424,12 @@ type MapFixed32Uint64 map[uint32]uint64
 //
 //go:noinline
 func (m *MapFixed32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed32(1, &key)
 			enc.AlwaysUint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4462,12 +4462,12 @@ type MapFixed32Sint32 map[uint32]int32
 //
 //go:noinline
 func (m *MapFixed32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed32(1, &key)
 			enc.AlwaysSint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4500,12 +4500,12 @@ type MapFixed32Sint64 map[uint32]int64
 //
 //go:noinline
 func (m *MapFixed32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed32(1, &key)
 			enc.AlwaysSint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4538,12 +4538,12 @@ type MapFixed32Fixed32 map[uint32]uint32
 //
 //go:noinline
 func (m *MapFixed32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed32(1, &key)
 			enc.AlwaysFixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4576,12 +4576,12 @@ type MapFixed32Fixed64 map[uint32]uint64
 //
 //go:noinline
 func (m *MapFixed32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed32(1, &key)
 			enc.AlwaysFixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4614,12 +4614,12 @@ type MapFixed32Sfixed32 map[uint32]int32
 //
 //go:noinline
 func (m *MapFixed32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed32(1, &key)
 			enc.AlwaysSfixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4652,12 +4652,12 @@ type MapFixed32Sfixed64 map[uint32]int64
 //
 //go:noinline
 func (m *MapFixed32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed32(1, &key)
 			enc.AlwaysSfixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4690,12 +4690,12 @@ type MapFixed32Float map[uint32]float32
 //
 //go:noinline
 func (m *MapFixed32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val float32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed32(1, &key)
 			enc.AlwaysFloat(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4728,12 +4728,12 @@ type MapFixed32Double map[uint32]float64
 //
 //go:noinline
 func (m *MapFixed32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val float64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed32(1, &key)
 			enc.AlwaysDouble(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4766,12 +4766,12 @@ type MapFixed32String map[uint32]string
 //
 //go:noinline
 func (m *MapFixed32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val string) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed32(1, &key)
 			enc.AlwaysString(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4804,12 +4804,12 @@ type MapFixed32Bytes map[uint32][]byte
 //
 //go:noinline
 func (m *MapFixed32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint32, val []byte) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed32(1, &key)
 			enc.AlwaysBytes(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4842,12 +4842,12 @@ type MapFixed64Bool map[uint64]bool
 //
 //go:noinline
 func (m *MapFixed64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val bool) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed64(1, &key)
 			enc.AlwaysBool(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4880,12 +4880,12 @@ type MapFixed64Int32 map[uint64]int32
 //
 //go:noinline
 func (m *MapFixed64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed64(1, &key)
 			enc.AlwaysInt32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4918,12 +4918,12 @@ type MapFixed64Int64 map[uint64]int64
 //
 //go:noinline
 func (m *MapFixed64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed64(1, &key)
 			enc.AlwaysInt64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4956,12 +4956,12 @@ type MapFixed64Uint32 map[uint64]uint32
 //
 //go:noinline
 func (m *MapFixed64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed64(1, &key)
 			enc.AlwaysUint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -4994,12 +4994,12 @@ type MapFixed64Uint64 map[uint64]uint64
 //
 //go:noinline
 func (m *MapFixed64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed64(1, &key)
 			enc.AlwaysUint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5032,12 +5032,12 @@ type MapFixed64Sint32 map[uint64]int32
 //
 //go:noinline
 func (m *MapFixed64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed64(1, &key)
 			enc.AlwaysSint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5070,12 +5070,12 @@ type MapFixed64Sint64 map[uint64]int64
 //
 //go:noinline
 func (m *MapFixed64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed64(1, &key)
 			enc.AlwaysSint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5108,12 +5108,12 @@ type MapFixed64Fixed32 map[uint64]uint32
 //
 //go:noinline
 func (m *MapFixed64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed64(1, &key)
 			enc.AlwaysFixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5146,12 +5146,12 @@ type MapFixed64Fixed64 map[uint64]uint64
 //
 //go:noinline
 func (m *MapFixed64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed64(1, &key)
 			enc.AlwaysFixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5184,12 +5184,12 @@ type MapFixed64Sfixed32 map[uint64]int32
 //
 //go:noinline
 func (m *MapFixed64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed64(1, &key)
 			enc.AlwaysSfixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5222,12 +5222,12 @@ type MapFixed64Sfixed64 map[uint64]int64
 //
 //go:noinline
 func (m *MapFixed64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed64(1, &key)
 			enc.AlwaysSfixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5260,12 +5260,12 @@ type MapFixed64Float map[uint64]float32
 //
 //go:noinline
 func (m *MapFixed64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val float32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed64(1, &key)
 			enc.AlwaysFloat(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5298,12 +5298,12 @@ type MapFixed64Double map[uint64]float64
 //
 //go:noinline
 func (m *MapFixed64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val float64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed64(1, &key)
 			enc.AlwaysDouble(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5336,12 +5336,12 @@ type MapFixed64String map[uint64]string
 //
 //go:noinline
 func (m *MapFixed64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val string) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed64(1, &key)
 			enc.AlwaysString(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5374,12 +5374,12 @@ type MapFixed64Bytes map[uint64][]byte
 //
 //go:noinline
 func (m *MapFixed64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key uint64, val []byte) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysFixed64(1, &key)
 			enc.AlwaysBytes(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5412,12 +5412,12 @@ type MapSfixed32Bool map[int32]bool
 //
 //go:noinline
 func (m *MapSfixed32Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val bool) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed32(1, &key)
 			enc.AlwaysBool(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5450,12 +5450,12 @@ type MapSfixed32Int32 map[int32]int32
 //
 //go:noinline
 func (m *MapSfixed32Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed32(1, &key)
 			enc.AlwaysInt32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5488,12 +5488,12 @@ type MapSfixed32Int64 map[int32]int64
 //
 //go:noinline
 func (m *MapSfixed32Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed32(1, &key)
 			enc.AlwaysInt64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5526,12 +5526,12 @@ type MapSfixed32Uint32 map[int32]uint32
 //
 //go:noinline
 func (m *MapSfixed32Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed32(1, &key)
 			enc.AlwaysUint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5564,12 +5564,12 @@ type MapSfixed32Uint64 map[int32]uint64
 //
 //go:noinline
 func (m *MapSfixed32Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed32(1, &key)
 			enc.AlwaysUint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5602,12 +5602,12 @@ type MapSfixed32Sint32 map[int32]int32
 //
 //go:noinline
 func (m *MapSfixed32Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed32(1, &key)
 			enc.AlwaysSint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5640,12 +5640,12 @@ type MapSfixed32Sint64 map[int32]int64
 //
 //go:noinline
 func (m *MapSfixed32Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed32(1, &key)
 			enc.AlwaysSint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5678,12 +5678,12 @@ type MapSfixed32Fixed32 map[int32]uint32
 //
 //go:noinline
 func (m *MapSfixed32Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed32(1, &key)
 			enc.AlwaysFixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5716,12 +5716,12 @@ type MapSfixed32Fixed64 map[int32]uint64
 //
 //go:noinline
 func (m *MapSfixed32Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed32(1, &key)
 			enc.AlwaysFixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5754,12 +5754,12 @@ type MapSfixed32Sfixed32 map[int32]int32
 //
 //go:noinline
 func (m *MapSfixed32Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed32(1, &key)
 			enc.AlwaysSfixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5792,12 +5792,12 @@ type MapSfixed32Sfixed64 map[int32]int64
 //
 //go:noinline
 func (m *MapSfixed32Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed32(1, &key)
 			enc.AlwaysSfixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5830,12 +5830,12 @@ type MapSfixed32Float map[int32]float32
 //
 //go:noinline
 func (m *MapSfixed32Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val float32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed32(1, &key)
 			enc.AlwaysFloat(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5868,12 +5868,12 @@ type MapSfixed32Double map[int32]float64
 //
 //go:noinline
 func (m *MapSfixed32Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val float64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed32(1, &key)
 			enc.AlwaysDouble(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5906,12 +5906,12 @@ type MapSfixed32String map[int32]string
 //
 //go:noinline
 func (m *MapSfixed32String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val string) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed32(1, &key)
 			enc.AlwaysString(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5944,12 +5944,12 @@ type MapSfixed32Bytes map[int32][]byte
 //
 //go:noinline
 func (m *MapSfixed32Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int32, val []byte) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed32(1, &key)
 			enc.AlwaysBytes(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -5982,12 +5982,12 @@ type MapSfixed64Bool map[int64]bool
 //
 //go:noinline
 func (m *MapSfixed64Bool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val bool) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed64(1, &key)
 			enc.AlwaysBool(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6020,12 +6020,12 @@ type MapSfixed64Int32 map[int64]int32
 //
 //go:noinline
 func (m *MapSfixed64Int32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed64(1, &key)
 			enc.AlwaysInt32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6058,12 +6058,12 @@ type MapSfixed64Int64 map[int64]int64
 //
 //go:noinline
 func (m *MapSfixed64Int64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed64(1, &key)
 			enc.AlwaysInt64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6096,12 +6096,12 @@ type MapSfixed64Uint32 map[int64]uint32
 //
 //go:noinline
 func (m *MapSfixed64Uint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed64(1, &key)
 			enc.AlwaysUint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6134,12 +6134,12 @@ type MapSfixed64Uint64 map[int64]uint64
 //
 //go:noinline
 func (m *MapSfixed64Uint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed64(1, &key)
 			enc.AlwaysUint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6172,12 +6172,12 @@ type MapSfixed64Sint32 map[int64]int32
 //
 //go:noinline
 func (m *MapSfixed64Sint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed64(1, &key)
 			enc.AlwaysSint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6210,12 +6210,12 @@ type MapSfixed64Sint64 map[int64]int64
 //
 //go:noinline
 func (m *MapSfixed64Sint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed64(1, &key)
 			enc.AlwaysSint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6248,12 +6248,12 @@ type MapSfixed64Fixed32 map[int64]uint32
 //
 //go:noinline
 func (m *MapSfixed64Fixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed64(1, &key)
 			enc.AlwaysFixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6286,12 +6286,12 @@ type MapSfixed64Fixed64 map[int64]uint64
 //
 //go:noinline
 func (m *MapSfixed64Fixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed64(1, &key)
 			enc.AlwaysFixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6324,12 +6324,12 @@ type MapSfixed64Sfixed32 map[int64]int32
 //
 //go:noinline
 func (m *MapSfixed64Sfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed64(1, &key)
 			enc.AlwaysSfixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6362,12 +6362,12 @@ type MapSfixed64Sfixed64 map[int64]int64
 //
 //go:noinline
 func (m *MapSfixed64Sfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed64(1, &key)
 			enc.AlwaysSfixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6400,12 +6400,12 @@ type MapSfixed64Float map[int64]float32
 //
 //go:noinline
 func (m *MapSfixed64Float) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val float32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed64(1, &key)
 			enc.AlwaysFloat(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6438,12 +6438,12 @@ type MapSfixed64Double map[int64]float64
 //
 //go:noinline
 func (m *MapSfixed64Double) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val float64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed64(1, &key)
 			enc.AlwaysDouble(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6476,12 +6476,12 @@ type MapSfixed64String map[int64]string
 //
 //go:noinline
 func (m *MapSfixed64String) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val string) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed64(1, &key)
 			enc.AlwaysString(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6514,12 +6514,12 @@ type MapSfixed64Bytes map[int64][]byte
 //
 //go:noinline
 func (m *MapSfixed64Bytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key int64, val []byte) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysSfixed64(1, &key)
 			enc.AlwaysBytes(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6552,12 +6552,12 @@ type MapStringBool map[string]bool
 //
 //go:noinline
 func (m *MapStringBool) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key string, val bool) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysString(1, &key)
 			enc.AlwaysBool(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6590,12 +6590,12 @@ type MapStringInt32 map[string]int32
 //
 //go:noinline
 func (m *MapStringInt32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key string, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysString(1, &key)
 			enc.AlwaysInt32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6628,12 +6628,12 @@ type MapStringInt64 map[string]int64
 //
 //go:noinline
 func (m *MapStringInt64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key string, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysString(1, &key)
 			enc.AlwaysInt64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6666,12 +6666,12 @@ type MapStringUint32 map[string]uint32
 //
 //go:noinline
 func (m *MapStringUint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key string, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysString(1, &key)
 			enc.AlwaysUint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6704,12 +6704,12 @@ type MapStringUint64 map[string]uint64
 //
 //go:noinline
 func (m *MapStringUint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key string, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysString(1, &key)
 			enc.AlwaysUint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6742,12 +6742,12 @@ type MapStringSint32 map[string]int32
 //
 //go:noinline
 func (m *MapStringSint32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key string, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysString(1, &key)
 			enc.AlwaysSint32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6780,12 +6780,12 @@ type MapStringSint64 map[string]int64
 //
 //go:noinline
 func (m *MapStringSint64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key string, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysString(1, &key)
 			enc.AlwaysSint64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6818,12 +6818,12 @@ type MapStringFixed32 map[string]uint32
 //
 //go:noinline
 func (m *MapStringFixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key string, val uint32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysString(1, &key)
 			enc.AlwaysFixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6856,12 +6856,12 @@ type MapStringFixed64 map[string]uint64
 //
 //go:noinline
 func (m *MapStringFixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key string, val uint64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysString(1, &key)
 			enc.AlwaysFixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6894,12 +6894,12 @@ type MapStringSfixed32 map[string]int32
 //
 //go:noinline
 func (m *MapStringSfixed32) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key string, val int32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysString(1, &key)
 			enc.AlwaysSfixed32(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6932,12 +6932,12 @@ type MapStringSfixed64 map[string]int64
 //
 //go:noinline
 func (m *MapStringSfixed64) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key string, val int64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysString(1, &key)
 			enc.AlwaysSfixed64(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -6970,12 +6970,12 @@ type MapStringFloat map[string]float32
 //
 //go:noinline
 func (m *MapStringFloat) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key string, val float32) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysString(1, &key)
 			enc.AlwaysFloat(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -7008,12 +7008,12 @@ type MapStringDouble map[string]float64
 //
 //go:noinline
 func (m *MapStringDouble) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key string, val float64) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysString(1, &key)
 			enc.AlwaysDouble(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -7046,12 +7046,12 @@ type MapStringString map[string]string
 //
 //go:noinline
 func (m *MapStringString) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key string, val string) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysString(1, &key)
 			enc.AlwaysString(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.
@@ -7084,12 +7084,12 @@ type MapStringBytes map[string][]byte
 //
 //go:noinline
 func (m *MapStringBytes) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key string, val []byte) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysString(1, &key)
 			enc.AlwaysBytes(2, &val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.

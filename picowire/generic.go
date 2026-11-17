@@ -5,45 +5,37 @@ package picowire
 
 import (
 	"cmp"
-	"iter"
 
 	"storj.io/picobuf"
 )
 
-// sortedMap iterates over map entries in key order, so that encoding is
+// rangeSorted calls fn for the map entries in key order, so that encoding is
 // deterministic. Single-entry maps are iterated directly to avoid the key
-// slice allocation.
-func sortedMap[K cmp.Ordered, V any](m map[K]V) iter.Seq2[K, V] {
-	return func(yield func(K, V) bool) {
-		if len(m) < 2 {
-			for key, val := range m {
-				if !yield(key, val) {
-					return
-				}
-			}
-			return
+// slice allocation. It takes a callback rather than returning an iterator,
+// because range-over-func adds several hundred bytes to every caller.
+func rangeSorted[K cmp.Ordered, V any](m map[K]V, fn func(K, V)) {
+	if len(m) < 2 {
+		for key, val := range m {
+			fn(key, val)
 		}
-		keys := make([]K, 0, len(m))
-		for key := range m {
-			keys = append(keys, key)
-		}
-		sortKeys(keys)
-		for _, key := range keys {
-			if !yield(key, m[key]) {
-				return
-			}
-		}
+		return
+	}
+	keys := make([]K, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sortKeys(keys)
+	for _, key := range keys {
+		fn(key, m[key])
 	}
 }
 
-// boolMap iterates over a map with bool keys in key order, false first.
-// There are only two keys, so there is nothing to sort.
-func boolMap[V any](m map[bool]V) iter.Seq2[bool, V] {
-	return func(yield func(bool, V) bool) {
-		for _, key := range [2]bool{false, true} {
-			if val, ok := m[key]; ok && !yield(key, val) {
-				return
-			}
+// rangeBool calls fn for the entries of a map with bool keys in key order,
+// false first. There are only two keys, so there is nothing to sort.
+func rangeBool[V any](m map[bool]V, fn func(bool, V)) {
+	for _, key := range [2]bool{false, true} {
+		if val, ok := m[key]; ok {
+			fn(key, val)
 		}
 	}
 }
@@ -142,12 +134,12 @@ func (m *MapOf[K, V, KC, VC]) PicoEncode(enc *picobuf.Encoder, field picobuf.Fie
 	var valueCodec VC
 	// key and val are passed by value, so that they do not escape through the
 	// dictionary dispatched codec calls.
-	for key, val := range sortedMap(*m) {
+	rangeSorted(*m, func(key K, val V) {
 		enc.AlwaysAnyBytes(field, func() {
 			keyCodec.PicoEncode(enc, 1, key)
 			valueCodec.PicoEncode(enc, 2, val)
 		})
-	}
+	})
 }
 
 // maxMapSizeHint caps the presized map capacity. The hint counts wire
@@ -172,12 +164,12 @@ type MapOfBool[V any, VC MapCodec[V]] map[bool]V
 //go:noinline
 func (m *MapOfBool[V, VC]) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {
 	var valueCodec VC
-	for key, val := range boolMap(*m) {
+	rangeBool(*m, func(key bool, val V) {
 		enc.AlwaysAnyBytes(field, func() {
 			enc.AlwaysBool(1, &key)
 			valueCodec.PicoEncode(enc, 2, val)
 		})
-	}
+	})
 }
 
 // PicoDecode decodes as protobuf.

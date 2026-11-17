@@ -466,20 +466,20 @@ func generateMaps() []byte {
 			pf("// %s implements map<%s,%s>.\n", mapType, strings.ToLower(key.Name), strings.ToLower(val.Name))
 			pf("type %s map[%s]%s\n\n", mapType, key.TypeName(), val.TypeName())
 
-			sorted := "sortedMap(*m)"
+			sorted := "rangeSorted"
 			if key.TypeName() == "bool" {
-				sorted = "boolMap(*m)"
+				sorted = "rangeBool"
 			}
 			pf("// PicoEncode encodes as protobuf, with entries sorted by key.\n")
 			pf("//go:noinline\n")
 			pf("func(m *%s) PicoEncode(enc *picobuf.Encoder, field picobuf.FieldNumber) {\n", mapType)
-			pf("   for key, val := range %s {\n", sorted)
+			pf("   %s(*m, func(key %s, val %s) {\n", sorted, key.TypeName(), val.TypeName())
 			pf("       enc.AlwaysAnyBytes(field, func() {\n")
 			// reference implementations never omit the key or the value.
 			pf("           enc.Always%s(1, &key)\n", key.Name)
 			pf("           enc.Always%s(2, &val)\n", val.Name)
 			pf("       })\n")
-			pf("   }\n")
+			pf("   })\n")
 			pf("}\n\n")
 
 			pf("// PicoDecode decodes as protobuf.\n")
