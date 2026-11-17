@@ -163,6 +163,9 @@ func (enc *Encoder) sizeForMarshal(msg Message) error {
 		return enc.err
 	}
 	enc.sizing = false
+	// The sizing pass encoded the same strings, so the writing pass does not
+	// need to validate them again.
+	enc.validatedUTF8 = true
 	return nil
 }
 

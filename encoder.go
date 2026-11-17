@@ -27,6 +27,9 @@ type Encoder struct {
 
 	sizing             bool
 	skipUTF8Validation bool
+	// validatedUTF8 is set for the writing pass of Marshal, after the sizing
+	// pass has already validated every string.
+	validatedUTF8 bool
 }
 
 var errEncodeRecursionDepth = &encodeError{message: "picobuf: exceeded maximum nesting depth while encoding"}
@@ -46,9 +49,9 @@ func (enc *Encoder) WithoutUTF8Validation(fn func()) {
 }
 
 // skipUTF8 reports whether string validation is currently disabled, per the
-// scoping rules of WithoutUTF8Validation.
+// scoping rules of WithoutUTF8Validation, or done already by the sizing pass.
 func (enc *Encoder) skipUTF8() bool {
-	return enc.skipUTF8Validation && enc.depth <= enc.skipUTF8Depth+1
+	return enc.validatedUTF8 || enc.skipUTF8Validation && enc.depth <= enc.skipUTF8Depth+1
 }
 
 // Err returns the error that occurred during encoding.
