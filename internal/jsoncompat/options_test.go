@@ -4,6 +4,7 @@
 package jsoncompat
 
 import (
+	"math"
 	"strings"
 	"testing"
 
@@ -23,5 +24,13 @@ func TestUnmarshalJSONOptions(t *testing.T) {
 	err := m.UnmarshalJSONOptions(data, picojson.UnmarshalOptions{MaxRepeatedElements: 2})
 	if err == nil || !strings.Contains(err.Error(), "maximum repeated elements") {
 		t.Fatalf("got %v", err)
+	}
+}
+
+func TestUnmarshalJSONOptionsLargeDepth(t *testing.T) {
+	var m pico.Lists
+	opts := picojson.UnmarshalOptions{MaxRecursionDepth: math.MaxInt}
+	if err := m.UnmarshalJSONOptions([]byte(`{"int32":[1]}`), opts); err != nil {
+		t.Fatal(err)
 	}
 }

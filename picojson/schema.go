@@ -12,6 +12,7 @@ package picojson
 
 import (
 	"errors"
+	"math"
 	"strings"
 
 	"storj.io/picobuf"
@@ -116,6 +117,8 @@ func (opts UnmarshalOptions) Unmarshal(data []byte, msg picobuf.Message, s Schem
 	if depth <= 0 {
 		depth = protowire.DefaultRecursionLimit
 	}
+	// picobuf keeps the depth in an int32, and the outermost message adds one.
+	depth = min(depth, math.MaxInt32-1)
 	// Like picobuf, the depth does not count the outermost message.
 	wire, err := unmarshalWire(data, s, int32(offset), depth+1)
 	if err != nil {
