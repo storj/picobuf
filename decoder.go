@@ -678,29 +678,37 @@ func (e *parseError) setOffset(input []byte) {
 	e.offset = cap(input) - e.rest
 }
 
+// maxErrorPath is the number of enclosing fields that an error keeps. A
+// depth-limit failure has thousands of them.
+const maxErrorPath = 16
+
+// addOuter records the field of an enclosing message, keeping the innermost
+// ones.
+//
 //go:noinline
 func (e *parseError) addOuter(field FieldNumber) {
-	e.outer = append(e.outer, field)
+	if len(e.outer) < maxErrorPath {
+		e.outer = append(e.outer, field)
+	} else {
+		e.outer[maxErrorPath-1] = -1 // marks the elided outer fields
+	}
 }
 
 func (e parseError) Error() string {
-	// A depth-limit failure has thousands of outer fields, so keep the ends.
-	const keep = 8
-	path := make([]byte, 0, 32)
-	for i := len(e.outer) - 1; i >= 0; i-- {
-		if i == len(e.outer)-1-keep && i > keep {
-			path = append(path, "(...)."...)
-			i = keep - 1
+	s := ""
+	for _, field := range e.outer {
+		part := "(...)"
+		if field >= 0 {
+			part = field.String()
 		}
-		path = append(path, e.outer[i].String()...)
-		path = append(path, '.')
+		s = part + "." + s
 	}
-	if e.field != 0 || len(path) == 0 {
-		path = append(path, e.field.String()...)
+	if e.field != 0 || s == "" {
+		s += e.field.String()
 	} else {
-		path = path[:len(path)-1]
+		s = s[:len(s)-1] // the unterminated group, whose field is outer[0]
 	}
-	s := "failed while parsing " + string(path)
+	s = "failed while parsing " + s
 	if e.offset >= 0 {
 		s += " at offset " + strconv.Itoa(e.offset)
 	}

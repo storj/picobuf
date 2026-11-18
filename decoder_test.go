@@ -775,7 +775,7 @@ func TestDecoder_MalformedValueError(t *testing.T) {
 		{"nested depth", nestedMessage(4), new(nested), picobuf.UnmarshalOptions{MaxRecursionDepth: 2},
 			"failed while parsing 1.1.1 at offset 6: exceeded maximum recursion depth"},
 		{"deep path", nestedMessage(30), new(nested), picobuf.UnmarshalOptions{MaxRecursionDepth: 20},
-			"failed while parsing 1.1.1.1.1.1.1.1.(...).1.1.1.1.1.1.1.1 at offset 42: exceeded maximum recursion depth"},
+			"failed while parsing (...).1.1.1.1.1.1.1.1.1.1.1.1.1.1.1 at offset 42: exceeded maximum recursion depth"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
