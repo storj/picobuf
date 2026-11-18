@@ -10,6 +10,7 @@ package present
 import (
 	slices "slices"
 	picobuf "storj.io/picobuf"
+	unsafe "unsafe"
 )
 
 type Profile struct {
@@ -71,28 +72,28 @@ func (m *Profile) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	m.SampleType = slices.Grow(m.SampleType, c.RepeatedMessageCount(1))
-	c.RepeatedMessage(1, func(c *picobuf.Decoder) {
+	m.SampleType = slices.Grow(m.SampleType, c.RepeatedMessageCountOfSize(1, unsafe.Sizeof(m.SampleType[0])))
+	c.RepeatedMessageOfSize(1, unsafe.Sizeof(m.SampleType[0]), func(c *picobuf.Decoder) {
 		m.SampleType = append(m.SampleType, ValueType{})
 		c.Loop(m.SampleType[len(m.SampleType)-1].Decode)
 	})
-	m.Sample = slices.Grow(m.Sample, c.RepeatedMessageCount(2))
-	c.RepeatedMessage(2, func(c *picobuf.Decoder) {
+	m.Sample = slices.Grow(m.Sample, c.RepeatedMessageCountOfSize(2, unsafe.Sizeof(m.Sample[0])))
+	c.RepeatedMessageOfSize(2, unsafe.Sizeof(m.Sample[0]), func(c *picobuf.Decoder) {
 		m.Sample = append(m.Sample, Sample{})
 		c.Loop(m.Sample[len(m.Sample)-1].Decode)
 	})
-	m.Mapping = slices.Grow(m.Mapping, c.RepeatedMessageCount(3))
-	c.RepeatedMessage(3, func(c *picobuf.Decoder) {
+	m.Mapping = slices.Grow(m.Mapping, c.RepeatedMessageCountOfSize(3, unsafe.Sizeof(m.Mapping[0])))
+	c.RepeatedMessageOfSize(3, unsafe.Sizeof(m.Mapping[0]), func(c *picobuf.Decoder) {
 		m.Mapping = append(m.Mapping, Mapping{})
 		c.Loop(m.Mapping[len(m.Mapping)-1].Decode)
 	})
-	m.Location = slices.Grow(m.Location, c.RepeatedMessageCount(4))
-	c.RepeatedMessage(4, func(c *picobuf.Decoder) {
+	m.Location = slices.Grow(m.Location, c.RepeatedMessageCountOfSize(4, unsafe.Sizeof(m.Location[0])))
+	c.RepeatedMessageOfSize(4, unsafe.Sizeof(m.Location[0]), func(c *picobuf.Decoder) {
 		m.Location = append(m.Location, Location{})
 		c.Loop(m.Location[len(m.Location)-1].Decode)
 	})
-	m.Function = slices.Grow(m.Function, c.RepeatedMessageCount(5))
-	c.RepeatedMessage(5, func(c *picobuf.Decoder) {
+	m.Function = slices.Grow(m.Function, c.RepeatedMessageCountOfSize(5, unsafe.Sizeof(m.Function[0])))
+	c.RepeatedMessageOfSize(5, unsafe.Sizeof(m.Function[0]), func(c *picobuf.Decoder) {
 		m.Function = append(m.Function, Function{})
 		c.Loop(m.Function[len(m.Function)-1].Decode)
 	})
@@ -160,8 +161,8 @@ func (m *Sample) Decode(c *picobuf.Decoder) {
 	}
 	c.RepeatedUint64(1, &m.LocationId)
 	c.RepeatedInt64(2, &m.Value)
-	m.Label = slices.Grow(m.Label, c.RepeatedMessageCount(3))
-	c.RepeatedMessage(3, func(c *picobuf.Decoder) {
+	m.Label = slices.Grow(m.Label, c.RepeatedMessageCountOfSize(3, unsafe.Sizeof(m.Label[0])))
+	c.RepeatedMessageOfSize(3, unsafe.Sizeof(m.Label[0]), func(c *picobuf.Decoder) {
 		m.Label = append(m.Label, Label{})
 		c.Loop(m.Label[len(m.Label)-1].Decode)
 	})
@@ -280,8 +281,8 @@ func (m *Location) Decode(c *picobuf.Decoder) {
 	c.Uint64(1, &m.Id)
 	c.Uint64(2, &m.MappingId)
 	c.Uint64(3, &m.Address)
-	m.Line = slices.Grow(m.Line, c.RepeatedMessageCount(4))
-	c.RepeatedMessage(4, func(c *picobuf.Decoder) {
+	m.Line = slices.Grow(m.Line, c.RepeatedMessageCountOfSize(4, unsafe.Sizeof(m.Line[0])))
+	c.RepeatedMessageOfSize(4, unsafe.Sizeof(m.Line[0]), func(c *picobuf.Decoder) {
 		m.Line = append(m.Line, Line{})
 		c.Loop(m.Line[len(m.Line)-1].Decode)
 	})

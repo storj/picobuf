@@ -90,6 +90,13 @@ pipeline {
                     }
                 }
 
+                stage('Tests 386') {
+                    steps {
+                        // int is 32 bits, which the 64-bit tests cannot catch.
+                        sh 'GOARCH=386 go test -parallel 4 -p 6 -vet=off ./...'
+                    }
+                }
+
                 stage('Go Compatibility') {
                     steps {
                         sh 'check-cross-compile -compiler "go,go.min" storj.io/picobuf/...'

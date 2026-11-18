@@ -5,6 +5,7 @@ package picowire
 
 import (
 	"cmp"
+	"unsafe"
 
 	"storj.io/picobuf"
 )
@@ -191,7 +192,7 @@ func decodeMap[K comparable, V any, KC MapCodec[K], VC MapCodec[V]](m *map[K]V, 
 			*m = make(map[K]V, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(key)+unsafe.Sizeof(val), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[K]V{}
 		}

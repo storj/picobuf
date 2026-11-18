@@ -3,7 +3,11 @@
 
 package picowire
 
-import "storj.io/picobuf"
+import (
+	"unsafe"
+
+	"storj.io/picobuf"
+)
 
 // BoolCodec encodes and decodes bool map entries.
 type BoolCodec struct{}
@@ -299,7 +303,7 @@ func (m *MapBoolBool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumber
 			*m = make(map[bool]bool, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(bool(false))+unsafe.Sizeof(bool(false)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]bool{}
 		}
@@ -337,7 +341,7 @@ func (m *MapBoolInt32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumbe
 			*m = make(map[bool]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(bool(false))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int32{}
 		}
@@ -375,7 +379,7 @@ func (m *MapBoolInt64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumbe
 			*m = make(map[bool]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(bool(false))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int64{}
 		}
@@ -413,7 +417,7 @@ func (m *MapBoolUint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[bool]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(bool(false))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]uint32{}
 		}
@@ -451,7 +455,7 @@ func (m *MapBoolUint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[bool]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(bool(false))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]uint64{}
 		}
@@ -489,7 +493,7 @@ func (m *MapBoolSint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[bool]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(bool(false))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int32{}
 		}
@@ -527,7 +531,7 @@ func (m *MapBoolSint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[bool]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(bool(false))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int64{}
 		}
@@ -565,7 +569,7 @@ func (m *MapBoolFixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[bool]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(bool(false))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]uint32{}
 		}
@@ -603,7 +607,7 @@ func (m *MapBoolFixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[bool]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(bool(false))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]uint64{}
 		}
@@ -641,7 +645,7 @@ func (m *MapBoolSfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[bool]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(bool(false))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int32{}
 		}
@@ -679,7 +683,7 @@ func (m *MapBoolSfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[bool]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(bool(false))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]int64{}
 		}
@@ -717,7 +721,7 @@ func (m *MapBoolFloat) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumbe
 			*m = make(map[bool]float32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(bool(false))+unsafe.Sizeof(float32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]float32{}
 		}
@@ -755,7 +759,7 @@ func (m *MapBoolDouble) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[bool]float64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(bool(false))+unsafe.Sizeof(float64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]float64{}
 		}
@@ -793,7 +797,7 @@ func (m *MapBoolString) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[bool]string, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(bool(false))+unsafe.Sizeof(string("")), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool]string{}
 		}
@@ -831,7 +835,7 @@ func (m *MapBoolBytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumbe
 			*m = make(map[bool][]byte, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(bool(false))+unsafe.Sizeof([]byte(nil)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[bool][]byte{}
 		}
@@ -869,7 +873,7 @@ func (m *MapInt32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumbe
 			*m = make(map[int32]bool, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(bool(false)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]bool{}
 		}
@@ -907,7 +911,7 @@ func (m *MapInt32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[int32]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
@@ -945,7 +949,7 @@ func (m *MapInt32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[int32]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
@@ -983,7 +987,7 @@ func (m *MapInt32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int32]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
@@ -1021,7 +1025,7 @@ func (m *MapInt32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int32]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
@@ -1059,7 +1063,7 @@ func (m *MapInt32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int32]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
@@ -1097,7 +1101,7 @@ func (m *MapInt32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int32]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
@@ -1135,7 +1139,7 @@ func (m *MapInt32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int32]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
@@ -1173,7 +1177,7 @@ func (m *MapInt32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int32]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
@@ -1211,7 +1215,7 @@ func (m *MapInt32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int32]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
@@ -1249,7 +1253,7 @@ func (m *MapInt32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int32]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
@@ -1287,7 +1291,7 @@ func (m *MapInt32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[int32]float32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(float32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float32{}
 		}
@@ -1325,7 +1329,7 @@ func (m *MapInt32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int32]float64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(float64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float64{}
 		}
@@ -1363,7 +1367,7 @@ func (m *MapInt32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int32]string, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(string("")), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]string{}
 		}
@@ -1401,7 +1405,7 @@ func (m *MapInt32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[int32][]byte, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof([]byte(nil)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32][]byte{}
 		}
@@ -1439,7 +1443,7 @@ func (m *MapInt64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumbe
 			*m = make(map[int64]bool, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(bool(false)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]bool{}
 		}
@@ -1477,7 +1481,7 @@ func (m *MapInt64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[int64]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
@@ -1515,7 +1519,7 @@ func (m *MapInt64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[int64]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
@@ -1553,7 +1557,7 @@ func (m *MapInt64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int64]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
@@ -1591,7 +1595,7 @@ func (m *MapInt64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int64]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
@@ -1629,7 +1633,7 @@ func (m *MapInt64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int64]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
@@ -1667,7 +1671,7 @@ func (m *MapInt64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int64]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
@@ -1705,7 +1709,7 @@ func (m *MapInt64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int64]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
@@ -1743,7 +1747,7 @@ func (m *MapInt64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int64]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
@@ -1781,7 +1785,7 @@ func (m *MapInt64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int64]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
@@ -1819,7 +1823,7 @@ func (m *MapInt64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int64]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
@@ -1857,7 +1861,7 @@ func (m *MapInt64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[int64]float32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(float32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float32{}
 		}
@@ -1895,7 +1899,7 @@ func (m *MapInt64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int64]float64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(float64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float64{}
 		}
@@ -1933,7 +1937,7 @@ func (m *MapInt64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int64]string, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(string("")), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]string{}
 		}
@@ -1971,7 +1975,7 @@ func (m *MapInt64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[int64][]byte, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof([]byte(nil)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64][]byte{}
 		}
@@ -2009,7 +2013,7 @@ func (m *MapUint32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[uint32]bool, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(bool(false)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]bool{}
 		}
@@ -2047,7 +2051,7 @@ func (m *MapUint32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[uint32]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
@@ -2085,7 +2089,7 @@ func (m *MapUint32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[uint32]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
@@ -2123,7 +2127,7 @@ func (m *MapUint32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint32]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint32{}
 		}
@@ -2161,7 +2165,7 @@ func (m *MapUint32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint32]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint64{}
 		}
@@ -2199,7 +2203,7 @@ func (m *MapUint32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint32]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
@@ -2237,7 +2241,7 @@ func (m *MapUint32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint32]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
@@ -2275,7 +2279,7 @@ func (m *MapUint32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint32]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint32{}
 		}
@@ -2313,7 +2317,7 @@ func (m *MapUint32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint32]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint64{}
 		}
@@ -2351,7 +2355,7 @@ func (m *MapUint32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[uint32]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
@@ -2389,7 +2393,7 @@ func (m *MapUint32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[uint32]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
@@ -2427,7 +2431,7 @@ func (m *MapUint32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[uint32]float32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(float32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]float32{}
 		}
@@ -2465,7 +2469,7 @@ func (m *MapUint32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint32]float64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(float64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]float64{}
 		}
@@ -2503,7 +2507,7 @@ func (m *MapUint32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint32]string, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(string("")), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]string{}
 		}
@@ -2541,7 +2545,7 @@ func (m *MapUint32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[uint32][]byte, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof([]byte(nil)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32][]byte{}
 		}
@@ -2579,7 +2583,7 @@ func (m *MapUint64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[uint64]bool, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(bool(false)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]bool{}
 		}
@@ -2617,7 +2621,7 @@ func (m *MapUint64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[uint64]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
@@ -2655,7 +2659,7 @@ func (m *MapUint64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[uint64]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
@@ -2693,7 +2697,7 @@ func (m *MapUint64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint64]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint32{}
 		}
@@ -2731,7 +2735,7 @@ func (m *MapUint64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint64]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint64{}
 		}
@@ -2769,7 +2773,7 @@ func (m *MapUint64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint64]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
@@ -2807,7 +2811,7 @@ func (m *MapUint64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint64]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
@@ -2845,7 +2849,7 @@ func (m *MapUint64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint64]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint32{}
 		}
@@ -2883,7 +2887,7 @@ func (m *MapUint64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint64]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint64{}
 		}
@@ -2921,7 +2925,7 @@ func (m *MapUint64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[uint64]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
@@ -2959,7 +2963,7 @@ func (m *MapUint64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[uint64]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
@@ -2997,7 +3001,7 @@ func (m *MapUint64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[uint64]float32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(float32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]float32{}
 		}
@@ -3035,7 +3039,7 @@ func (m *MapUint64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint64]float64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(float64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]float64{}
 		}
@@ -3073,7 +3077,7 @@ func (m *MapUint64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint64]string, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(string("")), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]string{}
 		}
@@ -3111,7 +3115,7 @@ func (m *MapUint64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[uint64][]byte, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof([]byte(nil)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64][]byte{}
 		}
@@ -3149,7 +3153,7 @@ func (m *MapSint32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[int32]bool, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(bool(false)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]bool{}
 		}
@@ -3187,7 +3191,7 @@ func (m *MapSint32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int32]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
@@ -3225,7 +3229,7 @@ func (m *MapSint32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int32]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
@@ -3263,7 +3267,7 @@ func (m *MapSint32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int32]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
@@ -3301,7 +3305,7 @@ func (m *MapSint32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int32]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
@@ -3339,7 +3343,7 @@ func (m *MapSint32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int32]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
@@ -3377,7 +3381,7 @@ func (m *MapSint32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int32]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
@@ -3415,7 +3419,7 @@ func (m *MapSint32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int32]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
@@ -3453,7 +3457,7 @@ func (m *MapSint32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int32]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
@@ -3491,7 +3495,7 @@ func (m *MapSint32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int32]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
@@ -3529,7 +3533,7 @@ func (m *MapSint32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int32]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
@@ -3567,7 +3571,7 @@ func (m *MapSint32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int32]float32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(float32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float32{}
 		}
@@ -3605,7 +3609,7 @@ func (m *MapSint32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int32]float64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(float64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float64{}
 		}
@@ -3643,7 +3647,7 @@ func (m *MapSint32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int32]string, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(string("")), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]string{}
 		}
@@ -3681,7 +3685,7 @@ func (m *MapSint32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int32][]byte, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof([]byte(nil)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32][]byte{}
 		}
@@ -3719,7 +3723,7 @@ func (m *MapSint64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[int64]bool, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(bool(false)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]bool{}
 		}
@@ -3757,7 +3761,7 @@ func (m *MapSint64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int64]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
@@ -3795,7 +3799,7 @@ func (m *MapSint64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int64]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
@@ -3833,7 +3837,7 @@ func (m *MapSint64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int64]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
@@ -3871,7 +3875,7 @@ func (m *MapSint64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int64]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
@@ -3909,7 +3913,7 @@ func (m *MapSint64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int64]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
@@ -3947,7 +3951,7 @@ func (m *MapSint64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int64]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
@@ -3985,7 +3989,7 @@ func (m *MapSint64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int64]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
@@ -4023,7 +4027,7 @@ func (m *MapSint64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int64]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
@@ -4061,7 +4065,7 @@ func (m *MapSint64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int64]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
@@ -4099,7 +4103,7 @@ func (m *MapSint64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int64]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
@@ -4137,7 +4141,7 @@ func (m *MapSint64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int64]float32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(float32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float32{}
 		}
@@ -4175,7 +4179,7 @@ func (m *MapSint64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int64]float64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(float64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float64{}
 		}
@@ -4213,7 +4217,7 @@ func (m *MapSint64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int64]string, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(string("")), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]string{}
 		}
@@ -4251,7 +4255,7 @@ func (m *MapSint64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[int64][]byte, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof([]byte(nil)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64][]byte{}
 		}
@@ -4289,7 +4293,7 @@ func (m *MapFixed32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[uint32]bool, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(bool(false)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]bool{}
 		}
@@ -4327,7 +4331,7 @@ func (m *MapFixed32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint32]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
@@ -4365,7 +4369,7 @@ func (m *MapFixed32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint32]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
@@ -4403,7 +4407,7 @@ func (m *MapFixed32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint32]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint32{}
 		}
@@ -4441,7 +4445,7 @@ func (m *MapFixed32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint32]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint64{}
 		}
@@ -4479,7 +4483,7 @@ func (m *MapFixed32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint32]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
@@ -4517,7 +4521,7 @@ func (m *MapFixed32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint32]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
@@ -4555,7 +4559,7 @@ func (m *MapFixed32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[uint32]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint32{}
 		}
@@ -4593,7 +4597,7 @@ func (m *MapFixed32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[uint32]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]uint64{}
 		}
@@ -4631,7 +4635,7 @@ func (m *MapFixed32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 			*m = make(map[uint32]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int32{}
 		}
@@ -4669,7 +4673,7 @@ func (m *MapFixed32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 			*m = make(map[uint32]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]int64{}
 		}
@@ -4707,7 +4711,7 @@ func (m *MapFixed32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint32]float32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(float32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]float32{}
 		}
@@ -4745,7 +4749,7 @@ func (m *MapFixed32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint32]float64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(float64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]float64{}
 		}
@@ -4783,7 +4787,7 @@ func (m *MapFixed32String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint32]string, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof(string("")), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32]string{}
 		}
@@ -4821,7 +4825,7 @@ func (m *MapFixed32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint32][]byte, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint32(0x0))+unsafe.Sizeof([]byte(nil)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint32][]byte{}
 		}
@@ -4859,7 +4863,7 @@ func (m *MapFixed64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[uint64]bool, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(bool(false)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]bool{}
 		}
@@ -4897,7 +4901,7 @@ func (m *MapFixed64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint64]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
@@ -4935,7 +4939,7 @@ func (m *MapFixed64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint64]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
@@ -4973,7 +4977,7 @@ func (m *MapFixed64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint64]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint32{}
 		}
@@ -5011,7 +5015,7 @@ func (m *MapFixed64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint64]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint64{}
 		}
@@ -5049,7 +5053,7 @@ func (m *MapFixed64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint64]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
@@ -5087,7 +5091,7 @@ func (m *MapFixed64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint64]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
@@ -5125,7 +5129,7 @@ func (m *MapFixed64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[uint64]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint32{}
 		}
@@ -5163,7 +5167,7 @@ func (m *MapFixed64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[uint64]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]uint64{}
 		}
@@ -5201,7 +5205,7 @@ func (m *MapFixed64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 			*m = make(map[uint64]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int32{}
 		}
@@ -5239,7 +5243,7 @@ func (m *MapFixed64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 			*m = make(map[uint64]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]int64{}
 		}
@@ -5277,7 +5281,7 @@ func (m *MapFixed64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint64]float32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(float32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]float32{}
 		}
@@ -5315,7 +5319,7 @@ func (m *MapFixed64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint64]float64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(float64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]float64{}
 		}
@@ -5353,7 +5357,7 @@ func (m *MapFixed64String) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[uint64]string, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof(string("")), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64]string{}
 		}
@@ -5391,7 +5395,7 @@ func (m *MapFixed64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[uint64][]byte, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(uint64(0x0))+unsafe.Sizeof([]byte(nil)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[uint64][]byte{}
 		}
@@ -5429,7 +5433,7 @@ func (m *MapSfixed32Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int32]bool, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(bool(false)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]bool{}
 		}
@@ -5467,7 +5471,7 @@ func (m *MapSfixed32Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int32]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
@@ -5505,7 +5509,7 @@ func (m *MapSfixed32Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int32]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
@@ -5543,7 +5547,7 @@ func (m *MapSfixed32Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int32]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
@@ -5581,7 +5585,7 @@ func (m *MapSfixed32Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int32]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
@@ -5619,7 +5623,7 @@ func (m *MapSfixed32Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int32]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
@@ -5657,7 +5661,7 @@ func (m *MapSfixed32Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int32]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
@@ -5695,7 +5699,7 @@ func (m *MapSfixed32Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 			*m = make(map[int32]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint32{}
 		}
@@ -5733,7 +5737,7 @@ func (m *MapSfixed32Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 			*m = make(map[int32]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]uint64{}
 		}
@@ -5771,7 +5775,7 @@ func (m *MapSfixed32Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Fie
 			*m = make(map[int32]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int32{}
 		}
@@ -5809,7 +5813,7 @@ func (m *MapSfixed32Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Fie
 			*m = make(map[int32]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]int64{}
 		}
@@ -5847,7 +5851,7 @@ func (m *MapSfixed32Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int32]float32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(float32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float32{}
 		}
@@ -5885,7 +5889,7 @@ func (m *MapSfixed32Double) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int32]float64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(float64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]float64{}
 		}
@@ -5923,7 +5927,7 @@ func (m *MapSfixed32String) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int32]string, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof(string("")), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32]string{}
 		}
@@ -5961,7 +5965,7 @@ func (m *MapSfixed32Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int32][]byte, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int32(0))+unsafe.Sizeof([]byte(nil)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int32][]byte{}
 		}
@@ -5999,7 +6003,7 @@ func (m *MapSfixed64Bool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[int64]bool, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(bool(false)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]bool{}
 		}
@@ -6037,7 +6041,7 @@ func (m *MapSfixed64Int32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int64]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
@@ -6075,7 +6079,7 @@ func (m *MapSfixed64Int64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int64]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
@@ -6113,7 +6117,7 @@ func (m *MapSfixed64Uint32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int64]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
@@ -6151,7 +6155,7 @@ func (m *MapSfixed64Uint64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int64]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
@@ -6189,7 +6193,7 @@ func (m *MapSfixed64Sint32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int64]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
@@ -6227,7 +6231,7 @@ func (m *MapSfixed64Sint64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int64]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
@@ -6265,7 +6269,7 @@ func (m *MapSfixed64Fixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 			*m = make(map[int64]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint32{}
 		}
@@ -6303,7 +6307,7 @@ func (m *MapSfixed64Fixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Fiel
 			*m = make(map[int64]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]uint64{}
 		}
@@ -6341,7 +6345,7 @@ func (m *MapSfixed64Sfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Fie
 			*m = make(map[int64]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int32{}
 		}
@@ -6379,7 +6383,7 @@ func (m *MapSfixed64Sfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Fie
 			*m = make(map[int64]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]int64{}
 		}
@@ -6417,7 +6421,7 @@ func (m *MapSfixed64Float) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int64]float32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(float32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float32{}
 		}
@@ -6455,7 +6459,7 @@ func (m *MapSfixed64Double) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int64]float64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(float64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]float64{}
 		}
@@ -6493,7 +6497,7 @@ func (m *MapSfixed64String) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[int64]string, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof(string("")), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64]string{}
 		}
@@ -6531,7 +6535,7 @@ func (m *MapSfixed64Bytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[int64][]byte, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(int64(0))+unsafe.Sizeof([]byte(nil)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[int64][]byte{}
 		}
@@ -6569,7 +6573,7 @@ func (m *MapStringBool) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNumb
 			*m = make(map[string]bool, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(string(""))+unsafe.Sizeof(bool(false)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]bool{}
 		}
@@ -6607,7 +6611,7 @@ func (m *MapStringInt32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[string]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(string(""))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int32{}
 		}
@@ -6645,7 +6649,7 @@ func (m *MapStringInt64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[string]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(string(""))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int64{}
 		}
@@ -6683,7 +6687,7 @@ func (m *MapStringUint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[string]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(string(""))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]uint32{}
 		}
@@ -6721,7 +6725,7 @@ func (m *MapStringUint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[string]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(string(""))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]uint64{}
 		}
@@ -6759,7 +6763,7 @@ func (m *MapStringSint32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[string]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(string(""))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int32{}
 		}
@@ -6797,7 +6801,7 @@ func (m *MapStringSint64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[string]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(string(""))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int64{}
 		}
@@ -6835,7 +6839,7 @@ func (m *MapStringFixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[string]uint32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(string(""))+unsafe.Sizeof(uint32(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]uint32{}
 		}
@@ -6873,7 +6877,7 @@ func (m *MapStringFixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldN
 			*m = make(map[string]uint64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(string(""))+unsafe.Sizeof(uint64(0x0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]uint64{}
 		}
@@ -6911,7 +6915,7 @@ func (m *MapStringSfixed32) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[string]int32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(string(""))+unsafe.Sizeof(int32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int32{}
 		}
@@ -6949,7 +6953,7 @@ func (m *MapStringSfixed64) PicoDecode(dec *picobuf.Decoder, field picobuf.Field
 			*m = make(map[string]int64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(string(""))+unsafe.Sizeof(int64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]int64{}
 		}
@@ -6987,7 +6991,7 @@ func (m *MapStringFloat) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[string]float32, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(string(""))+unsafe.Sizeof(float32(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]float32{}
 		}
@@ -7025,7 +7029,7 @@ func (m *MapStringDouble) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[string]float64, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(string(""))+unsafe.Sizeof(float64(0)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]float64{}
 		}
@@ -7063,7 +7067,7 @@ func (m *MapStringString) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNu
 			*m = make(map[string]string, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(string(""))+unsafe.Sizeof(string("")), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string]string{}
 		}
@@ -7101,7 +7105,7 @@ func (m *MapStringBytes) PicoDecode(dec *picobuf.Decoder, field picobuf.FieldNum
 			*m = make(map[string][]byte, min(n, maxMapSizeHint))
 		}
 	}
-	dec.RepeatedMessage(field, func(c *picobuf.Decoder) {
+	dec.RepeatedMessageOfSize(field, unsafe.Sizeof(string(""))+unsafe.Sizeof([]byte(nil)), func(c *picobuf.Decoder) {
 		if *m == nil {
 			*m = map[string][]byte{}
 		}

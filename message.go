@@ -240,6 +240,15 @@ type UnmarshalOptions struct {
 	// MaxRepeatedElements limits the total number of repeated values decoded
 	// across the message. Zero disables the limit.
 	MaxRepeatedElements int
+	// MaxRepeatedBytes limits the memory that the repeated values decoded
+	// across the message take: the Go size of each element, such as 8 bytes
+	// for an int64, 16 for a string header, the struct size of a message plus
+	// its pointer, and the key plus value size of a map entry. It excludes
+	// string and bytes contents, which the input size bounds, and messages
+	// that singular fields of the elements allocate. A tiny encoded element
+	// can take far more memory than the input, so set it for untrusted input.
+	// Zero disables the limit.
+	MaxRepeatedBytes int
 }
 
 // Unmarshal decodes data into msg. It merges into msg and does not reset it
@@ -257,6 +266,8 @@ func (opts UnmarshalOptions) unmarshal(data []byte, msg Message, dec *Decoder) e
 	*dec = Decoder{
 		messageDecodeState: messageDecodeState{buffer: data},
 		depthBudget:        protowire.DefaultRecursionLimit,
+		repeatedLeft:       math.MaxInt32,
+		repeatedBytesLeft:  math.MaxInt64,
 	}
 	dec.aliasInput = opts.AliasInput
 	dec.allowInvalidUTF8 = opts.AllowInvalidUTF8
@@ -264,7 +275,10 @@ func (opts UnmarshalOptions) unmarshal(data []byte, msg Message, dec *Decoder) e
 		dec.depthBudget = int32(min(opts.MaxRecursionDepth, math.MaxInt32))
 	}
 	if opts.MaxRepeatedElements > 0 {
-		dec.maxRepeatedElements = int32(min(opts.MaxRepeatedElements, math.MaxInt32))
+		dec.repeatedLeft = int32(min(opts.MaxRepeatedElements, math.MaxInt32))
+	}
+	if opts.MaxRepeatedBytes > 0 {
+		dec.repeatedBytesLeft = int64(opts.MaxRepeatedBytes)
 	}
 	dec.Loop(msg.Decode)
 	if dec.err != nil {

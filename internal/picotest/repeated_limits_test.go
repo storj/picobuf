@@ -6,10 +6,13 @@ package picotest
 import (
 	"bytes"
 	"slices"
+	"strings"
 	"testing"
 	"time"
+	"unsafe"
 
 	"storj.io/picobuf"
+	"storj.io/picobuf/internal/protowire"
 )
 
 func TestCustomRepeatedLimits(t *testing.T) {
@@ -58,5 +61,53 @@ func TestCustomRepeatedWrongWire(t *testing.T) {
 	}
 	if len(m.RepeatedCustomTypeCast) != 2 || !bytes.Equal(m.XXX_unrecognized, []byte{0x40, 7}) {
 		t.Fatalf("unexpected decoding: %+v", m)
+	}
+}
+
+func TestRepeatedBytesLimit(t *testing.T) {
+	const limit = 1 << 10
+	opts := picobuf.UnmarshalOptions{MaxRepeatedBytes: limit}
+	// Each case repeats a tiny element that takes far more memory decoded.
+	type test struct {
+		name  string
+		data  []byte
+		msg   picobuf.Message
+		size  uintptr
+		count func() int
+	}
+	var tests []test
+	add := func(name string, data []byte, msg picobuf.Message, size uintptr, count func() int) {
+		tests = append(tests, test{name, data, msg, size, count})
+	}
+	var pointers, values VariationsMessage
+	add("message pointers", bytes.Repeat([]byte{3<<3 | 2, 0}, 1000), &pointers,
+		unsafe.Sizeof(Message{})+unsafe.Sizeof(&Message{}), func() int { return len(pointers.Rep) })
+	add("message values", bytes.Repeat([]byte{6<<3 | 2, 0}, 1000), &values,
+		unsafe.Sizeof(Message{}), func() int { return len(values.PresentRep) })
+	tag := func(num protowire.Number, typ protowire.Type) []byte { return protowire.AppendTag(nil, num, typ) }
+	repeat := func(item []byte) []byte { return bytes.Repeat(item, 1000) }
+	var packed AllTypes
+	add("packed int64", protowire.AppendBytes(tag(18, protowire.BytesType), make([]byte, 1000)), &packed,
+		8, func() int { return len(packed.Int64S) })
+	var unpacked AllTypes
+	add("unpacked int64", repeat(append(tag(18, protowire.VarintType), 0)), &unpacked,
+		8, func() int { return len(unpacked.Int64S) })
+	var strs AllTypes
+	add("strings", repeat(append(tag(30, protowire.BytesType), 0)), &strs,
+		unsafe.Sizeof(""), func() int { return len(strs.Strings) })
+	var m Map
+	add("map entries", repeat(append(tag(1, protowire.BytesType), 0)), &m,
+		8, func() int { return len(m.Values) })
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := opts.Unmarshal(tt.data, tt.msg)
+			if err == nil || !strings.Contains(err.Error(), "maximum repeated bytes") {
+				t.Fatalf("got %v", err)
+			}
+			if got, most := tt.count(), int(limit/tt.size); got > most {
+				t.Fatalf("decoded %d elements, the limit allows %d", got, most)
+			}
+		})
 	}
 }

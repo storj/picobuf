@@ -105,6 +105,9 @@ type UnmarshalOptions struct {
 	// MaxRepeatedElements limits the total number of repeated values decoded
 	// across the message. Zero disables the limit.
 	MaxRepeatedElements int
+	// MaxRepeatedBytes limits the memory that the repeated values take, see
+	// picobuf.UnmarshalOptions.MaxRepeatedBytes. Zero disables the limit.
+	MaxRepeatedBytes int
 }
 
 // Unmarshal decodes ProtoJSON data into msg, described by the message at
@@ -129,6 +132,7 @@ func (opts UnmarshalOptions) Unmarshal(data []byte, msg picobuf.Message, s Schem
 	return picobuf.UnmarshalOptions{
 		MaxRecursionDepth:   opts.MaxRecursionDepth,
 		MaxRepeatedElements: opts.MaxRepeatedElements,
+		MaxRepeatedBytes:    opts.MaxRepeatedBytes,
 	}.Unmarshal(wire, msg)
 }
 

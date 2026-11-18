@@ -15,6 +15,7 @@ import (
 	picowire "storj.io/picobuf/picowire"
 	strconv "strconv"
 	time "time"
+	unsafe "unsafe"
 )
 
 type MapEnum int32
@@ -979,8 +980,8 @@ func (m *VariationsMessage) Decode(c *picobuf.Decoder) {
 	picobuf.DecodeRepeatedMessages(c, 3, &m.Rep, (*Message).Decode)
 	c.PresentMessage(4, m.PresentBasic.Decode)
 	c.PresentMessage(5, m.PresentOpt.Decode)
-	m.PresentRep = slices.Grow(m.PresentRep, c.RepeatedMessageCount(6))
-	c.RepeatedMessage(6, func(c *picobuf.Decoder) {
+	m.PresentRep = slices.Grow(m.PresentRep, c.RepeatedMessageCountOfSize(6, unsafe.Sizeof(m.PresentRep[0])))
+	c.RepeatedMessageOfSize(6, unsafe.Sizeof(m.PresentRep[0]), func(c *picobuf.Decoder) {
 		m.PresentRep = append(m.PresentRep, Message{})
 		c.Loop(m.PresentRep[len(m.PresentRep)-1].Decode)
 	})
@@ -1079,7 +1080,7 @@ func (m *CustomBytes) Decode(c *picobuf.Decoder) {
 		}
 		m.Opt.PicoDecode(c, 2)
 	}
-	for c.MatchField(3, 2) && c.TakeRepeated(3) {
+	for c.MatchField(3, 2) && c.TakeRepeatedOfSize(3, unsafe.Sizeof(m.Rep[0])) {
 		var zero pic.ID
 		m.Rep = append(m.Rep, zero)
 		m.Rep[len(m.Rep)-1].PicoDecode(c, 3)
@@ -1090,7 +1091,7 @@ func (m *CustomBytes) Decode(c *picobuf.Decoder) {
 	if c.MatchField(5, 2) {
 		m.PresentOpt.PicoDecode(c, 5)
 	}
-	for c.MatchField(6, 2) && c.TakeRepeated(6) {
+	for c.MatchField(6, 2) && c.TakeRepeatedOfSize(6, unsafe.Sizeof(m.PresentRep[0])) {
 		var zero pic.ID
 		m.PresentRep = append(m.PresentRep, zero)
 		m.PresentRep[len(m.PresentRep)-1].PicoDecode(c, 6)
@@ -1253,22 +1254,22 @@ func (m *CustomMessageTypes) Decode(c *picobuf.Decoder) {
 	if c.MatchField(5, 2) {
 		(*picoconv.Timestamp)(&m.PresentCustomTypeCast).PicoDecode(c, 5)
 	}
-	for c.MatchField(6, 2) && c.TakeRepeated(6) {
+	for c.MatchField(6, 2) && c.TakeRepeatedOfSize(6, unsafe.Sizeof(*m.RepeatedCustomType[0])+unsafe.Sizeof(m.RepeatedCustomType[0])) {
 		x := new(pic.Timestamp)
 		x.PicoDecode(c, 6)
 		m.RepeatedCustomType = append(m.RepeatedCustomType, x)
 	}
-	for c.MatchField(7, 2) && c.TakeRepeated(7) {
+	for c.MatchField(7, 2) && c.TakeRepeatedOfSize(7, unsafe.Sizeof(m.RepeatedPresentCustomType[0])) {
 		var zero pic.Timestamp
 		m.RepeatedPresentCustomType = append(m.RepeatedPresentCustomType, zero)
 		m.RepeatedPresentCustomType[len(m.RepeatedPresentCustomType)-1].PicoDecode(c, 7)
 	}
-	for c.MatchField(8, 2) && c.TakeRepeated(8) {
+	for c.MatchField(8, 2) && c.TakeRepeatedOfSize(8, unsafe.Sizeof(*m.RepeatedCustomTypeCast[0])+unsafe.Sizeof(m.RepeatedCustomTypeCast[0])) {
 		x := new(time.Time)
 		(*picoconv.Timestamp)(x).PicoDecode(c, 8)
 		m.RepeatedCustomTypeCast = append(m.RepeatedCustomTypeCast, x)
 	}
-	for c.MatchField(9, 2) && c.TakeRepeated(9) {
+	for c.MatchField(9, 2) && c.TakeRepeatedOfSize(9, unsafe.Sizeof(m.RepeatedPresentCustomTypeCast[0])) {
 		var zero time.Time
 		m.RepeatedPresentCustomTypeCast = append(m.RepeatedPresentCustomTypeCast, zero)
 		x := &m.RepeatedPresentCustomTypeCast[len(m.RepeatedPresentCustomTypeCast)-1]
@@ -2019,7 +2020,7 @@ func (m *CustomDurations) Decode(c *picobuf.Decoder) {
 	if m == nil {
 		return
 	}
-	for c.MatchField(1, 2) && c.TakeRepeated(1) {
+	for c.MatchField(1, 2) && c.TakeRepeatedOfSize(1, unsafe.Sizeof(m.Values[0])) {
 		var zero time.Duration
 		m.Values = append(m.Values, zero)
 		x := &m.Values[len(m.Values)-1]

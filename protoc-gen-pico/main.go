@@ -23,8 +23,9 @@ import (
 
 const (
 	picobufPackage  = protogen.GoImportPath("storj.io/picobuf")
-	picowirePackage = protogen.GoImportPath("storj.io/picobuf/picowire")
+	unsafePackage   = protogen.GoImportPath("unsafe")
 	slicesPackage   = protogen.GoImportPath("slices")
+	picowirePackage = protogen.GoImportPath("storj.io/picobuf/picowire")
 	strconvPackage  = protogen.GoImportPath("strconv")
 )
 
@@ -619,7 +620,7 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 			gf.P("  (*", info.castType, ")(m.", field.GoName, ").PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("}")
 		case info.repeated && info.pointer:
-			gf.P("for ", match, " && c.TakeRepeated(", field.Desc.Number(), ") {")
+			gf.P("for ", match, " && c.TakeRepeatedOfSize(", field.Desc.Number(), ", ", unsafePackage.Ident("Sizeof"), "(*m.", field.GoName, "[0])+", unsafePackage.Ident("Sizeof"), "(m.", field.GoName, "[0])) {")
 			gf.P("  x := new(", info.baseType, ")")
 			gf.P("  (*", info.castType, ")(x).PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", x)")
@@ -627,7 +628,7 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 		case !info.repeated && !info.pointer:
 			gf.P("(*", info.castType, ")(&m.", field.GoName, ").PicoDecode(c, ", field.Desc.Number(), ")")
 		case info.repeated && !info.pointer:
-			gf.P("for ", match, " && c.TakeRepeated(", field.Desc.Number(), ") {")
+			gf.P("for ", match, " && c.TakeRepeatedOfSize(", field.Desc.Number(), ", ", unsafePackage.Ident("Sizeof"), "(m.", field.GoName, "[0])) {")
 			gf.P("  var zero ", info.baseType)
 			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", zero)")
 			gf.P("  x := &m.", field.GoName, "[len(m.", field.GoName, ")-1]")
@@ -649,7 +650,7 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 			gf.P("  m.", field.GoName, ".PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("}")
 		case info.repeated && info.pointer:
-			gf.P("for ", match, " && c.TakeRepeated(", field.Desc.Number(), ") {")
+			gf.P("for ", match, " && c.TakeRepeatedOfSize(", field.Desc.Number(), ", ", unsafePackage.Ident("Sizeof"), "(*m.", field.GoName, "[0])+", unsafePackage.Ident("Sizeof"), "(m.", field.GoName, "[0])) {")
 			gf.P("  x := new(", info.baseType, ")")
 			gf.P("  x.PicoDecode(c, ", field.Desc.Number(), ")")
 			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", x)")
@@ -657,7 +658,7 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 		case !info.repeated && !info.pointer:
 			gf.P("m.", field.GoName, ".PicoDecode(c, ", field.Desc.Number(), ")")
 		case info.repeated && !info.pointer:
-			gf.P("for ", match, " && c.TakeRepeated(", field.Desc.Number(), ") {")
+			gf.P("for ", match, " && c.TakeRepeatedOfSize(", field.Desc.Number(), ", ", unsafePackage.Ident("Sizeof"), "(m.", field.GoName, "[0])) {")
 			gf.P("  var zero ", info.baseType)
 			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", zero)")
 			gf.P("  m.", field.GoName, "[len(m.", field.GoName, ")-1].PicoDecode(c, ", field.Desc.Number(), ")")
@@ -693,12 +694,10 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 	case info.kind == kindMessage:
 		messageMethod := "Message"
 		repeatedMethod := "RepeatedMessage"
-		repeatedCountMethod := "RepeatedMessageCount"
 		presentMethod := "PresentMessage"
 		if info.delimited {
 			messageMethod = "Group"
 			repeatedMethod = "RepeatedGroup"
-			repeatedCountMethod = "RepeatedGroupCount"
 			presentMethod = "PresentGroup"
 		}
 		switch {
@@ -714,8 +713,9 @@ func genFieldDecode(gf *generator, field *protogen.Field) {
 		case !info.pointer && !info.repeated:
 			gf.P("c.", presentMethod, "(", field.Desc.Number(), ", m.", field.GoName, ".Decode)")
 		case !info.pointer && info.repeated:
-			gf.P("m.", field.GoName, " = ", slicesPackage.Ident("Grow"), "(m.", field.GoName, ", c.", repeatedCountMethod, "(", field.Desc.Number(), "))")
-			gf.P("c.", repeatedMethod, "(", field.Desc.Number(), ", func(c *", picobufPackage.Ident("Decoder"), ") {")
+			size := []any{unsafePackage.Ident("Sizeof"), "(m.", field.GoName, "[0])"}
+			gf.P(append(append([]any{"m.", field.GoName, " = ", slicesPackage.Ident("Grow"), "(m.", field.GoName, ", c.", repeatedMethod, "CountOfSize(", field.Desc.Number(), ", "}, size...), "))")...)
+			gf.P(append(append([]any{"c.", repeatedMethod, "OfSize(", field.Desc.Number(), ", "}, size...), ", func(c *", picobufPackage.Ident("Decoder"), ") {")...)
 			gf.P("  m.", field.GoName, " = append(m.", field.GoName, ", ", info.baseType, "{})")
 			gf.P("  c.Loop(m.", field.GoName, "[len(m.", field.GoName, ")-1].Decode)")
 			gf.P("})")

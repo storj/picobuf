@@ -282,8 +282,8 @@ func TestGenerateRepeatedCustomRejectsPacked(t *testing.T) {
 	// A custom decoder consumes a single element, so packed input must not
 	// enter the loop, otherwise nothing advances the decoder.
 	for _, want := range []string{
-		"for c.MatchField(1, 0) && c.TakeRepeated(1)",
-		"for c.MatchField(2, 5) && c.TakeRepeated(2)",
+		"for c.MatchField(1, 0) && c.TakeRepeatedOfSize(1, unsafe.Sizeof(m.Custom[0]))",
+		"for c.MatchField(2, 5) && c.TakeRepeatedOfSize(2, unsafe.Sizeof(m.Serialized[0]))",
 	} {
 		if !strings.Contains(content, want) {
 			t.Fatalf("generated repeated custom code does not contain %q:\n%s", want, content)

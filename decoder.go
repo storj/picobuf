@@ -5,6 +5,7 @@ package picobuf
 
 import (
 	"bytes"
+	"math"
 	"slices"
 	"strconv"
 	"unsafe"
@@ -25,15 +26,20 @@ type Decoder struct {
 
 	// Serialized protobuf messages are smaller than 2 GiB, so int32 is
 	// sufficient for nesting and repeated-element limits and counters.
-	depthBudget         int32
-	skipUTF8Budget      int32
-	maxRepeatedElements int32
-	repeatedElements    int32
+	depthBudget    int32
+	skipUTF8Budget int32
+	// repeatedLeft and repeatedBytesLeft are what remains of the repeated
+	// element limits. Without a limit they start at the maximum, which the
+	// input cannot use up. Keeping only the remainder keeps the Decoder at 80
+	// bytes, a smaller allocation size class than 96.
+	repeatedLeft int32
 
 	init               bool
 	aliasInput         bool
 	allowInvalidUTF8   bool
 	skipUTF8Validation bool
+
+	repeatedBytesLeft int64
 }
 
 // WithoutUTF8Validation runs fn without validating the string fields that fn
@@ -73,6 +79,8 @@ func NewDecoder(data []byte) *Decoder {
 	return &Decoder{
 		messageDecodeState: messageDecodeState{buffer: data},
 		depthBudget:        protowire.DefaultRecursionLimit,
+		repeatedLeft:       math.MaxInt32,
+		repeatedBytesLeft:  math.MaxInt64,
 	}
 }
 
@@ -152,12 +160,18 @@ func (dec *Decoder) leaveMessage(parent messageDecodeState) {
 // RepeatedMessage calls fn for each consecutive value of a repeated message
 // field.
 func (dec *Decoder) RepeatedMessage(field FieldNumber, fn func(c *Decoder)) {
+	dec.RepeatedMessageOfSize(field, 0, fn)
+}
+
+// RepeatedMessageOfSize is RepeatedMessage for values that take size bytes of
+// memory each, which UnmarshalOptions.MaxRepeatedBytes limits.
+func (dec *Decoder) RepeatedMessageOfSize(field FieldNumber, size uintptr, fn func(c *Decoder)) {
 	for field == dec.pendingField {
 		if dec.pendingWire != protowire.BytesType {
 			dec.pendingUnknown = true
 			return
 		}
-		if !dec.takeRepeated(field) {
+		if !dec.takeRepeated(field, size) {
 			return
 		}
 
@@ -173,7 +187,14 @@ func (dec *Decoder) RepeatedMessage(field FieldNumber, fn func(c *Decoder)) {
 // RepeatedMessageCount returns the number of consecutive message values for
 // field, capped by the remaining repeated element limit.
 func (dec *Decoder) RepeatedMessageCount(field FieldNumber) int {
-	return dec.repeatedFieldCount(field, protowire.BytesType)
+	return dec.repeatedFieldCount(field, protowire.BytesType, 0)
+}
+
+// RepeatedMessageCountOfSize is RepeatedMessageCount for values that take
+// size bytes of memory each, also capped by the remaining
+// UnmarshalOptions.MaxRepeatedBytes.
+func (dec *Decoder) RepeatedMessageCountOfSize(field FieldNumber, size uintptr) int {
+	return dec.repeatedFieldCount(field, protowire.BytesType, size)
 }
 
 // KeptMessageValue returns the wire state that KeepMessageValue stored for
@@ -214,10 +235,12 @@ type messageValueKey[T, V any] struct{ destination *V }
 // It allocates the elements in blocks of at most 4 KiB instead of one by one,
 // so keeping a single element keeps the rest of its block alive.
 func DecodeRepeatedMessages[T any](dec *Decoder, field FieldNumber, out *[]*T, decode func(*T, *Decoder)) {
-	remaining := dec.RepeatedMessageCount(field)
+	var x *T
+	size := unsafe.Sizeof(*x) + unsafe.Sizeof(x)
+	remaining := dec.RepeatedMessageCountOfSize(field, size)
 	*out = slices.Grow(*out, remaining)
 	var block []T
-	dec.RepeatedMessage(field, func(c *Decoder) {
+	dec.RepeatedMessageOfSize(field, size, func(c *Decoder) {
 		var x *T
 		if len(block) == 0 && remaining > 0 {
 			n := elementBlockLen(remaining, unsafe.Sizeof(*x))
@@ -235,12 +258,16 @@ func DecodeRepeatedMessages[T any](dec *Decoder, field FieldNumber, out *[]*T, d
 	})
 }
 
-// DecodeRepeatedGroups is DecodeRepeatedMessages for delimited messages.
+// DecodeRepeatedGroups is DecodeRepeatedMessages for delimited messages. It
+// is a separate copy, so that programs without groups do not link the group
+// decoding.
 func DecodeRepeatedGroups[T any](dec *Decoder, field FieldNumber, out *[]*T, decode func(*T, *Decoder)) {
-	remaining := dec.RepeatedGroupCount(field)
+	var x *T
+	size := unsafe.Sizeof(*x) + unsafe.Sizeof(x)
+	remaining := dec.RepeatedGroupCountOfSize(field, size)
 	*out = slices.Grow(*out, remaining)
 	var block []T
-	dec.RepeatedGroup(field, func(c *Decoder) {
+	dec.RepeatedGroupOfSize(field, size, func(c *Decoder) {
 		var x *T
 		if len(block) == 0 && remaining > 0 {
 			n := elementBlockLen(remaining, unsafe.Sizeof(*x))
@@ -275,7 +302,7 @@ func (dec *Decoder) RepeatedEnum(field FieldNumber, add func(x int32)) {
 		case protowire.BytesType:
 			packed, n := protowire.ConsumeBytes(dec.buffer)
 			for len(packed) > 0 {
-				if !dec.takeRepeated(field) {
+				if !dec.takeRepeated(field, 4) {
 					return
 				}
 				x, xn := protowire.ConsumeVarint(packed)
@@ -288,7 +315,7 @@ func (dec *Decoder) RepeatedEnum(field FieldNumber, add func(x int32)) {
 			}
 			dec.nextField(n)
 		case protowire.VarintType:
-			if !dec.takeRepeated(field) {
+			if !dec.takeRepeated(field, 4) {
 				return
 			}
 			x, n := protowire.ConsumeVarint(dec.buffer)
@@ -310,27 +337,41 @@ func (dec *Decoder) RepeatedEnum(field FieldNumber, add func(x int32)) {
 // decoders for custom types call it before they allocate each element, because
 // the scalar decoding methods that they use do not count repeated values.
 func (dec *Decoder) TakeRepeated(field FieldNumber) bool {
-	return dec.pendingField == field && dec.takeRepeated(field)
+	return dec.TakeRepeatedOfSize(field, 0)
 }
 
-func (dec *Decoder) takeRepeated(field FieldNumber) bool {
-	if dec.maxRepeatedElements <= 0 {
-		return true
-	}
-	if dec.repeatedElements >= dec.maxRepeatedElements {
-		dec.fail(field, "exceeded maximum repeated elements")
+// TakeRepeatedOfSize is TakeRepeated for an element that takes size bytes of
+// memory, which UnmarshalOptions.MaxRepeatedBytes limits.
+func (dec *Decoder) TakeRepeatedOfSize(field FieldNumber, size uintptr) bool {
+	return dec.pendingField == field && dec.takeRepeated(field, size)
+}
+
+// takeRepeated accounts for one repeated element of size bytes, or fails
+// decoding when that exceeds a limit.
+func (dec *Decoder) takeRepeated(field FieldNumber, size uintptr) bool {
+	if dec.repeatedLeft <= 0 || uint64(size) > uint64(dec.repeatedBytesLeft) {
+		dec.failRepeated(field)
 		return false
 	}
-	dec.repeatedElements++
+	dec.repeatedLeft--
+	dec.repeatedBytesLeft -= int64(size)
 	return true
 }
 
-// addRepeated accounts for count elements of a packed field, which the caller
-// limited with repeatedReservation.
-func (dec *Decoder) addRepeated(count int) {
-	if dec.maxRepeatedElements > 0 {
-		dec.repeatedElements += int32(count)
+// failRepeated fails decoding with the limit that is used up.
+func (dec *Decoder) failRepeated(field FieldNumber) {
+	if dec.repeatedLeft <= 0 {
+		dec.fail(field, "exceeded maximum repeated elements")
+	} else {
+		dec.fail(field, "exceeded maximum repeated bytes")
 	}
+}
+
+// addRepeated accounts for count elements of size bytes of a packed field,
+// which the caller limited with repeatedReservation.
+func (dec *Decoder) addRepeated(count int, size uintptr) {
+	dec.repeatedLeft -= int32(count)
+	dec.repeatedBytesLeft -= int64(count) * int64(size)
 }
 
 // le32 decodes a little-endian fixed32. It avoids encoding/binary, which
@@ -347,15 +388,16 @@ func le64(b []byte) uint64 {
 		uint64(b[4])<<32 | uint64(b[5])<<40 | uint64(b[6])<<48 | uint64(b[7])<<56
 }
 
-func (dec *Decoder) repeatedReservation(count int) int {
-	if dec.maxRepeatedElements <= 0 {
-		return count
+// repeatedReservation limits count elements of size bytes to what the
+// remaining limits allow.
+func (dec *Decoder) repeatedReservation(count int, size uintptr) int {
+	count = min(count, int(dec.repeatedLeft))
+	if size > 0 {
+		// Take the minimum in int64, because the budget without a limit does
+		// not fit a 32-bit int.
+		count = int(min(int64(count), dec.repeatedBytesLeft/int64(size)))
 	}
-	remaining := int(dec.maxRepeatedElements - dec.repeatedElements)
-	if remaining < count {
-		return max(remaining, 0)
-	}
-	return count
+	return max(count, 0)
 }
 
 // Message decodes a message field. It calls fn in a Loop over the fields of
@@ -403,12 +445,18 @@ func (dec *Decoder) PresentGroup(field FieldNumber, fn func(*Decoder)) {
 
 // RepeatedGroup decodes repeated delimited messages.
 func (dec *Decoder) RepeatedGroup(field FieldNumber, fn func(*Decoder)) {
+	dec.RepeatedGroupOfSize(field, 0, fn)
+}
+
+// RepeatedGroupOfSize is RepeatedGroup for values that take size bytes of
+// memory each, which UnmarshalOptions.MaxRepeatedBytes limits.
+func (dec *Decoder) RepeatedGroupOfSize(field FieldNumber, size uintptr, fn func(*Decoder)) {
 	for field == dec.pendingField {
 		if dec.pendingWire != protowire.StartGroupType {
 			dec.pendingUnknown = true
 			return
 		}
-		if !dec.takeRepeated(field) {
+		if !dec.takeRepeated(field, size) {
 			return
 		}
 
@@ -435,10 +483,16 @@ func (dec *Decoder) group(field FieldNumber, fn func(*Decoder)) {
 // its lookahead, so that it does not scan whole nested groups before it
 // decodes them.
 func (dec *Decoder) RepeatedGroupCount(field FieldNumber) int {
-	return dec.repeatedFieldCount(field, protowire.StartGroupType)
+	return dec.repeatedFieldCount(field, protowire.StartGroupType, 0)
 }
 
-func (dec *Decoder) repeatedFieldCount(field FieldNumber, wire protowire.Type) int {
+// RepeatedGroupCountOfSize is RepeatedMessageCountOfSize for delimited
+// messages.
+func (dec *Decoder) RepeatedGroupCountOfSize(field FieldNumber, size uintptr) int {
+	return dec.repeatedFieldCount(field, protowire.StartGroupType, size)
+}
+
+func (dec *Decoder) repeatedFieldCount(field FieldNumber, wire protowire.Type, size uintptr) int {
 	if dec.pendingField != field || dec.pendingWire != wire {
 		return 0
 	}
@@ -464,7 +518,7 @@ func (dec *Decoder) repeatedFieldCount(field FieldNumber, wire protowire.Type) i
 		}
 		buffer = buffer[n:]
 	}
-	return dec.repeatedReservation(count)
+	return dec.repeatedReservation(count, size)
 }
 
 // UnrecognizedFields appends to out the fields that the message does not
