@@ -553,6 +553,12 @@ func genMessageDecode(gf *generator, m *protogen.Message) {
 		}
 		gf.P(append(args, ")")...)
 	case UnrecognizedFields_UNRECOGNIZED_IGNORE:
+		low, high := fieldsBitSet(m)
+		args := []any{"c.SkipUnrecognizedFields(", low}
+		for _, num := range high {
+			args = append(args, ", ", uint64(num))
+		}
+		gf.P(append(args, ")")...)
 	}
 }
 

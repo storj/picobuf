@@ -1399,6 +1399,7 @@ func (m *IgnoreUnknownMessage) Decode(c *picobuf.Decoder) {
 	}
 	c.Int64(2, &m.Second)
 	c.Int64(4, &m.Fourth)
+	c.SkipUnrecognizedFields(20)
 }
 
 func (m *IgnoreUnknownMessage) GetSecond() (v int64) {

@@ -479,10 +479,21 @@ func (dec *Decoder) UnrecognizedFields(exclude uint64, out *[]byte, excludeHigh 
 			dec.fail(dec.pendingField, "unable to parse unrecognized field")
 			return
 		}
-		*out = protowire.AppendTag(*out, protowire.Number(dec.pendingField), dec.pendingWire)
-		*out = append(*out, dec.buffer[:n]...)
+		if out != nil {
+			*out = protowire.AppendTag(*out, protowire.Number(dec.pendingField), dec.pendingWire)
+			*out = append(*out, dec.buffer[:n]...)
+		}
 		dec.nextField(n)
 	}
+}
+
+// SkipUnrecognizedFields skips the fields that the message does not recognize,
+// so that Loop does not call the decoding func once for each of them.
+//
+// The exclude bitmask holds the recognized field numbers below 64, and
+// excludeHigh lists the higher ones.
+func (dec *Decoder) SkipUnrecognizedFields(exclude uint64, excludeHigh ...FieldNumber) {
+	dec.UnrecognizedFields(exclude, nil, excludeHigh...)
 }
 
 // RejectUnrecognizedFields fails decoding when the message does not recognize
