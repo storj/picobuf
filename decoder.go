@@ -6,6 +6,7 @@ package picobuf
 import (
 	"bytes"
 	"slices"
+	"strconv"
 	"unsafe"
 
 	"storj.io/picobuf/internal/protowire"
@@ -129,7 +130,7 @@ func (dec *Decoder) enterScope(message []byte, group FieldNumber) messageDecodeS
 	parent := dec.messageDecodeState
 	tooDeep := dec.depthBudget <= 0
 	if tooDeep {
-		message = nil
+		message = message[:0] // keep the capacity for the error offset
 	}
 	dec.depthBudget--
 	dec.messageDecodeState = messageDecodeState{buffer: message, groupField: group}
@@ -143,6 +144,9 @@ func (dec *Decoder) enterScope(message []byte, group FieldNumber) messageDecodeS
 func (dec *Decoder) leaveMessage(parent messageDecodeState) {
 	dec.messageDecodeState = parent
 	dec.depthBudget++
+	if dec.err != nil {
+		dec.err.addOuter(parent.pendingField)
+	}
 }
 
 // RepeatedMessage calls fn for each consecutive value of a repeated message
@@ -599,16 +603,54 @@ func (dec *Decoder) Fail(field FieldNumber, msg string) {
 func (dec *Decoder) fail(field FieldNumber, msg string) {
 	// TODO: use static error types
 	dec.pendingField = fieldDecodingErrored
-	dec.err = &parseError{field: field, message: msg}
+	dec.err = &parseError{field: field, message: msg, offset: -1, rest: cap(dec.buffer)}
 }
 
+// parseError describes where decoding failed. The path is built only after
+// the failure, as the nested scopes unwind, so successful decoding pays
+// nothing for it.
 type parseError struct {
 	field   FieldNumber
 	message string
+	outer   []FieldNumber // enclosing message and group fields, innermost first
+	offset  int           // byte offset in the input, or -1 when unknown
+	rest    int           // capacity of the buffer at the failure, see setOffset
+}
+
+// setOffset computes the offset of the failure. Every scope buffer slices the
+// input, so the offset is the capacity of the input minus the capacity of the
+// buffer that failed.
+func (e *parseError) setOffset(input []byte) {
+	e.offset = cap(input) - e.rest
+}
+
+//go:noinline
+func (e *parseError) addOuter(field FieldNumber) {
+	e.outer = append(e.outer, field)
 }
 
 func (e parseError) Error() string {
-	return "failed while parsing " + e.field.String() + ": " + e.message
+	// A depth-limit failure has thousands of outer fields, so keep the ends.
+	const keep = 8
+	path := make([]byte, 0, 32)
+	for i := len(e.outer) - 1; i >= 0; i-- {
+		if i == len(e.outer)-1-keep && i > keep {
+			path = append(path, "(...)."...)
+			i = keep - 1
+		}
+		path = append(path, e.outer[i].String()...)
+		path = append(path, '.')
+	}
+	if e.field != 0 || len(path) == 0 {
+		path = append(path, e.field.String()...)
+	} else {
+		path = path[:len(path)-1]
+	}
+	s := "failed while parsing " + string(path)
+	if e.offset >= 0 {
+		s += " at offset " + strconv.Itoa(e.offset)
+	}
+	return s + ": " + e.message
 }
 
 func (dec *Decoder) nextField(advance int) {
@@ -630,7 +672,7 @@ func (dec *Decoder) nextField(advance int) {
 	dec.buffer = dec.buffer[advance:]
 	if len(dec.buffer) == 0 {
 		if dec.groupField != 0 {
-			dec.fail(dec.groupField, "unterminated group")
+			dec.fail(0, "unterminated group") // leaveMessage adds the group field
 			return
 		}
 		dec.pendingField = fieldDecodingDone

@@ -252,7 +252,7 @@ func (opts UnmarshalOptions) Unmarshal(data []byte, msg Message) error {
 // resulting state intact; Decoder.Unmarshal clears it before returning.
 func (opts UnmarshalOptions) unmarshal(data []byte, msg Message, dec *Decoder) error {
 	if opts.MaxInputSize > 0 && len(data) > opts.MaxInputSize {
-		return parseError{message: "input exceeds maximum size"}
+		return parseError{message: "input exceeds maximum size", offset: -1}
 	}
 	*dec = Decoder{
 		messageDecodeState: messageDecodeState{buffer: data},
@@ -267,11 +267,11 @@ func (opts UnmarshalOptions) unmarshal(data []byte, msg Message, dec *Decoder) e
 		dec.maxRepeatedElements = int32(min(opts.MaxRepeatedElements, math.MaxInt32))
 	}
 	dec.Loop(msg.Decode)
-	err := dec.Err()
-	if err == nil {
-		err = ValidateRequired(msg)
+	if dec.err != nil {
+		dec.err.setOffset(data)
+		return dec.err
 	}
-	return err
+	return ValidateRequired(msg)
 }
 
 // Unmarshal decodes data into msg. It merges into msg and does not reset it

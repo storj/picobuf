@@ -753,18 +753,29 @@ func TestDecoder_MalformedValueError(t *testing.T) {
 		want string
 	}{
 		{"message", []byte{0x0a, 0x05, 0x01}, new(nested), picobuf.UnmarshalOptions{},
-			"failed while parsing 1: unexpected EOF"},
+			"failed while parsing 1 at offset 1: unexpected EOF"},
 		{"repeated message", []byte{0x1a, 0x05, 0x01}, new(picotest.VariationsMessage), picobuf.UnmarshalOptions{},
-			"failed while parsing 3: unexpected EOF"},
+			"failed while parsing 3 at offset 1: unexpected EOF"},
 		{"packed", []byte{0x0a, 0x05, 0x01}, new(packedScalars), picobuf.UnmarshalOptions{},
-			"failed while parsing 1: unexpected EOF"},
+			"failed while parsing 1 at offset 1: unexpected EOF"},
 		{"skipped truncated", []byte{0x10, 0x80}, new(nested), picobuf.UnmarshalOptions{},
-			"failed while parsing 2: unexpected EOF"},
+			"failed while parsing 2 at offset 1: unexpected EOF"},
 		{"skipped overflow", append([]byte{0x10}, bytes.Repeat([]byte{0xff}, 10)...), new(nested), picobuf.UnmarshalOptions{},
-			"failed while parsing 2: variable length integer overflow"},
+			"failed while parsing 2 at offset 1: variable length integer overflow"},
 		// Two nested groups in field 2, which nested does not have.
 		{"skipped depth", []byte{0x13, 0x13, 0x14, 0x14}, new(nested), picobuf.UnmarshalOptions{MaxRecursionDepth: 1},
-			"failed while parsing 2: exceeded maximum recursion depth"},
+			"failed while parsing 2 at offset 1: exceeded maximum recursion depth"},
+		// The path lists the enclosing fields, outermost first.
+		{"nested message", []byte{0x0a, 0x04, 0x0a, 0x02, 0x0a, 0x05}, new(nested), picobuf.UnmarshalOptions{},
+			"failed while parsing 1.1.1 at offset 5: unexpected EOF"},
+		{"nested skipped", []byte{0x0a, 0x04, 0x0a, 0x02, 0x10, 0x80}, new(nested), picobuf.UnmarshalOptions{},
+			"failed while parsing 1.1.2 at offset 5: unexpected EOF"},
+		{"unterminated group", []byte{0x0b}, &stateMessage{mode: "Group"}, picobuf.UnmarshalOptions{},
+			"failed while parsing 1 at offset 1: unterminated group"},
+		{"nested depth", nestedMessage(4), new(nested), picobuf.UnmarshalOptions{MaxRecursionDepth: 2},
+			"failed while parsing 1.1.1 at offset 6: exceeded maximum recursion depth"},
+		{"deep path", nestedMessage(30), new(nested), picobuf.UnmarshalOptions{MaxRecursionDepth: 20},
+			"failed while parsing 1.1.1.1.1.1.1.1.(...).1.1.1.1.1.1.1.1 at offset 42: exceeded maximum recursion depth"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
