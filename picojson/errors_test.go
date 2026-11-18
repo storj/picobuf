@@ -7,6 +7,8 @@ import (
 	"errors"
 	"strings"
 	"testing"
+
+	"storj.io/picobuf/internal/protowire"
 )
 
 type countedError struct{ calls int }
@@ -39,7 +41,7 @@ func BenchmarkNestedJSONError(b *testing.B) {
 	data := []byte(strings.Repeat(`{"child":`, 4000) + `{"bad":0}` + strings.Repeat("}", 4000))
 	b.ReportAllocs()
 	for b.Loop() {
-		if _, err := unmarshalWire(data, schema, 0); err == nil {
+		if _, err := unmarshalWire(data, schema, 0, protowire.DefaultRecursionLimit); err == nil {
 			b.Fatal("accepted unknown field")
 		}
 	}

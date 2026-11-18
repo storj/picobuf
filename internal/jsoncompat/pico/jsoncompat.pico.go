@@ -117,11 +117,16 @@ func (m Scalars) MarshalJSON() ([]byte, error) {
 }
 
 func (m *Scalars) UnmarshalJSON(data []byte) error {
+	return m.UnmarshalJSONOptions(data, picojson.UnmarshalOptions{})
+}
+
+// UnmarshalJSONOptions is UnmarshalJSON within the limits of opts.
+func (m *Scalars) UnmarshalJSONOptions(data []byte, opts picojson.UnmarshalOptions) error {
 	if string(data) == "null" {
 		return nil
 	}
 	*m = Scalars{}
-	return picojson.Unmarshal(data, m, picojson_File_jsoncompat_proto, 0)
+	return opts.Unmarshal(data, m, picojson_File_jsoncompat_proto, 0)
 }
 
 type Optionals struct {
@@ -218,11 +223,16 @@ func (m Optionals) MarshalJSON() ([]byte, error) {
 }
 
 func (m *Optionals) UnmarshalJSON(data []byte) error {
+	return m.UnmarshalJSONOptions(data, picojson.UnmarshalOptions{})
+}
+
+// UnmarshalJSONOptions is UnmarshalJSON within the limits of opts.
+func (m *Optionals) UnmarshalJSONOptions(data []byte, opts picojson.UnmarshalOptions) error {
 	if string(data) == "null" {
 		return nil
 	}
 	*m = Optionals{}
-	return picojson.Unmarshal(data, m, picojson_File_jsoncompat_proto, 236)
+	return opts.Unmarshal(data, m, picojson_File_jsoncompat_proto, 236)
 }
 
 type Lists struct {
@@ -297,11 +307,16 @@ func (m Lists) MarshalJSON() ([]byte, error) {
 }
 
 func (m *Lists) UnmarshalJSON(data []byte) error {
+	return m.UnmarshalJSONOptions(data, picojson.UnmarshalOptions{})
+}
+
+// UnmarshalJSONOptions is UnmarshalJSON within the limits of opts.
+func (m *Lists) UnmarshalJSONOptions(data []byte, opts picojson.UnmarshalOptions) error {
 	if string(data) == "null" {
 		return nil
 	}
 	*m = Lists{}
-	return picojson.Unmarshal(data, m, picojson_File_jsoncompat_proto, 302)
+	return opts.Unmarshal(data, m, picojson_File_jsoncompat_proto, 302)
 }
 
 type Maps struct {
@@ -349,11 +364,16 @@ func (m Maps) MarshalJSON() ([]byte, error) {
 }
 
 func (m *Maps) UnmarshalJSON(data []byte) error {
+	return m.UnmarshalJSONOptions(data, picojson.UnmarshalOptions{})
+}
+
+// UnmarshalJSONOptions is UnmarshalJSON within the limits of opts.
+func (m *Maps) UnmarshalJSONOptions(data []byte, opts picojson.UnmarshalOptions) error {
 	if string(data) == "null" {
 		return nil
 	}
 	*m = Maps{}
-	return picojson.Unmarshal(data, m, picojson_File_jsoncompat_proto, 391)
+	return opts.Unmarshal(data, m, picojson_File_jsoncompat_proto, 391)
 }
 
 type Oneofs struct {
@@ -468,11 +488,16 @@ func (m Oneofs) MarshalJSON() ([]byte, error) {
 }
 
 func (m *Oneofs) UnmarshalJSON(data []byte) error {
+	return m.UnmarshalJSONOptions(data, picojson.UnmarshalOptions{})
+}
+
+// UnmarshalJSONOptions is UnmarshalJSON within the limits of opts.
+func (m *Oneofs) UnmarshalJSONOptions(data []byte, opts picojson.UnmarshalOptions) error {
 	if string(data) == "null" {
 		return nil
 	}
 	*m = Oneofs{}
-	return picojson.Unmarshal(data, m, picojson_File_jsoncompat_proto, 938)
+	return opts.Unmarshal(data, m, picojson_File_jsoncompat_proto, 938)
 }
 
 type isOneofs_Kind interface{ isOneofs_Kind() }
@@ -665,11 +690,16 @@ func (m WellKnown) MarshalJSON() ([]byte, error) {
 }
 
 func (m *WellKnown) UnmarshalJSON(data []byte) error {
+	return m.UnmarshalJSONOptions(data, picojson.UnmarshalOptions{})
+}
+
+// UnmarshalJSONOptions is UnmarshalJSON within the limits of opts.
+func (m *WellKnown) UnmarshalJSONOptions(data []byte, opts picojson.UnmarshalOptions) error {
 	if string(data) == "null" {
 		return nil
 	}
 	*m = WellKnown{}
-	return picojson.Unmarshal(data, m, picojson_File_jsoncompat_proto, 1055)
+	return opts.Unmarshal(data, m, picojson_File_jsoncompat_proto, 1055)
 }
 
 type Custom struct {
@@ -733,11 +763,16 @@ func (m Custom) MarshalJSON() ([]byte, error) {
 }
 
 func (m *Custom) UnmarshalJSON(data []byte) error {
+	return m.UnmarshalJSONOptions(data, picojson.UnmarshalOptions{})
+}
+
+// UnmarshalJSONOptions is UnmarshalJSON within the limits of opts.
+func (m *Custom) UnmarshalJSONOptions(data []byte, opts picojson.UnmarshalOptions) error {
 	if string(data) == "null" {
 		return nil
 	}
 	*m = Custom{}
-	return picojson.Unmarshal(data, m, picojson_File_jsoncompat_proto, 1661)
+	return opts.Unmarshal(data, m, picojson_File_jsoncompat_proto, 1661)
 }
 
 type All struct {
@@ -844,11 +879,16 @@ func (m All) MarshalJSON() ([]byte, error) {
 }
 
 func (m *All) UnmarshalJSON(data []byte) error {
+	return m.UnmarshalJSONOptions(data, picojson.UnmarshalOptions{})
+}
+
+// UnmarshalJSONOptions is UnmarshalJSON within the limits of opts.
+func (m *All) UnmarshalJSONOptions(data []byte, opts picojson.UnmarshalOptions) error {
 	if string(data) == "null" {
 		return nil
 	}
 	*m = All{}
-	return picojson.Unmarshal(data, m, picojson_File_jsoncompat_proto, 1732)
+	return opts.Unmarshal(data, m, picojson_File_jsoncompat_proto, 1732)
 }
 
 type MethodNames struct {
@@ -890,11 +930,16 @@ func (m MethodNames) MarshalJSON() ([]byte, error) {
 }
 
 func (m *MethodNames) UnmarshalJSON(data []byte) error {
+	return m.UnmarshalJSONOptions(data, picojson.UnmarshalOptions{})
+}
+
+// UnmarshalJSONOptions is UnmarshalJSON within the limits of opts.
+func (m *MethodNames) UnmarshalJSONOptions(data []byte, opts picojson.UnmarshalOptions) error {
 	if string(data) == "null" {
 		return nil
 	}
 	*m = MethodNames{}
-	return picojson.Unmarshal(data, m, picojson_File_jsoncompat_proto, 1855)
+	return opts.Unmarshal(data, m, picojson_File_jsoncompat_proto, 1855)
 }
 
 type MethodOneof struct {
@@ -939,11 +984,16 @@ func (m MethodOneof) MarshalJSON() ([]byte, error) {
 }
 
 func (m *MethodOneof) UnmarshalJSON(data []byte) error {
+	return m.UnmarshalJSONOptions(data, picojson.UnmarshalOptions{})
+}
+
+// UnmarshalJSONOptions is UnmarshalJSON within the limits of opts.
+func (m *MethodOneof) UnmarshalJSONOptions(data []byte, opts picojson.UnmarshalOptions) error {
 	if string(data) == "null" {
 		return nil
 	}
 	*m = MethodOneof{}
-	return picojson.Unmarshal(data, m, picojson_File_jsoncompat_proto, 1956)
+	return opts.Unmarshal(data, m, picojson_File_jsoncompat_proto, 1956)
 }
 
 type isMethodOneof_Encode interface{ isMethodOneof_Encode() }

@@ -120,7 +120,7 @@ func genFile(plugin *protogen.Plugin, file *protogen.File, conf config) {
 func reserveMethodNames(messages []*protogen.Message, getters bool) {
 	for _, m := range messages {
 		reserved := map[string]bool{
-			"Encode": true, "Decode": true, "MarshalJSON": true, "UnmarshalJSON": true,
+			"Encode": true, "Decode": true, "MarshalJSON": true, "UnmarshalJSON": true, "UnmarshalJSONOptions": true,
 			"PicoValidateRequiredDepth": true,
 		}
 		used := make(map[string]bool)

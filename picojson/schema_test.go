@@ -53,7 +53,7 @@ func TestUnmarshalFieldOrder(t *testing.T) {
 		for _, aliases := range []bool{false, true} {
 			t.Run(fmt.Sprintf("reversed=%v/aliases=%v", reversed, aliases), func(t *testing.T) {
 				schema, data, want := wideMessage(1000, reversed, aliases)
-				got, err := unmarshalWire(data, schema, 0)
+				got, err := unmarshalWire(data, schema, 0, protowire.DefaultRecursionLimit)
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -63,7 +63,7 @@ func TestUnmarshalFieldOrder(t *testing.T) {
 				// After wrapping, unknown names and duplicate aliases must still fail.
 				for _, suffix := range []string{`,"unknown":1}`, `,"field_1":2}`} {
 					bad := append(append([]byte(nil), data[:len(data)-1]...), suffix...)
-					if _, err := unmarshalWire(bad, schema, 0); err == nil {
+					if _, err := unmarshalWire(bad, schema, 0, protowire.DefaultRecursionLimit); err == nil {
 						t.Fatalf("accepted invalid suffix %s", suffix)
 					}
 				}
@@ -81,7 +81,7 @@ func BenchmarkUnmarshalFieldOrder(b *testing.B) {
 				b.SetBytes(int64(len(data)))
 				b.ResetTimer()
 				for b.Loop() {
-					if _, err := unmarshalWire(data, schema, 0); err != nil {
+					if _, err := unmarshalWire(data, schema, 0, protowire.DefaultRecursionLimit); err != nil {
 						b.Fatal(err)
 					}
 				}

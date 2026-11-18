@@ -99,12 +99,17 @@ func genJSONMethods(gf *generator, m *protogen.Message) {
 	gf.P("}")
 	gf.P()
 	gf.P("func (m *", m.GoIdent, ") UnmarshalJSON(data []byte) error {")
+	gf.P("return m.UnmarshalJSONOptions(data, ", picojsonPackage.Ident("UnmarshalOptions"), "{})")
+	gf.P("}")
+	gf.P()
+	gf.P("// UnmarshalJSONOptions is UnmarshalJSON within the limits of opts.")
+	gf.P("func (m *", m.GoIdent, ") UnmarshalJSONOptions(data []byte, opts ", picojsonPackage.Ident("UnmarshalOptions"), ") error {")
 	// By the encoding/json convention, null is a no-op.
 	gf.P("if string(data) == \"null\" {")
 	gf.P("return nil")
 	gf.P("}")
 	gf.P("*m = ", m.GoIdent, "{}")
-	gf.P("return ", picojsonPackage.Ident("Unmarshal"), "(data, m, ", gf.json.ident, ", ", offset, ")")
+	gf.P("return opts.Unmarshal(data, m, ", gf.json.ident, ", ", offset, ")")
 	gf.P("}")
 	gf.P()
 }

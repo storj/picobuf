@@ -90,11 +90,43 @@ func Marshal(msg picobuf.Message, s Schema, offset int) ([]byte, error) {
 // Unmarshal decodes ProtoJSON data into msg, described by the message at
 // offset in s. Like protojson, it rejects unknown fields.
 func Unmarshal(data []byte, msg picobuf.Message, s Schema, offset int) error {
-	wire, err := unmarshalWire(data, s, int32(offset))
+	return UnmarshalOptions{}.Unmarshal(data, msg, s, offset)
+}
+
+// UnmarshalOptions limits the input that Unmarshal accepts. The zero value
+// sets no limits beyond the default recursion depth.
+type UnmarshalOptions struct {
+	// MaxInputSize rejects JSON inputs larger than this many bytes. Zero
+	// disables the limit.
+	MaxInputSize int
+	// MaxRecursionDepth limits nested messages. Zero uses the default limit.
+	MaxRecursionDepth int
+	// MaxRepeatedElements limits the total number of repeated values decoded
+	// across the message. Zero disables the limit.
+	MaxRepeatedElements int
+}
+
+// Unmarshal decodes ProtoJSON data into msg, described by the message at
+// offset in s, within the limits of opts.
+func (opts UnmarshalOptions) Unmarshal(data []byte, msg picobuf.Message, s Schema, offset int) error {
+	if opts.MaxInputSize > 0 && len(data) > opts.MaxInputSize {
+		return errors.New("picojson: input exceeds maximum size")
+	}
+	depth := opts.MaxRecursionDepth
+	if depth <= 0 {
+		depth = protowire.DefaultRecursionLimit
+	}
+	// Like picobuf, the depth does not count the outermost message.
+	wire, err := unmarshalWire(data, s, int32(offset), depth+1)
 	if err != nil {
 		return wrap("picojson: ", err)
 	}
-	return picobuf.Unmarshal(wire, msg)
+	// The wire data can be larger than its JSON, so MaxInputSize stays with
+	// the JSON.
+	return picobuf.UnmarshalOptions{
+		MaxRecursionDepth:   opts.MaxRecursionDepth,
+		MaxRepeatedElements: opts.MaxRepeatedElements,
+	}.Unmarshal(wire, msg)
 }
 
 // Errors inside the package have no prefix, Marshal and Unmarshal add it.

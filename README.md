@@ -91,6 +91,8 @@ Generating with `--pico_opt=protojson=true` adds `MarshalJSON` and
 place of encoding/json/jsontext. The conversion goes through the wire format,
 so a custom type maps to JSON as the protobuf type that its field declares.
 Messages from other packages that yours refer to do not need the option.
+For untrusted input, `UnmarshalJSONOptions` takes `picojson.UnmarshalOptions`
+to limit the input size, nesting, and repeated elements.
 Tests compare the mapping against protojson. It differs in two ways:
 
 * picojson does not support `google.protobuf.Any`, `Struct`, `Value`,

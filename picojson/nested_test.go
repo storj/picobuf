@@ -27,7 +27,7 @@ func TestUnmarshalNestedLengths(t *testing.T) {
 		for _, depth := range []int{1, 3, 200} {
 			t.Run(fmt.Sprintf("size=%d/depth=%d", size, depth), func(t *testing.T) {
 				text := strings.Repeat("x", size)
-				wire, err := unmarshalWire(nestedNode(depth, text), nodeSchema, 0)
+				wire, err := unmarshalWire(nestedNode(depth, text), nodeSchema, 0, protowire.DefaultRecursionLimit)
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -56,10 +56,27 @@ func BenchmarkUnmarshalNested(b *testing.B) {
 			data := nestedNode(depth, text)
 			b.SetBytes(int64(len(data)))
 			for b.Loop() {
-				if _, err := unmarshalWire(data, nodeSchema, 0); err != nil {
+				if _, err := unmarshalWire(data, nodeSchema, 0, protowire.DefaultRecursionLimit); err != nil {
 					b.Fatal(err)
 				}
 			}
 		})
+	}
+}
+
+func TestUnmarshalWithLimits(t *testing.T) {
+	// nestedNode(n) nests n messages inside the outermost one, which the
+	// depth limit does not count.
+	if _, err := unmarshalWire(nestedNode(5, "x"), nodeSchema, 0, 5+1); err != nil {
+		t.Fatal(err)
+	}
+	// The limits fail before decoding into msg, so it can be nil.
+	err := UnmarshalOptions{MaxRecursionDepth: 5}.Unmarshal(nestedNode(6, "x"), nil, nodeSchema, 0)
+	if err == nil || !strings.Contains(err.Error(), "recursion depth") {
+		t.Fatalf("depth: got %v", err)
+	}
+	err = UnmarshalOptions{MaxInputSize: 10}.Unmarshal(nestedNode(1, "x"), nil, nodeSchema, 0)
+	if err == nil || !strings.Contains(err.Error(), "maximum size") {
+		t.Fatalf("size: got %v", err)
 	}
 }

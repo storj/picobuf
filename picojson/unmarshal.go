@@ -19,16 +19,17 @@ import (
 type unmarshaler struct {
 	schema Schema
 	dec    *jsontext.Decoder
+	depth  int // remaining message nesting
 }
 
 // unmarshalWire parses data as the message at offset in s into wire data.
-func unmarshalWire(data []byte, s Schema, offset int32) ([]byte, error) {
+func unmarshalWire(data []byte, s Schema, offset int32, depth int) ([]byte, error) {
 	// Wire data is at most ten times its JSON, a list of zero DoubleValue
 	// with five byte tags, which keeps every length within lengthSize.
 	if len(data) > math.MaxInt32 {
 		return nil, errors.New("input too large")
 	}
-	u := unmarshaler{schema: s, dec: jsontext.NewDecoder(bytes.NewBuffer(data))}
+	u := unmarshaler{schema: s, dec: jsontext.NewDecoder(bytes.NewBuffer(data)), depth: depth}
 	out, err := u.message(offset, nil)
 	if err != nil {
 		return nil, err
@@ -52,6 +53,11 @@ func (u *unmarshaler) read(kind jsontext.Kind) (jsontext.Token, error) {
 
 // message appends the wire data of the message value that the decoder is at.
 func (u *unmarshaler) message(offset int32, out []byte) ([]byte, error) {
+	if u.depth <= 0 {
+		return nil, errors.New("exceeded maximum recursion depth")
+	}
+	u.depth--
+	defer func() { u.depth++ }()
 	msg := u.schema.message(offset)
 	if handled, out, err := u.wellKnown(&msg, out); handled {
 		return out, err
